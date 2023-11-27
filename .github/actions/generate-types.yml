@@ -1,0 +1,22 @@
+name: 'generate-types'
+on:
+  pull_request:
+
+jobs:
+  build: 
+    runs-on: ubuntu-latest
+    steps:
+        - uses: supabase/setup-cli@v1
+            with:
+            version: latest
+        - run: supabase init
+        - name: Start Supabase local development setup
+          run: supabase db start
+        - name: Verify generated types match Postgres schema
+          run: |
+            supabase gen types typescript --local > types/supabase.ts
+            if ! git diff --ignore-space-at-eol --exit-code --quiet types/supabase.ts; then
+              echo "Detected uncommitted changes after build. See status below:"
+              git diff
+              exit 1
+            fi
