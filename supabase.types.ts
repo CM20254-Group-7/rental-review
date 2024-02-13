@@ -34,7 +34,257 @@ export interface Database {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      landlord_private_profiles: {
+        Row: {
+          id: string
+        }
+        Insert: {
+          id: string
+        }
+        Update: {
+          id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "landlord_private_profiles_id_fkey"
+            columns: ["id"]
+            referencedRelation: "user_profiles"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      landlord_public_profiles: {
+        Row: {
+          id: string
+        }
+        Insert: {
+          id: string
+        }
+        Update: {
+          id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "landlord_public_profiles_id_fkey"
+            columns: ["id"]
+            referencedRelation: "landlord_private_profiles"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      properties: {
+        Row: {
+          id: string
+        }
+        Insert: {
+          id?: string
+        }
+        Update: {
+          id?: string
+        }
+        Relationships: []
+      }
+      property_ownership: {
+        Row: {
+          ended_at: string | null
+          landlord_id: string | null
+          property_id: string
+          started_at: string
+        }
+        Insert: {
+          ended_at?: string | null
+          landlord_id?: string | null
+          property_id: string
+          started_at: string
+        }
+        Update: {
+          ended_at?: string | null
+          landlord_id?: string | null
+          property_id?: string
+          started_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "property_ownership_landlord_id_fkey"
+            columns: ["landlord_id"]
+            referencedRelation: "landlord_public_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "property_ownership_property_id_fkey"
+            columns: ["property_id"]
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      review_photos: {
+        Row: {
+          photo_id: number
+          review_id: string
+        }
+        Insert: {
+          photo_id: number
+          review_id: string
+        }
+        Update: {
+          photo_id?: number
+          review_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "review_photos_photo_id_fkey"
+            columns: ["photo_id"]
+            referencedRelation: "uploaded_files"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "review_photos_review_id_fkey"
+            columns: ["review_id"]
+            referencedRelation: "reviews"
+            referencedColumns: ["review_id"]
+          }
+        ]
+      }
+      reviewer_private_profiles: {
+        Row: {
+          property_id: string
+          reviewer_id: string
+          user_id: string
+        }
+        Insert: {
+          property_id: string
+          reviewer_id?: string
+          user_id: string
+        }
+        Update: {
+          property_id?: string
+          reviewer_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reviewer_private_profiles_property_id_fkey"
+            columns: ["property_id"]
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reviewer_private_profiles_user_id_fkey"
+            columns: ["user_id"]
+            referencedRelation: "user_profiles"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      reviewer_public_profiles: {
+        Row: {
+          created_at: string
+          id: string
+        }
+        Insert: {
+          created_at?: string
+          id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reviewer_public_profiles_id_fkey"
+            columns: ["id"]
+            referencedRelation: "reviewer_private_profiles"
+            referencedColumns: ["reviewer_id"]
+          }
+        ]
+      }
+      reviews: {
+        Row: {
+          property_id: string
+          review_date: string
+          review_id: string
+          reviewer_id: string
+        }
+        Insert: {
+          property_id: string
+          review_date: string
+          review_id?: string
+          reviewer_id: string
+        }
+        Update: {
+          property_id?: string
+          review_date?: string
+          review_id?: string
+          reviewer_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reviews_property_id_fkey"
+            columns: ["property_id"]
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reviews_reviewer_id_fkey"
+            columns: ["reviewer_id"]
+            referencedRelation: "reviewer_public_profiles"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      uploaded_files: {
+        Row: {
+          file_name: string | null
+          id: number
+        }
+        Insert: {
+          file_name?: string | null
+          id?: number
+        }
+        Update: {
+          file_name?: string | null
+          id?: number
+        }
+        Relationships: []
+      }
+      user_profiles: {
+        Row: {
+          created_at: string | null
+          email: string | null
+          first_name: string | null
+          id: string
+          last_name: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          email?: string | null
+          first_name?: string | null
+          id: string
+          last_name?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          email?: string | null
+          first_name?: string | null
+          id?: string
+          last_name?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_profiles_id_fkey"
+            columns: ["id"]
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_public_profiles_id_fkey"
+            columns: ["id"]
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
     }
     Views: {
       [_ in never]: never
