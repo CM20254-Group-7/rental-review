@@ -177,43 +177,30 @@ export interface Database {
           }
         ]
       }
-      reviewer_public_profiles: {
-        Row: {
-          created_at: string
-          id: string
-        }
-        Insert: {
-          created_at?: string
-          id: string
-        }
-        Update: {
-          created_at?: string
-          id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "reviewer_public_profiles_id_fkey"
-            columns: ["id"]
-            referencedRelation: "reviewer_private_profiles"
-            referencedColumns: ["reviewer_id"]
-          }
-        ]
-      }
       reviews: {
         Row: {
+          landlord_rating: number
           property_id: string
+          property_rating: number
+          review_body: string
           review_date: string
           review_id: string
           reviewer_id: string
         }
         Insert: {
+          landlord_rating: number
           property_id: string
+          property_rating: number
+          review_body: string
           review_date: string
           review_id?: string
           reviewer_id: string
         }
         Update: {
+          landlord_rating?: number
           property_id?: string
+          property_rating?: number
+          review_body?: string
           review_date?: string
           review_id?: string
           reviewer_id?: string
@@ -228,8 +215,8 @@ export interface Database {
           {
             foreignKeyName: "reviews_reviewer_id_fkey"
             columns: ["reviewer_id"]
-            referencedRelation: "reviewer_public_profiles"
-            referencedColumns: ["id"]
+            referencedRelation: "reviewer_private_profiles"
+            referencedColumns: ["reviewer_id"]
           }
         ]
       }
