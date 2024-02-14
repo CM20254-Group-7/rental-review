@@ -1,0 +1,5 @@
+# Protect git config including this file
+/.github/ lth30@bath.ac.uk
+
+# protect the migtations folder
+/supabase/migrations/ lth30@bath.ac.uk
