@@ -29,6 +29,7 @@ export type State = {
     message?: string | null;
 };
 
+//given either the id of an existing property or the address of a new one, creates a review written by the currently logged in user
 export const createReview = async (
     property : {
         id: string | undefined, 
@@ -63,6 +64,12 @@ export const createReview = async (
         landlord_rating
     } = validatedFields.data;
 
+    // create service client
+    const serviceSupabase = createClient<Database>(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.SUPABASE_SERVICE_KEY!
+    )
+
     if (!property_id) {
         if (!property_address) {
             return {
@@ -73,9 +80,33 @@ export const createReview = async (
         // TODO: Handle property creation
 
         // Check if property with address exists
+        const { data: existingProperty, error: existingPropertyError } = await serviceSupabase
+            .from('properties')
+            .select('id')
+            .eq('address', property_address)
+            .maybeSingle()
         // If it does - Error
+
+        if (existingProperty) {
+            return {
+                message: 'Property Already Exists'
+            }
+        }
+
         // If it doesn't - Create Property & set property_id
-        property_id = 'new_property_id' // replace with actual property_id
+        const { data: newProperty, error: newPropertyError } = await serviceSupabase
+            .from('properties')
+            .insert({ address: property_address })
+            .select('id')
+            .single()
+
+        if (newPropertyError) {
+            return {
+                message: 'Error Creating Property'
+            }
+        }
+
+        property_id = newProperty.id // replace with actual property_id
     }
 
     // get user
@@ -106,12 +137,6 @@ export const createReview = async (
     }
 
     // all good, create review
-
-    // create service client
-    const serviceSupabase = createClient<Database>(
-        process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        process.env.SUPABASE_SERVICE_KEY!
-    )
 
     // create reviewer profile
     const { data: reviewerProfile, error: reviewerProfileError } = await serviceSupabase

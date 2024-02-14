@@ -6,10 +6,8 @@ import { createReview } from "./actions";
 
 const createReviewPage = () => {
   // define example propertyId and address, these should be determined by params in implementation
-
-  // set examplePropertyId to undefined to test creating a new property
-  const examplePropertyId = '7cda6a4c-868d-436d-a05b-25d6eeaed351'
-  const exampleAddress = undefined //"1234 Example St, Example, EX 12345";
+  const examplePropertyId = undefined // '7cda6a4c-868d-436d-a05b-25d6eeaed351'
+  const exampleAddress = "1234 Example St, Example, EX 12345";
 
   // bind the id & address to the createReview function
   const initialState = { message: null, errors: {} };
@@ -19,7 +17,7 @@ const createReviewPage = () => {
   return (
     <div>
       <h1>Create Review</h1>
-      <p>Test page for create action</p>
+      <p>Test page for create review action - REPLACE ME</p>
 
       <form
         className="flex flex-col gap-2 pleace-items-center max-w-prose w-full border p-4 rounded-md"
@@ -27,7 +25,7 @@ const createReviewPage = () => {
       >
         <label htmlFor="review_date">Review Date</label>
         <input 
-          className="border p-2 rounded-md bg-gray-800"
+          className="border p-2 rounded-md"
           type="date"
           name="review_date"
           id="review_date"
@@ -36,7 +34,7 @@ const createReviewPage = () => {
 
         <label htmlFor="review_body">Review Body</label>
         <textarea 
-          className="border p-2 rounded-md bg-gray-800"
+          className="border p-2 rounded-md"
           name="review_body"
           id="review_body"
           required
@@ -44,7 +42,7 @@ const createReviewPage = () => {
 
         <label htmlFor="property_rating">Property Rating</label>
         <input 
-          className="border p-2 rounded-md bg-gray-800"
+          className="border p-2 rounded-md"
           type="number"
           name="property_rating"
           id="property_rating"
@@ -55,7 +53,7 @@ const createReviewPage = () => {
 
         <label htmlFor="landlord_rating">Landlord Rating</label>
         <input 
-          className="border p-2 rounded-md bg-gray-800x§"
+          className="border p-2 rounded-md"
           type="number"
           name="landlord_rating"
           id="landlord_rating"
@@ -65,7 +63,7 @@ const createReviewPage = () => {
         />
 
         <button 
-          className="text-white rounded-md p-2 bg-gray-800 hover:bg-gray-700 border"
+          className="rounded-md p-2 hover:bg-gray-600/20 border"
           type="submit"
         >Create Review</button>
 

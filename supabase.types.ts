@@ -74,12 +74,15 @@ export interface Database {
       }
       properties: {
         Row: {
+          address: string
           id: string
         }
         Insert: {
+          address: string
           id?: string
         }
         Update: {
+          address?: string
           id?: string
         }
         Relationships: []
