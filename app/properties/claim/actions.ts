@@ -6,8 +6,7 @@ import { createClient } from '@supabase/supabase-js'
 import { cookies } from "next/headers";
 import { z } from "zod";
 
-export default function ClaimProperty() {
-    async function claimProperty(formData: FormData) {
+export default async function claimProperty(formData: FormData) {
         const property_id = formData.get('property_id');
 
         if (!property_id) {
@@ -31,12 +30,16 @@ export default function ClaimProperty() {
             }
         }
 
-        //  check if the user is already the landlord of the property
+        //  check a the user is already the landlord of the property for this time period
         const { data: propertyOwnership, error: propertyOwnershipError } = await supabase
             .from('property_ownership')
-            .select('landlord_id')
-            .match({ id: property_id })
-        if (propertyOwnership && propertyOwnership.length > 0 && propertyOwnership[0].landlord_id === user.id) {
+            .select('started_at, ended_at')
+            .eq('property_id', property_id)
+
+        // if empty then good
+        // if not empty check start and end date overlap
+
+        if (propertyOwnership) {
             return {
                 message: 'User is already the landlord of this property'
             }
@@ -56,7 +59,6 @@ export default function ClaimProperty() {
             })
             .match({ id: property_id })
     }
-}
 
 // Things to discuss on 16/2/24 meeting:
 // 1. When do the ended_at get set? 
