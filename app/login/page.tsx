@@ -38,18 +38,23 @@ export default function Login({
     const supabase = createClient(cookieStore)
 
     const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        emailRedirectTo: `${origin}/auth/callback`,
-      },
-    })
+      email: email,
+      password: password,
+          });
+          if (error) {
+              console.log(error);
+              if (error == null){
+                console.log(error);
+                  
+              } else {
+                  console.log(error);
+                  // Password must be 6 letters
+                  return redirect("/login?message=There was an error while creating your account. Please try again.")
 
-    if (error) {
-      return redirect('/login?message=Could not authenticate user')
-    }
-
-    return redirect('/login?message=Check email to continue sign in process')
+              }
+          } else{
+            return redirect('/login?message=Check email to continue sign in process')
+          }
   }
 
   return (
