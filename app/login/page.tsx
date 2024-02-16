@@ -26,7 +26,7 @@ export default function Login({
     if (error) {
       return redirect('/login?message=Could not authenticate user')
     }
-
+    //Change this with a link to the next page
     return redirect('/')
   }
 
@@ -60,6 +60,7 @@ export default function Login({
                   
               } else {
                   console.log(error);
+                  // Password must be 6 letters
                   return redirect("/login?message=There was an error while creating your account. Please try again.")
 
               }
