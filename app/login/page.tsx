@@ -3,8 +3,6 @@ import { headers, cookies } from 'next/headers'
 import { createClient } from '@/utils/supabase/server'
 import { redirect } from 'next/navigation'
 
-
-// login function
 export default function Login({
   searchParams,
 }: {
@@ -26,12 +24,10 @@ export default function Login({
     if (error) {
       return redirect('/login?message=Could not authenticate user')
     }
-    //Change this with a link to the next page
+
     return redirect('/')
   }
 
-  // signup function
-  
   const signUp = async (formData: FormData) => {
     'use server'
 
@@ -41,32 +37,19 @@ export default function Login({
     const cookieStore = cookies()
     const supabase = createClient(cookieStore)
 
-    //const { error } = await supabase.auth.signUp({
-    //  email,
-    //  password,
-    //  options: {
-    //    emailRedirectTo: `${origin}/auth/callback`,
-    //  },
-    //})
-
     const { error } = await supabase.auth.signUp({
-      email: email,
-      password: password,
-          });
-          if (error) {
-              console.log(error);
-              if (error == null){
-                console.log(error);
-                  
-              } else {
-                  console.log(error);
-                  // Password must be 6 letters
-                  return redirect("/login?message=There was an error while creating your account. Please try again.")
+      email,
+      password,
+      options: {
+        emailRedirectTo: `${origin}/auth/callback`,
+      },
+    })
 
-              }
-          } else{
-            return redirect('/login?message=Check email to continue sign in process')
-          }
+    if (error) {
+      return redirect('/login?message=Could not authenticate user')
+    }
+
+    return redirect('/login?message=Check email to continue sign in process')
   }
 
   return (
