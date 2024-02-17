@@ -1,12 +1,13 @@
-import Link from 'next/link'
-import { signIn, signUp } from './actions'
+'use client'
 
-export default function Login({
-  searchParams,
-}: {
-  searchParams: { message: string }
-}) {
-  
+import Link from 'next/link'
+import { signIn, signUp, State } from './actions'
+import { useFormState } from 'react-dom'
+
+export default function Login() {
+  const initialState = { message: null, errors: {} };
+  const [loginState, loginDispatch] = useFormState(signIn, initialState)
+  const [signupState, signupDispatch] = useFormState(signUp, initialState)
 
   return (
     <div className="flex-1 flex flex-col w-full px-8 sm:max-w-md justify-center gap-2">
@@ -33,7 +34,7 @@ export default function Login({
 
       <form
         className="animate-in flex-1 flex flex-col w-full justify-center gap-2 text-foreground"
-        action={signIn}
+        action={loginDispatch}
       >
         <label className="text-md" htmlFor="email">
           Email
@@ -58,14 +59,14 @@ export default function Login({
           Sign In
         </button>
         <button
-          formAction={signUp}
+          formAction={signupDispatch}
           className="border border-foreground/20 rounded-md px-4 py-2 text-foreground mb-2"
         >
           Sign Up
         </button>
-        {searchParams?.message && (
+        {loginState?.message && (
           <p className="mt-4 p-4 bg-foreground/10 text-foreground text-center">
-            {searchParams.message}
+            {loginState.message}
           </p>
         )}
       </form>
