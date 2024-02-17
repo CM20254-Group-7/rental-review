@@ -23,7 +23,9 @@ const Form: React.FC<FormProps> = ({
             className="animate-in h-full flex-1 flex flex-col w-[90vw] sm:max-w-md gap-4 text-foreground border rounded-md shadow-md p-4 bg-background"
             action={dispatch}
         >
-            <h2 className="text-2xl">{title}</h2>
+            <h2 className="text-2xl pb-1 border-b-2 border-foreground/10">{title}</h2>
+
+            {/* <span className=''></span> */}
 
             <div className='flex flex-col flex-1 justify-center gap-4'>
                 {children}
@@ -52,28 +54,9 @@ export const SignInForm = () => {
             title='Returning User? Sign In Here.'
             submitText='Sign In'
         >
-            <label className="text-md" htmlFor="email">
-                Email
-            </label>
-            <input
-                className="rounded-md px-4 py-2 bg-inherit border mb-6"
-                name="email"
-                placeholder="you@example.com"
-                required
-            />
-            <p className="text-red-500 h-6">{loginState.errors?.email}</p>
+            <EmailField errors={loginState.errors?.email} />
 
-            <label className="text-md" htmlFor="password">
-                Password
-            </label>
-            <input
-                className="rounded-md px-4 py-2 bg-inherit border mb-6"
-                type="password"
-                name="password"
-                placeholder="••••••••"
-                required
-            />
-            <p className="text-red-500 h-6">{loginState.errors?.password}</p>
+            <PasswordField errors={loginState.errors?.password} />
         </Form>
     )
 }
@@ -89,40 +72,80 @@ export const SignUpForm = () => {
             title='New User? Sign Up Here.'
             submitText='Sign Up'
         >
-            <label className="text-md" htmlFor="email">
-                Email
-            </label>
-            <input
-                className="rounded-md px-4 py-2 bg-inherit border mb-6"
-                name="email"
-                placeholder="you@example.com"
-                required
-            />
-            <p className="text-red-500 h-6">{signupState.errors?.email}</p>
+            <EmailField errors={signupState.errors?.email} />
 
-            <label className="text-md" htmlFor="password">
-                Password
-            </label>
-            <input
-                className="rounded-md px-4 py-2 bg-inherit border mb-6"
-                type="password"
-                name="password"
-                placeholder="••••••••"
-                required
-            />
-            <p className="text-red-500 h-6">{signupState.errors?.password}</p>
+            <PasswordField errors={signupState.errors?.password} />
 
-            <label className="text-md" htmlFor="confirmPassword">
-                Confirm Password
-            </label>
-            <input
-                className="rounded-md px-4 py-2 bg-inherit border mb-6"
-                type="password"
-                name="confirmPassword"
-                placeholder="••••••••"
-                required
-            />
-            <p className="text-red-500 h-6">{signupState.errors?.confirmPassword}</p>
+            <ConfirmPasswordField errors={signupState.errors?.confirmPassword} />
         </Form>
     )
 }
+
+interface Field {
+    name: string
+    label: string
+    type?: 'password' | 'email' | 'text'
+    placeholder?: string
+    required?: boolean
+    errors?: string[]
+}
+const Field = ({
+    name,
+    label,
+    type = 'text',
+    placeholder,
+    required = false,
+    errors,
+}: Field) => {
+    return (
+        <div className='flex flex-col gap-1'>
+            <label className="text-md" htmlFor={name}>
+                {label}
+            </label>
+            <input
+                className="rounded-md px-4 py-2 bg-inherit border"
+                type={type}
+                name={name}
+                placeholder={placeholder}
+                required={required}
+            />
+            <p className="text-red-500 h-6">{errors}</p>
+        </div>
+    )
+}
+
+interface EmailFieldProps {
+    errors?: string[]
+}
+const EmailField: React.FC<EmailFieldProps> = ({ errors }) => <Field
+    name="email"
+    label="Email"
+    type="email"
+    placeholder="you@example.com"
+    required
+    errors={errors}
+/>
+
+interface PasswordFieldProps {
+    errors?: string[]
+}
+const PasswordField: React.FC<PasswordFieldProps> = ({ errors }) => <Field
+    name="password"
+    label="Password"
+    type="password"
+    placeholder="••••••••"
+    required
+    errors={errors}
+/>
+
+interface ConfirmPasswordFieldProps {
+    errors?: string[]
+}
+const ConfirmPasswordField: React.FC<ConfirmPasswordFieldProps> = ({ errors }) => <Field
+    name="confirmPassword"
+    label="Confirm Password"
+    type="password"
+    placeholder="••••••••"
+    required
+    errors={errors}
+/>
