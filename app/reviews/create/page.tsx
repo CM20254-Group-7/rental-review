@@ -1,19 +1,44 @@
 "use client";
 
-// TEST PAGE FOR CREATE ACTION - PLEASE REPLACE
 import { useFormState } from "react-dom";
 import { createReview } from "./actions";
+import { NextPage } from "next";
+import { createClient } from "@/utils/supabase/client";
 
-const createReviewPage = () => {
-  // define example propertyId and address, these should be determined by params in implementation
-  const examplePropertyId = undefined; // '7cda6a4c-868d-436d-a05b-25d6eeaed351'
-  const exampleAddress = "1 Lorem Ipsum Road, Oldfield Park"; // ofc replace this later
+const createReviewPage: NextPage = async ({
+  searchParams
+}: {
+  searchParams?: {
+    propertyId?: string,
+    address?: string,
+  }
+}) => {
+  const propertyId = searchParams?.propertyId;
+  let address: string|undefined = undefined;
+
+  // get the address from the propertyId if it's defined
+  if (propertyId) {
+    const supabase = createClient();
+
+    const { data, error } = await supabase
+      .from("properties")
+      .select("address")
+      .eq("id", propertyId)
+      .maybeSingle();
+    
+    // Consider adding error handling here
+    // redirect to / show not-found if no property found with the provided id
+
+    address = data?.address;
+  }
+
+  if (!address) address = searchParams?.address /* For Testing, add dummy value if none provided, consider replacing with error handling as above */ || "1 Lorem Ipsum Road, Oldfield Park";
 
   // bind the id & address to the createReview function
   const initialState = { message: null, errors: {} };
   const createReviewWithProperty = createReview.bind(null, {
-    id: examplePropertyId,
-    address: exampleAddress,
+    id: propertyId,
+    address: address,
   });
   const [state, dispatch] = useFormState(
     createReviewWithProperty,
@@ -25,7 +50,7 @@ const createReviewPage = () => {
       <h1 className="text-4xl font-bold mb-2 mt-8">Add New Review</h1>
       <p className="mb-8 text-xl">
         Add a new review for this property:{" "}
-        <span>1 Lorem Ipsum Road, Oldfield Park</span>
+        <span>{address}</span>
       </p>
 
       <form
