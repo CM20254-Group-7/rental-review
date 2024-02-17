@@ -23,14 +23,15 @@ const createReviewPage = () => {
   return (
     <div style={{ minWidth: "1000px" }}>
       <h1 className="text-4xl font-bold mb-2 mt-8">Add New Review</h1>
-      <p className="mb-8 text-2l">
+      <p className="mb-8 text-xl">
         Add a new review for this property:{" "}
         <span>1 Lorem Ipsum Road, Oldfield Park</span>
       </p>
 
       <form
-        className="flex flex-col gap-2 pleace-items-center max-w-prose w-full border p-4 rounded-md"
+        className="flex flex-col gap-2 pleace-items-center w-full border p-4 rounded-md mb-8"
         action={dispatch}
+        style={{ backgroundColor: "#778378", color: "#222" }}
       >
         <h2 className="text-xl font-semibold">Your Details</h2>
 
@@ -73,7 +74,6 @@ const createReviewPage = () => {
           max="5"
           required
         />
-
         <label htmlFor="contract_fairness_rating">Fairness of contract</label>
         <input
           className="border p-2 rounded-md"
@@ -130,8 +130,9 @@ const createReviewPage = () => {
         ></textarea>
 
         <button
-          className="rounded-md p-2 hover:bg-gray-600/20 border"
+          className="rounded-md p-2 border"
           type="submit"
+          style={{ backgroundColor: "#E2B758" }}
         >
           Create Review
         </button>
