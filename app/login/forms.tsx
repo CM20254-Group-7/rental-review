@@ -7,6 +7,7 @@ interface FormProps {
     children: React.ReactNode
     dispatch: (formData: FormData) => void
     state: State
+    title: string,
     submitText: string,
 }
 
@@ -14,14 +15,20 @@ const Form: React.FC<FormProps> = ({
     children,
     dispatch,
     state,
+    title,
     submitText,
 }) => {
     return (
         <form
-            className="animate-in flex-1 flex flex-col w-full justify-center gap-2 text-foreground"
+            className="animate-in h-full flex-1 flex flex-col w-[90vw] sm:max-w-md gap-4 text-foreground border rounded-md shadow-md p-4 bg-background"
             action={dispatch}
         >
-            {children}
+            <h2 className="text-2xl">{title}</h2>
+
+            <div className='flex flex-col flex-1 justify-center gap-4'>
+                {children}
+            </div>
+
             <button className="bg-green-700 rounded-md px-4 py-2 text-foreground mb-2">
                 {submitText}
             </button>
@@ -39,9 +46,10 @@ export const SignInForm = () => {
     const [loginState, loginDispatch] = useFormState(signIn, initialState)
 
     return (
-        <Form 
-            dispatch={loginDispatch} 
+        <Form
+            dispatch={loginDispatch}
             state={loginState}
+            title='Returning User? Sign In Here.'
             submitText='Sign In'
         >
             <label className="text-md" htmlFor="email">
@@ -73,10 +81,11 @@ export const SignUpForm = () => {
     const [signupState, signupDispatch] = useFormState(signUp, initialState)
 
     return (
-        <Form 
+        <Form
             dispatch={signupDispatch}
             state={signupState}
-            submitText='Sign Up'    
+            title='New User? Sign Up Here.'
+            submitText='Sign Up'
         >
             <label className="text-md" htmlFor="email">
                 Email
