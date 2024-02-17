@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { SignInForm } from './forms'
+import { SignInForm, SignUpForm } from './forms'
 
 export default function Login() {
 
@@ -27,6 +27,8 @@ export default function Login() {
       </Link>
 
       <SignInForm />
+
+      <SignUpForm />
       
     </div>
   )
