@@ -42,7 +42,7 @@ const Form: React.FC<FormProps> = ({
 }
 
 export const SignInForm = () => {
-    const initialState = { message: null, errors: {} };
+    const initialState: State = { message: null, errors: {} };
     const [loginState, loginDispatch] = useFormState(signIn, initialState)
 
     return (
@@ -61,6 +61,7 @@ export const SignInForm = () => {
                 placeholder="you@example.com"
                 required
             />
+            <p className="text-red-500 h-6">{loginState.errors?.email}</p>
 
             <label className="text-md" htmlFor="password">
                 Password
@@ -72,12 +73,13 @@ export const SignInForm = () => {
                 placeholder="••••••••"
                 required
             />
+            <p className="text-red-500 h-6">{loginState.errors?.password}</p>
         </Form>
     )
 }
 
 export const SignUpForm = () => {
-    const initialState = { message: null, errors: {} }
+    const initialState: State = { message: null, errors: {} }
     const [signupState, signupDispatch] = useFormState(signUp, initialState)
 
     return (
@@ -96,6 +98,7 @@ export const SignUpForm = () => {
                 placeholder="you@example.com"
                 required
             />
+            <p className="text-red-500 h-6">{signupState.errors?.email}</p>
 
             <label className="text-md" htmlFor="password">
                 Password
@@ -107,6 +110,7 @@ export const SignUpForm = () => {
                 placeholder="••••••••"
                 required
             />
+            <p className="text-red-500 h-6">{signupState.errors?.password}</p>
 
             <label className="text-md" htmlFor="confirmPassword">
                 Confirm Password
@@ -118,6 +122,7 @@ export const SignUpForm = () => {
                 placeholder="••••••••"
                 required
             />
+            <p className="text-red-500 h-6">{signupState.errors?.confirmPassword}</p>
         </Form>
     )
 }
