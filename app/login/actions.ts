@@ -115,11 +115,20 @@ export const signUp = async (prevState: State, formData: FormData): Promise<Stat
         password: password,
     });
 
-    if (error) return {
-        errors: {
-            auth: [error.message]
-        },
-        message: 'Sign up failed, please check your credentials and try again.'
+    if (error) {
+        if (error.message == "User already registered") return {
+            errors: {
+                email: [error.message]
+            },
+            message: 'A User with this email already exists.'
+        }
+
+        return {
+            errors: {
+                auth: [error.message]
+            },
+            message: 'Sign up failed, please check your credentials and try again.'
+        }
     }
 
     return {
