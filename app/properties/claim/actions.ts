@@ -33,17 +33,41 @@ export default async function claimProperty(formData: FormData) {
         //  check a the user is already the landlord of the property for this time period
         const { data: propertyOwnership, error: propertyOwnershipError } = await supabase
             .from('property_ownership')
-            .select('started_at, ended_at')
+            .select('landlord_id, started_at, ended_at')
             .eq('property_id', property_id)
 
         // if empty then good
+
+        if (propertyOwnership != null) {
+            
+            for (const property of propertyOwnership) {
+                if (property.landlord_id == user.id) {
+                    return {
+                        message: 'User is already the landlord of this property'
+                    }
+                } 
+                // Things to check:
+                // 1.   If it is claimed by another landlord 
+                // 2.   If new start date is between any of the existing start and end dates then return error
+                // 3.   If new end date is between any of the existing start and end dates then return error
+
+                
+                // Where to get the new start and end dates from?
+                
+
+
+            }
+
+
+            }
+
         // if not empty check start and end date overlap
 
-        if (propertyOwnership) {
-            return {
-                message: 'User is already the landlord of this property'
-            }
-        }
+        // if (propertyOwnership) {
+        //     return {
+        //         message: 'User is already the landlord of this property'
+        //     }
+        // }
 
 
         // update the property_ownership table
