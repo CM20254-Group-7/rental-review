@@ -15,11 +15,11 @@ alter table "public"."landlord_private_profiles" enable row level security;
 create table "public"."landlord_public_profiles" (
     "user_id" uuid not null,
     "website" varchar(50), 
-    "join_data" date not null,
+    "join_date" date not null,
     "bio" varchar(200), 
     "profile_image_id" uuid,
     "rating" float not null, 
-    "verifiled" bool not null,
+    "verified" bool not null,
     "type" char not null
 );
 
