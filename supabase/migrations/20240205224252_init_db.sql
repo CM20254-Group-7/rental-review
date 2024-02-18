@@ -14,11 +14,10 @@ alter table "public"."landlord_private_profiles" enable row level security;
 
 create table "public"."landlord_public_profiles" (
     "user_id" uuid not null,
-    "website" varchar(50), 
-    "join_date" date not null,
-    "bio" varchar(200), 
+    "website" varchar(50),
+    "bio" varchar(200),
     "profile_image_id" uuid,
-    "rating" float not null, 
+    "rating" float not null,
     "verified" bool not null,
     "type" char not null
 );
@@ -149,7 +148,7 @@ alter table "public"."landlord_private_profiles" validate constraint "landlord_p
 alter table "public"."landlord_public_profiles" add constraint "landlord_public_profiles_id_fkey" FOREIGN KEY (user_id) REFERENCES landlord_private_profiles(user_id) not valid;
 alter table "public"."landlord_public_profiles" validate constraint "landlord_public_profiles_id_fkey";
 
-alter table "public"."property_ownership" add constraint "property_ownership_landlord_id_fkey" FOREIGN KEY (landlord_id) REFERENCES landlord_public_profiles(id) not valid;
+alter table "public"."property_ownership" add constraint "property_ownership_landlord_id_fkey" FOREIGN KEY (landlord_id) REFERENCES landlord_public_profiles(user_id) not valid;
 alter table "public"."property_ownership" validate constraint "property_ownership_landlord_id_fkey";
 alter table "public"."property_ownership" add constraint "property_ownership_property_id_fkey" FOREIGN KEY (property_id) REFERENCES properties(id) not valid;
 alter table "public"."property_ownership" validate constraint "property_ownership_property_id_fkey";
@@ -172,12 +171,12 @@ alter table "public"."reviewer_public_profiles" validate constraint "reviewer_pu
 alter table "public"."reviews" add constraint "reviews_property_id_fkey" FOREIGN KEY (property_id) REFERENCES properties(id) not valid;
 alter table "public"."reviews" validate constraint "reviews_property_id_fkey";
 alter table "public"."reviews" add constraint "reviews_property_id_reviewer_id_key" UNIQUE using index "reviews_property_id_reviewer_id_key";
-alter table "public"."reviews" add constraint "reviews_reviewer_id_fkey" FOREIGN KEY (reviewer_id) REFERENCES reviewer_public_profiles(id) not valid;
+alter table "public"."reviews" add constraint "reviews_reviewer_id_fkey" FOREIGN KEY (reviewer_id) REFERENCES reviewer_public_profiles(user_id) not valid;
 alter table "public"."reviews" validate constraint "reviews_reviewer_id_fkey";
 
-alter table "public"."user_profiles" add constraint "user_profiles_id_fkey" FOREIGN KEY (user_id) REFERENCES auth.users(user_id) not valid;
+alter table "public"."user_profiles" add constraint "user_profiles_id_fkey" FOREIGN KEY (user_id) REFERENCES auth.users(id) not valid;
 alter table "public"."user_profiles" validate constraint "user_profiles_id_fkey";
-alter table "public"."user_profiles" add constraint "user_public_profiles_id_fkey" FOREIGN KEY (user_id) REFERENCES auth.users(user_id) not valid;
+alter table "public"."user_profiles" add constraint "user_public_profiles_id_fkey" FOREIGN KEY (user_id) REFERENCES auth.users(id) not valid;
 alter table "public"."user_profiles" validate constraint "user_public_profiles_id_fkey";
 
 
