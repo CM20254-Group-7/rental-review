@@ -36,13 +36,34 @@ export interface Database {
     Tables: {
       landlord_private_profiles: {
         Row: {
+          city: string | null
+          country: string
+          county: string | null
+          house: string
           id: string
+          phone_number: string
+          postcode: string
+          street: string | null
         }
         Insert: {
+          city?: string | null
+          country: string
+          county?: string | null
+          house: string
           id: string
+          phone_number: string
+          postcode: string
+          street?: string | null
         }
         Update: {
+          city?: string | null
+          country?: string
+          county?: string | null
+          house?: string
           id?: string
+          phone_number?: string
+          postcode?: string
+          street?: string | null
         }
         Relationships: [
           {
@@ -50,19 +71,37 @@ export interface Database {
             columns: ["id"]
             isOneToOne: true
             referencedRelation: "user_profiles"
-            referencedColumns: ["id"]
+            referencedColumns: ["user_id"]
           }
         ]
       }
       landlord_public_profiles: {
         Row: {
+          bio: string | null
           id: string
+          profile_image_id: string | null
+          rating: number
+          type: string
+          verified: boolean
+          website: string | null
         }
         Insert: {
+          bio?: string | null
           id: string
+          profile_image_id?: string | null
+          rating: number
+          type: string
+          verified: boolean
+          website?: string | null
         }
         Update: {
+          bio?: string | null
           id?: string
+          profile_image_id?: string | null
+          rating?: number
+          type?: string
+          verified?: boolean
+          website?: string | null
         }
         Relationships: [
           {
@@ -184,7 +223,7 @@ export interface Database {
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "user_profiles"
-            referencedColumns: ["id"]
+            referencedColumns: ["user_id"]
           }
         ]
       }
@@ -253,34 +292,34 @@ export interface Database {
           created_at: string | null
           email: string | null
           first_name: string | null
-          id: string
           last_name: string | null
+          user_id: string
         }
         Insert: {
           created_at?: string | null
           email?: string | null
           first_name?: string | null
-          id: string
           last_name?: string | null
+          user_id: string
         }
         Update: {
           created_at?: string | null
           email?: string | null
           first_name?: string | null
-          id?: string
           last_name?: string | null
+          user_id?: string
         }
         Relationships: [
           {
             foreignKeyName: "user_profiles_id_fkey"
-            columns: ["id"]
+            columns: ["user_id"]
             isOneToOne: true
             referencedRelation: "users"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "user_public_profiles_id_fkey"
-            columns: ["id"]
+            columns: ["user_id"]
             isOneToOne: true
             referencedRelation: "users"
             referencedColumns: ["id"]
