@@ -78,10 +78,10 @@ export const ReviewDetailsLayout: React.FC<ReviewDetailsLayoutProps> = ({
                         <StarRating rating={propertyRating} />
                     </div>
 
-                    {/* <div className="flex flex-col"> */}
-                        {/* <p className="text-lg font-semibold">Landlord:</p> */}
-                        {/* <StarRating rating={landlordRating} /> */}
-                    {/* </div> */}
+                    <div className="flex flex-col">
+                        <p className="text-lg font-semibold">Landlord:</p>
+                        <StarRating rating={landlordRating} />
+                    </div>
                 {/* </div> */}
 
                 {/* <p className="text-lg font-semibold">Review:</p> */}
