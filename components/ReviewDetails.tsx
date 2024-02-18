@@ -73,9 +73,10 @@ export const ReviewDetailsLayout: React.FC<ReviewDetailsLayoutProps> = ({
             <div className="flex flex-col w-full sm:w-4/5 gap-2">
 
                 {/* <div className="flex flex-col sm:flex-row justify-around place-items-center"> */}
-                    {/* <div className="flex flex-col"> */}
-                        {/* <p className="text-lg font-semibold">Property:</p> */}
-                        {/* <StarRating rating={propertyRating} /> */}
+                    <div className="flex flex-col">
+                        <p className="text-lg font-semibold">Property:</p>
+                        <StarRating rating={propertyRating} />
+                    </div>
 
                     {/* <div className="flex flex-col"> */}
                         {/* <p className="text-lg font-semibold">Landlord:</p> */}
