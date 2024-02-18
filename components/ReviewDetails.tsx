@@ -84,8 +84,8 @@ export const ReviewDetailsLayout: React.FC<ReviewDetailsLayoutProps> = ({
                     </div>
                 </div>
 
-                {/* <p className="text-lg font-semibold">Review:</p> */}
-                {/* <p className="border rounded-md h-fit min-h-[5rem] bg-gray-100/10 py-1 px-2">{reviewMessage}</p> */}
+                <p className="text-lg font-semibold">Review:</p>
+                <p className="border rounded-md h-fit min-h-[5rem] bg-gray-100/10 py-1 px-2">{reviewMessage}</p>
                 <p className="ml-auto text-gray-300">{reviewDate.toLocaleDateString()}</p>
             </div>
         </MaybeLink>
