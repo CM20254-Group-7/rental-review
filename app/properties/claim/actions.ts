@@ -13,8 +13,13 @@ export type State = {
     message?: string | null;
 };
 
-export default async function claimProperty(formData: FormData) {
-    const property_id = formData.get('property_id');
+export const claimProperty = async (
+    propertyId: string,
+    landlordId: string,
+    prevState: State,
+    formData: FormData
+): Promise<State> => {
+    const property_id = propertyId
 
     if (!property_id) {
         return {

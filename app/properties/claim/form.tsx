@@ -1,7 +1,7 @@
 'use client'
 
 import { useFormState } from "react-dom"
-import claimProperty from "./actions"
+import { claimProperty } from "./actions"
 
 interface ClaimPropertyFormProps {
     property_id: string
@@ -38,7 +38,7 @@ export const ClaimPropertyForm: React.FC<ClaimPropertyFormProps> = ({
                 </div>
             </div>
 
-            <form 
+            <form
                 className="flex flex-col gap-4 justify-center bg-foreground/10 border-x px-4 py-8"
                 action={dispatch}
             >
