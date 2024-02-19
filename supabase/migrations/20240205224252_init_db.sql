@@ -147,7 +147,7 @@ alter table "public"."landlord_private_profiles" validate constraint "landlord_p
 alter table "public"."landlord_public_profiles" add constraint "landlord_public_profiles_id_fkey" FOREIGN KEY (user_id) REFERENCES landlord_private_profiles(user_id) not valid;
 alter table "public"."landlord_public_profiles" validate constraint "landlord_public_profiles_id_fkey";
 
-alter table "public"."property_ownership" add constraint "property_ownership_landlord_id_fkey" FOREIGN KEY (landlord_id) REFERENCES landlord_public_profiles(id) not valid;
+alter table "public"."property_ownership" add constraint "property_ownership_landlord_id_fkey" FOREIGN KEY (landlord_id) REFERENCES landlord_public_profiles(user_id) not valid;
 alter table "public"."property_ownership" validate constraint "property_ownership_landlord_id_fkey";
 alter table "public"."property_ownership" add constraint "property_ownership_property_id_fkey" FOREIGN KEY (property_id) REFERENCES properties(id) not valid;
 alter table "public"."property_ownership" validate constraint "property_ownership_property_id_fkey";
