@@ -189,14 +189,14 @@ const setPropertyOwnership = async (
         process.env.SUPABASE_SERVICE_KEY!
     )
 
-    const { data, error } = await supabase
+    const { error } = await supabase
         .from('property_ownership')
-        .update({
+        .insert({
+            property_id: propertyId,
             landlord_id: landlordId,
             started_at: startedAt.toISOString(),
             ended_at: endedAt?.toISOString()
         })
-        .match({ id: propertyId })
 
     if (error) {
         return {
