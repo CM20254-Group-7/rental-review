@@ -92,8 +92,20 @@ const getLandlordDetails = async (
         }
     }
 
+    // get user
+    const cookieStore = cookies()
+    const supabase = createServerClient(cookieStore)
+
+    const { data: { user }, error: userError } = await supabase.auth.getUser()
+    if (!user) {
+        return {
+            message: 'User Not Logged In'
+        }
+    }
+    
+
     return {
-        message: null,
+        message: "Landlord details fetched successfully",
         errors: undefined
     }
 }
