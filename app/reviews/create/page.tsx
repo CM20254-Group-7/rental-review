@@ -52,52 +52,35 @@ const createReviewPage = () => {
           required
         />
 
-        <h2 className="text-xl font-semibold">Landlord Ratings</h2>
+        <h2 className="text-xl font-semibold">Ratings</h2>
 
-        <label htmlFor="speed_rating">Speed to Reply</label>
+        <label htmlFor="landlord_rating">
+          Rate the landlord on a scale from 1-5
+        </label>
         <input
           className="border p-2 rounded-md"
           type="number"
-          name="speed_rating"
-          id="speed_rating"
-          min="1"
-          max="5"
-          required
-        />
-        <label htmlFor="contract_fairness_rating">Fairness of contract</label>
-        <input
-          className="border p-2 rounded-md"
-          type="number"
-          name="contract_fairness_rating"
-          id="contract_fairness_rating"
+          name="landlord_rating"
+          id="landlord_rating"
           min="1"
           max="5"
           required
         />
 
-        <label htmlFor="friendliness_rating">Friendliness</label>
+        <label htmlFor="property_rating">
+          Rate the property on a scale of 1-5
+        </label>
         <input
           className="border p-2 rounded-md mb-6"
           type="number"
-          name="friendliness_rating"
-          id="friendliness_rating"
+          name="property_rating"
+          id="property_rating"
           min="1"
           max="5"
           required
         />
 
-        <h2 className="text-xl font-semibold">Overall Ratings</h2>
-
-        <label htmlFor="friendliness_rating">Overall Rating</label>
-        <input
-          className="border p-2 rounded-md"
-          type="number"
-          name="friendliness_rating"
-          id="friendliness_rating"
-          min="1"
-          max="5"
-          required
-        />
+        <h2 className="text-xl font-semibold">Review Description</h2>
 
         {/* Comment this out later if we decide to include image upload*/}
         {/* <label htmlFor="property_images">Upload images of property here</label>
@@ -110,11 +93,19 @@ const createReviewPage = () => {
           required
         /> */}
 
+        <label htmlFor="review_title">Review Title</label>
+        <textarea
+          className="border p-1 rounded-md h-10"
+          name="review_title"
+          id="review_title"
+          required
+        ></textarea>
+
         <label htmlFor="review_body">
           Write your review here (max 300 characters)
         </label>
         <textarea
-          className="border p-2 rounded-md h-40"
+          className="border p-2 rounded-md h-40 mb-6"
           name="review_body"
           id="review_body"
           required
