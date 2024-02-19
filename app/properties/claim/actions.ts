@@ -166,6 +166,10 @@ export const claimProperty = async (
                         message: 'Error Claiming Property'
                     }
                 }
+
+                return {
+                    message: 'Property Claimed Successfully'
+                }
             }
         }
     }
