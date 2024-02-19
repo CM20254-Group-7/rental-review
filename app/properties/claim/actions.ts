@@ -98,17 +98,16 @@ export const claimProperty = async (
 
     // check if the user is logged in
     const { data: { user }, error: userError } = await supabase.auth.getUser()
-    if (userError) {
+    if (userError)
         return {
             message: 'Error Fetching User'
-        }
-    }
+        };
 
-    if (!user) {
+
+    if (!user)
         return {
             message: 'User Not Logged In'
-        }
-    }
+        };
 
     //  check a the user is already the landlord of the property for this time period
     const { data: propertyOwnershipList, error: propertyOwnershipError } = await supabase
@@ -116,11 +115,11 @@ export const claimProperty = async (
         .select('landlord_id, started_at, ended_at')
         .eq('property_id', property_id)
 
-    if (propertyOwnershipError) {
+    if (propertyOwnershipError)
         return {
             message: 'Error Fetching Property Ownership'
-        }
-    }
+        };
+
 
     // if empty then good
     if (propertyOwnershipList.length == 0)
@@ -148,29 +147,24 @@ export const claimProperty = async (
         const existing_start = new Date(propertyOwnership.started_at)
         const existing_end = propertyOwnership.ended_at ? new Date(propertyOwnership.ended_at) : new Date()
 
-
-        if (propertyOwnership.landlord_id == user.id) {
-            // tried to claim the same property again
+        // tried to claim the same property again
+        if (propertyOwnership.landlord_id == user.id)
             return {
                 message: 'User is already the landlord of this property'
-            }
+            };
 
-        } else if (propertyOwnership.landlord_id != null) {
-            // property is claimed by someone else
+        // new start date is before current end date
+        if (existing_end && ended_at < existing_end)
+            return {
+                message: 'New start date is before the current end date'
+            };
 
-            if (existing_end && ended_at < existing_end) {
-                // new start date is before current end date
-                return {
-                    message: 'New start date is before the current end date'
-                }
+        // new end date is after current start date
+        if (existing_start && started_at > existing_end)
+            return {
+                message: 'New end date is after the current start date'
+            };
 
-            } else if (existing_start && started_at > existing_end) {
-                // new end date is after current start date
-                return {
-                    message: 'New end date is after the current start date'
-                }
-            }
-        }
     }
 
     // if no unresolveable conflicts where found, continue, closing an open claim if necessary
@@ -198,15 +192,15 @@ const setPropertyOwnership = async (
             ended_at: endedAt?.toISOString()
         })
 
-    if (error) {
+    if (error)
         return {
             message: 'Error Claiming Property'
-        }
-    }
+        };
+
 
     return {
         message: 'Property Claimed Successfully'
-    }
+    };
 }
 
 const setPropertyOwnershipWithClose = async (
@@ -216,7 +210,7 @@ const setPropertyOwnershipWithClose = async (
     endedAt: Date | null,
     openClaimToClose: false | { started_at: Date }
 ): Promise<State> => {
-    if (!openClaimToClose) return await setPropertyOwnership( propertyId, landlordId, startedAt, endedAt )
+    if (!openClaimToClose) return await setPropertyOwnership(propertyId, landlordId, startedAt, endedAt)
 
     // close the open claim with the day before the new claim starts
     const supabase = createServiceClient<Database>(
@@ -233,12 +227,11 @@ const setPropertyOwnershipWithClose = async (
         .eq('property_id', propertyId)
         .eq('started_at', openClaimToClose.started_at.toISOString())
 
-    if (error) {
+    if (error)
         return {
             message: 'Error Closing Open Claim'
-        }
-    }
+        };
 
     // continue to create the new claim
-    return await setPropertyOwnership( propertyId, landlordId, startedAt, endedAt )
+    return await setPropertyOwnership(propertyId, landlordId, startedAt, endedAt)
 }
