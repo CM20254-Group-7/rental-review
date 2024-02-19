@@ -99,7 +99,8 @@ const createReviewPage = () => {
           required
         />
 
-        <label htmlFor="property_images">Upload images of property here</label>
+        {/* Comment this out later if we decide to include image upload*/}
+        {/* <label htmlFor="property_images">Upload images of property here</label>
         <input
           className="border p-2 rounded-md"
           type="file"
@@ -107,7 +108,7 @@ const createReviewPage = () => {
           id="property_images"
           accept="image/*"
           required
-        />
+        /> */}
 
         <label htmlFor="review_body">
           Write your review here (max 300 characters)
