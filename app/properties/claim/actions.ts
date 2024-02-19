@@ -1,6 +1,8 @@
 'use server'
 
+import { Database } from "@/supabase.types";
 import { createClient as createServerClient } from "@/utils/supabase/server";
+import { createClient as createServiceClient } from "@supabase/supabase-js"
 import { cookies } from "next/headers";
 import { z } from "zod";
 
@@ -152,25 +154,39 @@ export const claimProperty = async (
 
             } else {
                 // property is good to claim
-                const { data, error } = await supabase
-                    .from('property_ownership')
-                    .update({
-                        landlord_id: user.id,
-                        started_at: started_at.toISOString(),
-                        ended_at: null
-                    })
-                    .match({ id: property_id })
-
-                if (error) {
-                    return {
-                        message: 'Error Claiming Property'
-                    }
-                }
-
-                return {
-                    message: 'Property Claimed Successfully'
-                }
+                return setPropertyOwnership(property_id, landlord_id, started_at, ended_at)
             }
         }
+    }
+}
+
+const setPropertyOwnership = async (
+    propertyId: string,
+    landlordId: string,
+    startedAt: Date,
+    endedAt: Date | null
+) => {
+    const supabase = createServiceClient<Database>(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.SUPABASE_SERVICE_KEY!
+    )
+    
+    const { data, error } = await supabase
+        .from('property_ownership')
+        .update({
+            landlord_id: landlordId,
+            started_at: startedAt.toISOString(),
+            ended_at: endedAt?.toISOString()
+        })
+        .match({ id: propertyId })
+
+    if (error) {
+        return {
+            message: 'Error Claiming Property'
+        }
+    }
+
+    return {
+        message: 'Property Claimed Successfully'
     }
 }
