@@ -140,7 +140,10 @@ export const claimProperty = async (
     //    2.2 The new claim starts before the existing claim
     //        2.2.1 The new claim is closed and ends before the existing claim starts, continue
     //        2.2.2 The new claim is open or ends after the existing claim starts, fail
-    
+
+    // To handle 2.1, track whether there is an open claim to close as we iterate through the existing claims
+    let openClaimToClose: false | { started_at: Date } = false;
+
     for (const propertyOwnership of propertyOwnershipList) {
         const existing_start = new Date(propertyOwnership.started_at)
         const existing_end = propertyOwnership.ended_at ? new Date(propertyOwnership.ended_at) : new Date()
@@ -167,12 +170,11 @@ export const claimProperty = async (
                     message: 'New end date is after the current start date'
                 }
             }
-
-        } else {
-            // property is good to claim
-            return setPropertyOwnership(property_id, landlord_id, started_at, ended_at)
         }
     }
+
+    // if no unresolveable conflicts where found, continue, closing an open claim if necessary
+    return setPropertyOwnershipWithClose(property_id, landlord_id, started_at, ended_at, openClaimToClose)
 }
 
 
@@ -205,4 +207,38 @@ const setPropertyOwnership = async (
     return {
         message: 'Property Claimed Successfully'
     }
+}
+
+const setPropertyOwnershipWithClose = async (
+    propertyId: string,
+    landlordId: string,
+    startedAt: Date,
+    endedAt: Date | null,
+    openClaimToClose: false | { started_at: Date }
+): Promise<State> => {
+    if (!openClaimToClose) return await setPropertyOwnership( propertyId, landlordId, startedAt, endedAt )
+
+    // close the open claim with the day before the new claim starts
+    const supabase = createServiceClient<Database>(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.SERVICE_SUPABASE_KEY!
+    );
+    const newEndedAt = new Date(startedAt.getDate() - 1);
+
+    const { error } = await supabase
+        .from('property_ownership')
+        .update({
+            ended_at: newEndedAt.toISOString()
+        })
+        .eq('property_id', propertyId)
+        .eq('started_at', openClaimToClose.started_at.toISOString())
+
+    if (error) {
+        return {
+            message: 'Error Closing Open Claim'
+        }
+    }
+
+    // continue to create the new claim
+    return await setPropertyOwnership( propertyId, landlordId, startedAt, endedAt )
 }
