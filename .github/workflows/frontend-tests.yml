@@ -31,12 +31,7 @@ jobs:
       run: npx playwright install --with-deps
 
     - name: start supabase
-      run: |
-        supabase start
-        supabase db reset
-
-    - name: pre build webserver
-      run: npm run build
+      run: supabase start
 
     - name: Run Playwright tests
       run: npx playwright test        
