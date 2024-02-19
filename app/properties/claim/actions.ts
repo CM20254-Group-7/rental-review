@@ -21,6 +21,26 @@ export const ClaimPropertySchema = z
         started_at: z.date(),
         ended_at: z.date().nullable()
     })
+    // started_at must be in the past
+    .superRefine(({ started_at }, ctx) => {
+        if (started_at > new Date()) {
+            ctx.addIssue({
+                code: z.ZodIssueCode.custom,
+                message: 'Start date must be in the past',
+                path: ['started_at']
+            })
+        }
+    })
+    // If ended_at is not null, it must be in the past
+    .superRefine(({ ended_at }, ctx) => {
+        if (ended_at && ended_at > new Date()) {
+            ctx.addIssue({
+                code: z.ZodIssueCode.custom,
+                message: 'End date must be in the past',
+                path: ['ended_at']
+            })
+        }
+    })
     // If ended_at is not null, it must be after started_at
     .superRefine(({ started_at, ended_at }, ctx) => {
         if (ended_at && started_at > ended_at) {
