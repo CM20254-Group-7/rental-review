@@ -43,6 +43,15 @@ const createReviewPage = () => {
           required
         ></textarea>
 
+        <label htmlFor="review_date">Review Date</label>
+        <input
+          className="border p-2 rounded-md"
+          type="date"
+          name="review_date"
+          id="review_date"
+          required
+        />
+
         <label htmlFor="tenancy_period">Tenancy Period</label>
         <input
           className="border p-2 rounded-md mb-6"
@@ -102,7 +111,7 @@ const createReviewPage = () => {
         ></textarea>
 
         <label htmlFor="review_body">
-          Write your review here (max 300 characters)
+          Write your review here (max 1000 characters)
         </label>
         <textarea
           className="border p-2 rounded-md h-40 mb-6"
