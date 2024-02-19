@@ -45,20 +45,10 @@ const createReviewPage = () => {
 
         <label htmlFor="tenancy_period">Tenancy Period</label>
         <input
-          className="border p-2 rounded-md"
+          className="border p-2 rounded-md mb-6"
           type="text"
           name="tenancy_period"
           id="tenancy_period"
-          required
-        />
-
-        <label htmlFor="proof_of_tenancy">Upload proof of tenancy</label>
-        <input
-          className="border p-2 rounded-md mb-6"
-          type="file"
-          name="proof_of_tenancy"
-          id="proof_of_tenancy"
-          accept="image/*"
           required
         />
 
