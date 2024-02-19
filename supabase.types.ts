@@ -36,77 +36,41 @@ export interface Database {
     Tables: {
       landlord_private_profiles: {
         Row: {
-          city: string | null
-          country: string
-          county: string | null
-          house: string
-          phone_number: string
-          postcode: string
-          street: string | null
-          user_id: string
+          id: string
         }
         Insert: {
-          city?: string | null
-          country: string
-          county?: string | null
-          house: string
-          phone_number: string
-          postcode: string
-          street?: string | null
-          user_id: string
+          id: string
         }
         Update: {
-          city?: string | null
-          country?: string
-          county?: string | null
-          house?: string
-          phone_number?: string
-          postcode?: string
-          street?: string | null
-          user_id?: string
+          id?: string
         }
         Relationships: [
           {
             foreignKeyName: "landlord_private_profiles_id_fkey"
-            columns: ["user_id"]
+            columns: ["id"]
             isOneToOne: true
             referencedRelation: "user_profiles"
-            referencedColumns: ["user_id"]
+            referencedColumns: ["id"]
           }
         ]
       }
       landlord_public_profiles: {
         Row: {
-          bio: string | null
-          profile_image_id: string | null
-          type: string
-          user_id: string
-          verified: boolean
-          website: string | null
+          id: string
         }
         Insert: {
-          bio?: string | null
-          profile_image_id?: string | null
-          type: string
-          user_id: string
-          verified: boolean
-          website?: string | null
+          id: string
         }
         Update: {
-          bio?: string | null
-          profile_image_id?: string | null
-          type?: string
-          user_id?: string
-          verified?: boolean
-          website?: string | null
+          id?: string
         }
         Relationships: [
           {
             foreignKeyName: "landlord_public_profiles_id_fkey"
-            columns: ["user_id"]
+            columns: ["id"]
             isOneToOne: true
             referencedRelation: "landlord_private_profiles"
-            referencedColumns: ["user_id"]
+            referencedColumns: ["id"]
           }
         ]
       }
@@ -150,7 +114,7 @@ export interface Database {
             columns: ["landlord_id"]
             isOneToOne: false
             referencedRelation: "landlord_public_profiles"
-            referencedColumns: ["user_id"]
+            referencedColumns: ["id"]
           },
           {
             foreignKeyName: "property_ownership_property_id_fkey"
@@ -220,7 +184,7 @@ export interface Database {
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "user_profiles"
-            referencedColumns: ["user_id"]
+            referencedColumns: ["id"]
           }
         ]
       }
@@ -289,34 +253,34 @@ export interface Database {
           created_at: string | null
           email: string | null
           first_name: string | null
+          id: string
           last_name: string | null
-          user_id: string
         }
         Insert: {
           created_at?: string | null
           email?: string | null
           first_name?: string | null
+          id: string
           last_name?: string | null
-          user_id: string
         }
         Update: {
           created_at?: string | null
           email?: string | null
           first_name?: string | null
+          id?: string
           last_name?: string | null
-          user_id?: string
         }
         Relationships: [
           {
             foreignKeyName: "user_profiles_id_fkey"
-            columns: ["user_id"]
+            columns: ["id"]
             isOneToOne: true
             referencedRelation: "users"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "user_public_profiles_id_fkey"
-            columns: ["user_id"]
+            columns: ["id"]
             isOneToOne: true
             referencedRelation: "users"
             referencedColumns: ["id"]
