@@ -13,7 +13,17 @@ create table "public"."landlord_public_profiles" (
 alter table "public"."landlord_public_profiles" enable row level security;
 
 create table "public"."properties" (
-    "id" uuid not null default gen_random_uuid()
+    "id" uuid not null default gen_random_uuid(),
+    "country" varchar(20) not null, 
+    "county" varchar(20), 
+    "street" varchar(20), 
+    "house" varchar(20) not null,
+    "postcode" varchar(10) not null,
+    "description" varchar(200), 
+    "image_id" uuid, 
+    "property_type" char not null,
+    "beds" integer,
+    "baths" integer
 );
 
 
