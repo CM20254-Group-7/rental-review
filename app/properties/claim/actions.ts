@@ -123,42 +123,48 @@ export const claimProperty = async (
     }
 
     // if empty then good
+    if (propertyOwnershipList.length == 0)
+        return setPropertyOwnership(
+            property_id,
+            landlord_id,
+            started_at,
+            ended_at
+        );
 
-    if (propertyOwnershipList != null) {
-        for (const propertyOwnership of propertyOwnershipList) {
-            const existing_start = new Date(propertyOwnership.started_at)
-            const existing_end = propertyOwnership.ended_at ? new Date(propertyOwnership.ended_at) : new Date()
+    for (const propertyOwnership of propertyOwnershipList) {
+        const existing_start = new Date(propertyOwnership.started_at)
+        const existing_end = propertyOwnership.ended_at ? new Date(propertyOwnership.ended_at) : new Date()
 
 
-            if (propertyOwnership.landlord_id == user.id) {
-                // tried to claim the same property again
-                return {
-                    message: 'User is already the landlord of this property'
-                }
-
-            } else if (propertyOwnership.landlord_id != null) {
-                // property is claimed by someone else
-
-                if (existing_end && ended_at < existing_end) {
-                    // new start date is before current end date
-                    return {
-                        message: 'New start date is before the current end date'
-                    }
-
-                } else if (existing_start && started_at > existing_end) {
-                    // new end date is after current start date
-                    return {
-                        message: 'New end date is after the current start date'
-                    }
-                }
-
-            } else {
-                // property is good to claim
-                return setPropertyOwnership(property_id, landlord_id, started_at, ended_at)
+        if (propertyOwnership.landlord_id == user.id) {
+            // tried to claim the same property again
+            return {
+                message: 'User is already the landlord of this property'
             }
+
+        } else if (propertyOwnership.landlord_id != null) {
+            // property is claimed by someone else
+
+            if (existing_end && ended_at < existing_end) {
+                // new start date is before current end date
+                return {
+                    message: 'New start date is before the current end date'
+                }
+
+            } else if (existing_start && started_at > existing_end) {
+                // new end date is after current start date
+                return {
+                    message: 'New end date is after the current start date'
+                }
+            }
+
+        } else {
+            // property is good to claim
+            return setPropertyOwnership(property_id, landlord_id, started_at, ended_at)
         }
     }
 }
+
 
 const setPropertyOwnership = async (
     propertyId: string,
@@ -170,7 +176,7 @@ const setPropertyOwnership = async (
         process.env.NEXT_PUBLIC_SUPABASE_URL!,
         process.env.SUPABASE_SERVICE_KEY!
     )
-    
+
     const { data, error } = await supabase
         .from('property_ownership')
         .update({
