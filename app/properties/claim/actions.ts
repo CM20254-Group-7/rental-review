@@ -131,6 +131,16 @@ export const claimProperty = async (
             ended_at
         );
 
+    // If not empty, for each existing property ownership record, there several cases to consider:
+    // 1. The existing claim is closed
+    //    1.1 The existing claim does not overlap with the new claim, continue
+    //    1.2 The existing claim overlaps with the new claim, fail
+    // 2. The existing claim is open 
+    //    2.1 The new claim starts after the existing claim, close the existing claim & continue
+    //    2.2 The new claim starts before the existing claim
+    //        2.2.1 The new claim is closed and ends before the existing claim starts, continue
+    //        2.2.2 The new claim is open or ends after the existing claim starts, fail
+    
     for (const propertyOwnership of propertyOwnershipList) {
         const existing_start = new Date(propertyOwnership.started_at)
         const existing_end = propertyOwnership.ended_at ? new Date(propertyOwnership.ended_at) : new Date()
