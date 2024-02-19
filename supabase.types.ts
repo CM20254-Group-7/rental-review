@@ -44,20 +44,8 @@ export interface Database {
           postcode: string
           street: string | null
           user_id: string
-          city: string | null
-          country: string
-          county: string | null
-          house: string
-          id: string
-          phone_number: string
-          postcode: string
-          street: string | null
         }
         Insert: {
-          city?: string | null
-          country: string
-          county?: string | null
-          house: string
           city?: string | null
           country: string
           county?: string | null
@@ -66,9 +54,6 @@ export interface Database {
           postcode: string
           street?: string | null
           user_id: string
-          phone_number: string
-          postcode: string
-          street?: string | null
         }
         Update: {
           city?: string | null
@@ -79,14 +64,6 @@ export interface Database {
           postcode?: string
           street?: string | null
           user_id?: string
-          city?: string | null
-          country?: string
-          county?: string | null
-          house?: string
-          id?: string
-          phone_number?: string
-          postcode?: string
-          street?: string | null
         }
         Relationships: [
           {
@@ -94,7 +71,7 @@ export interface Database {
             columns: ["user_id"]
             isOneToOne: true
             referencedRelation: "user_profiles"
-            referencedColumns: ["user_user_id"]
+            referencedColumns: ["user_id"]
           }
         ]
       }
@@ -106,13 +83,6 @@ export interface Database {
           user_id: string
           verified: boolean
           website: string | null
-          bio: string | null
-          id: string
-          profile_image_id: string | null
-          rating: number
-          type: string
-          verified: boolean
-          website: string | null
         }
         Insert: {
           bio?: string | null
@@ -121,26 +91,12 @@ export interface Database {
           user_id: string
           verified: boolean
           website?: string | null
-          bio?: string | null
-          id: string
-          profile_image_id?: string | null
-          rating: number
-          type: string
-          verified: boolean
-          website?: string | null
         }
         Update: {
           bio?: string | null
           profile_image_id?: string | null
           type?: string
           user_id?: string
-          verified?: boolean
-          website?: string | null
-          bio?: string | null
-          id?: string
-          profile_image_id?: string | null
-          rating?: number
-          type?: string
           verified?: boolean
           website?: string | null
         }
@@ -265,7 +221,6 @@ export interface Database {
             isOneToOne: false
             referencedRelation: "user_profiles"
             referencedColumns: ["user_id"]
-            referencedColumns: ["user_id"]
           }
         ]
       }
@@ -336,14 +291,12 @@ export interface Database {
           first_name: string | null
           last_name: string | null
           user_id: string
-          user_id: string
         }
         Insert: {
           created_at?: string | null
           email?: string | null
           first_name?: string | null
           last_name?: string | null
-          user_id: string
           user_id: string
         }
         Update: {
@@ -352,12 +305,10 @@ export interface Database {
           first_name?: string | null
           last_name?: string | null
           user_id?: string
-          user_id?: string
         }
         Relationships: [
           {
             foreignKeyName: "user_profiles_id_fkey"
-            columns: ["user_id"]
             columns: ["user_id"]
             isOneToOne: true
             referencedRelation: "users"
@@ -365,7 +316,6 @@ export interface Database {
           },
           {
             foreignKeyName: "user_public_profiles_id_fkey"
-            columns: ["user_id"]
             columns: ["user_id"]
             isOneToOne: true
             referencedRelation: "users"
