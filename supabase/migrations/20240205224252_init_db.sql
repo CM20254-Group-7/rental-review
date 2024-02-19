@@ -1,5 +1,5 @@
 create table "public"."landlord_private_profiles" (
-    "id" uuid not null,
+    "user_id" uuid not null,
     "phone_number" varchar(20) not null,
     "postcode" varchar(7) not null,
     "country" varchar(20) not null,
@@ -13,11 +13,10 @@ create table "public"."landlord_private_profiles" (
 alter table "public"."landlord_private_profiles" enable row level security;
 
 create table "public"."landlord_public_profiles" (
-    "id" uuid not null,
+    "user_id" uuid not null,
     "website" varchar(50),
     "bio" varchar(200),
     "profile_image_id" uuid,
-    "rating" float not null,
     "verified" bool not null,
     "type" char not null
 );
@@ -96,9 +95,9 @@ create table "public"."user_profiles" (
 
 alter table "public"."user_profiles" enable row level security;
 
-CREATE UNIQUE INDEX landlord_private_profiles_pkey ON public.landlord_private_profiles USING btree (id);
+CREATE UNIQUE INDEX landlord_private_profiles_pkey ON public.landlord_private_profiles USING btree (user_id);
 
-CREATE UNIQUE INDEX landlord_public_profiles_pkey ON public.landlord_public_profiles USING btree (id);
+CREATE UNIQUE INDEX landlord_public_profiles_pkey ON public.landlord_public_profiles USING btree (user_id);
 
 CREATE UNIQUE INDEX properties_pkey ON public.properties USING btree (id);
 
@@ -142,10 +141,10 @@ alter table "public"."uploaded_files" add constraint "uploaded_files_pkey" PRIMA
 
 alter table "public"."user_profiles" add constraint "user_public_profiles_pkey" PRIMARY KEY using index "user_public_profiles_pkey";
 
-alter table "public"."landlord_private_profiles" add constraint "landlord_private_profiles_id_fkey" FOREIGN KEY (id) REFERENCES user_profiles(user_id) not valid;
+alter table "public"."landlord_private_profiles" add constraint "landlord_private_profiles_id_fkey" FOREIGN KEY (user_id) REFERENCES user_profiles(user_id) not valid;
 alter table "public"."landlord_private_profiles" validate constraint "landlord_private_profiles_id_fkey";
 
-alter table "public"."landlord_public_profiles" add constraint "landlord_public_profiles_id_fkey" FOREIGN KEY (id) REFERENCES landlord_private_profiles(id) not valid;
+alter table "public"."landlord_public_profiles" add constraint "landlord_public_profiles_id_fkey" FOREIGN KEY (user_id) REFERENCES landlord_private_profiles(user_id) not valid;
 alter table "public"."landlord_public_profiles" validate constraint "landlord_public_profiles_id_fkey";
 
 alter table "public"."property_ownership" add constraint "property_ownership_landlord_id_fkey" FOREIGN KEY (landlord_id) REFERENCES landlord_public_profiles(id) not valid;
