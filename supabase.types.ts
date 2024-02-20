@@ -292,7 +292,20 @@ export interface Database {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_average_property_rating: {
+        Args: {
+          property_id: string
+        }
+        Returns: number
+      }
+      get_properties_with_ratings: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          property_id: string
+          address: string
+          average_rating: number
+        }[]
+      }
     }
     Enums: {
       [_ in never]: never
