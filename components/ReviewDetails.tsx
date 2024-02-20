@@ -2,9 +2,9 @@
 
 import { createClient } from "@/utils/supabase/server"
 import { cookies } from "next/headers"
+import { StarRatingLayout } from "./StarRating"
 import Link from "next/link"
 
-import { StarIcon } from '@heroicons/react/24/solid'
 
 interface ReviewDetailsProps {
     reviewId: string
@@ -75,12 +75,12 @@ export const ReviewDetailsLayout: React.FC<ReviewDetailsLayoutProps> = ({
                 <div className="flex flex-col sm:flex-row justify-around place-items-center">
                     <div className="flex flex-col">
                         <p className="text-lg font-semibold">Property:</p>
-                        <StarRating rating={propertyRating} />
+                        <StarRatingLayout rating={propertyRating} />
                     </div>
 
                     <div className="flex flex-col">
                         <p className="text-lg font-semibold">Landlord:</p>
-                        <StarRating rating={landlordRating} />
+                        <StarRatingLayout rating={landlordRating} />
                     </div>
                 </div>
 
@@ -122,24 +122,3 @@ const MaybeLink: React.FC<MaybeLinkProps> = ({
     )
 }
 
-interface StarRatingProps {
-    rating: number
-}
-export const StarRating: React.FC<StarRatingProps> = ({
-    rating
-}) => {
-    return (
-        <div className="flex">
-            {Array.from({ length: 5 }).map((_, i) => {
-                const starNumber = i + 1
-                const isFilled = starNumber <= rating
-                return (
-                    <StarIcon
-                        key={i}
-                        className={`h-10 w-10 ${isFilled ? 'text-yellow-300' : 'text-gray-400'}`}
-                    />
-                )
-            })}
-        </div>
-    )
-}
