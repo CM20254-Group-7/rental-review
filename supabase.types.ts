@@ -128,19 +128,19 @@ export interface Database {
       property_ownership: {
         Row: {
           ended_at: string | null
-          landlord_id: string | null
+          landlord_id: string
           property_id: string
           started_at: string
         }
         Insert: {
           ended_at?: string | null
-          landlord_id?: string | null
+          landlord_id: string
           property_id: string
           started_at: string
         }
         Update: {
           ended_at?: string | null
-          landlord_id?: string | null
+          landlord_id?: string
           property_id?: string
           started_at?: string
         }
