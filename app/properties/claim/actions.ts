@@ -16,12 +16,12 @@ export type State = {
     message?: string | null;
 };
 
-export const ClaimPropertySchema = z
+const ClaimPropertySchema = z
     .object({
         property_id: z.string(),
         landlord_id: z.string(),
-        started_at: z.date(),
-        ended_at: z.date().nullable()
+        started_at: z.coerce.date(),
+        ended_at: z.coerce.date().nullable()
     })
     // started_at must be in the past
     .superRefine(({ started_at }, ctx) => {
@@ -176,9 +176,11 @@ export const claimProperty = async (
                 if (ended_at < existing_start)
                     continue;
                 // check if the new claim is open or ends after the existing claim starts
-                return {
-                    message: 'The new claim overlaps with an existing claim'
-                };
+                else
+                    return {
+                        message: 'The new claim overlaps with an existing claim'
+                    };
+
             }
         }
     }
