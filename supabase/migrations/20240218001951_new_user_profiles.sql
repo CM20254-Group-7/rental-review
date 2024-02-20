@@ -15,7 +15,7 @@ CREATE OR REPLACE FUNCTION public.create_profile_for_user()
  LANGUAGE plpgsql
  SECURITY DEFINER
 AS $function$begin
-  insert into public.user_profiles(id, email)
+  insert into public.user_profiles(user_id, email)
   values(new.id, new.email);
   
   return new;
@@ -27,7 +27,7 @@ on "public"."user_profiles"
 as permissive
 for select
 to public
-using ((auth.uid() = id));
+using ((auth.uid() = user_id));
 
 
 
