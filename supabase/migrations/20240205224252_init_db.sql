@@ -17,7 +17,6 @@ create table "public"."landlord_public_profiles" (
     "website" varchar(50),
     "bio" varchar(200),
     "profile_image_id" uuid,
-    "rating" float not null,
     "verified" bool not null,
     "type" char not null
 );
