@@ -15,7 +15,7 @@ export const StarRatingLayout: React.FC<StarRatingProps> = ({
                 return (
                     <StarIcon
                         key={i}
-                        className={`h-10 w-10 ${isFilled ? 'text-yellow-300' : 'text-gray-400'}`}
+                        className={`h-6 w-6 ${isFilled ? 'text-yellow-300' : 'text-gray-400'}`}
                     />
                 )
             })}
