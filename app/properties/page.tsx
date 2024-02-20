@@ -6,17 +6,15 @@ export default async function PropertiesPage(){
     const cookieStore = cookies();
     const supabase = createClient(cookieStore);
 
-    const{ data:property, error: propertyError } = await supabase
+    const{ data:properties, error: propertiesError } = await supabase
         .from('properties')
         .select('address')
 
-    console.log(property, propertyError)
-
-    if ( propertyError ) {
+    if ( propertiesError ) {
         return(
             <div>
                 <main>
-                    You suck at programming, and there's an error...
+                    There is an error with the properties database.
                 </main>
             </div>
         )
@@ -38,7 +36,7 @@ export default async function PropertiesPage(){
             <div>
                 <main>
                     <ul>
-                        {property?.map((p) => {
+                        {properties?.map((p) => {
                             return (
                                 <li>{p.address}</li>
                             )
