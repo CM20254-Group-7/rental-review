@@ -173,7 +173,7 @@ export const createReview = async (
       review_date: review_date.toISOString(),
       property_id,
       reviewer_id,
-      review_title,
+      title: review_title,
       review_body,
       property_rating,
     });
