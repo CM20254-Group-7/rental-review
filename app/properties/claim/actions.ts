@@ -153,18 +153,34 @@ export const claimProperty = async (
                 message: 'User is already the landlord of this property'
             };
 
-        // new start date is before current end date
-        if (existing_end && ended_at < existing_end)
-            return {
-                message: 'New start date is before the current end date'
-            };
+        // closed cases
+        if (existing_end != null)
+            // check if the new claim overlaps with the existing claim
+            if    ((ended_at <= existing_end && ended_at >= existing_start)
+                || (started_at <= existing_end && started_at >= existing_start)
+                || (started_at >= existing_start && ended_at <= existing_end))
+                return {
+                    message: 'The new claim overlaps with an existing claim'
+                };
+            else 
+                return setPropertyOwnership(property_id, landlord_id, started_at, ended_at);
 
-        // new end date is after current start date
-        if (existing_start && started_at > existing_end)
-            return {
-                message: 'New end date is after the current start date'
-            };
 
+
+        // open cases
+        else {
+            const started_at = new Date(propertyOwnership.started_at); // Declare the started_at variable
+            // check if the new claim is before the existing claim
+            if (started_at < existing_start) {
+                // whole new claim is before the existing claim, continue
+                if (ended_at < existing_start)
+                    continue;
+                // check if the new claim is open or ends after the existing claim starts
+                return {
+                    message: 'The new claim overlaps with an existing claim'
+                };
+            }
+        }
     }
 
     // if no unresolveable conflicts where found, continue, closing an open claim if necessary

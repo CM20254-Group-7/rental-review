@@ -58,12 +58,16 @@ const ClaimPropertyPage: NextPage = async ({
         process.env.SUPABASE_SERVICE_KEY!
     )
         .from('landlord_private_profiles')
-        .select('user_id')
-        .eq('user_id', user.id)
+        .select('id')
+        .eq('id', user.id)
         .maybeSingle()
 
-    const landlordId = landlordData?.user_id
-    if (landlordError || !landlordId) return (
+    let landlordId: string | null = null; // Declare landlordId variable
+    if (!landlordError && landlordData && 'id' in landlordData) { // Add type guard
+        landlordId = landlordData.id as string | null; // Assign landlordId value with type assertion
+    }
+
+    if (landlordError || !landlordData || !landlordId) return (
         <div>
             <h1>ERROR: User is not registered as a landlord</h1>
         </div>
