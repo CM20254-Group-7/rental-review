@@ -1,6 +1,7 @@
 import { createClient } from "@/utils/supabase/server"
 import { cookies } from "next/headers"
 import { NextPage } from "next"
+import { notFound } from "next/navigation"
 
 const landlordProfilePage: NextPage = async ({
     searchParams
@@ -28,9 +29,21 @@ const landlordProfilePage: NextPage = async ({
         .eq('user_id', landlordId)
         .single()
 
-    if (landlordError || !landlordData) return (
+    // landlord not found
+    if (landlordError || !landlordData) {
+        notFound()
+    }
+
+    // get the landlord bio
+    const { data: landlordBio, error: landlordBioError } = await supabase
+        .from('landlord_public_profiles')
+        .select('bio')
+        .eq('user_id', landlordId)
+        .single()
+
+    if (landlordBioError) return ( 
         <div>
-            <h1>ERROR: Landlord profile not found</h1>
+            <h1>ERROR: Unable to fetch landlord bio</h1>
         </div>
     )
 
@@ -44,46 +57,54 @@ const landlordProfilePage: NextPage = async ({
         <div>
             <h1>ERROR: Unable to fetch landlord properties</h1>
         </div>
-    ); else if (!landlordProperties) return (
-        <div>
-            <h1>ERROR: Landlord has no properties</h1>
-        </div>
     )
     
-    // get the details of each property that the landlord owns
-    const { data: propertyDetails, error: propertyDetailsError } = await supabase
+    let propertyDetails: { address: string }[] = [];
+    if (landlordProperties !== null) {
+        console.log(landlordProperties)
+        const { data: details, error: propertyDetailsError } = await supabase
         .from('properties')
         .select('address')
-        .eq('id', landlordProperties.map(property => property.property_id))
+        .in('id', landlordProperties.map(property => property.property_id))
 
-    if (propertyDetailsError || !propertyDetails) return (
-        <div>
-            <h1>ERROR: Unable to fetch property details</h1>
-        </div>
-    )
-
-    // check if the user is logged in
-    const { data: { user }, error: userError } = await supabase.auth.getUser()
-    if (userError || !user) return (
-        <div>
-            <h1>ERROR: User not logged in</h1>
-        </div>
-    )
+        if (propertyDetailsError) return (
+            <div>
+                <h1>ERROR: Unable to fetch property details</h1>
+            </div>
+        )
+        propertyDetails = details
+    }
+    
 
     return (
         <div>
+            {/* Might need to change the format of thing whole div */}
             <h1 style={{ fontSize: "100px" }}>Landlord Profile</h1>
             <p>Name: {landlordData.first_name + ' ' + landlordData.last_name}</p>
             <p>Email: {landlordData.email}</p>
             <p>Created at: {landlordData.created_at}</p>
-            {/* CHANGE THIS */}
-            <p style={{textAlign: "center", backgroundColor: "red"}}>NEED TO ADD LINK TO THE PROPERTY!!!</p>
-            <p>Properties:</p>
-            <ul>
-                {propertyDetails.map(property => (
-                    <li>{property.address}</li>
-                ))}
-            </ul>
+            <p>Bio: {landlordBio.bio}</p>    
+            {/* only show the properties if the landlord has it */}
+            {propertyDetails !== null && (
+                <div>
+                    {propertyDetails.length === 0 ? (
+                        <p>No properties</p>
+                    ) : (
+                        <div>
+                            <h2>Properties</h2>
+                            <ul>
+                                {propertyDetails.map(property => (
+                                    <div>
+                                        <li>{property.address}</li>
+                                        <li style={{textAlign: "center", backgroundColor: "red"}}>NEED TO ADD LINK TO THE PROPERTY!!!</li>
+                                    </div>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
+                </div>
+            )}
+
         </div>
     )
 }
