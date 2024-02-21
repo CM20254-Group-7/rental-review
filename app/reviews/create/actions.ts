@@ -60,7 +60,7 @@ export const createReview = async (
         property_address,
         review_date,
         review_body,
-        property_rating,
+        property_rating,    
         landlord_rating
     } = validatedFields.data;
 
