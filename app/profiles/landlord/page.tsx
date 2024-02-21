@@ -1,36 +1,89 @@
-'use client'
+import { createClient } from "@/utils/supabase/server"
+import { cookies } from "next/headers"
+import { NextPage } from "next"
 
-// TEST PAGE FOR CREATE ACTION - PLEASE REPLACE
-import { useFormState } from 'react-dom'
-import { getLandlordDetails } from "./actions";
-// import { createReview } from "./actions";
+const landlordProfilePage: NextPage = async ({
+    searchParams
+}: {
+    searchParams?: {
+        landlordId?: string,
+    }
+}) => {
+    // check if a landlord id was provided
+    const landlordId = searchParams?.landlordId
+    if (!landlordId) return (
+        <div>
+            <h1>ERROR: No Landlord Id provided</h1>
+        </div>
+    )
 
-const landlordProfilePage = () => {
+    // set up the supabase client
+    const cookieStore = cookies()
+    const supabase = createClient(cookieStore)
 
-    // For testing only
-    const exampleLandlordId = "1"
-    const exampleLandlordName = "John Doe"
-    const exampleLandlordEmail = "johndoe@gmail.com"
-    const exampleLandlordPhone = "123-456-7890"
-    const exampleLandLordProperties = ["1234 Example St, Example, EX 12345", "5678 Example St, Example, EX 12345"]
+    // check if a landlord with the provided id exists and get their info
+    const { data: landlordData, error: landlordError } = await supabase
+        .from('user_profiles')
+        .select('*')
+        .eq('user_id', landlordId)
+        .single()
 
-    // get landlord info from the database
-    const initialState = { message: null, errors: {} };
-    const landlordDetails = getLandlordDetails.bind(null, {id: exampleLandlordId, name: exampleLandlordName, email: exampleLandlordEmail, phone: exampleLandlordPhone, properties: exampleLandLordProperties});
+    if (landlordError || !landlordData) return (
+        <div>
+            <h1>ERROR: Landlord profile not found</h1>
+        </div>
+    )
+
+    // get the properties associated with the landlord and get their info
+    const { data: landlordProperties, error: landlordPropertiesError } = await supabase
+        .from('property_ownership')
+        .select('property_id')
+        .eq('landlord_id', landlordId)
+
+    if (landlordPropertiesError) return (
+        <div>
+            <h1>ERROR: Unable to fetch landlord properties</h1>
+        </div>
+    ); else if (!landlordProperties) return (
+        <div>
+            <h1>ERROR: Landlord has no properties</h1>
+        </div>
+    )
+    
+    // get the details of each property that the landlord owns
+    const { data: propertyDetails, error: propertyDetailsError } = await supabase
+        .from('properties')
+        .select('address')
+        .eq('id', landlordProperties.map(property => property.property_id))
+
+    if (propertyDetailsError || !propertyDetails) return (
+        <div>
+            <h1>ERROR: Unable to fetch property details</h1>
+        </div>
+    )
+
+    // check if the user is logged in
+    const { data: { user }, error: userError } = await supabase.auth.getUser()
+    if (userError || !user) return (
+        <div>
+            <h1>ERROR: User not logged in</h1>
+        </div>
+    )
 
     return (
-        // display landlord info using the landlordDetails function
         <div>
-            <h1>Landlord Profile</h1>
-            <p>Test page for landlord profile action - REPLACE ME</p>
-            <p>Name: {exampleLandlordName}</p>
-            <p>Email: {exampleLandlordEmail}</p>
-            <p>Phone: {exampleLandlordPhone}</p>
+            <h1 style={{ fontSize: "100px" }}>Landlord Profile</h1>
+            <p>Name: {landlordData.first_name + ' ' + landlordData.last_name}</p>
+            <p>Email: {landlordData.email}</p>
+            <p>Created at: {landlordData.created_at}</p>
+            {/* CHANGE THIS */}
+            <p style={{textAlign: "center", backgroundColor: "red"}}>NEED TO ADD LINK TO THE PROPERTY!!!</p>
             <p>Properties:</p>
-            {/* print each property on a new line */}
-            {exampleLandLordProperties.map((property) => (
-                <p>{property}</p>
-            ))}
+            <ul>
+                {propertyDetails.map(property => (
+                    <li>{property.address}</li>
+                ))}
+            </ul>
         </div>
     )
 }
