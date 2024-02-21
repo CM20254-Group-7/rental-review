@@ -1,17 +1,10 @@
 import { createClient } from "@/utils/supabase/server"
 import { cookies } from "next/headers"
-import { NextPage } from "next"
 import { notFound } from "next/navigation"
 
-const landlordProfilePage: NextPage = async ({
-    searchParams
-}: {
-    searchParams?: {
-        landlordId?: string,
-    }
-}) => {
+export default async function landlordProfilePage( {params }: { params: { landlordId: string } }) {
     // check if a landlord id was provided
-    const landlordId = searchParams?.landlordId
+    const landlordId = params.landlordId
     if (!landlordId) return (
         <div>
             <h1>ERROR: No Landlord Id provided</h1>
@@ -108,5 +101,3 @@ const landlordProfilePage: NextPage = async ({
         </div>
     )
 }
-
-export default landlordProfilePage
