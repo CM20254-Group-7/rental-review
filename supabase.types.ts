@@ -288,22 +288,16 @@ export interface Database {
         Row: {
           created_at: string | null
           email: string | null
-          first_name: string | null
-          last_name: string | null
           user_id: string
         }
         Insert: {
           created_at?: string | null
           email?: string | null
-          first_name?: string | null
-          last_name?: string | null
           user_id: string
         }
         Update: {
           created_at?: string | null
           email?: string | null
-          first_name?: string | null
-          last_name?: string | null
           user_id?: string
         }
         Relationships: [
@@ -328,20 +322,7 @@ export interface Database {
       [_ in never]: never
     }
     Functions: {
-      get_average_property_rating: {
-        Args: {
-          property_id: string
-        }
-        Returns: number
-      }
-      get_properties_with_ratings: {
-        Args: Record<PropertyKey, never>
-        Returns: {
-          property_id: string
-          address: string
-          average_rating: number
-        }[]
-      }
+      [_ in never]: never
     }
     Enums: {
       [_ in never]: never
