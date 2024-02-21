@@ -5,6 +5,7 @@ import { createClient } from "@/utils/supabase/server"
 import { cookies } from "next/headers"
 import { StarRatingLayout } from '@/components/StarRating'
 import { ReviewDetailsLayout } from '@/components/ReviewDetails'
+import { notFound } from 'next/navigation'
 
 export default async function Page({ params }: { params: { id: string } }) {
 
@@ -17,6 +18,8 @@ export default async function Page({ params }: { params: { id: string } }) {
         .eq('id', params.id)
         .single()
 
+    if (error || !data) notFound()
+
     return (
         <div className="flex-1 flex flex-col w-full px-8 justify-top items-center gap-2">
             <div className="flex flex-row w-full px-8 justify-center gap-2">
@@ -28,7 +31,7 @@ export default async function Page({ params }: { params: { id: string } }) {
                     alt="Image of a house"
                 />
                 <div className="flex-1 flex flex-col w-full px-8 sm:max-w-md justify-top gap-2">
-                    <text className='font-bold text-lg'>{data?.address}</text>
+                    <text className='font-bold text-lg'>{data.address}</text>
                     <text>Owned by Jane Doe</text>
                     <div className='flex flex-row w-full px-0 justify-start items-center gap-2'>
                         <text>Average rating:</text>
