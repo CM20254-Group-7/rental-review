@@ -1,9 +1,3 @@
-drop policy "Enable read access for all users" on "public"."properties";
-
-drop function if exists "public"."get_average_property_rating"(property_id uuid);
-
-drop function if exists "public"."get_properties_with_ratings"();
-
 alter table "public"."user_profiles" drop column "first_name";
 
 alter table "public"."user_profiles" drop column "last_name";
@@ -21,6 +15,9 @@ AS $function$begin
   return new;
 end;$function$
 ;
+
+CREATE TRIGGER create_profile_for_new_user AFTER INSERT ON auth.users FOR EACH ROW EXECUTE FUNCTION create_profile_for_user();
+
 
 create policy "Allow users to get their own profile"
 on "public"."user_profiles"

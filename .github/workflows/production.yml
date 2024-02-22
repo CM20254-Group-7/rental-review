@@ -1,3 +1,4 @@
+# On merging to production branch, push migrations to production supabase deployment
 name: Deploy Migrations to Production
 
 on:
