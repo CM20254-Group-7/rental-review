@@ -9,6 +9,15 @@ import { z } from "zod";
 const newReviewSchema = z.object({
     property_id: z.string().uuid().optional(),
     property_address: z.string().optional(),
+    property_baths: z.number().int().min(1),
+    property_beds: z.number().int().min(1),
+    property_country: z.string().optional(),
+    property_county: z.string().optional(),
+    property_description: z.string().optional().max(1000),
+    property_house: z.string().optional(),
+    property_type: z.string().optional(),
+    property_postcode: z.string().optional(),
+    property_street: z.string().optional(),
 
     review_date: z.coerce.date(),
 
@@ -34,6 +43,15 @@ export const createReview = async (
     property : {
         id: string | undefined, 
         address: string | undefined,
+        beds: number | undefined,
+        baths: number | undefined, 
+        country: string | undefined, 
+        county: string | undefined,
+        description: string | undefined, 
+        house: string | undefined, 
+        property_type: string | undefined,
+        postcode: string | undefined,
+        street: string | undefined
     },
     prevState: State,
     formData: FormData
@@ -42,6 +60,15 @@ export const createReview = async (
     const validatedFields = newReviewSchema.safeParse({
         property_id: property.id,
         property_address: property.address,
+        property_baths: property.baths,
+        property_beds: property.beds,
+        property_country: property.country,
+        property_county: property.county,
+        property_description: property.description,
+        property_house: property.house,
+        property_type: property.property_type,
+        property_postcode: property.postcode,
+        property_street: property.street,
         review_date: formData.get('review_date'),
         review_body: formData.get('review_body'),
         property_rating: formData.get('property_rating'),
@@ -58,6 +85,15 @@ export const createReview = async (
     let {
         property_id,
         property_address,
+        property_baths,
+        property_beds,
+        property_country,
+        property_county,
+        property_description,
+        property_house,
+        property_type,
+        property_postcode,
+        property_street,
         review_date,
         review_body,
         property_rating,    
@@ -96,7 +132,7 @@ export const createReview = async (
         // If it doesn't - Create Property & set property_id
         const { data: newProperty, error: newPropertyError } = await serviceSupabase
             .from('properties')
-            .insert({ address: property_address, baths: 4, beds: 2, country: "UK", county: "Somerset", description: "Its well nice innit", house: "4", postcode: "BA1 1AA", property_type: "flat", street: "Gay Street" })
+            .insert({ address: property_address, baths: property_baths, beds: property_beds, country: property_country, county: property_county, description: property_description, house: property_house, postcode: property_postcode, property_type: property_type, street: property_street })
             .select('id')
             .single()
 
