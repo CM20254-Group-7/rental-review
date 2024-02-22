@@ -1,4 +1,8 @@
-check_function_bodies = off;
+alter table "public"."user_profiles" drop column "first_name";
+
+alter table "public"."user_profiles" drop column "last_name";
+
+set check_function_bodies = off;
 
 CREATE OR REPLACE FUNCTION public.create_profile_for_user()
  RETURNS trigger
