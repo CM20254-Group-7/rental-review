@@ -132,7 +132,9 @@ export const createReview = async (
         // If it doesn't - Create Property & set property_id
         const { data: newProperty, error: newPropertyError } = await serviceSupabase
             .from('properties')
-            .insert({ address: property_address, baths: property_baths, beds: property_beds, country: property_country, county: property_county, description: property_description, house: property_house, postcode: property_postcode, property_type: property_type, street: property_street })
+            //.insert({ address: property_address, baths: property_baths, beds: property_beds, country: property_country, county: property_county, description: property_description, house: property_house, postcode: property_postcode, property_type: property_type, street: property_street })
+            .insert({ address: "property_address", baths: 2, beds: 2, country: "property_country", county: "property_county", description: "property_description", house: "property_house", postcode: "property_postcode", property_type: "property_type", street: "property_street" })
+
             .select('id')
             .single()
 
