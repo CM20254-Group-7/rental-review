@@ -1,9 +1,10 @@
-name: 'database-tests'
+# On each pull request, run the supabse tests to verify the backend schema
+name: Backend Tests
 on:
   pull_request:
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
