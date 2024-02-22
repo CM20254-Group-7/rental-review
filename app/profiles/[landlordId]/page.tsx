@@ -5,11 +5,6 @@ import { notFound } from "next/navigation"
 export default async function landlordProfilePage( {params }: { params: { landlordId: string } }) {
     // check if a landlord id was provided
     const landlordId = params.landlordId
-    if (!landlordId) return (
-        <div>
-            <h1>ERROR: No Landlord Id provided</h1>
-        </div>
-    )
 
     // set up the supabase client
     const cookieStore = cookies()
@@ -17,7 +12,7 @@ export default async function landlordProfilePage( {params }: { params: { landlo
 
     // check if a landlord with the provided id exists and get their info
     const { data: landlordData, error: landlordError } = await supabase
-        .from('user_profiles')
+        .from('landlord_public_profiles')
         .select('*')
         .eq('user_id', landlordId)
         .single()
@@ -73,9 +68,8 @@ export default async function landlordProfilePage( {params }: { params: { landlo
         <div>
             {/* Might need to change the format of thing whole div */}
             <h1 style={{ fontSize: "100px" }}>Landlord Profile</h1>
-            <p>Name: {landlordData.first_name + ' ' + landlordData.last_name}</p>
-            <p>Email: {landlordData.email}</p>
-            <p>Created at: {landlordData.created_at}</p>
+            <p>Name: {landlordData.display_name}</p>
+            <p>Email: {landlordData.display_email}</p>
             <p>Bio: {landlordBio.bio}</p>    
             {/* only show the properties if the landlord has it */}
             {propertyDetails !== null && (
