@@ -11,7 +11,7 @@ const createReviewPage = () => {
   const exampleBeds = 2;
   const exampleBaths = 8;
   const exampleCountry = "Angola"; 
-  const exapmleCounty = "Somerset"; 
+  const exampleCounty = "Somerset"; 
   const exampleDescription = "Its good innit";
   const exampleHouse = "43";
   const exampleType = "Flat"; 
