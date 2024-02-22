@@ -1,4 +1,9 @@
-name: 'generate-types'
+# On pull request, check that the typescript definitions are up-to-date with the Postgres schema
+# This ensures that conflicting upstream changes are caught at build time
+# We can catch issue with
+#  - any new changes made to the database that would effect existing/upstream frontend code
+#  - any new changes made to the frontend that are not up to date with the upstream database schema
+name: Typescript Definitions Up-to-Date
 on:
   pull_request:
 

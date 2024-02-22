@@ -1,4 +1,5 @@
-name: Playwright Tests
+# On each pull request, run end-to-end tests using Playwright
+name: End to End Tests
 on:
   pull_request:
 
