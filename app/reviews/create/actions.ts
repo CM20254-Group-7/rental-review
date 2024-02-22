@@ -96,7 +96,7 @@ export const createReview = async (
         // If it doesn't - Create Property & set property_id
         const { data: newProperty, error: newPropertyError } = await serviceSupabase
             .from('properties')
-            .insert({ address: property_address })
+            .insert({ address: property_address, country: "UK" })
             .select('id')
             .single()
 
