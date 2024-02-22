@@ -13,7 +13,7 @@ const newReviewSchema = z.object({
     property_beds: z.number().int().min(1),
     property_country: z.string().optional(),
     property_county: z.string().optional(),
-    property_description: z.string().optional().max(1000),
+    property_description: z.string().optional(),
     property_house: z.string().optional(),
     property_type: z.string().optional(),
     property_postcode: z.string().optional(),
