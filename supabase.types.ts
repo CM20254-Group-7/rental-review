@@ -112,7 +112,7 @@ export interface Database {
       }
       properties: {
         Row: {
-          address: string | null
+          address: string
           baths: number | null
           beds: number | null
           country: string
@@ -125,7 +125,7 @@ export interface Database {
           street: string | null
         }
         Insert: {
-          address?: string | null
+          address: string
           baths?: number | null
           beds?: number | null
           country: string
@@ -138,7 +138,7 @@ export interface Database {
           street?: string | null
         }
         Update: {
-          address?: string | null
+          address?: string
           baths?: number | null
           beds?: number | null
           country?: string
@@ -315,22 +315,16 @@ export interface Database {
         Row: {
           created_at: string | null
           email: string | null
-          first_name: string | null
-          last_name: string | null
           user_id: string
         }
         Insert: {
           created_at?: string | null
           email?: string | null
-          first_name?: string | null
-          last_name?: string | null
           user_id: string
         }
         Update: {
           created_at?: string | null
           email?: string | null
-          first_name?: string | null
-          last_name?: string | null
           user_id?: string
         }
         Relationships: [
