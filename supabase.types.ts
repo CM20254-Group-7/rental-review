@@ -113,14 +113,17 @@ export interface Database {
       properties: {
         Row: {
           address: string
+          country: string
           id: string
         }
         Insert: {
           address: string
+          country: string
           id?: string
         }
         Update: {
           address?: string
+          country?: string
           id?: string
         }
         Relationships: []
