@@ -1,7 +1,3 @@
-alter table "public"."properties" drop constraint "properties_address_key";
-
-drop index if exists "public"."properties_address_key";
-
 alter table "public"."properties" add column "baths" smallint;
 
 alter table "public"."properties" add column "beds" smallint;
