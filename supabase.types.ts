@@ -288,22 +288,16 @@ export interface Database {
         Row: {
           created_at: string | null
           email: string | null
-          first_name: string | null
-          last_name: string | null
           user_id: string
         }
         Insert: {
           created_at?: string | null
           email?: string | null
-          first_name?: string | null
-          last_name?: string | null
           user_id: string
         }
         Update: {
           created_at?: string | null
           email?: string | null
-          first_name?: string | null
-          last_name?: string | null
           user_id?: string
         }
         Relationships: [
