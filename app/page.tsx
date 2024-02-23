@@ -1,9 +1,11 @@
 export default async function Index() {
 
   return (
-    <div>
-      <div className="flex-1 w-full flex flex-col gap-20 items-center">
-        <Header/>
+    <div className="flex-grow flex-1 w-full flex flex-col gap-20 items-center py-10">
+      {/* Header */}
+      <div className="flex flex-col gap-1 items-center">
+        <h1 className="font-bold text-4xl mb-4 mt-3">Rental Review</h1>
+        <h2 className="font-bold text-2xl mb-4">Welcome to our web app.</h2>
       </div>
 
       <div>
