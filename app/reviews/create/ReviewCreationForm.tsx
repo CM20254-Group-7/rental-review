@@ -121,7 +121,7 @@ export const ReviewCreationForm: React.FC<FormProps> = ({
       </button>
 
       {state.message && <p>{state.message}</p>}
-      {state.errors && <p>{JSON.stringify(state.errors, null, "\t")}</p>}
+      {state.errors && <p>Oops! Something went wrong. Please try again.</p>}
     </form>
   );
 };
