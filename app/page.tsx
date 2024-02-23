@@ -5,7 +5,7 @@ export default async function Index() {
       {/* Header */}
       <div className="flex flex-col gap-1 items-center">
         <h1 className="font-semibold text-6xl mb-4 mt-3 text-primary">Rental Review</h1>
-        <h2 className="font-bold text-2xl mb-4">Welcome to our web app</h2>
+        <h2 className="font-bold text-2xl mb-4">Helping to fix the UK's rental sector one review at a time</h2>
       </div>
 
       {/* Descriptions */}
