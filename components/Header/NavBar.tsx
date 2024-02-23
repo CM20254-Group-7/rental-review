@@ -1,6 +1,6 @@
 import AuthButton from "./AuthButton";
 import HomeButton from "./HomeButton";
-import { NavLink } from "@/components/NavLink";
+import { NavLink } from "@/components/Header/NavLink";
 
 export default function NavBar() {
     return (
