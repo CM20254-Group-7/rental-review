@@ -92,26 +92,25 @@ export const createReview = async (
         .maybeSingle();
     // If it does - Error
 
-    if (existingProperty) {
-      return {
-        message: "Property Already Exists",
-      };
+    if (!existingProperty || existingPropertyError) {
+      // If it doesn't - Create Property & set property_id
+      const { data: newProperty, error: newPropertyError } =
+        await serviceSupabase
+          .from("properties")
+          .insert({ address: property_address })
+          .select("id")
+          .single();
+
+      if (newPropertyError) {
+        return {
+          message: "Error Creating Property",
+        };
+      }
+
+      property_id = newProperty.id; // replace with actual property_id
+    } else {
+      property_id = existingProperty.id;
     }
-
-    // If it doesn't - Create Property & set property_id
-    const { data: newProperty, error: newPropertyError } = await serviceSupabase
-      .from("properties")
-      .insert({ address: property_address })
-      .select("id")
-      .single();
-
-    if (newPropertyError) {
-      return {
-        message: "Error Creating Property",
-      };
-    }
-
-    property_id = newProperty.id; // replace with actual property_id
   }
 
   // get user
@@ -148,14 +147,11 @@ export const createReview = async (
 
   // create reviewer profile
   const { data: reviewerProfile, error: reviewerProfileError } =
-    await serviceSupabase
-      .from("reviewer_private_profiles")
-      .insert({
-        user_id,
-        property_id,
-      })
-      .select()
-      .single();
+    await serviceSupabase.from("reviewer_private_profiles").insert({
+      user_id,
+      property_id,
+      reviewer_id: user_id,
+    });
 
   if (reviewerProfileError) {
     return {
@@ -163,20 +159,20 @@ export const createReview = async (
     };
   }
 
-  const { reviewer_id } = reviewerProfile;
+  console.log(reviewerProfile);
 
   // create reviews
-  const { data: review, error: reviewError } = await serviceSupabase
-    .from("reviews")
-    .insert({
-      landlord_rating,
-      review_date: review_date.toISOString(),
-      property_id,
-      reviewer_id,
-      title: review_title,
-      review_body,
-      property_rating,
-    });
+  // const { data: review, error: reviewError } = await serviceSupabase
+  //   .from("reviews")
+  //   .insert({
+  //     landlord_rating,
+  //     review_date: review_date.toISOString(),
+  //     property_id,
+  //     reviewerProfile.id,
+  //     title: review_title,
+  //     review_body,
+  //     property_rating,
+  //   });
 
   return {
     message: "Review Created",
