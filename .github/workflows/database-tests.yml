@@ -1,0 +1,15 @@
+# On each pull request, run the supabse tests to verify the backend schema
+name: Backend Tests
+on:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: supabase/setup-cli@v1
+        with:
+          version: 1.142.2
+      - run: supabase db start
+      - run: supabase test db

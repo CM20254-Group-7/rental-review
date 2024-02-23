@@ -36,41 +36,89 @@ export type Database = {
     Tables: {
       landlord_private_profiles: {
         Row: {
-          id: string;
-        };
+          city: string | null
+          country: string
+          county: string | null
+          first_name: string | null
+          house: string
+          last_name: string | null
+          phone_number: string
+          postcode: string
+          street: string | null
+          user_id: string
+        }
         Insert: {
-          id: string;
-        };
+          city?: string | null
+          country: string
+          county?: string | null
+          first_name?: string | null
+          house: string
+          last_name?: string | null
+          phone_number: string
+          postcode: string
+          street?: string | null
+          user_id: string
+        }
         Update: {
-          id?: string;
-        };
+          city?: string | null
+          country?: string
+          county?: string | null
+          first_name?: string | null
+          house?: string
+          last_name?: string | null
+          phone_number?: string
+          postcode?: string
+          street?: string | null
+          user_id?: string
+        }
         Relationships: [
           {
-            foreignKeyName: "landlord_private_profiles_id_fkey";
-            columns: ["id"];
-            isOneToOne: true;
-            referencedRelation: "user_profiles";
-            referencedColumns: ["id"];
+            foreignKeyName: "landlord_private_profiles_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "user_profiles"
+            referencedColumns: ["user_id"]
           }
         ];
       };
       landlord_public_profiles: {
         Row: {
-          id: string;
-        };
+          bio: string | null
+          display_email: string
+          display_name: string
+          profile_image_id: string | null
+          type: string
+          user_id: string
+          verified: boolean
+          website: string | null
+        }
         Insert: {
-          id: string;
-        };
+          bio?: string | null
+          display_email: string
+          display_name: string
+          profile_image_id?: string | null
+          type: string
+          user_id: string
+          verified: boolean
+          website?: string | null
+        }
         Update: {
-          id?: string;
-        };
+          bio?: string | null
+          display_email?: string
+          display_name?: string
+          profile_image_id?: string | null
+          type?: string
+          user_id?: string
+          verified?: boolean
+          website?: string | null
+        }
         Relationships: [
           {
-            foreignKeyName: "landlord_public_profiles_id_fkey";
-            columns: ["id"];
-            isOneToOne: true;
-            referencedRelation: "landlord_private_profiles";
-            referencedColumns: ["id"];
+            foreignKeyName: "landlord_public_profiles_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "landlord_private_profiles"
+            referencedColumns: ["user_id"]
           }
         ];
       };
@@ -91,30 +139,30 @@ export type Database = {
       };
       property_ownership: {
         Row: {
-          ended_at: string | null;
-          landlord_id: string | null;
-          property_id: string;
-          started_at: string;
-        };
+          ended_at: string | null
+          landlord_id: string
+          property_id: string
+          started_at: string
+        }
         Insert: {
-          ended_at?: string | null;
-          landlord_id?: string | null;
-          property_id: string;
-          started_at: string;
-        };
+          ended_at?: string | null
+          landlord_id: string
+          property_id: string
+          started_at: string
+        }
         Update: {
-          ended_at?: string | null;
-          landlord_id?: string | null;
-          property_id?: string;
-          started_at?: string;
-        };
+          ended_at?: string | null
+          landlord_id?: string
+          property_id?: string
+          started_at?: string
+        }
         Relationships: [
           {
-            foreignKeyName: "property_ownership_landlord_id_fkey";
-            columns: ["landlord_id"];
-            isOneToOne: false;
-            referencedRelation: "landlord_public_profiles";
-            referencedColumns: ["id"];
+            foreignKeyName: "property_ownership_landlord_id_fkey"
+            columns: ["landlord_id"]
+            isOneToOne: false
+            referencedRelation: "landlord_public_profiles"
+            referencedColumns: ["user_id"]
           },
           {
             foreignKeyName: "property_ownership_property_id_fkey";
@@ -180,11 +228,11 @@ export type Database = {
             referencedColumns: ["id"];
           },
           {
-            foreignKeyName: "reviewer_private_profiles_user_id_fkey";
-            columns: ["user_id"];
-            isOneToOne: false;
-            referencedRelation: "user_profiles";
-            referencedColumns: ["id"];
+            foreignKeyName: "reviewer_private_profiles_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "user_profiles"
+            referencedColumns: ["user_id"]
           }
         ];
       };
@@ -253,40 +301,34 @@ export type Database = {
       };
       user_profiles: {
         Row: {
-          created_at: string | null;
-          email: string | null;
-          first_name: string | null;
-          id: string;
-          last_name: string | null;
-        };
+          created_at: string | null
+          email: string | null
+          user_id: string
+        }
         Insert: {
-          created_at?: string | null;
-          email?: string | null;
-          first_name?: string | null;
-          id: string;
-          last_name?: string | null;
-        };
+          created_at?: string | null
+          email?: string | null
+          user_id: string
+        }
         Update: {
-          created_at?: string | null;
-          email?: string | null;
-          first_name?: string | null;
-          id?: string;
-          last_name?: string | null;
-        };
+          created_at?: string | null
+          email?: string | null
+          user_id?: string
+        }
         Relationships: [
           {
-            foreignKeyName: "user_profiles_id_fkey";
-            columns: ["id"];
-            isOneToOne: true;
-            referencedRelation: "users";
-            referencedColumns: ["id"];
+            foreignKeyName: "user_profiles_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "users"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "user_public_profiles_id_fkey";
-            columns: ["id"];
-            isOneToOne: true;
-            referencedRelation: "users";
-            referencedColumns: ["id"];
+            foreignKeyName: "user_public_profiles_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "users"
+            referencedColumns: ["id"]
           }
         ];
       };
