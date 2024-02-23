@@ -5,17 +5,13 @@ import { UserCircleIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
+import { signOut } from "./actions";
 
 const UserManagementButton: React.FC<{ email: string }> = ({ email }) => {
     const router = useRouter();
     const supabase = createClient()
 
     const { ref, isComponentVisible, setIsComponentVisible } = useComponentVisible();
-
-    const signOut = async () => {
-        await supabase.auth.signOut()
-        router.push('/login')
-    }
 
     return (
         <div className="relative" >
@@ -39,12 +35,16 @@ const UserManagementButton: React.FC<{ email: string }> = ({ email }) => {
                         Manage Account
                     </Link>
 
-                    <button 
-                        onClick={signOut}
+                    <form
+                        action={signOut}
                         className="py-2 px-4 w-full text-right rounded-b-md no-underline hover:bg-secondary/10"
                     >
-                        Logout
-                    </button>
+                        <button
+                            className="inline"
+                        >
+                            Logout
+                        </button>
+                    </form>
                 </div>
             )}
         </div>
