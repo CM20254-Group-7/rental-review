@@ -50,7 +50,7 @@ export const ReviewCreationForm: React.FC<FormProps> = ({
       <label htmlFor="tenancy_period">Tenancy Period</label>
       <input
         className="border p-2 rounded-md mb-6"
-        type="text"
+        type="number"
         name="tenancy_period"
         id="tenancy_period"
         required
@@ -119,9 +119,6 @@ export const ReviewCreationForm: React.FC<FormProps> = ({
       >
         Create Review
       </button>
-
-      {state.message && <p>{state.message}</p>}
-      {state.errors && <p>Oops! Something went wrong. Please try again.</p>}
     </form>
   );
 };

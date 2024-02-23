@@ -16,6 +16,8 @@ const newReviewSchema = z.object({
   review_body: z.string().min(1).max(1000),
   property_rating: z.coerce.number().int().min(1).max(5),
   landlord_rating: z.coerce.number().int().min(1).max(5),
+  tenant_period: z.coerce.number().int().min(1),
+
 });
 
 export type State = {
@@ -27,6 +29,7 @@ export type State = {
     review_body?: string[];
     property_rating?: string[];
     landlord_rating?: string[];
+    tenant_period?: string[];
   };
   message?: string | null;
 };
@@ -49,8 +52,10 @@ export const createReview = async (
     review_body: formData.get("review_body"),
     property_rating: formData.get("property_rating"),
     landlord_rating: formData.get("landlord_rating"),
+    tenant_period: formData.get("tenancy_period"),
   });
 
+  console.log(validatedFields);
   if (!validatedFields.success) {
     return {
       errors: validatedFields.error.flatten().fieldErrors,
@@ -64,6 +69,7 @@ export const createReview = async (
     review_date,
     review_title,
     review_body,
+    tenant_period,
     property_rating,
     landlord_rating,
   } = validatedFields.data;
@@ -150,7 +156,6 @@ export const createReview = async (
     await serviceSupabase.from("reviewer_private_profiles").insert({
       user_id,
       property_id,
-      reviewer_id: user_id,
     });
 
   if (reviewerProfileError) {
@@ -159,20 +164,42 @@ export const createReview = async (
     };
   }
 
-  console.log(reviewerProfile);
+  // Get reviewer profile id
+  const { data: reviewerProfileId, error: reviewerProfileIdError } = await serviceSupabase
+    .from("reviewer_private_profiles")
+    .select("reviewer_id")
+    .eq("user_id", user_id)
+    .eq("property_id", property_id)
+    .single();
+
+  if (reviewerProfileIdError) {
+    return {
+      message: "Error Getting Reviewer Profile Id",
+    };
+  }
 
   // create reviews
-  // const { data: review, error: reviewError } = await serviceSupabase
-  //   .from("reviews")
-  //   .insert({
-  //     landlord_rating,
-  //     review_date: review_date.toISOString(),
-  //     property_id,
-  //     reviewerProfile.id,
-  //     title: review_title,
-  //     review_body,
-  //     property_rating,
-  //   });
+  const { data: review, error: reviewError } = await serviceSupabase
+    .from("reviews")
+    .insert({
+      property_id: property_id,
+      reviewer_id: reviewerProfileId.reviewer_id,
+      review_date: review_date.toISOString(),
+      review_title: review_title,
+      review_body: review_body,
+      property_rating: property_rating,
+      landlord_rating: landlord_rating,
+      tenancy_period: tenant_period,
+    });
+
+  if (reviewError) {
+    return {
+      message: "Error Creating Review",
+    };
+  }
+
+
+
 
   return {
     message: "Review Created",
