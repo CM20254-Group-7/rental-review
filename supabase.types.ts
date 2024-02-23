@@ -39,7 +39,9 @@ export interface Database {
           city: string | null
           country: string
           county: string | null
+          first_name: string | null
           house: string
+          last_name: string | null
           phone_number: string
           postcode: string
           street: string | null
@@ -49,7 +51,9 @@ export interface Database {
           city?: string | null
           country: string
           county?: string | null
+          first_name?: string | null
           house: string
+          last_name?: string | null
           phone_number: string
           postcode: string
           street?: string | null
@@ -59,7 +63,9 @@ export interface Database {
           city?: string | null
           country?: string
           county?: string | null
+          first_name?: string | null
           house?: string
+          last_name?: string | null
           phone_number?: string
           postcode?: string
           street?: string | null
@@ -78,6 +84,8 @@ export interface Database {
       landlord_public_profiles: {
         Row: {
           bio: string | null
+          display_email: string
+          display_name: string
           profile_image_id: string | null
           type: string
           user_id: string
@@ -86,6 +94,8 @@ export interface Database {
         }
         Insert: {
           bio?: string | null
+          display_email: string
+          display_name: string
           profile_image_id?: string | null
           type: string
           user_id: string
@@ -94,6 +104,8 @@ export interface Database {
         }
         Update: {
           bio?: string | null
+          display_email?: string
+          display_name?: string
           profile_image_id?: string | null
           type?: string
           user_id?: string
