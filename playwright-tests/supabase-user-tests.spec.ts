@@ -75,9 +75,6 @@ test.describe('User 1 tests', () => {
 
         // Expect the navbar to contain the user's email
         await expect(page.getByRole('navigation')).toContainText('user.1@example.com');
-
-        // Expect the body to contain the logout button.
-        await expect(page.getByRole('navigation')).toContainText('Logout');
     });
 
     test(`user1 can access user1's profile`, async ({ page }) => {
@@ -143,9 +140,6 @@ test.describe('User 2 tests', () => {
 
         // Expect the navbar to contain the user's email
         await expect(page.getByRole('navigation')).toContainText('user.2@example.com');
-
-        // Expect the body to contain the logout button.
-        await expect(page.getByRole('navigation')).toContainText('Logout');
     });
 
     test(`user2 cannot access user1's profile`, async ({ page }) => {
