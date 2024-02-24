@@ -1,5 +1,6 @@
 import { createClient } from '@/utils/supabase/server'
 import { cookies } from 'next/headers';
+import Link from 'next/link';
 import { Suspense, cache } from 'react';
 import { setTimeout } from "timers/promises";
 
@@ -11,6 +12,14 @@ export default function PropertiesPage() {
                 <Suspense fallback={<PropertyResultsSkeleton />}>
                     <PropertyResults />
                 </Suspense>
+                <div className='flex flex-col items-center gap-2'>
+                    <p>Can't see your property?</p>
+                    <Link href="/reviews/create">
+                        <button className="border border-accent rounded-md px-4 py-2 text-accent mb-5 hover:bg-accent/10 hover:shadow-lg hover:shadow-accent/20">
+                            Review a New Property
+                        </button>
+                    </Link>
+                </div>
             </div>
         </div>
     )
