@@ -8,17 +8,19 @@ export default function PropertiesPage() {
     return (
         <div className='flex-1 w-screen flex flex-row'>
             <SideBar />
-            <div className='flex flex-col w-full max-w-prose gap-8 items-center flex-1 py-20'>
-                <Suspense fallback={<PropertyResultsSkeleton />}>
-                    <PropertyResults />
-                </Suspense>
-                <div className='flex flex-col items-center gap-2'>
-                    <p>Can't see your property?</p>
-                    <Link href="/reviews/create">
-                        <button className="border border-accent rounded-md px-4 py-2 text-accent mb-5 hover:bg-accent/10 hover:shadow-lg hover:shadow-accent/20">
-                            Review a New Property
-                        </button>
-                    </Link>
+            <div className='flex w-full justify-center flex-1 py-20'>
+                <div className="flex flex-col w-full max-w-prose gap-8 items-center">
+                    <Suspense fallback={<PropertyResultsSkeleton />}>
+                        <PropertyResults />
+                    </Suspense>
+                    <div className='flex flex-col items-center gap-2'>
+                        <p>Can't see your property?</p>
+                        <Link href="/reviews/create">
+                            <button className="border border-accent rounded-md px-4 py-2 text-accent mb-5 hover:bg-secondary/10 dark:hover:bg-accent/10 hover:shadow-lg hover:shadow-accent/20">
+                                Review a New Property
+                            </button>
+                        </Link>
+                    </div>
                 </div>
             </div>
         </div>
@@ -75,7 +77,22 @@ const PropertyResults: React.FC = async () => {
 
     return properties.map((property) => {
         return (
-            <div>{property.address}</div>
+            <Link
+                className='flex flex-col w-full items-center rounded-xl bg-secondary/10 hover:bg-secondary/20 p-6 pb-8 gap-4 border shadow-md shadow-secondary/40 hover:shadow-lg hover:shadow-secondary/40'
+                href={`/properties/${property.id}`}
+                key={property.id}
+            >
+                {/* Card Header */}
+                <div className='flex flex-col w-full'>
+                    <h2 className="text-2xl font-semibold mb-1 w-fit text-accent">{property.address}</h2>
+                    <span className='border border-b w-full border-accent' />
+                </div>
+
+                {/* Property Details here */}
+                {/* <div className='flex flex-col gap-2'>
+                                
+                </div> */}
+            </Link>
         )
     })
 }
