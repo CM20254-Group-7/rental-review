@@ -1,28 +1,15 @@
 import { createClient } from '@/utils/supabase/server'
-import { error } from 'console';
 import { cookies } from 'next/headers';
+import { Suspense } from 'react';
 
-export default async function PropertiesPage() {
-    const cookieStore = cookies();
-    const supabase = createClient(cookieStore);
-
-    const { data: properties, error: propertiesError } = await supabase
-        .from('properties')
-        .select('address')
-
-    if (propertiesError) {
-        return (
-            <div>
-                There is an error with the properties database.
-            </div>
-        )
-    }
-
+export default function PropertiesPage() {
     return (
         <div>
             <SideBar />
             <ul>
-                <PropertyResults properties={properties} />
+                <Suspense fallback={<li>Loading...</li>}>
+                    <PropertyResults />
+                </Suspense>
             </ul>
         </div>
     )
@@ -42,9 +29,22 @@ const SideBar: React.FC = () => {
     )
 }
 
-const PropertyResults: React.FC<{properties: {
-    address: string;
-}[]}> = ({properties}) => {
+const PropertyResults: React.FC = async () => {
+    const cookieStore = cookies();
+    const supabase = createClient(cookieStore);
+
+    const { data: properties, error: propertiesError } = await supabase
+        .from('properties')
+        .select('address')
+
+    if (propertiesError || properties.length === 0) {
+        return (
+            <div>
+                No properties found
+            </div>
+        )
+    }
+
     return properties?.map((property) => {
         return (
             <li>{property.address}</li>
