@@ -26,19 +26,7 @@ const ClaimPropertyPage: NextPage<{ params: { id: string } }> = async ({ params:
 
     // Check the user is logged in
     const { data: { user }, error: userError } = await supabase.auth.getUser()
-    if (userError || !user) return (
-        <div className="flex flex-col flex-1 place-items-center justify-center gap-4">
-            <p className="text-lg font-semibold">
-                You must be logged in to access this page
-            </p>
-            <Link 
-                href={`/login?redirect=/properties/${propertyId}/claim`}
-                className="text-primary font-semibold underline cursor-pointer"
-            >
-                Go to Login
-            </Link>
-        </div>
-    )
+    if (userError || !user) return <NotLoggedInMessage propertyId={propertyId} />
 
 
     // Check that the user has a landlord profile
@@ -57,19 +45,7 @@ const ClaimPropertyPage: NextPage<{ params: { id: string } }> = async ({ params:
         landlordId = landlordData.id as string | null; // Assign landlordId value with type assertion
     }
 
-    if (landlordError || !landlordData || !landlordId) return (
-        <div className="flex flex-col flex-1 place-items-center justify-center gap-4">
-            <p className="text-lg font-semibold">
-                You must be registered as a landlord to access this page
-            </p>
-            <Link 
-                href={`/landlord-registration`}
-                className="text-primary font-semibold underline cursor-pointer"
-            >
-                Become a Landlord
-            </Link>
-        </div>
-    )
+    if (landlordError || !landlordData || !landlordId) return <NotALandlordMessage />
 
 
     // State is valid, render the form
@@ -83,5 +59,31 @@ const ClaimPropertyPage: NextPage<{ params: { id: string } }> = async ({ params:
         </div>
     )
 }
+
+const NotLoggedInMessage: React.FC<{propertyId: string}> = ({propertyId}) =>
+    <div className="flex flex-col flex-1 place-items-center justify-center gap-4">
+        <p className="text-lg font-semibold">
+            You must be logged in to access this page
+        </p>
+        <Link
+            href={`/login?redirect=/properties/${propertyId}/claim`}
+            className="text-primary font-semibold underline cursor-pointer"
+        >
+            Go to Login
+        </Link>
+    </div>
+
+const NotALandlordMessage: React.FC = () =>
+    <div className="flex flex-col flex-1 place-items-center justify-center gap-4">
+        <p className="text-lg font-semibold">
+            You must be registered as a landlord to access this page
+        </p>
+        <Link
+            href={`/landlord-registration`}
+            className="text-primary font-semibold underline cursor-pointer"
+        >
+            Become a Landlord
+        </Link>
+    </div>
 
 export default ClaimPropertyPage
