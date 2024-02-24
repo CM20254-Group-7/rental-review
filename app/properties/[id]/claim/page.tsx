@@ -6,8 +6,9 @@ import { NextPage } from "next"
 
 import { ClaimPropertyForm } from "./form"
 import { notFound } from "next/navigation"
+import Link from "next/link"
 
-const ClaimPropertyPage: NextPage<{params: { id: string }}> = async ({ params: {id: propertyId} }) => {
+const ClaimPropertyPage: NextPage<{ params: { id: string } }> = async ({ params: { id: propertyId } }) => {
     // Set up the supabase client
     const cookieStore = cookies()
     const supabase = createClient(cookieStore)
@@ -26,8 +27,16 @@ const ClaimPropertyPage: NextPage<{params: { id: string }}> = async ({ params: {
     // Check the user is logged in
     const { data: { user }, error: userError } = await supabase.auth.getUser()
     if (userError || !user) return (
-        <div>
-            <h1>ERROR: User not logged in</h1>
+        <div className="flex flex-col flex-1 place-items-center justify-center gap-4">
+            <p className="text-lg font-semibold">
+                You must be logged in to access this page
+            </p>
+            <Link 
+                href={`/login?redirect=/properties/${propertyId}/claim`}
+                className="text-primary font-semibold underline cursor-pointer"
+            >
+                Go to Login
+            </Link>
         </div>
     )
 
@@ -49,12 +58,20 @@ const ClaimPropertyPage: NextPage<{params: { id: string }}> = async ({ params: {
     }
 
     if (landlordError || !landlordData || !landlordId) return (
-        <div>
-            <h1>ERROR: User is not registered as a landlord</h1>
+        <div className="flex flex-col flex-1 place-items-center justify-center gap-4">
+            <p className="text-lg font-semibold">
+                You must be registered as a landlord to access this page
+            </p>
+            <Link 
+                href={`/landlord-registration`}
+                className="text-primary font-semibold underline cursor-pointer"
+            >
+                Become a Landlord
+            </Link>
         </div>
     )
 
-    
+
     // State is valid, render the form
     return (
         <div className="flex flex-1 flex-col gap-2 justify-center">
