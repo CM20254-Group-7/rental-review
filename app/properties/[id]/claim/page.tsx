@@ -6,16 +6,10 @@ import { NextPage } from "next"
 
 import { ClaimPropertyForm } from "./form"
 
-const ClaimPropertyPage: NextPage = async ({
-    searchParams
-}: {
-    searchParams?: {
-        propertyId?: string,
-    }
-}) => {
+const ClaimPropertyPage: NextPage<{params: { id: string }}> = async ({ params }) => {
 
     // Check a property id was provided
-    const propertyId = searchParams?.propertyId
+    const propertyId = params?.id
     if (!propertyId) return (
         <div>
             <h1>ERROR: No Property Id provided</h1>
