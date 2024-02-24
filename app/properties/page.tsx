@@ -8,7 +8,7 @@ export default function PropertiesPage() {
         <div className='flex-1 w-screen flex flex-row'>
             <SideBar />
             <div className='flex flex-col w-full max-w-prose gap-8 items-center flex-1 py-20'>
-                <Suspense fallback={<li>Loading...</li>}>
+                <Suspense fallback={<PropertyResultsSkeleton />}>
                     <PropertyResults />
                 </Suspense>
             </div>
@@ -69,4 +69,13 @@ const PropertyResults: React.FC = async () => {
             <div>{property.address}</div>
         )
     })
+}
+
+export const PropertyResultsSkeleton: React.FC = () => {
+    // TODO: Replace with skeleton
+    return (
+        <div className='my-auto' >
+            Properties Loading...
+        </div>
+    )
 }
