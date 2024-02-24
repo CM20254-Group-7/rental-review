@@ -12,15 +12,15 @@ export default function PropertiesPage() {
                 <div className="flex flex-col w-full max-w-prose gap-8 items-center">
                     <Suspense fallback={<PropertyResultsSkeleton />}>
                         <PropertyResults />
+                        <div className='flex flex-col items-center gap-2'>
+                            <p>Can't see your property?</p>
+                            <Link href="/reviews/create">
+                                <button className="border border-accent rounded-md px-4 py-2 text-accent mb-5 hover:bg-secondary/10 dark:hover:bg-accent/10 hover:shadow-lg hover:shadow-accent/20">
+                                    Review a New Property
+                                </button>
+                            </Link>
+                        </div>
                     </Suspense>
-                    <div className='flex flex-col items-center gap-2'>
-                        <p>Can't see your property?</p>
-                        <Link href="/reviews/create">
-                            <button className="border border-accent rounded-md px-4 py-2 text-accent mb-5 hover:bg-secondary/10 dark:hover:bg-accent/10 hover:shadow-lg hover:shadow-accent/20">
-                                Review a New Property
-                            </button>
-                        </Link>
-                    </div>
                 </div>
             </div>
         </div>
