@@ -46,10 +46,6 @@ const getPropertyResults = cache(async () => {
     const cookieStore = cookies();
     const supabase = createClient(cookieStore);
 
-
-    // Fake loading time to test load state
-    await setTimeout(1000);
-
     const { data: properties, error: propertiesError } = await supabase
         .from('properties')
         .select('*')
