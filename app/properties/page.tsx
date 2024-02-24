@@ -97,7 +97,7 @@ const PropertyResults: React.FC = async () => {
     })
 }
 
-export const PropertyResultsSkeleton: React.FC = () => {
+const PropertyResultsSkeleton: React.FC = () => {
     // TODO: Replace with skeleton
     return (
         <div className='my-auto' >
