@@ -1,6 +1,7 @@
 import { createClient } from '@/utils/supabase/server'
 import { cookies } from 'next/headers';
-import { Suspense } from 'react';
+import { Suspense, cache } from 'react';
+import { setTimeout } from "timers/promises";
 
 export default function PropertiesPage() {
     return (
@@ -29,23 +30,40 @@ const SideBar: React.FC = () => {
     )
 }
 
-const PropertyResults: React.FC = async () => {
+const getPropertyResults = cache(async () => {
     const cookieStore = cookies();
     const supabase = createClient(cookieStore);
 
+
+    // Fake loading time to test load state
+    await setTimeout(1000);
+
     const { data: properties, error: propertiesError } = await supabase
         .from('properties')
-        .select('address')
+        .select('*')
 
-    if (propertiesError || properties.length === 0) {
+    if (propertiesError) {
+        return {
+            properties: [],
+        }
+    }
+
+    return {
+        properties,
+    }
+});
+
+const PropertyResults: React.FC = async () => {
+    const { properties } = await getPropertyResults();
+
+    if (properties.length === 0)
         return (
             <div>
                 No properties found
             </div>
         )
-    }
 
-    return properties?.map((property) => {
+    return properties.map((property) => {
         return (
             <li>{property.address}</li>
         )
