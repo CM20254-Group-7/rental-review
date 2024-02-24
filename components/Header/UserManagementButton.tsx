@@ -37,10 +37,10 @@ const UserManagementButton: React.FC<{ email: string }> = ({ email }) => {
 
                     <form
                         action={signOut}
-                        className="py-2 px-4 w-full text-right rounded-b-md no-underline hover:bg-secondary/10"
+                        className="contents"
                     >
                         <button
-                            className="inline"
+                            className="py-2 px-4 w-full text-right rounded-b-md no-underline hover:bg-secondary/10"
                         >
                             Logout
                         </button>
