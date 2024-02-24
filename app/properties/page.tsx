@@ -13,37 +13,29 @@ export default async function PropertiesPage() {
     if (propertiesError) {
         return (
             <div>
-                <main>
-                    There is an error with the properties database.
-                </main>
+                There is an error with the properties database.
             </div>
         )
     }
 
     return (
         <div>
-            <div>
-                <form
-                    className="animate-in flex-1 flex flex-col w-full justify-center gap-1 text-foreground">
-                    <input className="mt-5 rounded-md px-4 py-2 bg-inherit border mb-1"
-                        name="address"
-                        placeholder="13 Argyle Terrace, Staverton, Bath, BA2 3DF..." />
-                    <button className="border border-foreground/20 rounded-md px-4 py-2 text-foreground mb-5">
-                        Search (no functionality yet)
-                    </button>
-                </form>
-            </div>
-            <div>
-                <main>
-                    <ul>
-                        {properties?.map((p) => {
-                            return (
-                                <li>{p.address}</li>
-                            )
-                        })}
-                    </ul>
-                </main>
-            </div>
+            <form
+                className="animate-in flex-1 flex flex-col w-full justify-center gap-1 text-foreground">
+                <input className="mt-5 rounded-md px-4 py-2 bg-inherit border mb-1"
+                    name="address"
+                    placeholder="13 Argyle Terrace, Staverton, Bath, BA2 3DF..." />
+                <button className="border border-foreground/20 rounded-md px-4 py-2 text-foreground mb-5">
+                    Search (no functionality yet)
+                </button>
+            </form>
+            <ul>
+                {properties?.map((p) => {
+                    return (
+                        <li>{p.address}</li>
+                    )
+                })}
+            </ul>
         </div>
     )
 }
