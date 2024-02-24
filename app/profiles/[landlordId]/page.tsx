@@ -17,6 +17,9 @@ export default async function landlordProfilePage( {params }: { params: { landlo
         .eq('user_id', landlordId)
         .single()
 
+    console.log(landlordData)
+    console.log(landlordError)
+
     // landlord not found
     if (landlordError || !landlordData) {
         notFound()
