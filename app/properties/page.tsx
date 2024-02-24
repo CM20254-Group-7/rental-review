@@ -5,13 +5,13 @@ import { setTimeout } from "timers/promises";
 
 export default function PropertiesPage() {
     return (
-        <div>
+        <div className='flex-1 w-screen flex flex-row'>
             <SideBar />
-            <ul>
+            <div className='flex flex-col w-full max-w-prose gap-8 items-center flex-1 py-20'>
                 <Suspense fallback={<li>Loading...</li>}>
                     <PropertyResults />
                 </Suspense>
-            </ul>
+            </div>
         </div>
     )
 }
@@ -19,7 +19,8 @@ export default function PropertiesPage() {
 const SideBar: React.FC = () => {
     return (
         <form
-            className="animate-in flex-1 flex flex-col w-full justify-center gap-1 text-foreground">
+            className="flex flex-col gap-1 text-foreground border-r px-2 py-4"
+        >
             <input className="mt-5 rounded-md px-4 py-2 bg-inherit border mb-1"
                 name="address"
                 placeholder="13 Argyle Terrace, Staverton, Bath, BA2 3DF..." />
@@ -65,7 +66,7 @@ const PropertyResults: React.FC = async () => {
 
     return properties.map((property) => {
         return (
-            <li>{property.address}</li>
+            <div>{property.address}</div>
         )
     })
 }
