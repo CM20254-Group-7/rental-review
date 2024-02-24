@@ -5,18 +5,9 @@ import { cookies } from "next/headers"
 import { NextPage } from "next"
 
 import { ClaimPropertyForm } from "./form"
+import { notFound } from "next/navigation"
 
-const ClaimPropertyPage: NextPage<{params: { id: string }}> = async ({ params }) => {
-
-    // Check a property id was provided
-    const propertyId = params?.id
-    if (!propertyId) return (
-        <div>
-            <h1>ERROR: No Property Id provided</h1>
-        </div>
-    )
-
-
+const ClaimPropertyPage: NextPage<{params: { id: string }}> = async ({ params: {id: propertyId} }) => {
     // Set up the supabase client
     const cookieStore = cookies()
     const supabase = createClient(cookieStore)
@@ -29,11 +20,7 @@ const ClaimPropertyPage: NextPage<{params: { id: string }}> = async ({ params })
         .eq('id', propertyId)
         .maybeSingle()
 
-    if (propertyError || !propertyData) return (
-        <div>
-            <h1>ERROR: Property not found</h1>
-        </div>
-    )
+    if (propertyError || !propertyData) notFound()
 
 
     // Check the user is logged in
