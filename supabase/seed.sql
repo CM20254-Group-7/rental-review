@@ -1,17 +1,19 @@
--- Create Sample Users
+-- Sample Users
 -- 
--- |       Email         |     Password     |
--- |---------------------|------------------|    
--- | user.1@example.com  | User.1.Password  |
--- | user.2@example.com  | User.2.Password  |
--- | user.3@example.com  | User.3.Password  |
--- | user.4@example.com  | User.4.Password  |
--- | user.5@example.com  | User.5.Password  |
--- | user.6@example.com  | User.6.Password  |
--- | user.7@example.com  | User.7.Password  |
--- | user.8@example.com  | User.8.Password  |
--- | user.9@example.com  | User.9.Password  |
--- | user.10@example.com | User.10.Password |
+-- |       Email         |     Password     |       Used for      |                           Detail                          |
+-- |---------------------|------------------|---------------------|-----------------------------------------------------------|
+-- | user.1@example.com  | User.1.Password  | supabase-user-tests |                                                           |
+-- |                     |                  | landlord-page-tests | Must have owned (at least) 2 properties (1 & 2 Test Road) |
+-- | user.2@example.com  | User.2.Password  | supabase-user-tests |                                                           |
+-- |                     |                  | landlord-page-tests | Must be a landlord, but not have owned any properties     |
+-- | user.3@example.com  | User.3.Password  | landlord-page-tests | Must not be registered as a landlord                      |
+-- | user.4@example.com  | User.4.Password  |                     |                                                           |
+-- | user.5@example.com  | User.5.Password  |                     |                                                           |
+-- | user.6@example.com  | User.6.Password  |                     |                                                           |
+-- | user.7@example.com  | User.7.Password  |                     |                                                           |
+-- | user.8@example.com  | User.8.Password  |                     |                                                           |
+-- | user.9@example.com  | User.9.Password  |                     |                                                           |
+-- | user.10@example.com | User.10.Password |                     |                                                           |
 
 INSERT INTO "auth"."users" (            "instance_id"             ,                  "id"                 ,      "aud"     ,     "role"     ,        "email"       ,                      "encrypted_password"                     ,      "email_confirmed_at"      , "invited_at", "confirmation_token", "confirmation_sent_at", "recovery_token", "recovery_sent_at", "email_change_token_new", "email_change", "email_change_sent_at",        "last_sign_in_at"       ,               "raw_app_meta_data"              , "raw_user_meta_data", "is_super_admin",          "created_at"          ,          "updated_at"          , "phone", "phone_confirmed_at", "phone_change", "phone_change_token", "phone_change_sent_at", "email_change_token_current", "email_change_confirm_status", "banned_until", "reauthentication_token", "reauthentication_sent_at", "is_sso_user", "deleted_at") VALUES
                            ('00000000-0000-0000-0000-000000000000', 'b1b284f9-2c24-4f2e-bd4e-9c7ab7fe88e3', 'authenticated', 'authenticated', 'user.1@example.com'  , '$2a$10$dAXb7tcknPdbIxQjhH5Kp.HsnSH/axCF84WFR3x/5igoOD5Yf/rtq', '2024-02-21 19:01:43.584403+00', NULL        , ''                  , NULL                  , ''              , NULL              , ''                      , ''            , NULL                  , '2024-02-21 19:01:43.587224+00', '{"provider": "email", "providers": ["email"]}', '{}'                , NULL            , '2024-02-21 19:01:43.574501+00', '2024-02-21 19:01:43.590832+00', NULL   , NULL                , ''            , ''                  , NULL                  , ''                          , 0                            , NULL          , ''                      , NULL                      , false        , NULL        ),
@@ -25,47 +27,49 @@ INSERT INTO "auth"."users" (            "instance_id"             ,             
                            ('00000000-0000-0000-0000-000000000000', '1c6ff33c-5efe-4b45-bd35-13783eebbee2', 'authenticated', 'authenticated', 'user.9@example.com'  , '$2a$10$rJBYMRDxq2lyStjPEcY7d.0aQnb6xeNhrE.q9Y0VQPWDjmvcKcncK', '2024-02-21 19:02:49.598548+00', NULL        , ''                  , NULL                  , ''              , NULL              , ''                      , ''            , NULL                  , '2024-02-21 19:02:49.600667+00', '{"provider": "email", "providers": ["email"]}', '{}'                , NULL            , '2024-02-21 19:02:49.594916+00', '2024-02-21 19:02:49.602113+00', NULL   , NULL                , ''            , ''                  , NULL                  , ''                          , 0                            , NULL          , ''                      , NULL                      , false        , NULL        ),
                            ('00000000-0000-0000-0000-000000000000', '5b3bb17f-33fe-40dd-a387-285e70812f0b', 'authenticated', 'authenticated', 'user.10@example.com' , '$2a$10$fDAaDVDdFr4hR4IEIBuQCu34leGCv6ACDMXHVW1pC9d1qWWrC4Hq2', '2024-02-21 19:02:56.022635+00', NULL        , ''                  , NULL                  , ''              , NULL              , ''                      , ''            , NULL                  , '2024-02-21 19:02:56.025823+00', '{"provider": "email", "providers": ["email"]}', '{}'                , NULL            , '2024-02-21 19:02:56.019983+00', '2024-02-21 19:02:56.027023+00', NULL   , NULL                , ''            , ''                  , NULL                  , ''                          , 0                            , NULL          , ''                      , NULL                      , false        , NULL        );
 
--- Create Sample Properties
+-- Sample Properties
 --
--- |                  ID                  |     Address   |
--- | 1ececec8-4bbf-445f-8de0-f563caf0bf01 |  1 Test Road  |
--- | 6a83d02b-9da1-4a4a-9719-05e8a8c9228d |  2 Test Road  |
+-- |   Address   |       Used for      |             Details            |
+-- |-------------|---------------------|--------------------------------|
+-- | 1 Test Road | landlord-page-tests | Must have been owned by User.1 |
+-- | 2 Test Road | landlord-page-tests | Must have been owned by User.1 |
 
 INSERT INTO "public"."properties" (                    "id"              ,   "address"  ) VALUES
                                   ('1ececec8-4bbf-445f-8de0-f563caf0bf01', '1 Test Road'),
                                   ('6a83d02b-9da1-4a4a-9719-05e8a8c9228d', '2 Test Road');
 
 
--- Create Sample Landlord Private Profiles
+-- Sample Landlord Private Profiles
 --
--- Note: the name and address is merged into one column for simplicity in this example
+-- No tests directly use this table yet, however the public profiles require it to exist.
 --
--- |    User    |      Name    | Phone number |         Address       |
--- |   User.1   |    Joe Doe   |   12345678   | 1 Test House, TES T12 |
--- |   User.2   | Matthew Nash |   87654321   | 2 Test House, TES T34 |
+-- |    User    |       Used for      |             Details            |
+-- |   User.1   |                     |                                |
+-- |   User.2   |                     |                                |
 
 INSERT INTO "public"."landlord_private_profiles" (               "user_id"              , "phone_number" , "postcode" ,     "country"    , "county" , "city" , "street" ,    "house"    , "first_name" , "last_name" ) VALUES
                                                   ('b1b284f9-2c24-4f2e-bd4e-9c7ab7fe88e3', '12345678'     , 'TES T12'  , 'United Kingdom',  NULL    , NULL   ,  NULL    , '1 Test House', 'Joe'        , 'Doe'     ),
                                                   ('44db487d-ace4-43c8-bd7c-38b32b0bc711', '87654321'     , 'TES T34'  , 'United Kingdom',  NULL    , NULL   ,  NULL    , '2 Test House', 'Matthew'    , 'Nash'    );
 
 
--- Create Sample Landlord Public Profiles
+-- Sample Landlord Public Profiles
 --
--- |    User    |  Display name  |      Display email      |         Address       |      Bio        |
--- |   User.1   |   Test Name 1  |  display1@example.com   | 1 Test House, TES T12 |  Cool landlord  |
--- |   User.2   |   Test Name 2  |  display2@example.com   | 2 Test House, TES T34 | Cooler landlord |
+-- |    User    |  Display name  |       Used for      |                                                  Details                                                 |
+-- |------------|----------------|---------------------|----------------------------------------------------------------------------------------------------------|
+-- |   User.1   |   Test Name 1  | landlord-page-tests | Name, email, and bio must match 'Test Name 1', 'display1@example.com, and 'Cool landlord' respectively   |
+-- |   User.2   |   Test Name 2  | landlord-page-tests | Name, email, and bio must match 'Test Name 2', 'display2@example.com, and 'Cooler landlord' respectively |
 
-INSERT INTO "public"."landlord_public_profiles" (               "user_id"              , "website" ,       "bio"       , "verified" , "profile_image_id" , "type" ,    "display_email"     , "display_name" ) VALUES
+INSERT INTO "public"."landlord_public_profiles" (               "user_id"               , "website" ,       "bio"      , "verified" , "profile_image_id" , "type" ,    "display_email"     , "display_name" ) VALUES
                                                  ('b1b284f9-2c24-4f2e-bd4e-9c7ab7fe88e3',  NULL     , 'Cool landlord'  ,    TRUE    ,  NULL              ,    1   , 'display1@example.com' , 'Test Name 1'  ),
                                                  ('44db487d-ace4-43c8-bd7c-38b32b0bc711',  NULL     , 'Cooler landlord',    TRUE    ,  NULL              ,    1   , 'display2@example.com' , 'Test Name 2'  );
 
 
--- Create Sample property_ownership
+-- Sample Property Ownership
 --
--- | Property Address | Landlord Name | Started At |  Ended At |
--- |   1 Test Road    |    Joe Doe    | 2024-01-20 | 2024-02-21|
--- |   2 Test Road    |    Joe Doe    | 2024-02-20 | 2024-02-21|
-
+-- | Property Address |   Landlord   |       Used for      |                    Details                   |
+-- |------------------|--------------|---------------------|----------------------------------------------|
+-- |   1 Test Road    |    User.1    | landlord-page-tests | Must have been owned by User.1 at some point |
+-- |   2 Test Road    |    User.1    | landlord-page-tests | Must have been owned by User.1 at some point |
 
 INSERT INTO "public"."property_ownership" (               "property_id"           , "started_at" ,              "landlord_id"            , "ended_at" ) VALUES
                                            ('1ececec8-4bbf-445f-8de0-f563caf0bf01', '2024-02-20' , 'b1b284f9-2c24-4f2e-bd4e-9c7ab7fe88e3', '2024-02-21' ),
