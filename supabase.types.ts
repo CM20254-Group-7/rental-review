@@ -39,9 +39,7 @@ export interface Database {
           city: string | null
           country: string
           county: string | null
-          first_name: string | null
           house: string
-          last_name: string | null
           phone_number: string
           postcode: string
           street: string | null
@@ -51,9 +49,7 @@ export interface Database {
           city?: string | null
           country: string
           county?: string | null
-          first_name?: string | null
           house: string
-          last_name?: string | null
           phone_number: string
           postcode: string
           street?: string | null
@@ -63,9 +59,7 @@ export interface Database {
           city?: string | null
           country?: string
           county?: string | null
-          first_name?: string | null
           house?: string
-          last_name?: string | null
           phone_number?: string
           postcode?: string
           street?: string | null
@@ -84,8 +78,6 @@ export interface Database {
       landlord_public_profiles: {
         Row: {
           bio: string | null
-          display_email: string
-          display_name: string
           profile_image_id: string | null
           type: string
           user_id: string
@@ -94,8 +86,6 @@ export interface Database {
         }
         Insert: {
           bio?: string | null
-          display_email: string
-          display_name: string
           profile_image_id?: string | null
           type: string
           user_id: string
@@ -104,8 +94,6 @@ export interface Database {
         }
         Update: {
           bio?: string | null
-          display_email?: string
-          display_name?: string
           profile_image_id?: string | null
           type?: string
           user_id?: string
@@ -125,42 +113,42 @@ export interface Database {
       properties: {
         Row: {
           address: string
-          baths: number | null
-          beds: number | null
+          baths: number
+          beds: number
           country: string
-          county: string
+          county: string | null
           description: string | null
           house: string
           id: string
           postcode: string
           property_type: string
-          street: string | null
+          street: string
         }
         Insert: {
           address: string
-          baths?: number | null
-          beds?: number | null
+          baths: number
+          beds: number
           country: string
-          county: string
+          county?: string | null
           description?: string | null
           house: string
           id?: string
           postcode: string
           property_type: string
-          street?: string | null
+          street: string
         }
         Update: {
           address?: string
-          baths?: number | null
-          beds?: number | null
+          baths?: number
+          beds?: number
           country?: string
-          county?: string
+          county?: string | null
           description?: string | null
           house?: string
           id?: string
           postcode?: string
           property_type?: string
-          street?: string | null
+          street?: string
         }
         Relationships: []
       }
