@@ -53,7 +53,7 @@ export default async function landlordProfilePage( {params }: { params: { landlo
         const { data: details, error: propertyDetailsError } = await supabase
         .from('properties')
         .select('address')
-        .in('id', landlordProperties.map((property: { property_id: string }) => property.property_id))
+        .in('id', landlordProperties.map(property => property.property_id))
 
         if (propertyDetailsError) return (
             <div>
