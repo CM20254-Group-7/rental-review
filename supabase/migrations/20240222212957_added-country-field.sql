@@ -2,7 +2,7 @@ alter table "public"."properties" add column "baths" smallint;
 
 alter table "public"."properties" add column "beds" smallint; 
 
-alter table "public"."properties" add column "country" text not null; 
+alter table "public"."properties" add column "country" text; 
 
 alter table "public"."properties" add column "county" text not null; 
 
