@@ -11,12 +11,12 @@ const newReviewSchema = z.object({
     property_address: z.string().optional(),
     property_baths: z.number().int().min(1),
     property_beds: z.number().int().min(1),
-    property_country: z.string().optional(),
-    property_county: z.string().optional(),
+    property_country: z.string(),
+    property_county: z.string(),
     property_description: z.string().optional(),
-    property_house: z.string().optional(),
-    property_type: z.string().optional(),
-    property_postcode: z.string().optional(),
+    property_house: z.string(),
+    property_type: z.string(),
+    property_postcode: z.string().max(8),
     property_street: z.string().optional(),
 
     review_date: z.coerce.date(),
@@ -133,7 +133,7 @@ export const createReview = async (
         const { data: newProperty, error: newPropertyError } = await serviceSupabase
             .from('properties')
             //.insert({ address: "property_address", baths: 2, beds: 3, country: "property_country", county: "property_county", description: property_description, house: property_house, postcode: property_postcode, property_type: property_type, street: property_street })
-            .insert({ address: property_address, baths: property_baths, beds: property_beds, country: "property_country", county:"property_county", description: property_description, house: "property_house", postcode: "property_postcode", property_type: "property_type", street: property_street })
+            .insert({ address: property_address, baths: property_baths, beds: property_beds, country: property_country, county:property_county, description: property_description, house: property_house, postcode: property_postcode, property_type: property_type, street: property_street })
             .select('id')
             .single()
 
