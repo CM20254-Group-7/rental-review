@@ -16,8 +16,8 @@ const newReviewSchema = z.object({
     property_description: z.string().optional(),
     property_house: z.string(),
     property_type: z.string(),
-    property_postcode: z.string().max(8),
-    property_street: z.string().optional(),
+    property_postcode: z.string(),
+    property_street: z.string(),
 
     review_date: z.coerce.date(),
 
