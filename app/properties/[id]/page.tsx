@@ -47,57 +47,73 @@ const PropertyDetailPage: NextPage<{
         id: string
     }
 }> = async ({ params }) => {
-    const PropertyDetails = await getPropertyDetails(params.id)
+    const propertyDetails = await getPropertyDetails(params.id)
 
-    if (!PropertyDetails) notFound()
+    if (!propertyDetails) notFound()
 
     return (
-        <div className="flex-1 flex flex-col w-full px-8 justify-top items-center gap-2 py-20">
-            <div className="flex flex-row w-full px-8 justify-center gap-2">
-                <div className='relative w-full max-w-md aspect-[1000/682]'>
-                    <Image
-                        className='absolute w-full max-w-md rounded-lg'
-                        src="/house.jpeg"
-                        width={1000}
-                        height={682}
-                        alt="Image of a house"
-                    />
-                    <div className='w-full h-full bg-background/40 backdrop-blur flex flex-col place-items-center justify-center'>
-                        <p className='text-lg font-semibold text-foreground'>Property Images Coming Soon</p>
-                    </div>
-                </div>
-                <div className="flex-1 flex flex-col w-full px-8 sm:max-w-md justify-top gap-2">
-                    <text className='font-bold text-lg'>{PropertyDetails.address}</text>
-                    <div className='flex flex-row gap-1'>
-                        <label className='font-semibold'>Owned By:</label>
-                        <Suspense fallback={<ArrowPathIcon className='w-5 h-5 animate-spin' />}>
-                            <OwnershipDetails propertyId={PropertyDetails.id} />
-                        </Suspense>
+        <div className="flex-1 flex flex-col w-full px-16 justify-top items-center gap-2 py-20">
+            {/* Content Boundary */}
+            <div className="flex flex-col w-full max-w-4xl bg-secondary/10 shadow-md shadow-secondary/40 rounded-lg overflow-clip border">
+                {/* Details Header */}
+                <div className="flex flex-row w-full justify-between gap-2 bg-secondary/30 shadow-lg shadow-secondary/40">
+                    {/* Images - Currently not implemented so shows example image with disclaimer */}
+                    <div className='relative w-full max-w-md aspect-[1000/682]'>
+                        <Image
+                            className='absolute w-full max-w-md rounded-lg'
+                            src="/house.jpeg"
+                            width={1000}
+                            height={682}
+                            alt="Image of a house"
+                        />
+                        <div className='w-full h-full bg-background/40 backdrop-blur flex flex-col place-items-center justify-center'>
+                            <p className='text-lg font-semibold text-foreground'>Property Images Coming Soon</p>
+                        </div>
                     </div>
 
-                    <div className='flex flex-row w-full px-0 justify-start items-center gap-2'>
-                        <label className='font-semibold'>Average Rating:</label>
-                        <Suspense fallback={<ArrowPathIcon className='w-5 h-5 animate-spin' />}>
-                            <AverageRating propertyId={PropertyDetails.id} />
-                        </Suspense>
-                    </div>
+                    {/* General Property Details */}
+                    <div className="flex-1 flex flex-col w-full px-8 sm:max-w-md justify-top gap-2 py-4">
+                        {/* Title - Uses address */}
+                        <div className='flex flex-col w-full'>
+                            <h2 className="text-2xl font-semibold mb-1 w-fit text-accent">{propertyDetails.address}</h2>
+                            <span className='border border-b w-full border-accent' />
+                        </div>
+                            
+                        {/* Ownership */}
+                        <div className='flex flex-row gap-1'>
+                            <label className='font-semibold'>Owned By:</label>
+                            <Suspense fallback={<ArrowPathIcon className='w-5 h-5 animate-spin' />}>
+                                <OwnershipDetails propertyId={propertyDetails.id} />
+                            </Suspense>
+                        </div>
 
-                    <text>{PropertyDetails.description}</text>
+                        {/* Average Ratings */}
+                        <div className='flex flex-row w-full px-0 justify-start items-center gap-2'>
+                            <label className='font-semibold'>Average Rating:</label>
+                            <Suspense fallback={<ArrowPathIcon className='w-5 h-5 animate-spin' />}>
+                                <AverageRating propertyId={propertyDetails.id} />
+                            </Suspense>
+                        </div>
+
+                        {/* Other Known Property Details - currently only description, consider expaniding to include details like No. of bedrooms */}
+                        <text>{propertyDetails.description}</text>
+                    </div>
                 </div>
+
+                {/* Review List */}
+                {Array.from({ length: 3 }).map((_, i) => {
+                    return (
+                        <ReviewDetailsLayout
+                            reviewId="1"
+                            reviewerId="1"
+                            reviewDate={new Date('01 Jan 1970 00:00:00 GMT')}
+                            landlordRating={2}
+                            propertyRating={4}
+                            reviewMessage="This is a review message"
+                        />
+                    )
+                })}
             </div>
-
-            {Array.from({ length: 3 }).map((_, i) => {
-                return (
-                    <ReviewDetailsLayout
-                        reviewId="1"
-                        reviewerId="1"
-                        reviewDate={new Date('01 Jan 1970 00:00:00 GMT')}
-                        landlordRating={2}
-                        propertyRating={4}
-                        reviewMessage="This is a review message"
-                    />
-                )
-            })}
         </div>
     )
 }
