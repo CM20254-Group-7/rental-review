@@ -77,7 +77,7 @@ INSERT INTO "public"."landlord_public_profiles" (               "user_id"       
 
 INSERT INTO "public"."property_ownership" (               "property_id"           , "started_at" ,              "landlord_id"            , "ended_at" ) VALUES
                                            ('1ececec8-4bbf-445f-8de0-f563caf0bf01', '2024-02-20' , 'b1b284f9-2c24-4f2e-bd4e-9c7ab7fe88e3', '2024-02-21' ),
-                                           ('6a83d02b-9da1-4a4a-9719-05e8a8c9228d', '2024-01-20' , 'b1b284f9-2c24-4f2e-bd4e-9c7ab7fe88e3', '2024-02-21' );
+                                           ('6a83d02b-9da1-4a4a-9719-05e8a8c9228d', '2024-01-20' , 'b1b284f9-2c24-4f2e-bd4e-9c7ab7fe88e3', NULL );
 
 -- Sample Reviewer Private Profiles
 --

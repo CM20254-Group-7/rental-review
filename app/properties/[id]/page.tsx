@@ -133,8 +133,7 @@ const getCurrentOwner = cache(async (propertyId: string): Promise<landlordPublic
         .from('property_ownership')
         .select('landlord_public_profiles(*)')
         .eq('property_id', propertyId)
-        // only get the ones that are currently the owner
-        .not('ended_at', 'is', null)
+        .is('ended_at', null)
         .maybeSingle()
 
     if (error || !data || !data.landlord_public_profiles) return null
