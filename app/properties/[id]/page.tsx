@@ -6,8 +6,13 @@ import { cookies } from "next/headers"
 import { StarRatingLayout } from '@/components/StarRating'
 import { ReviewDetailsLayout } from '@/components/ReviewDetails'
 import { notFound } from 'next/navigation'
+import { NextPage } from 'next'
 
-export default async function Page({ params }: { params: { id: string } }) {
+const PropertyDetailPage: NextPage<{
+    params: {
+        id: string
+    }
+}> = async ({ params }) => {
 
     const cookieStore = cookies();
     const supabase = createClient(cookieStore);
@@ -21,7 +26,7 @@ export default async function Page({ params }: { params: { id: string } }) {
     if (error || !data) notFound()
 
     return (
-        <div className="flex-1 flex flex-col w-full px-8 justify-top items-center gap-2">
+        <div className="flex-1 flex flex-col w-full px-8 justify-top items-center gap-2 py-20">
             <div className="flex flex-row w-full px-8 justify-center gap-2">
                 <div className='relative w-full max-w-md aspect-[1000/682]'>
                     <Image
@@ -62,3 +67,5 @@ export default async function Page({ params }: { params: { id: string } }) {
         </div>
     )
 }
+
+export default PropertyDetailPage;
