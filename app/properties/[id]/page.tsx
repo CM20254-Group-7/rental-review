@@ -69,13 +69,19 @@ const PropertyDetailPage: NextPage<{
                 </div>
                 <div className="flex-1 flex flex-col w-full px-8 sm:max-w-md justify-top gap-2">
                     <text className='font-bold text-lg'>{PropertyDetails.address}</text>
-                    <Suspense fallback={<ArrowPathIcon className='w-5 h-5 animate-spin' />}>
-                        <OwnershipDetails propertyId={PropertyDetails.id} />
-                    </Suspense>
-                    
-                    <Suspense fallback={<ArrowPathIcon className='w-5 h-5 animate-spin' />}>
-                        <AverageRating propertyId={PropertyDetails.id} />
-                    </Suspense>
+                    <div className='flex flex-row gap-1'>
+                        <label className='font-semibold'>Owned By:</label>
+                        <Suspense fallback={<ArrowPathIcon className='w-5 h-5 animate-spin' />}>
+                            <OwnershipDetails propertyId={PropertyDetails.id} />
+                        </Suspense>
+                    </div>
+
+                    <div className='flex flex-row w-full px-0 justify-start items-center gap-2'>
+                        <label className='font-semibold'>Average Rating:</label>
+                        <Suspense fallback={<ArrowPathIcon className='w-5 h-5 animate-spin' />}>
+                            <AverageRating propertyId={PropertyDetails.id} />
+                        </Suspense>
+                    </div>
 
                     <text>{PropertyDetails.description}</text>
                 </div>
@@ -129,18 +135,20 @@ const OwnershipDetails: React.FC<{
 }> = async ({ propertyId }) => {
     const currentLandlord = await getCurrentOwner(propertyId)
 
-    if (!currentLandlord) return (
-        <p><label className='inline-block font-semibold'>Owned By:</label> Unknown</p>
-    )
+    if (!currentLandlord)
+        return (
+            <p>Unknown</p>
+        )
 
     const landlordName = currentLandlord.display_name
 
     return (
-        <p><label className='inline-block font-semibold'>Owned By:</label> {landlordName}</p>
+        <p>{landlordName}</p>
     )
 }
 
 const getAverageRating = cache(async (propertyId: string): Promise<number | null> => {
+    await setTimeout(1500)
     const supabase = createClient(cookies());
 
     const { data, error } = await supabase
@@ -154,15 +162,13 @@ const getAverageRating = cache(async (propertyId: string): Promise<number | null
 const AverageRating: React.FC<{ propertyId: string }> = async ({ propertyId }) => {
     const averageRating = await getAverageRating(propertyId)
 
+    if (!averageRating)
+        return (
+            <p>No Ratings yet</p>
+        )
+
     return (
-        <div className='flex flex-row w-full px-0 justify-start items-center gap-2'>
-            <label className='font-semibold'>Average Rating:</label>
-            {averageRating ?
-                <StarRatingLayout rating={averageRating} />
-                :
-                <text>No Ratings yet</text>
-            }
-        </div>
+        <StarRatingLayout rating={averageRating} />
     )
 }
 
