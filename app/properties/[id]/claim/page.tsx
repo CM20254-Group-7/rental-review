@@ -15,7 +15,7 @@ const ClaimPropertyPage: NextPage<{ params: { id: string } }> = async ({ params:
     // Check a property with the provided id exists
     const { data: propertyData, error: propertyError } = await supabase
         .from('properties')
-        .select('id')
+        .select('id, address')
         .eq('id', propertyId)
         .maybeSingle()
 
@@ -42,39 +42,27 @@ const ClaimPropertyPage: NextPage<{ params: { id: string } }> = async ({ params:
 
     // State is valid, render the form
     return (
-        <div className="flex flex-1 flex-col gap-2 justify-center">
-            <h1 className="text-xl font-semibold text-center">Claim Property</h1>
-
-            <div
-            className="flex flex-col"
-        >
-            <div className="flex flex-col gap-2 justify-center bg-primary/50 border rounded-t-lg p-4">
-                <div className="flex flex-row gap-2 items-baseline">
-                    <label
-                        className="text-lg font-bold"
-                        htmlFor="property_address"
-                    >Claiming Property:</label>
-                    <p className="text-md">{propertyId}</p>
+        <div className="flex flex-1 flex-col gap-2 place-items-center justify-center w-full">
+            <div className="flex flex-col w-full max-w-prose">
+                <div className="flex flex-col  gap-2 justify-center bg-primary/50 border rounded-t-lg p-4">
+                    <div className="flex flex-row gap-2 items-baseline">
+                        <label
+                            className="text-lg font-bold"
+                            htmlFor="property_address"
+                        >Claiming Property:</label>
+                        <p className="text-md">{propertyData.address}</p>
+                    </div>
                 </div>
-
-                <div className="flex flex-row gap-2 items-baseline">
-                    <label
-                        className="text-lg font-bold"
-                        htmlFor="landlord_id"
-                    >Landlord Id:</label>
-                    <p className="text-md">{landlordId}</p>
-                </div>
-            </div>
-            <ClaimPropertyForm
-                property_id={propertyId}
-                landlord_id={landlordId}
-            />
+                <ClaimPropertyForm
+                    property_id={propertyId}
+                    landlord_id={landlordId}
+                />
             </div>
         </div>
     )
 }
 
-const NotLoggedInMessage: React.FC<{propertyId: string}> = ({propertyId}) =>
+const NotLoggedInMessage: React.FC<{ propertyId: string }> = ({ propertyId }) =>
     <div className="flex flex-col flex-1 place-items-center justify-center gap-4">
         <p className="text-lg font-semibold">
             You must be logged in to access this page
