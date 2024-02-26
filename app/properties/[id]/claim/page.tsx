@@ -48,12 +48,12 @@ const ClaimPropertyPage: NextPage<{ params: { id: string } }> = async ({ params:
             <div
             className="flex flex-col"
         >
-            <div className="flex flex-col gap-2 justify-center bg-foreground/20 border rounded-t-lg p-4">
+            <div className="flex flex-col gap-2 justify-center bg-primary/50 border rounded-t-lg p-4">
                 <div className="flex flex-row gap-2 items-baseline">
                     <label
                         className="text-lg font-bold"
-                        htmlFor="property_id"
-                    >Property Id:</label>
+                        htmlFor="property_address"
+                    >Claiming Property:</label>
                     <p className="text-md">{propertyId}</p>
                 </div>
 
