@@ -2,11 +2,39 @@ import { Page, expect } from "@playwright/test";
 
 const apiBaseURL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 
+const userIds = [
+    'b1b284f9-2c24-4f2e-bd4e-9c7ab7fe88e3',
+    '44db487d-ace4-43c8-bd7c-38b32b0bc711',
+    'e155848a-f32b-4d7d-a8d2-4228a7989078',
+    '482afef6-1b2f-4ac2-a449-9bc318f55936',
+    '4dfc3778-a1f2-410d-ae3d-9c92a469db8d',
+    '470b631a-addd-4380-acf3-b476e136d5f6',
+    'a5ceb0f0-707e-47b8-9021-cf451fca19be',
+    'f48d6af6-5b3e-4834-ab9d-3e2d9af434b6',
+    '1c6ff33c-5efe-4b45-bd35-13783eebbee2',
+    '5b3bb17f-33fe-40dd-a387-285e70812f0b',
+]
+
+const userLabels = [
+    'User 1',
+    'User 2',
+    'User 3',
+    'User 4',
+    'User 5',
+    'User 6',
+    'User 7',
+    'User 8',
+    'User 9',
+    'User 10',
+]
+
 export const users = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(i => {
     return {
         file: `playwright/.auth/user${i}.json`,
         email: `user.${i}@example.com`,
         password: `User.${i}.Password`,
+        id: userIds[i - 1],
+        label: userLabels[i - 1],
     }
 });
 
