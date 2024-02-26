@@ -7,6 +7,7 @@ import { StarRatingLayout } from '@/components/StarRating'
 import { ReviewDetailsLayout } from '@/components/ReviewDetails'
 import { notFound } from 'next/navigation'
 import { NextPage } from 'next'
+import { cache } from 'react'
 
 const PropertyDetailPage: NextPage<{
     params: {
@@ -68,24 +69,42 @@ const PropertyDetailPage: NextPage<{
     )
 }
 
-const OwnershipDetails: React.FC<{
-    propertyId: string
-}> = async ({propertyId}) => {
+interface landlordPublicProfile {
+    bio: string | null;
+    display_email: string;
+    display_name: string;
+    profile_image_id: string | null;
+    type: string;
+    user_id: string;
+    verified: boolean;
+    website: string | null;
+}
+
+const getCurrentOwner = cache(async (propertyId: string): Promise<landlordPublicProfile | null> => {
     const supabase = createClient(cookies());
 
     const { data, error } = await supabase
         .from('property_ownership')
-        .select('*, landlord_public_profiles(*)')
+        .select('landlord_public_profiles(*)')
         .eq('property_id', propertyId)
         .is('ended_at', null)
         .maybeSingle()
 
-    if (error || !data || !data.landlord_public_profiles) return (
+    if (error || !data || !data.landlord_public_profiles) return null
+
+    return data.landlord_public_profiles
+})
+
+const OwnershipDetails: React.FC<{
+    propertyId: string
+}> = async ({ propertyId }) => {
+    const currentLandlord = await getCurrentOwner(propertyId)
+
+    if (!currentLandlord) return (
         <p><label className='inline-block font-semibold'>Owned By:</label> Unknown</p>
     )
 
-    const landlordName = data.landlord_public_profiles.display_name
-
+    const landlordName = currentLandlord.display_name
 
     return (
         <p><label className='inline-block font-semibold'>Owned By:</label> {landlordName}</p>
