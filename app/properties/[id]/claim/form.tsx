@@ -20,7 +20,7 @@ export const ClaimPropertyForm: React.FC<ClaimPropertyFormProps> = ({
 
     const [startDate, setStartDate] = useState<Date | null>(null)
     const [endDate, setEndDate] = useState<Date | null>(null)
-    const [stillOwned, setStillOwned] = useState(false)
+    const [stillOwned, setStillOwned] = useState<boolean | undefined>()
 
     useEffect(() => {
         if (stillOwned) setEndDate(null)
@@ -61,7 +61,7 @@ export const ClaimPropertyForm: React.FC<ClaimPropertyFormProps> = ({
                             className={`${endDate ? 'bg-accent/20 hover:bg-accent/30 border-accent/50' : 'bg-transparent hover:bg-foreground/5 border-foreground/50'} border w-[45%]  rounded-md px-2 py-1`}
                             type="date"
                             name="ended_at"
-                            required={!stillOwned}
+                            required={!(stillOwned === true)}
                             onChange={(e) => setEndDate(new Date(e.target.value))}
                             value={endDate?.toISOString().split('T')[0] ?? ''}
                         />
@@ -69,7 +69,8 @@ export const ClaimPropertyForm: React.FC<ClaimPropertyFormProps> = ({
                         <button
                             onClick={(e) => {
                                 e.preventDefault()
-                                setStillOwned(!stillOwned)
+                                if (stillOwned === true) setStillOwned(false)
+                                setStillOwned(!(stillOwned === true))
                             }}
                             type="button"
                             className={`${stillOwned ? 'bg-accent/20 hover:bg-accent/30 border-accent/50' : 'bg-transparent hover:bg-foreground/5 border-foreground/50'} flex flex-row w-[45%] justify-evenly px-2 py-1 border rounded-md align-middle items-center`}
@@ -96,6 +97,7 @@ export const ClaimPropertyForm: React.FC<ClaimPropertyFormProps> = ({
             </form>
 
             <div className="flex flex-col gap-2 justify-center bg-primary/50 border rounded-b-lg p-4">
+                <pre>{JSON.stringify(stillOwned, null, '\t')}</pre>
                 <pre>{JSON.stringify(state, null, '\t')}</pre>
             </div>
 
