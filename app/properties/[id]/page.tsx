@@ -9,6 +9,8 @@ import { notFound } from 'next/navigation'
 import { NextPage } from 'next'
 import { cache } from 'react'
 
+export const revalidate = 60 * 60  // revalidate every hour
+
 interface PropertyDetails {
     address: string;
     baths: number;
