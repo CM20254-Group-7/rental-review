@@ -33,10 +33,12 @@ INSERT INTO "auth"."users" (            "instance_id"             ,             
 -- |-------------|---------------------|--------------------------------|
 -- | 1 Test Road | landlord-page-tests | Must have been owned by User.1 |
 -- | 2 Test Road | landlord-page-tests | Must have been owned by User.1 |
+-- | 3 Test Road | TBD                 | Initially unclaimed to test claiming |
 
 INSERT INTO "public"."properties" (                    "id"              ,   "address"  ) VALUES
                                   ('1ececec8-4bbf-445f-8de0-f563caf0bf01', '1 Test Road'),
                                   ('6a83d02b-9da1-4a4a-9719-05e8a8c9228d', '2 Test Road');
+                                  ('0bd989b3-b897-42a3-a0ff-9e1e48f11fde', '3 Test Road');
 
 
 -- Sample Landlord Private Profiles
