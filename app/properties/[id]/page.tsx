@@ -182,20 +182,52 @@ const AverageRating: React.FC<{ propertyId: string }> = async ({ propertyId }) =
     )
 }
 
-const ReviewResults: React.FC<{ propertyId: string }> = async ({ propertyId }) => {
-    return Array.from({ length: 3 }).map((_, i) => {
-            return (
-                <ReviewDetailsLayout
-                    reviewId="1"
-                    reviewerId="1"
-                    reviewDate={new Date('01 Jan 1970 00:00:00 GMT')}
-                    landlordRating={2}
-                    propertyRating={4}
-                    reviewMessage="This is a review message"
-                />
-            )
-        })
-    
+interface ReviewDetails {
+    landlord_rating: number;
+    property_id: string;
+    property_rating: number;
+    review_body: string;
+    review_date: Date;
+    review_id: string;
+    reviewer_id: string;
 }
+const getReviewResults = cache(async (propertyId: string): Promise<ReviewDetails[]> => {
+    const supabase = createClient(cookies());
+
+    const { data, error } = await supabase
+        .from('reviews')
+        .select('*')
+        .eq('property_id', propertyId)
+
+    if (error) return []
+
+    return data.map((review) => {
+        return {
+            ...review,
+            review_date: new Date(review.review_date)
+        }
+    })
+})
+
+const ReviewResults: React.FC<{ propertyId: string }> = async ({ propertyId }) => {
+    const reviewResults = await getReviewResults(propertyId)
+
+    if (reviewResults.length == 0)
+        return (
+            <p>No Reviews yet</p>
+        )
+
+    return reviewResults.map((reviewDetails) =>
+        <ReviewDetailsLayout
+            reviewId={reviewDetails.review_id}
+            reviewerId={reviewDetails.reviewer_id}
+            reviewDate={reviewDetails.review_date}
+            landlordRating={reviewDetails.landlord_rating}
+            propertyRating={reviewDetails.property_rating}
+            reviewMessage={reviewDetails.review_body}
+        />
+    )
+}
+
 
 export default PropertyDetailPage;
