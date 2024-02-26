@@ -9,22 +9,42 @@ import { notFound } from 'next/navigation'
 import { NextPage } from 'next'
 import { cache } from 'react'
 
-const PropertyDetailPage: NextPage<{
-    params: {
-        id: string
-    }
-}> = async ({ params }) => {
-
+interface PropertyDetails {
+    address: string;
+    baths: number;
+    beds: number;
+    country: string;
+    county: string | null;
+    description: string | null;
+    house: string;
+    id: string;
+    postcode: string;
+    property_type: string;
+    street: string;
+}
+const getPropertyDetails = cache(async (propertyId:string) : Promise<PropertyDetails | null> => {
     const cookieStore = cookies();
     const supabase = createClient(cookieStore);
 
     const { data, error } = await supabase
         .from('properties')
         .select('*')
-        .eq('id', params.id)
+        .eq('id', propertyId)
         .single()
 
-    if (error || !data) notFound()
+    if (error || !data) return null
+
+    return data
+})
+
+const PropertyDetailPage: NextPage<{
+    params: {
+        id: string
+    }
+}> = async ({ params }) => {
+    const  PropertyDetails = await getPropertyDetails(params.id)
+
+    if (!PropertyDetails) notFound()
 
     return (
         <div className="flex-1 flex flex-col w-full px-8 justify-top items-center gap-2 py-20">
@@ -42,8 +62,8 @@ const PropertyDetailPage: NextPage<{
                     </div>
                 </div>
                 <div className="flex-1 flex flex-col w-full px-8 sm:max-w-md justify-top gap-2">
-                    <text className='font-bold text-lg'>{data.address}</text>
-                    <OwnershipDetails propertyId={params.id} />
+                    <text className='font-bold text-lg'>{PropertyDetails.address}</text>
+                    <OwnershipDetails propertyId={PropertyDetails.id} />
                     <div className='flex flex-row w-full px-0 justify-start items-center gap-2'>
                         <text>Average rating:</text>
                         <StarRatingLayout rating={4} />
