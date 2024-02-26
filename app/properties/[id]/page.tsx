@@ -78,7 +78,7 @@ const PropertyDetailPage: NextPage<{
                             <h2 className="text-2xl font-semibold mb-1 w-fit text-accent">{propertyDetails.address}</h2>
                             <span className='border border-b w-full border-accent' />
                         </div>
-                            
+
                         {/* Ownership */}
                         <div className='flex flex-row gap-1'>
                             <label className='font-semibold'>Owned By:</label>
@@ -101,18 +101,26 @@ const PropertyDetailPage: NextPage<{
                 </div>
 
                 {/* Review List */}
-                {Array.from({ length: 3 }).map((_, i) => {
-                    return (
-                        <ReviewDetailsLayout
-                            reviewId="1"
-                            reviewerId="1"
-                            reviewDate={new Date('01 Jan 1970 00:00:00 GMT')}
-                            landlordRating={2}
-                            propertyRating={4}
-                            reviewMessage="This is a review message"
-                        />
-                    )
-                })}
+                <div className='flex flex-col gap-6 px-8 py-6'>
+                    <div className='flex flex-col w-full'>
+                        <h2 className="text-2xl font-semibold mb-1 w-fit text-accent">Reviews</h2>
+                        <span className='border border-b w-full border-accent' />
+                    </div>
+                    <div className='flex flex-col gap-4 justify-center items-center'>
+                        {Array.from({ length: 3 }).map((_, i) => {
+                            return (
+                                <ReviewDetailsLayout
+                                    reviewId="1"
+                                    reviewerId="1"
+                                    reviewDate={new Date('01 Jan 1970 00:00:00 GMT')}
+                                    landlordRating={2}
+                                    propertyRating={4}
+                                    reviewMessage="This is a review message"
+                                />
+                            )
+                        })}
+                    </div>
+                </div>
             </div>
         </div>
     )
