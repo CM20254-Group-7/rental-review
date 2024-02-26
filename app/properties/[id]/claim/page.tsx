@@ -1,6 +1,4 @@
 import { createClient } from "@/utils/supabase/server"
-import { createClient as createServiceClient } from "@supabase/supabase-js" // TESTING ONLY - REMOVE ME
-import { Database } from "@/supabase.types"
 import { cookies } from "next/headers"
 import { NextPage } from "next"
 
@@ -31,21 +29,15 @@ const ClaimPropertyPage: NextPage<{ params: { id: string } }> = async ({ params:
 
     // Check that the user has a landlord profile
     // TESTING ONLY: landlord profile table permissions are not set up yet, use service client to fetch data
-    const { data: landlordData, error: landlordError } = await createServiceClient<Database>(
-        process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        process.env.SUPABASE_SERVICE_KEY!
-    )
+    const { data: landlordData, error: landlordError } = await supabase
         .from('landlord_private_profiles')
-        .select('id')
-        .eq('id', user.id)
-        .maybeSingle()
+        .select('user_id')
+        .eq('user_id', user.id)
+        .single()
 
-    let landlordId: string | null = null; // Declare landlordId variable
-    if (!landlordError && landlordData && 'id' in landlordData) { // Add type guard
-        landlordId = landlordData.id as string | null; // Assign landlordId value with type assertion
-    }
+    if (landlordError) return <NotALandlordMessage />
 
-    if (landlordError || !landlordData || !landlordId) return <NotALandlordMessage />
+    const landlordId = landlordData.user_id
 
 
     // State is valid, render the form
