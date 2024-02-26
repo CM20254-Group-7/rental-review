@@ -9,7 +9,6 @@ import { notFound } from 'next/navigation'
 import { NextPage } from 'next'
 import { Suspense, cache } from 'react'
 import { ArrowPathIcon } from '@heroicons/react/24/solid'
-import { setTimeout } from 'timers/promises'
 
 export const revalidate = 60 * 60  // revalidate every hour
 
@@ -115,7 +114,6 @@ interface landlordPublicProfile {
 }
 
 const getCurrentOwner = cache(async (propertyId: string): Promise<landlordPublicProfile | null> => {
-    await setTimeout(1000)
     const supabase = createClient(cookies());
 
     const { data, error } = await supabase
@@ -148,7 +146,6 @@ const OwnershipDetails: React.FC<{
 }
 
 const getAverageRating = cache(async (propertyId: string): Promise<number | null> => {
-    await setTimeout(1500)
     const supabase = createClient(cookies());
 
     const { data, error } = await supabase
