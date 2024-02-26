@@ -7,7 +7,9 @@ import { StarRatingLayout } from '@/components/StarRating'
 import { ReviewDetailsLayout } from '@/components/ReviewDetails'
 import { notFound } from 'next/navigation'
 import { NextPage } from 'next'
-import { cache } from 'react'
+import { Suspense, cache } from 'react'
+import { ArrowPathIcon } from '@heroicons/react/24/solid'
+import { setTimeout } from 'timers/promises'
 
 export const revalidate = 60 * 60  // revalidate every hour
 
@@ -67,8 +69,13 @@ const PropertyDetailPage: NextPage<{
                 </div>
                 <div className="flex-1 flex flex-col w-full px-8 sm:max-w-md justify-top gap-2">
                     <text className='font-bold text-lg'>{PropertyDetails.address}</text>
-                    <OwnershipDetails propertyId={PropertyDetails.id} />
-                    <AverageRating propertyId={PropertyDetails.id} />
+                    <Suspense fallback={<ArrowPathIcon className='w-5 h-5 animate-spin' />}>
+                        <OwnershipDetails propertyId={PropertyDetails.id} />
+                    </Suspense>
+                    
+                    <Suspense fallback={<ArrowPathIcon className='w-5 h-5 animate-spin' />}>
+                        <AverageRating propertyId={PropertyDetails.id} />
+                    </Suspense>
 
                     <text>{PropertyDetails.description}</text>
                 </div>
@@ -102,6 +109,7 @@ interface landlordPublicProfile {
 }
 
 const getCurrentOwner = cache(async (propertyId: string): Promise<landlordPublicProfile | null> => {
+    await setTimeout(1000)
     const supabase = createClient(cookies());
 
     const { data, error } = await supabase
