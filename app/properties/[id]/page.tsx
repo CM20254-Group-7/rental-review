@@ -84,7 +84,7 @@ const PropertyDetailPage: NextPage<{
                         }
                     </div>
 
-                    <text>This is a description. consequat laboris pariatur deserunt exercitation ut ipsum tempor aliquip consequat in laborum voluptate commodo dolor laborum exercitation do duis duis ex aliqua amet fugiat pariatur laborum ex magna excepteur culpa amet est excepteur eu</text>
+                    <text>{PropertyDetails.description}</text>
                 </div>
             </div>
 
