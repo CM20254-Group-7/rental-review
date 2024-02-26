@@ -44,10 +44,32 @@ const ClaimPropertyPage: NextPage<{ params: { id: string } }> = async ({ params:
     return (
         <div className="flex flex-1 flex-col gap-2 justify-center">
             <h1 className="text-xl font-semibold text-center">Claim Property</h1>
+
+            <div
+            className="flex flex-col"
+        >
+            <div className="flex flex-col gap-2 justify-center bg-foreground/20 border rounded-t-lg p-4">
+                <div className="flex flex-row gap-2 items-baseline">
+                    <label
+                        className="text-lg font-bold"
+                        htmlFor="property_id"
+                    >Property Id:</label>
+                    <p className="text-md">{propertyId}</p>
+                </div>
+
+                <div className="flex flex-row gap-2 items-baseline">
+                    <label
+                        className="text-lg font-bold"
+                        htmlFor="landlord_id"
+                    >Landlord Id:</label>
+                    <p className="text-md">{landlordId}</p>
+                </div>
+            </div>
             <ClaimPropertyForm
                 property_id={propertyId}
                 landlord_id={landlordId}
             />
+            </div>
         </div>
     )
 }

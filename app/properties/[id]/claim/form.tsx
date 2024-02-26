@@ -17,27 +17,8 @@ export const ClaimPropertyForm: React.FC<ClaimPropertyFormProps> = ({
     const [state, dispatch] = useFormState(claimPropertyWithIds, initialState)
 
     return (
-        <div
-            className="flex flex-col"
-        >
-            <div className="flex flex-col gap-2 justify-center bg-foreground/20 border rounded-t-lg p-4">
-                <div className="flex flex-row gap-2 items-baseline">
-                    <label
-                        className="text-lg font-bold"
-                        htmlFor="property_id"
-                    >Property Id:</label>
-                    <p className="text-md">{property_id}</p>
-                </div>
-
-                <div className="flex flex-row gap-2 items-baseline">
-                    <label
-                        className="text-lg font-bold"
-                        htmlFor="landlord_id"
-                    >Landlord Id:</label>
-                    <p className="text-md">{landlord_id}</p>
-                </div>
-            </div>
-
+        
+        <div className="Contents">
             <form
                 className="flex flex-col gap-4 justify-center bg-foreground/10 border-x px-4 py-8"
                 action={dispatch}
