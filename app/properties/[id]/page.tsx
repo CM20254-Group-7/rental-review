@@ -107,18 +107,7 @@ const PropertyDetailPage: NextPage<{
                         <span className='border border-b w-full border-accent' />
                     </div>
                     <div className='flex flex-col gap-4 justify-center items-center'>
-                        {Array.from({ length: 3 }).map((_, i) => {
-                            return (
-                                <ReviewDetailsLayout
-                                    reviewId="1"
-                                    reviewerId="1"
-                                    reviewDate={new Date('01 Jan 1970 00:00:00 GMT')}
-                                    landlordRating={2}
-                                    propertyRating={4}
-                                    reviewMessage="This is a review message"
-                                />
-                            )
-                        })}
+                        <ReviewResults propertyId={propertyDetails.id} />
                     </div>
                 </div>
             </div>
@@ -191,6 +180,22 @@ const AverageRating: React.FC<{ propertyId: string }> = async ({ propertyId }) =
     return (
         <StarRatingLayout rating={averageRating} />
     )
+}
+
+const ReviewResults: React.FC<{ propertyId: string }> = async ({ propertyId }) => {
+    return Array.from({ length: 3 }).map((_, i) => {
+            return (
+                <ReviewDetailsLayout
+                    reviewId="1"
+                    reviewerId="1"
+                    reviewDate={new Date('01 Jan 1970 00:00:00 GMT')}
+                    landlordRating={2}
+                    propertyRating={4}
+                    reviewMessage="This is a review message"
+                />
+            )
+        })
+    
 }
 
 export default PropertyDetailPage;
