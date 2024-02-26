@@ -23,8 +23,9 @@ interface PropertyDetails {
     postcode: string;
     property_type: string;
     street: string;
+    averageRating?: number;
 }
-const getPropertyDetails = cache(async (propertyId:string) : Promise<PropertyDetails | null> => {
+const getPropertyDetails = cache(async (propertyId: string): Promise<PropertyDetails | null> => {
     const cookieStore = cookies();
     const supabase = createClient(cookieStore);
 
@@ -36,7 +37,15 @@ const getPropertyDetails = cache(async (propertyId:string) : Promise<PropertyDet
 
     if (error || !data) return null
 
-    return data
+    const { data: averageRating, error: averageRatingError } = await supabase
+        .rpc('get_average_property_rating', { property_id: propertyId })
+
+    console.log(averageRating, averageRatingError)
+
+    return {
+        ...data,
+        averageRating: averageRatingError ? undefined : averageRating
+    }
 })
 
 const PropertyDetailPage: NextPage<{
@@ -44,7 +53,7 @@ const PropertyDetailPage: NextPage<{
         id: string
     }
 }> = async ({ params }) => {
-    const  PropertyDetails = await getPropertyDetails(params.id)
+    const PropertyDetails = await getPropertyDetails(params.id)
 
     if (!PropertyDetails) notFound()
 
@@ -67,8 +76,12 @@ const PropertyDetailPage: NextPage<{
                     <text className='font-bold text-lg'>{PropertyDetails.address}</text>
                     <OwnershipDetails propertyId={PropertyDetails.id} />
                     <div className='flex flex-row w-full px-0 justify-start items-center gap-2'>
-                        <text>Average rating:</text>
-                        <StarRatingLayout rating={4} />
+                        <label className='font-semibold'>Average Rating:</label>
+                        {PropertyDetails.averageRating ?
+                            <StarRatingLayout rating={PropertyDetails.averageRating} />
+                            :
+                            <text>No Ratings yet</text>
+                        }
                     </div>
 
                     <text>This is a description. consequat laboris pariatur deserunt exercitation ut ipsum tempor aliquip consequat in laborum voluptate commodo dolor laborum exercitation do duis duis ex aliqua amet fugiat pariatur laborum ex magna excepteur culpa amet est excepteur eu</text>
