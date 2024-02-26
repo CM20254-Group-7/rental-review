@@ -14,16 +14,16 @@ export const revalidate = 60 * 60  // revalidate every hour
 
 interface PropertyDetails {
     address: string;
-    baths: number;
-    beds: number;
-    country: string;
+    baths: number | null;
+    beds: number | null;
+    country: string | null;
     county: string | null;
     description: string | null;
-    house: string;
+    house: string | null;
     id: string;
-    postcode: string;
-    property_type: string;
-    street: string;
+    postcode: string | null;
+    property_type: string | null;
+    street: string | null;
 }
 const getPropertyDetails = cache(async (propertyId: string): Promise<PropertyDetails | null> => {
     const cookieStore = cookies();
