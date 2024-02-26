@@ -42,7 +42,7 @@ const PropertyDetailPage: NextPage<{
                 </div>
                 <div className="flex-1 flex flex-col w-full px-8 sm:max-w-md justify-top gap-2">
                     <text className='font-bold text-lg'>{data.address}</text>
-                    <OwnershipDetails />
+                    <OwnershipDetails propertyId={params.id} />
                     <div className='flex flex-row w-full px-0 justify-start items-center gap-2'>
                         <text>Average rating:</text>
                         <StarRatingLayout rating={4} />
@@ -68,10 +68,28 @@ const PropertyDetailPage: NextPage<{
     )
 }
 
-export default PropertyDetailPage;
+const OwnershipDetails: React.FC<{
+    propertyId: string
+}> = async ({propertyId}) => {
+    const supabase = createClient(cookies());
 
-const OwnershipDetails: React.FC = () => {
+    const { data, error } = await supabase
+        .from('property_ownership')
+        .select('*, landlord_public_profiles(*)')
+        .eq('property_id', propertyId)
+        .is('ended_at', null)
+        .maybeSingle()
+
+    if (error || !data || !data.landlord_public_profiles) return (
+        <p><label className='inline-block font-semibold'>Owned By:</label> Unknown</p>
+    )
+
+    const landlordName = data.landlord_public_profiles.display_name
+
+
     return (
-        <p>Owned by Jane Doe</p>
+        <p><label className='inline-block font-semibold'>Owned By:</label> {landlordName}</p>
     )
 }
+
+export default PropertyDetailPage;
