@@ -4,21 +4,21 @@
 
 @layer base {
   :root {
-    --foreground: 0 0% 19%;
-    --background: 120 10% 96%;
-    --primary: 42 62% 37%;
-    --secondary: 0 0% 60%;
-    --accent: 41 50% 31%;
+    --foreground: 0 0% 7%;
+    --background: 0 0% 87%;
+    --primary: 125 5% 51%;
+    --secondary: 125 5% 51%;
+    --accent: 42 62% 37%;
   }
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --foreground: 0 0% 81%;
-    --background: 120 10% 4%;
-    --primary: 42 62% 63%;
-    --secondary: 0 0% 40%;
-    --accent: 41 50% 69%;
+    --foreground: 0 0% 93%;
+    --background: 0 0% 13%;
+    --primary: 125 5% 49%;
+    --secondary: 125 5% 49%;
+    --accent: 42 62% 63%;
   }
 }
 
