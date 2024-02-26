@@ -23,7 +23,6 @@ interface PropertyDetails {
     postcode: string;
     property_type: string;
     street: string;
-    averageRating?: number;
 }
 const getPropertyDetails = cache(async (propertyId: string): Promise<PropertyDetails | null> => {
     const cookieStore = cookies();
@@ -37,14 +36,8 @@ const getPropertyDetails = cache(async (propertyId: string): Promise<PropertyDet
 
     if (error || !data) return null
 
-    const { data: averageRating, error: averageRatingError } = await supabase
-        .rpc('get_average_property_rating', { property_id: propertyId })
-
-    console.log(averageRating, averageRatingError)
-
     return {
         ...data,
-        averageRating: averageRatingError ? undefined : averageRating
     }
 })
 
@@ -75,14 +68,7 @@ const PropertyDetailPage: NextPage<{
                 <div className="flex-1 flex flex-col w-full px-8 sm:max-w-md justify-top gap-2">
                     <text className='font-bold text-lg'>{PropertyDetails.address}</text>
                     <OwnershipDetails propertyId={PropertyDetails.id} />
-                    <div className='flex flex-row w-full px-0 justify-start items-center gap-2'>
-                        <label className='font-semibold'>Average Rating:</label>
-                        {PropertyDetails.averageRating ?
-                            <StarRatingLayout rating={PropertyDetails.averageRating} />
-                            :
-                            <text>No Ratings yet</text>
-                        }
-                    </div>
+                    <AverageRating propertyId={PropertyDetails.id} />
 
                     <text>{PropertyDetails.description}</text>
                 </div>
@@ -143,6 +129,32 @@ const OwnershipDetails: React.FC<{
 
     return (
         <p><label className='inline-block font-semibold'>Owned By:</label> {landlordName}</p>
+    )
+}
+
+const getAverageRating = cache(async (propertyId: string): Promise<number | null> => {
+    const supabase = createClient(cookies());
+
+    const { data, error } = await supabase
+        .rpc('get_average_property_rating', { property_id: propertyId })
+
+    if (error) return null
+
+    return data
+})
+
+const AverageRating: React.FC<{ propertyId: string }> = async ({ propertyId }) => {
+    const averageRating = await getAverageRating(propertyId)
+
+    return (
+        <div className='flex flex-row w-full px-0 justify-start items-center gap-2'>
+            <label className='font-semibold'>Average Rating:</label>
+            {averageRating ?
+                <StarRatingLayout rating={averageRating} />
+                :
+                <text>No Ratings yet</text>
+            }
+        </div>
     )
 }
 
