@@ -203,59 +203,53 @@ const getAverageLandlordRating = cache(async (landlordId: string): Promise<numbe
         .from('property_ownership')
         .select('*')
         .eq('landlord_id', landlordId);
-        
+    
+    console.log(properties)
+
     if (propertiesError || !properties) return null;
 
     // Get unique end dates and start dates
     const endedAtDates: (string | null)[] = properties.map(property => property.ended_at);
     const startedAtDates: (string | null)[] = properties.map(property => property.started_at);
-    const uniqueEndedAtDates: (string | null)[] = [];
-    const uniqueStartedAtDates: (string | null)[] = [];
 
-    // Populate uniqueEndedAtDates
-    for (const endedAt of endedAtDates) {
-        if (endedAt && !uniqueEndedAtDates.includes(endedAt)) {
-            uniqueEndedAtDates.push(endedAt);
-        }
-    }
-
-    // Populate uniqueStartedAtDates
-    for (const startedAt of startedAtDates) {
-        if (startedAt && !uniqueStartedAtDates.includes(startedAt)) {
-            uniqueStartedAtDates.push(startedAt);
-        }
-    }
-
-    let totalRating = 0;
+    let totalRating = properties.length;
     let reviewCount = 0;
 
-    // Loop through each combination of start and end date
-    for (const endedAt of uniqueEndedAtDates) {
-        for (const startedAt of uniqueStartedAtDates) {
-            // Get the rating for properties with review dates between the start and end date
-            const { data: rating, error } = await supabase
-                .from('reviews')
-                .select('property_rating')
-                .in('property_id', properties.map(property => property.property_id))
-                .lte('review_date', endedAt)
-                .gte('review_date', startedAt)
-                .maybeSingle();
+    console.log("total rating:\t" + totalRating)
 
-            if (error || !rating) continue; // Handle errors or no data found
-            
-            totalRating += rating.property_rating;
-            reviewCount++;
+    // For each property, get the reviews and calculate the average rating
+    for (const property of properties) {
+        // Get the reviews for the property
+        const { data: reviews, error: reviewsError } = await supabase
+            .from('reviews')
+            .select('property_rating')
+            .eq('property_id', property.property_id);
+
+        if (reviewsError || !reviews) return null;
+
+        console.log(reviews)
+
+        // Calculate the average rating for the property
+        let propertyTotalRating = 0;
+        let propertyReviewCount = 0;
+        for (const review of reviews) {
+            propertyTotalRating += review.property_rating;
+            propertyReviewCount++;
         }
+
+        // Add the property's average rating to the total rating
+        reviewCount += propertyReviewCount;
     }
+    
 
     if (reviewCount === 0) return null; // No reviews found
 
     // Calculate average rating
     const averageRating = totalRating / reviewCount;
 
-    console.log(averageRating)
-    console.log(reviewCount)
-    console.log(totalRating)
+    console.log("average rating:\t" + averageRating)
+    console.log("total rating:\t" + totalRating)
+    console.log("review count:\t" + reviewCount)
 
     return averageRating;
 });
