@@ -48,7 +48,6 @@ const PropertyDetailPage: NextPage<{
     }
 }> = async ({ params }) => {
     const propertyDetails = await getPropertyDetails(params.id)
-    const currentOwnerDetails = await getCurrentOwner(params.id)
 
     if (!propertyDetails) notFound()
 
@@ -137,10 +136,6 @@ const getCurrentOwner = cache(async (propertyId: string): Promise<landlordPublic
         // only get the ones that are currently the owner
         .not('ended_at', 'is', null)
         .maybeSingle()
-
-
-    console.log(data)
-    console.log(error)
 
     if (error || !data || !data.landlord_public_profiles) return null
 

@@ -23,6 +23,9 @@ export default async function PropertiesPage(){
     return(
         <div>
             <div>
+                <h1>Profile Page</h1>
+            </div>
+            <div>
                 <form
                 className="animate-in flex-1 flex flex-col w-full justify-center gap-1 text-foreground">
                     <input className="mt-5 rounded-md px-4 py-2 bg-inherit border mb-1" 
