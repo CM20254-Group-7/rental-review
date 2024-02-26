@@ -16,7 +16,7 @@ const UserManagementButton: React.FC<{ email: string }> = ({ email }) => {
     return (
         <div className="relative" >
             <button
-                className={`py-2 px-3 text-sm flex flex-row bg-background hover:bg-secondary/10 border hover:shadow-sm hover:shadow-primary/20 transition-all text-primary justify-center items-center gap-2 ${isComponentVisible ? 'rounded-t-md' : 'rounded-md'}`}
+                className={`py-2 px-3 text-sm flex flex-row bg-background hover:bg-secondary/10 border hover:shadow-sm hover:shadow-primary/20 transition-all text-accent justify-center items-center gap-2 ${isComponentVisible ? 'rounded-t-md' : 'rounded-md'}`}
                 onClick={() => setIsComponentVisible(true)}
             >
                 <p >{email}</p>
@@ -26,7 +26,7 @@ const UserManagementButton: React.FC<{ email: string }> = ({ email }) => {
             {isComponentVisible && (
                 <div
                     ref={ref}
-                    className={`absolute top-[100%] w-full text-sm flex flex-col bg-background border-x border-b hover:shadow-sm hover:shadow-primary/20 transition-all text-primary justify-center items-center rounded-b-md`}
+                    className={`absolute top-[100%] w-full text-sm flex flex-col bg-background border-x border-b hover:shadow-sm hover:shadow-primary/20 transition-all text-foreground justify-center items-center rounded-b-md`}
                 >
                     <Link
                         href={`/account`}

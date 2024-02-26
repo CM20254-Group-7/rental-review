@@ -48,7 +48,7 @@ export default async function Index() {
 
 const Card: React.FC<{ title: string, children: React.ReactNode }> = ({ title, children }) => {
   return (
-    <div className='flex flex-col items-center rounded-xl bg-secondary/80 p-6 pb-8 gap-4 border shadow-2xl shadow-secondary dark:shadow-secondary/40' title="General information.">
+    <div className='flex flex-col items-center rounded-xl bg-primary/40 p-6 pb-8 gap-4 border shadow-2xl shadow-primary/40 dark:shadow-primary/20' title="General information.">
       {/* Card Header */}
       <div className='flex flex-col items-center w-full'>
         <h2 className="text-2xl font-semibold mb-1 w-fit text-accent">{title}</h2>
