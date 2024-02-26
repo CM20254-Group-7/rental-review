@@ -3,8 +3,8 @@ import { users } from './helpers';
 
 // This test uses 3 users
 // for each it will check what is displayed on the landlord's profile page
-const firstUser  = users[0]; // Landlord with no properties
-const secondUser = users[1]; // Landlord with 2 properties
+const firstUser  = users[1]; // Landlord with no properties
+const secondUser = users[0]; // Landlord with 2 properties
 const thirdUser  = users[2]; // Not a landlord
 
 test.describe('Landlord Profile Page Tests', () => {
