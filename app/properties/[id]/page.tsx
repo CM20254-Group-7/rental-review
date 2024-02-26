@@ -42,7 +42,7 @@ const PropertyDetailPage: NextPage<{
                 </div>
                 <div className="flex-1 flex flex-col w-full px-8 sm:max-w-md justify-top gap-2">
                     <text className='font-bold text-lg'>{data.address}</text>
-                    <text>Owned by Jane Doe</text>
+                    <OwnershipDetails />
                     <div className='flex flex-row w-full px-0 justify-start items-center gap-2'>
                         <text>Average rating:</text>
                         <StarRatingLayout rating={4} />
@@ -69,3 +69,9 @@ const PropertyDetailPage: NextPage<{
 }
 
 export default PropertyDetailPage;
+
+const OwnershipDetails: React.FC = () => {
+    return (
+        <p>Owned by Jane Doe</p>
+    )
+}
