@@ -64,7 +64,7 @@ export const claimProperty = async (
         property_id: propertyId,
         landlord_id: landlordId,
         started_at: formData.get('started_at'),
-        ended_at: formData.get('ended_at')
+        ended_at: formData.get('ended_at') !== '' ? formData.get('ended_at') : null
     });
 
     if (!validatedFields.success) return {
@@ -80,7 +80,7 @@ export const claimProperty = async (
     } = {
         ...validatedFields.data,
         started_at: validatedFields.data.started_at,
-        ended_at: validatedFields.data.ended_at || new Date()
+        ended_at: validatedFields.data.ended_at
     }
 
     if (!property_id) {
@@ -153,34 +153,40 @@ export const claimProperty = async (
                 message: 'User is already the landlord of this property'
             };
 
-        // closed cases
-        if (existing_end != null)
+        // 1. closed cases
+        if (existing_end != null) {
             // check if the new claim overlaps with the existing claim
-            if    ((ended_at <= existing_end && ended_at >= existing_start)
-                || (started_at <= existing_end && started_at >= existing_start)
-                || (started_at >= existing_start && ended_at <= existing_end))
+            // 1.2 The existing claim overlaps with the new claim, fail
+            // 
+            // - new ownership starts before the existing one, and does not end until after the existing one starts
+            //   either new ownership is open or ends after the existing one starts
+            if (started_at < existing_start && (!ended_at || ended_at > existing_start))
                 return {
                     message: 'The new claim overlaps with an existing claim'
                 };
-            else 
-                return setPropertyOwnership(property_id, landlord_id, started_at, ended_at);
 
+            // - new ownership starts while the existing one is ongoing
+            if (started_at > existing_start && started_at < existing_end)
+                return {
+                    message: 'The new claim overlaps with an existing claim'
+                };
 
+            // 1.1 The existing claim does not overlap with the new claim, continu
+        }
+        // 2. open cases
+        else { // Declare the started_at variable
+            // 2.1 The new claim starts after the existing claim, close the existing claim & continue
+            if (started_at > existing_start) {
+                openClaimToClose = { started_at: existing_start }
+            }
 
-        // open cases
-        else {
-            const started_at = new Date(propertyOwnership.started_at); // Declare the started_at variable
-            // check if the new claim is before the existing claim
-            if (started_at < existing_start) {
-                // whole new claim is before the existing claim, continue
-                if (ended_at < existing_start)
-                    continue;
-                // check if the new claim is open or ends after the existing claim starts
-                else
+            // 2.2 The new claim starts before the existing claim
+            else {
+                // 2.2.2 The new claim is closed and ends before the existing claim starts, continue
+                if (!ended_at || ended_at < existing_start)
                     return {
                         message: 'The new claim overlaps with an existing claim'
                     };
-
             }
         }
     }
