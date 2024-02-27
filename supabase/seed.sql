@@ -1,20 +1,21 @@
 -- Sample Users
 -- 
--- |       Email         |     Password     |         Used for        |                           Detail                          |
--- |---------------------|------------------|-------------------------|-----------------------------------------------------------|
--- | user.1@example.com  | User.1.Password  |   supabase-user-tests   |                                                           |
--- |                     |                  |   landlord-page-tests   | Must have owned (at least) 2 properties (1 & 2 Test Road) |
--- | user.2@example.com  | User.2.Password  |   supabase-user-tests   |                                                           |
--- |                     |                  |   landlord-page-tests   | Must be a landlord, but not have owned any properties     |
--- | user.3@example.com  | User.3.Password  |   landlord-page-tests   | Must not be registered as a landlord                      |
--- |                     |                  | property-claiming-tests | Must not be registered as a landlord                      |
--- | user.4@example.com  | User.4.Password  |                         |                                                           |
--- | user.5@example.com  | User.5.Password  |                         |                                                           |
--- | user.6@example.com  | User.6.Password  |                         |                                                           |
--- | user.7@example.com  | User.7.Password  |                         |                                                           |
--- | user.8@example.com  | User.8.Password  |                         |                                                           |
--- | user.9@example.com  | User.9.Password  |                         |                                                           |
--- | user.10@example.com | User.10.Password |                         |                                                           |
+-- |       Email         |     Password     |         Used for        |                           Detail                           |
+-- |---------------------|------------------|-------------------------|------------------------------------------------------------|
+-- | user.1@example.com  | User.1.Password  |   supabase-user-tests   |                                                            |
+-- |                     |                  |   landlord-page-tests   | Must have owned (at least) 2 properties (1 & 2 Test Road)  |
+-- | user.2@example.com  | User.2.Password  |   supabase-user-tests   |                                                            |
+-- |                     |                  |   landlord-page-tests   | Must be a landlord, but not have owned any properties      |
+-- |                     |                  | property-claiming-tests | Must be registered as a landlord                           |
+-- | user.3@example.com  | User.3.Password  |   landlord-page-tests   | Must not be registered as a landlord                       |
+-- |                     |                  | property-claiming-tests | Must not be registered as a landlord                       |
+-- | user.4@example.com  | User.4.Password  |                         |                                                            |
+-- | user.5@example.com  | User.5.Password  |                         |                                                            |
+-- | user.6@example.com  | User.6.Password  |                         |                                                            |
+-- | user.7@example.com  | User.7.Password  |                         |                                                            |
+-- | user.8@example.com  | User.8.Password  |                         |                                                            |
+-- | user.9@example.com  | User.9.Password  |                         |                                                            |
+-- | user.10@example.com | User.10.Password |                         |                                                            |
 
 INSERT INTO "auth"."users" (            "instance_id"             ,                  "id"                 ,      "aud"     ,     "role"     ,        "email"       ,                      "encrypted_password"                     ,      "email_confirmed_at"      , "invited_at", "confirmation_token", "confirmation_sent_at", "recovery_token", "recovery_sent_at", "email_change_token_new", "email_change", "email_change_sent_at",        "last_sign_in_at"       ,               "raw_app_meta_data"              , "raw_user_meta_data", "is_super_admin",          "created_at"          ,          "updated_at"          , "phone", "phone_confirmed_at", "phone_change", "phone_change_token", "phone_change_sent_at", "email_change_token_current", "email_change_confirm_status", "banned_until", "reauthentication_token", "reauthentication_sent_at", "is_sso_user", "deleted_at") VALUES
                            ('00000000-0000-0000-0000-000000000000', 'b1b284f9-2c24-4f2e-bd4e-9c7ab7fe88e3', 'authenticated', 'authenticated', 'user.1@example.com'  , '$2a$10$dAXb7tcknPdbIxQjhH5Kp.HsnSH/axCF84WFR3x/5igoOD5Yf/rtq', '2024-02-21 19:01:43.584403+00', NULL        , ''                  , NULL                  , ''              , NULL              , ''                      , ''            , NULL                  , '2024-02-21 19:01:43.587224+00', '{"provider": "email", "providers": ["email"]}', '{}'                , NULL            , '2024-02-21 19:01:43.574501+00', '2024-02-21 19:01:43.590832+00', NULL   , NULL                , ''            , ''                  , NULL                  , ''                          , 0                            , NULL          , ''                      , NULL                      , false        , NULL        ),
@@ -34,12 +35,11 @@ INSERT INTO "auth"."users" (            "instance_id"             ,             
 -- |-------------|---------------------|--------------------------------|
 -- | 1 Test Road | landlord-page-tests | Must have been owned by User.1 |
 -- | 2 Test Road | landlord-page-tests | Must have been owned by User.1 |
--- | 3 Test Road | TBD                 | Initially unclaimed to test claiming |
 
-INSERT INTO "public"."properties" (                    "id"              ,   "address"  ) VALUES
-                                  ('1ececec8-4bbf-445f-8de0-f563caf0bf01', '1 Test Road'),
-                                  ('6a83d02b-9da1-4a4a-9719-05e8a8c9228d', '2 Test Road');
-                                  ('0bd989b3-b897-42a3-a0ff-9e1e48f11fde', '3 Test Road');
+INSERT INTO "public"."properties" (                    "id"              ,      "address"    ) VALUES
+                                  ('1ececec8-4bbf-445f-8de0-f563caf0bf01', '1 Test Road'     ),
+                                  ('6a83d02b-9da1-4a4a-9719-05e8a8c9228d', '2 Test Road'     );
+                                  
 
 
 -- Sample Landlord Private Profiles
