@@ -26,7 +26,7 @@ const loginDetailsSchema = z.object({
 // Sign in form does not contain a confirm field
 const signInSchema = loginDetailsSchema.omit({ confirmPassword: true })
 
-export const signIn = async (prevState: State, formData: FormData): Promise<State> => {
+export const signIn = async (redirectTo: string | undefined, prevState: State, formData: FormData): Promise<State> => {
     // validate and get the credentials from the form
     const validatedFields = signInSchema.safeParse({
         email: formData.get('email'),
@@ -59,7 +59,7 @@ export const signIn = async (prevState: State, formData: FormData): Promise<Stat
         message: 'Sign in failed, please check your credentials and try again.'
     }
 
-    return redirect('/')
+    return redirect(redirectTo || '/')
 }
 
 // Sign up form requires the confirm field to match the password
@@ -86,7 +86,7 @@ const signUpSchema = loginDetailsSchema
 // TODO: add other password complexity checks
 // TODO: add email uniqueness check here or in function body
 
-export const signUp = async (prevState: State, formData: FormData): Promise<State> => {
+export const signUp = async (redirectTo:string|undefined, prevState: State, formData: FormData): Promise<State> => {
     // validate and get the credentials from the form
     const validatedFields = signUpSchema.safeParse({
         email: formData.get('email'),
@@ -113,6 +113,9 @@ export const signUp = async (prevState: State, formData: FormData): Promise<Stat
     const { error } = await supabase.auth.signUp({
         email: email,
         password: password,
+        options: {
+            emailRedirectTo: redirectTo
+        }
     });
 
     if (error) {

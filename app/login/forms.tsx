@@ -20,7 +20,7 @@ const Form: React.FC<FormProps> = ({
 }) => {
     return (
         <form
-            className="animate-in h-full flex-1 flex flex-col w-[90vw] sm:max-w-md gap-4 text-foreground border rounded-md shadow-md p-4 bg-background"
+            className="animate-in h-full flex-1 flex flex-col w-[90vw] sm:max-w-md gap-4 text-foreground border rounded-md shadow-xl shadow-accent/10 p-4 bg-background"
             action={dispatch}
         >
             <h2 className="text-2xl pb-1 border-b-2 border-foreground/10">{title}</h2>
@@ -31,7 +31,7 @@ const Form: React.FC<FormProps> = ({
                 {children}
             </div>
 
-            <button className="bg-green-700 rounded-md px-4 py-2 text-foreground mb-2">
+            <button className=" bg-primary rounded-md px-4 py-2 text-background mb-2">
                 {submitText}
             </button>
             {state?.message && (
@@ -43,9 +43,12 @@ const Form: React.FC<FormProps> = ({
     )
 }
 
-export const SignInForm = () => {
+export const SignInForm: React.FC<{
+    redirectTo?: string
+}> = ({redirectTo}) => {
     const initialState: State = { message: null, errors: {} };
-    const [loginState, loginDispatch] = useFormState(signIn, initialState)
+    const signInWithRedirect = signIn.bind(null, redirectTo)
+    const [loginState, loginDispatch] = useFormState(signInWithRedirect, initialState)
 
     return (
         <Form
@@ -61,9 +64,12 @@ export const SignInForm = () => {
     )
 }
 
-export const SignUpForm = () => {
+export const SignUpForm: React.FC<{
+    redirectTo?: string
+}> = ({redirectTo}) => {
     const initialState: State = { message: null, errors: {} }
-    const [signupState, signupDispatch] = useFormState(signUp, initialState)
+    const signUpWithRedirect = signUp.bind(null, redirectTo)
+    const [signupState, signupDispatch] = useFormState(signUpWithRedirect, initialState)
 
     return (
         <Form
