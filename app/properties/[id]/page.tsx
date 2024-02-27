@@ -48,12 +48,8 @@ const PropertyDetailPage: NextPage<{
     }
 }> = async ({ params }) => {
     const propertyDetails = await getPropertyDetails(params.id)
-
     if (!propertyDetails) notFound()
-
-    const OwnerDetails = await getCurrentOwner(propertyDetails.id)
-
-    if (!OwnerDetails) notFound()
+    const currentLandlord = await getCurrentOwner(propertyDetails.id)
 
     return (
         <div className="flex-1 flex flex-col w-full px-16 justify-top items-center gap-2 py-20">
@@ -87,9 +83,12 @@ const PropertyDetailPage: NextPage<{
                         <div className='flex flex-row w-full px-0 justify-start items-center gap-2'>
                             <label className='font-semibold'>Average Rating:</label>
                             <Suspense fallback={<ArrowPathIcon className='w-5 h-5 animate-spin' />}>
-                                <AverageRating propertyId={propertyDetails.id} />
+                                <PropertyAverageRating propertyId={propertyDetails.id} />
                             </Suspense>
                         </div>
+
+                        {/* Line break */}
+                        <div className='mb-4'></div>
 
                         {/* Ownership */}
                         <div className='flex flex-row gap-1'>
@@ -100,13 +99,16 @@ const PropertyDetailPage: NextPage<{
                         </div>
 
                         {/* Landlord Average Rating */}
-                        <div className='flex flex-row gap-1'>
+                        <div className='flex flex-row w-full px-0 justify-start items-center gap-2'>
                             <label className='font-semibold'>Landlord Rating:</label>
-                            <Suspense fallback={<ArrowPathIcon className='w-5 h-5 animate-spin' />}>
-                                <LandlordRating landlordId={OwnerDetails?.user_id} />
-                            </Suspense>
+                            {currentLandlord ? (
+                                <Suspense fallback={<ArrowPathIcon className='w-5 h-5 animate-spin' />}>
+                                    <LandlordAverageRating landlordId={currentLandlord.user_id} />
+                                </Suspense>
+                            ) : (
+                                <p>No Ratings yet</p>
+                            )}
                         </div>
-                            
 
                         {/* Other Known Property Details - currently only description, consider expaniding to include details like No. of bedrooms */}
                         <text>{propertyDetails.description}</text>
@@ -171,19 +173,46 @@ const OwnershipDetails: React.FC<{
     )
 }
 
-const getAveragePropertyRating = cache(async (propertyId: string): Promise<number | null> => {
+const getLandlordAverageRating = cache(async (landlordId: string): Promise<number | null> => {
     const supabase = createClient(cookies());
 
-    const { data, error } = await supabase
-        .rpc('get_average_property_rating', { property_id: propertyId })
+    // get all properties owned by the landlord
+    const { data: propertiesOwnedByLandlord, error: propertiesOwnedByLandlordError } = await supabase
+        .from('property_ownership')
+        .select('*')
+        .eq('landlord_id', landlordId)
 
-    if (error) return null
+    if (propertiesOwnedByLandlordError) return null
 
-    return data
+    // loop over each property and the landlord_rating for each property
+    let totalRating = 0
+    let totalProperties = 0
+    for (const property of propertiesOwnedByLandlord) {
+        // get the landlord_rating from reviews with the review_date within the ownership period
+        let query = supabase
+        .from('reviews')
+        .select('landlord_rating')
+        .eq('property_id', property.property_id)
+        .gte('review_date', property.started_at);
+
+    // Check if ended_at is not null
+    if (property.ended_at !== null) {
+        query = query.lte('review_date', property.ended_at);
+    }
+
+    const { data: propertyRatings, error: propertyRatingError } = await query;
+        if (propertyRatingError) return null
+
+        for (const rating of propertyRatings) {
+            totalRating += rating.landlord_rating
+            totalProperties++
+        }
+    }
+    return totalRating / totalProperties
 })
 
-const AverageRating: React.FC<{ propertyId: string }> = async ({ propertyId }) => {
-    const averageRating = await getAveragePropertyRating(propertyId)
+const LandlordAverageRating: React.FC<{ landlordId: string }> = async ({ landlordId }) => {
+    const averageRating = await getLandlordAverageRating(landlordId)
 
     if (!averageRating)
         return (
@@ -195,80 +224,27 @@ const AverageRating: React.FC<{ propertyId: string }> = async ({ propertyId }) =
     )
 }
 
-const getAverageLandlordRating = cache(async (landlordId: string): Promise<number | null> => {
+const getPropertyAverageRating = cache(async (propertyId: string): Promise<number | null> => {
     const supabase = createClient(cookies());
 
-    // Get all the property that the landlord owns
-    const { data: properties, error: propertiesError } = await supabase
-        .from('property_ownership')
-        .select('*')
-        .eq('landlord_id', landlordId);
-    
-    console.log(properties)
+    const { data, error } = await supabase
+        .rpc('get_average_property_rating', { property_id: propertyId })
 
-    if (propertiesError || !properties) return null;
+    if (error) return null
 
-    // Get unique end dates and start dates
-    const endedAtDates: (string | null)[] = properties.map(property => property.ended_at);
-    const startedAtDates: (string | null)[] = properties.map(property => property.started_at);
+    return data
+})
 
-    let totalRating = properties.length;
-    let reviewCount = 0;
+const PropertyAverageRating: React.FC<{ propertyId: string }> = async ({ propertyId }) => {
+    const averageRating = await getPropertyAverageRating(propertyId)
 
-    console.log("total rating:\t" + totalRating)
-
-    // For each property, get the reviews and calculate the average rating
-    for (const property of properties) {
-        // Get the reviews for the property
-        const { data: reviews, error: reviewsError } = await supabase
-            .from('reviews')
-            .select('property_rating')
-            .eq('property_id', property.property_id);
-
-        if (reviewsError || !reviews) return null;
-
-        console.log(reviews)
-
-        // Calculate the average rating for the property
-        let propertyTotalRating = 0;
-        let propertyReviewCount = 0;
-        for (const review of reviews) {
-            propertyTotalRating += review.property_rating;
-            propertyReviewCount++;
-        }
-
-        // Add the property's average rating to the total rating
-        reviewCount += propertyReviewCount;
-    }
-    
-
-    if (reviewCount === 0) return null; // No reviews found
-
-    // Calculate average rating
-    const averageRating = totalRating / reviewCount;
-
-    console.log("average rating:\t" + averageRating)
-    console.log("total rating:\t" + totalRating)
-    console.log("review count:\t" + reviewCount)
-
-    return averageRating;
-});
-
-
-const LandlordRating: React.FC<{
-    landlordId: string
-}> = async ({ landlordId }) => {
-    const landlordAverageRating = await getAverageLandlordRating(landlordId)
-
-    if (!landlordAverageRating)
+    if (!averageRating)
         return (
             <p>No Ratings yet</p>
         )
 
-    const rating = landlordAverageRating
-
     return (
-        <p>{rating}</p>
+        <StarRatingLayout rating={averageRating} />
     )
 }
 
