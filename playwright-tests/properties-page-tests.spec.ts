@@ -23,6 +23,6 @@ test('Nonextant property test', async ({ page }) => {
 
 test('PropertyId not provided test', async ({ page }) => {
   await page.goto('http://localhost:3000/properties');
-  await expect(page.getByRole('list')).toContainText(firstProperty.address);
-  await expect(page.getByRole('list')).toContainText(secondProperty.address);
+  await expect(page.getByRole('main')).toContainText(firstProperty.address);
+  await expect(page.getByRole('main')).toContainText(secondProperty.address);
 });
