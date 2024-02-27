@@ -6,10 +6,8 @@
 -- |                     |                  | landlord-page-tests | Must have owned (at least) 2 properties (1 & 2 Test Road) |
 -- | user.2@example.com  | User.2.Password  | supabase-user-tests |                                                           |
 -- |                     |                  | landlord-page-tests | Must be a landlord, but not have owned any properties     |
--- |                     |                  |                     | Must have (at least) 1 property review  (1 Test Road)     |
 -- | user.3@example.com  | User.3.Password  | landlord-page-tests | Must not be registered as a landlord                      |
--- |                     |                  |                     | Must have (at least) 2 property reviews (1 & 2 Test Road) |
--- | user.4@example.com  | User.4.Password  |                     | Must not have any property reviews                        |
+-- | user.4@example.com  | User.4.Password  |                     |                                                           |
 -- | user.5@example.com  | User.5.Password  |                     |                                                           |
 -- | user.6@example.com  | User.6.Password  |                     |                                                           |
 -- | user.7@example.com  | User.7.Password  |                     |                                                           |
@@ -34,9 +32,7 @@ INSERT INTO "auth"."users" (            "instance_id"             ,             
 -- |   Address   |       Used for      |             Details            |
 -- |-------------|---------------------|--------------------------------|
 -- | 1 Test Road | landlord-page-tests | Must have been owned by User.1 |
--- |             | profile-page-tests  |                                |
 -- | 2 Test Road | landlord-page-tests | Must have been owned by User.1 |
--- |             |                     |                                |
 
 INSERT INTO "public"."properties" (                    "id"              ,   "address"  ) VALUES
                                   ('1ececec8-4bbf-445f-8de0-f563caf0bf01', '1 Test Road'),
