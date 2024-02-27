@@ -1,9 +1,8 @@
 'use client'
 
 import { useFormState } from "react-dom"
-import { claimProperty } from "./actions"
-import { use, useEffect, useState } from "react"
-import { CheckIcon } from "@heroicons/react/24/solid"
+import { State, claimProperty } from "./actions"
+import { useEffect, useState } from "react"
 
 interface ClaimPropertyFormProps {
     property_id: string
@@ -96,11 +95,36 @@ export const ClaimPropertyForm: React.FC<ClaimPropertyFormProps> = ({
                 >Claim Property</button>
             </form>
 
-            <div className="flex flex-col gap-2 justify-center bg-primary/50 border rounded-b-lg p-4">
-                <pre>{JSON.stringify(stillOwned, null, '\t')}</pre>
-                <pre>{JSON.stringify(state, null, '\t')}</pre>
+            <div className="flex flex-col gap-2 bg-primary/50 border rounded-b-lg p-4 items-center justify-center min-h-[4rem]">
+                {/* <pre>{JSON.stringify(state, null, 2)}</pre> */}
+                <ErrorMessage state={state} />
             </div>
 
         </div>
+    )
+}
+
+const ErrorMessage: React.FC<{ state: State }> = ({ state }) => {
+    // Handle specific errors
+
+    if (state.errors?.started_at?.includes('Start date must be in the past'))
+        return (
+            <p>Start date must be in the past</p>
+        )
+
+    if (state.errors?.ended_at?.includes('End date must be in the past'))
+        return (
+            <p>End date must be in the past</p>
+        )
+
+    if (state.errors?.ended_at?.includes('End date must be after start date'))
+        return (
+            <p>End date must be after start date</p>
+        )
+
+
+    // Handle generic errors/messages
+    return (
+        <p>{state.message}</p>
     )
 }
