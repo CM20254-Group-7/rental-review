@@ -49,7 +49,6 @@ export default async function landlordProfilePage( {params }: { params: { landlo
     
     let propertyDetails: { address: string }[] = [];
     if (landlordProperties !== null) {
-        console.log(landlordProperties)
         const { data: details, error: propertyDetailsError } = await supabase
         .from('properties')
         .select('address')
