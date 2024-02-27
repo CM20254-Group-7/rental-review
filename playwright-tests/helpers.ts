@@ -52,6 +52,8 @@ export const properties = [1, 2].map(i => {
     return {
         id: propertyIds[i - 1],
         address: propertyAddresses[i - 1],
+        // They are all owned by the same user according to the mock data
+        owner: "Test Name 1",
         };
 });
 
