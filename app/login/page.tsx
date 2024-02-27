@@ -1,12 +1,14 @@
 import Link from 'next/link'
 import { SignInForm, SignUpForm } from './forms'
+import { NextPage } from 'next'
 
-export default function Login() {
+const LoginPage: NextPage = ({searchParams}: {searchParams?: {redirect?: string}}) => {
+  const redirectTo = searchParams?.redirect
 
   return (
     <div className="relative flex-1 flex px-8 justify-center place-items-center gap-8 pt-24 pb-8">
-      <Link
-        href="/"
+      {redirectTo && <Link
+        href={redirectTo}
         className="absolute left-8 top-8 py-2 px-4 rounded-md no-underline text-foreground bg-btn-background hover:bg-btn-background-hover flex items-center group text-sm"
       >
         <svg
@@ -24,12 +26,14 @@ export default function Login() {
           <polyline points="15 18 9 12 15 6" />
         </svg>{' '}
         Back
-      </Link>
+      </Link>}
 
       <div className="grid grid-cols-1 [@media(min-width:996px)]:grid-cols-2 gap-8 w-full">
-        <SignInForm />
-        <SignUpForm />
+        <SignInForm redirectTo={redirectTo}/>
+        <SignUpForm redirectTo={redirectTo}/>
       </div>   
     </div>
   )
 }
+
+export default LoginPage;
