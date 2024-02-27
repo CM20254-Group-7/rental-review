@@ -47,7 +47,7 @@ export const ReviewCreationForm: React.FC<FormProps> = ({
         required
       />
 
-      <label htmlFor="tenancy_period">Tenancy Period</label>
+      <label htmlFor="tenancy_period">Tenancy Period (in months)</label>
       <input
         className="border p-2 rounded-md mb-6"
         type="number"
