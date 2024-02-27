@@ -125,15 +125,42 @@ export interface Database {
       properties: {
         Row: {
           address: string
+          baths: number | null
+          beds: number | null
+          country: string | null
+          county: string | null
+          description: string | null
+          house: string | null
           id: string
+          postcode: string | null
+          property_type: string | null
+          street: string | null
         }
         Insert: {
           address: string
+          baths?: number | null
+          beds?: number | null
+          country?: string | null
+          county?: string | null
+          description?: string | null
+          house?: string | null
           id?: string
+          postcode?: string | null
+          property_type?: string | null
+          street?: string | null
         }
         Update: {
           address?: string
+          baths?: number | null
+          beds?: number | null
+          country?: string | null
+          county?: string | null
+          description?: string | null
+          house?: string | null
           id?: string
+          postcode?: string | null
+          property_type?: string | null
+          street?: string | null
         }
         Relationships: []
       }

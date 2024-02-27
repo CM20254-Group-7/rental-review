@@ -1,6 +1,8 @@
 import { NextPage } from "next";
-import { createClient } from "@/utils/supabase/client";
+import { cookies } from "next/headers";
+import { createClient } from "@/utils/supabase/server";
 import { ReviewCreationForm } from "./ReviewCreationForm";
+import { notFound } from "next/navigation";
 
 const createReviewPage: NextPage = async ({
   searchParams,
@@ -15,21 +17,25 @@ const createReviewPage: NextPage = async ({
 
   // get the address from the propertyId if it's defined
   if (propertyId) {
-    const supabase = createClient();
+    const cookieStore = cookies();
+    const supabase = createClient(cookieStore);
 
     const { data, error } = await supabase
       .from("properties")
       .select("address")
       .eq("id", propertyId)
-      .maybeSingle();
+      .single();
 
     // Consider adding error handling here
     // redirect to / show not-found if no property found with the provided id
+    if (!data) notFound();
 
-    address = data?.address;
+    address = data.address;
   }
 
   if (!address) address = searchParams?.address;
+  if (!address) notFound();
+
 
   return (
     <div style={{ minWidth: "1000px" }}>
