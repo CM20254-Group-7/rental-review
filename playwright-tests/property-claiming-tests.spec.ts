@@ -1,9 +1,11 @@
 import { test, expect } from '@playwright/test';
 import { users } from './helpers';
+import exp from 'constants';
 
-const firstUser = users[2] // user not registered as a landlord - test that cannot access the claim page
-const secondUser = users[1] // user registered as a landlord, with no claimed properties
-const thirdUser = users[3] // user registered as a landlord, will attempt to claim properties
+const notALandlordUser = users[2] // user not registered as a landlord - test that cannot access the claim page
+const noPropertyLandlordUser = users[1] // user registered as a landlord, with no claimed properties
+const propertyClaimerUser = users[3] // user registered as a landlord, will attempt to claim properties
+const existingOwnerUser = users[4] // user registered as a landlord, will attempt to claim properties
 
 let properties: {
     [key: number]: {
@@ -144,13 +146,13 @@ test.describe('1. Page Access', () => {
                 .locator('form')
                 .filter({ hasText: 'Returning User? Sign In Here.' })
                 .getByPlaceholder('you@example.com')
-                .fill(firstUser.email);
+                .fill(notALandlordUser.email);
 
             await page
                 .locator('form')
                 .filter({ hasText: 'Returning User? Sign In Here.' })
                 .getByPlaceholder('••••••••')
-                .fill(firstUser.password);
+                .fill(notALandlordUser.password);
 
             await page
                 .getByRole('button', { name: 'Sign In' })
@@ -160,8 +162,8 @@ test.describe('1. Page Access', () => {
         });
     })
 
-    test.describe(`1.2. Logged in but not a landlord - ${firstUser.label}`, () => {
-        test.use({ storageState: firstUser.file });
+    test.describe(`1.2. Logged in but not a landlord - ${notALandlordUser.label}`, () => {
+        test.use({ storageState: notALandlordUser.file });
 
         test('1.2.1. User cannot access claim property page', async ({ page }, testInfo) => {
             const property = properties[testInfo.line]
@@ -183,8 +185,8 @@ test.describe('1. Page Access', () => {
         });
     });
 
-    test.describe(`1.3. Logged in as a landlord - ${secondUser.label}`, () => {
-        test.use({ storageState: secondUser.file });
+    test.describe(`1.3. Logged in as a landlord - ${noPropertyLandlordUser.label}`, () => {
+        test.use({ storageState: noPropertyLandlordUser.file });
 
         test('1.3.1. User can access claim property page', async ({ page }, testInfo) => {
             const property = properties[testInfo.line]
@@ -199,7 +201,7 @@ test.describe('1. Page Access', () => {
 
 test.describe('2. Property Valididity', () => {
     // use the third user as they should have access to the claim property page and it does not matter if they claim properties, asumes 1.3.1 passes
-    test.use({ storageState: thirdUser.file });
+    test.use({ storageState: propertyClaimerUser.file });
 
     test('2.1. Invalid Property ID', async ({ page }) => {
         await page.goto(`/properties/invalid-id/claim`);
@@ -238,7 +240,7 @@ test.describe('2. Property Valididity', () => {
 
 test.describe('3. Claim Property Form', () => {
     // use the third user as they should have access to the page and there will be no issues if they claim a property
-    test.use({ storageState: thirdUser.file });
+    test.use({ storageState: propertyClaimerUser.file });
 
     // go to the claim page before each test
     test.beforeEach(async ({ page }, testInfo) => {
@@ -311,7 +313,7 @@ test.describe('3. Claim Property Form', () => {
         });
     });
 
-    test('3.3. Form Submission', async ({page},testInfo) => {
+    test('3.3. Form Submission', async ({ page }, testInfo) => {
         // check that a new property record is added to the database when form is submitted with valid data
         const property = properties[testInfo.line]
 
@@ -336,7 +338,7 @@ test.describe('3. Claim Property Form', () => {
         // Check the ownership record details match those expected
         await expect(ownershipRecord.started_at).toBe(today.yearBefore().yearBefore().toISODateString());
         await expect(ownershipRecord.ended_at).toBe(today.yearBefore().toISODateString());
-        await expect(ownershipRecord.landlord_id).toBe(thirdUser.id);
+        await expect(ownershipRecord.landlord_id).toBe(propertyClaimerUser.id);
     });
 
     test.describe('3.4. Client Side Form Validation', () => {
@@ -440,7 +442,7 @@ test.describe('3. Claim Property Form', () => {
                 // Check the ownership record details match those expected
                 await expect(ownershipRecord.started_at).toBe(today.yearBefore().toISODateString());
                 await expect(ownershipRecord.ended_at).toBeNull();
-                await expect(ownershipRecord.landlord_id).toBe(thirdUser.id);
+                await expect(ownershipRecord.landlord_id).toBe(propertyClaimerUser.id);
             });
 
             test('3.5.A.2. Near Pass', async ({ page }, testInfo) => {
@@ -472,7 +474,7 @@ test.describe('3. Claim Property Form', () => {
                 // Check the ownership record details match those expected
                 await expect(ownershipRecord.started_at).toBe(today.dayBefore().toISODateString());
                 await expect(ownershipRecord.ended_at).toBeNull();
-                await expect(ownershipRecord.landlord_id).toBe(thirdUser.id);
+                await expect(ownershipRecord.landlord_id).toBe(propertyClaimerUser.id);
             });
 
             test('3.5.A.3. Boundary (should pass)', async ({ page }, testInfo) => {
@@ -504,7 +506,7 @@ test.describe('3. Claim Property Form', () => {
                 // Check the ownership record details match those expected
                 await expect(ownershipRecord.started_at).toBe(today.toISODateString());
                 await expect(ownershipRecord.ended_at).toBeNull();
-                await expect(ownershipRecord.landlord_id).toBe(thirdUser.id);
+                await expect(ownershipRecord.landlord_id).toBe(propertyClaimerUser.id);
             });
 
             test('3.5.A.2. Near fail', async ({ page }, testInfo) => {
@@ -597,7 +599,7 @@ test.describe('3. Claim Property Form', () => {
                 // Check the ownership record details match those expected
                 await expect(ownershipRecord.started_at).toBe(start_date);
                 await expect(ownershipRecord.ended_at).toBe(today.yearBefore().toISODateString());
-                await expect(ownershipRecord.landlord_id).toBe(thirdUser.id);
+                await expect(ownershipRecord.landlord_id).toBe(propertyClaimerUser.id);
             });
 
             test('3.5.B.2. Near Pass', async ({ page }, testInfo) => {
@@ -629,7 +631,7 @@ test.describe('3. Claim Property Form', () => {
                 // Check the ownership record details match those expected
                 await expect(ownershipRecord.started_at).toBe(start_date);
                 await expect(ownershipRecord.ended_at).toBe(today.dayBefore().toISODateString());
-                await expect(ownershipRecord.landlord_id).toBe(thirdUser.id);
+                await expect(ownershipRecord.landlord_id).toBe(propertyClaimerUser.id);
             });
 
             test('3.5.B.3. Boundary (should pass)', async ({ page }, testInfo) => {
@@ -661,7 +663,7 @@ test.describe('3. Claim Property Form', () => {
                 // Check the ownership record details match those expected
                 await expect(ownershipRecord.started_at).toBe(start_date);
                 await expect(ownershipRecord.ended_at).toBe(today.toISODateString());
-                await expect(ownershipRecord.landlord_id).toBe(thirdUser.id);
+                await expect(ownershipRecord.landlord_id).toBe(propertyClaimerUser.id);
             });
 
             test('3.5.B.4. Near Fail', async ({ page }, testInfo) => {
@@ -754,7 +756,7 @@ test.describe('3. Claim Property Form', () => {
                 // Check the ownership record details match those expected
                 await expect(ownershipRecord.started_at).toBe(start_date.toISODateString());
                 await expect(ownershipRecord.ended_at).toBe(today.yearBefore().toISODateString());
-                await expect(ownershipRecord.landlord_id).toBe(thirdUser.id);
+                await expect(ownershipRecord.landlord_id).toBe(propertyClaimerUser.id);
             });
 
             test('3.5.C.2. Near Pass', async ({ page }, testInfo) => {
@@ -786,7 +788,7 @@ test.describe('3. Claim Property Form', () => {
                 // Check the ownership record details match those expected
                 await expect(ownershipRecord.started_at).toBe(start_date.toISODateString());
                 await expect(ownershipRecord.ended_at).toBe(start_date.dayAfter().toISODateString());
-                await expect(ownershipRecord.landlord_id).toBe(thirdUser.id);
+                await expect(ownershipRecord.landlord_id).toBe(propertyClaimerUser.id);
             });
 
             test('3.5.B.3. Boundary (should fail)', async ({ page }, testInfo) => {
@@ -1042,8 +1044,654 @@ test.describe('3. Claim Property Form', () => {
                 // Check the ownership record details match those expected
                 await expect(ownershipRecord.started_at).toBe(today.yearBefore().yearBefore().toISODateString());
                 await expect(ownershipRecord.ended_at).toBe(today.yearBefore().toISODateString());
-                await expect(ownershipRecord.landlord_id).toBe(thirdUser.id);
+                await expect(ownershipRecord.landlord_id).toBe(propertyClaimerUser.id);
             });
         });
+    });
+});
+
+test.describe('4. Claim Collision', () => {
+    // should be logged in as the property claimer for all tests
+    test.use({ storageState: propertyClaimerUser.file });
+
+    // go to the claim page before each test
+    test.beforeEach(async ({ page }, testInfo) => {
+        const property = properties[testInfo.line]
+
+        await page.goto(`/properties/${property.id}/claim`);
+    });
+
+    test.describe('4.1. Single Closed Claim', () => {
+        // Define the existing claim start and end dates
+        const existing_claim_start = today.yearsBefore(2)
+        const existing_claim_end = today.yearBefore()
+
+        // Setup the potentially colliding claim before each test
+        test.beforeEach(async ({ page }, testInfo) => {
+            const property = properties[testInfo.line]
+
+            // Create the existing ownership record
+            const res = await page.request.post(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/property_ownership?select=*`, {
+                headers: {
+                    'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+                    'Authorization': `Bearer ${process.env.SUPABASE_SERVICE_KEY!}`,
+                    'Content-Type': 'application/json',
+                    'Prefer': 'return=representation'
+                },
+                data: {
+                    property_id: property.id,
+                    landlord_id: existingOwnerUser.id,
+                    started_at: existing_claim_start.toISODateString(),
+                    ended_at: existing_claim_end.toISODateString()
+                }
+            });
+
+            await expect(res).toBeOK();
+            console.log(await res.json());
+        });
+
+        test.describe('4.1.1. New starts before existing', () => {
+            const new_claim_start = existing_claim_start.yearsBefore(2)
+
+            // Existing:                        |----------|
+            // New:       |----------|
+            // Date:     -4         -3         -2         -1          0
+            test('4.1.1.1. New ends before existing starts', async ({ page }, testInfo) => {
+                const property = properties[testInfo.line]
+                const new_claim_end = existing_claim_start.yearBefore()
+
+                // Fill in form & submit
+                await page.locator('input[name="started_at"]').fill(new_claim_start.toISODateString())
+                await page.locator('input[name="ended_at"]').fill(new_claim_end.toISODateString())
+                await page.getByRole('button', { name: 'Claim Property' }).click();
+
+                // Wait for and check the response - Success
+                await expect(page.getByRole('main')).toContainText('Property Claimed Successfully');
+
+                // Check that the claim was added to the database
+                const res = await page.request.get(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/property_ownership?select=*&property_id=eq.${property.id}&landlord_id=eq.${propertyClaimerUser.id}`, {
+                    headers: {
+                        'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+                        'Authorization': `Bearer ${process.env.SUPABASE_SERVICE_KEY!}`
+                    }
+                })
+
+                // Get the ownership record
+                await expect(res).toBeOK();
+                const ownershipRecord = (await res.json())[0];
+
+                // Check the ownership record details match those expected
+                await expect(ownershipRecord.started_at).toBe(new_claim_start.toISODateString());
+                await expect(ownershipRecord.ended_at).toBe(new_claim_end.toISODateString());
+            });
+
+            // Existing:                        |----------|
+            // New:       |---------------------|
+            // Date:     -4         -3         -2         -1          0
+            test('4.1.1.2. New ends on same day as existing starts', async ({ page }, testInfo) => {
+                const property = properties[testInfo.line]
+                const new_claim_end = existing_claim_start
+
+                // Fill in form & submit
+                await page.locator('input[name="started_at"]').fill(new_claim_start.toISODateString())
+                await page.locator('input[name="ended_at"]').fill(new_claim_end.toISODateString())
+                await page.getByRole('button', { name: 'Claim Property' }).click();
+
+                // Wait for and check the response - Success
+                await expect(page.getByRole('main')).toContainText('Property Claimed Successfully');
+
+                // Check that the claim was added to the database
+                const res = await page.request.get(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/property_ownership?select=*&property_id=eq.${property.id}&landlord_id=eq.${propertyClaimerUser.id}`, {
+                    headers: {
+                        'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+                        'Authorization': `Bearer ${process.env.SUPABASE_SERVICE_KEY!}`
+                    }
+                })
+
+                // Get the ownership record
+                await expect(res).toBeOK();
+                const ownershipRecord = (await res.json())[0];
+
+                // Check the ownership record details match those expected
+                await expect(ownershipRecord.started_at).toBe(new_claim_start.toISODateString());
+                await expect(ownershipRecord.ended_at).toBe(new_claim_end.toISODateString());
+            });
+
+            // Existing:                        |----------|
+            // New:       |--------------------------|
+            // Date:     -4         -3         -2         -1          0
+            test('4.1.1.3. New ends during existing', async ({ page }, testInfo) => {
+                const property = properties[testInfo.line]
+                const new_claim_end = existing_claim_start.monthsAfter(6)
+
+                // Fill in form & submit
+                await page.locator('input[name="started_at"]').fill(new_claim_start.toISODateString())
+                await page.locator('input[name="ended_at"]').fill(new_claim_end.toISODateString())
+                await page.getByRole('button', { name: 'Claim Property' }).click();
+
+                // Wait for and check the response - Fail
+                await expect(page.getByRole('main')).toContainText(/Property Claim Failed|The new claim overlaps with an existing claim|Error Claiming Property/);
+
+                // Check that the claim was not added to the database
+                const res = await page.request.get(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/property_ownership?select=*&property_id=eq.${property.id}&landlord_id=eq.${propertyClaimerUser.id}`, {
+                    headers: {
+                        'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+                        'Authorization': `Bearer ${process.env.SUPABASE_SERVICE_KEY!}`
+                    }
+                })
+                await expect(res).toBeOK();
+                const ownershipRecords = await res.json();
+                await expect(ownershipRecords.length).toBeFalsy();
+            });
+
+            // Existing:                        |----------|
+            // New:       |--------------------------------|
+            // Date:     -4         -3         -2         -1          0
+            test('4.1.1.4. New ends on same day as existing ends', async ({ page }, testInfo) => {
+                const property = properties[testInfo.line]
+                const new_claim_end = existing_claim_end
+
+                // Fill in form & submit
+                await page.locator('input[name="started_at"]').fill(new_claim_start.toISODateString())
+                await page.locator('input[name="ended_at"]').fill(new_claim_end.toISODateString())
+                await page.getByRole('button', { name: 'Claim Property' }).click();
+
+                // Wait for and check the response - Fail
+                await expect(page.getByRole('main')).toContainText(/Property Claim Failed|The new claim overlaps with an existing claim|Error Claiming Property/);
+
+                // Check that the claim was not added to the database
+                const res = await page.request.get(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/property_ownership?select=*&property_id=eq.${property.id}&landlord_id=eq.${propertyClaimerUser.id}`, {
+                    headers: {
+                        'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+                        'Authorization': `Bearer ${process.env.SUPABASE_SERVICE_KEY!}`
+                    }
+                })
+                await expect(res).toBeOK();
+                const ownershipRecords = await res.json();
+                await expect(ownershipRecords.length).toBeFalsy();
+            });
+
+            // Existing:                        |----------|
+            // New:       |--------------------------------------|
+            // Date:     -4         -3         -2         -1          0
+            test('4.1.1.5. New ends after existing ends', async ({ page }, testInfo) => {
+                const property = properties[testInfo.line]
+                const new_claim_end = existing_claim_end.monthsAfter(6)
+
+                // Fill in form & submit
+                await page.locator('input[name="started_at"]').fill(new_claim_start.toISODateString())
+                await page.locator('input[name="ended_at"]').fill(new_claim_end.toISODateString())
+                await page.getByRole('button', { name: 'Claim Property' }).click();
+
+                // Wait for and check the response - Fail
+                await expect(page.getByRole('main')).toContainText(/Property Claim Failed|The new claim overlaps with an existing claim|Error Claiming Property/);
+
+                // Check that the claim was not added to the database
+                const res = await page.request.get(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/property_ownership?select=*&property_id=eq.${property.id}&landlord_id=eq.${propertyClaimerUser.id}`, {
+                    headers: {
+                        'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+                        'Authorization': `Bearer ${process.env.SUPABASE_SERVICE_KEY!}`
+                    }
+                })
+                await expect(res).toBeOK();
+                const ownershipRecords = await res.json();
+                await expect(ownershipRecords.length).toBeFalsy();
+            });
+
+            // Existing:                        |----------|
+            // New:       |------------------------------------------->
+            // Date:     -4         -3         -2         -1          0
+            test('4.1.1.5. New is open', async ({ page }, testInfo) => {
+                const property = properties[testInfo.line]
+
+                // Fill in form & submit
+                await page.locator('input[name="started_at"]').fill(new_claim_start.toISODateString())
+                await page.getByRole('button', { name: 'I still own this property' }).click();
+                await page.getByRole('button', { name: 'Claim Property' }).click();
+
+                // Wait for and check the response - Fail
+                await expect(page.getByRole('main')).toContainText(/Property Claim Failed|The new claim overlaps with an existing claim|Error Claiming Property/);
+
+                // Check that the claim was not added to the database
+                const res = await page.request.get(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/property_ownership?select=*&property_id=eq.${property.id}&landlord_id=eq.${propertyClaimerUser.id}`, {
+                    headers: {
+                        'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+                        'Authorization': `Bearer ${process.env.SUPABASE_SERVICE_KEY!}`
+                    }
+                })
+                await expect(res).toBeOK();
+                const ownershipRecords = await res.json();
+                await expect(ownershipRecords.length).toBeFalsy();
+            });
+        });
+
+        test.describe('4.1.2. New starts on same day as existing', () => {
+            const new_claim_start = existing_claim_start
+
+            // Existing:  |----------|
+            // New:       |-----|   
+            // Date:     -2         -1          0
+            test('4.1.2.1 New ends before existing ends', async ({ page }, testInfo) => {
+                const property = properties[testInfo.line]
+                const new_claim_end = existing_claim_start.monthsAfter(6)
+
+                // Fill in form & submit
+                await page.locator('input[name="started_at"]').fill(new_claim_start.toISODateString())
+                await page.locator('input[name="ended_at"]').fill(new_claim_end.toISODateString())
+                await page.getByRole('button', { name: 'Claim Property' }).click();
+
+                // Wait for and check the response - Fail
+                await expect(page.getByRole('main')).toContainText(/Property Claim Failed|The new claim overlaps with an existing claim|Error Claiming Property/);
+
+                // Check that the claim was not added to the database
+                const res = await page.request.get(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/property_ownership?select=*&property_id=eq.${property.id}&landlord_id=eq.${propertyClaimerUser.id}`, {
+                    headers: {
+                        'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+                        'Authorization': `Bearer ${process.env.SUPABASE_SERVICE_KEY!}`
+                    }
+                })
+                await expect(res).toBeOK();
+                const ownershipRecords = await res.json();
+                await expect(ownershipRecords.length).toBeFalsy();
+            });
+
+            // Existing:  |----------|
+            // New:       |----------|
+            // Date:     -2         -1          0
+            test('4.1.2.2. New ends on same day as existing ends', async ({ page }, testInfo) => {
+                const property = properties[testInfo.line]
+                const new_claim_end = existing_claim_end
+
+                // Fill in form & submit
+                await page.locator('input[name="started_at"]').fill(new_claim_start.toISODateString())
+                await page.locator('input[name="ended_at"]').fill(new_claim_end.toISODateString())
+                await page.getByRole('button', { name: 'Claim Property' }).click();
+
+                // Wait for and check the response - Fail
+                await expect(page.getByRole('main')).toContainText(/Property Claim Failed|The new claim overlaps with an existing claim|Error Claiming Property/);
+
+                // Check that the claim was not added to the database
+                const res = await page.request.get(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/property_ownership?select=*&property_id=eq.${property.id}&landlord_id=eq.${propertyClaimerUser.id}`, {
+                    headers: {
+                        'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+                        'Authorization': `Bearer ${process.env.SUPABASE_SERVICE_KEY!}`
+                    }
+                })
+                await expect(res).toBeOK();
+                const ownershipRecords = await res.json();
+                await expect(ownershipRecords.length).toBeFalsy();
+            });
+
+            // Existing:  |----------|
+            // New:       |----------------|
+            // Date:     -2         -1          0
+            test('4.2.2.3 New ends after existing ends', async ({ page }, testInfo) => {
+                const property = properties[testInfo.line]
+                const new_claim_end = existing_claim_end.monthsAfter(6)
+
+                // Fill in form & submit
+                await page.locator('input[name="started_at"]').fill(new_claim_start.toISODateString())
+                await page.locator('input[name="ended_at"]').fill(new_claim_end.toISODateString())
+                await page.getByRole('button', { name: 'Claim Property' }).click();
+
+                // Wait for and check the response - Fail
+                await expect(page.getByRole('main')).toContainText(/Property Claim Failed|The new claim overlaps with an existing claim|Error Claiming Property/);
+
+                // Check that the claim was not added to the database
+                const res = await page.request.get(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/property_ownership?select=*&property_id=eq.${property.id}&landlord_id=eq.${propertyClaimerUser.id}`, {
+                    headers: {
+                        'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+                        'Authorization': `Bearer ${process.env.SUPABASE_SERVICE_KEY!}`
+                    }
+                })
+                await expect(res).toBeOK();
+                const ownershipRecords = await res.json();
+                await expect(ownershipRecords.length).toBeFalsy();
+            });
+
+            // Existing:  |----------|
+            // New:       |--------------------->
+            // Date:     -2         -1          0
+            test('4.1.2.4. New is open', async ({ page }, testInfo) => {
+                const property = properties[testInfo.line]
+
+                // Fill in form & submit
+                await page.locator('input[name="started_at"]').fill(new_claim_start.toISODateString())
+                await page.getByRole('button', { name: 'I still own this property' }).click();
+                await page.getByRole('button', { name: 'Claim Property' }).click();
+
+                // Wait for and check the response - Fail
+                await expect(page.getByRole('main')).toContainText(/Property Claim Failed|The new claim overlaps with an existing claim|Error Claiming Property/);
+
+                // Check that the claim was not added to the database
+                const res = await page.request.get(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/property_ownership?select=*&property_id=eq.${property.id}&landlord_id=eq.${propertyClaimerUser.id}`, {
+                    headers: {
+                        'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+                        'Authorization': `Bearer ${process.env.SUPABASE_SERVICE_KEY!}`
+                    }
+                })
+                await expect(res).toBeOK();
+                const ownershipRecords = await res.json();
+                await expect(ownershipRecords.length).toBeFalsy();
+            });
+        });
+
+        test.describe('4.1.3. New starts during existing', () => {
+            const new_claim_start = existing_claim_start.monthsAfter(3)
+
+            // Existing:  |----------|
+            // New:          |----|   
+            // Date:     -2         -1          0
+            test('4.1.3.1 New ends before existing ends', async ({ page }, testInfo) => {
+                const property = properties[testInfo.line]
+                const new_claim_end = existing_claim_end.monthsBefore(3)
+
+                // Fill in form & submit
+                await page.locator('input[name="started_at"]').fill(new_claim_start.toISODateString())
+                await page.locator('input[name="ended_at"]').fill(new_claim_end.toISODateString())
+                await page.getByRole('button', { name: 'Claim Property' }).click();
+
+                // Wait for and check the response - Fail
+                await expect(page.getByRole('main')).toContainText(/Property Claim Failed|The new claim overlaps with an existing claim|Error Claiming Property/);
+
+                // Check that the claim was not added to the database
+                const res = await page.request.get(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/property_ownership?select=*&property_id=eq.${property.id}&landlord_id=eq.${propertyClaimerUser.id}`, {
+                    headers: {
+                        'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+                        'Authorization': `Bearer ${process.env.SUPABASE_SERVICE_KEY!}`
+                    }
+                })
+                await expect(res).toBeOK();
+                const ownershipRecords = await res.json();
+                await expect(ownershipRecords.length).toBeFalsy();
+            });
+
+            // Existing:  |----------|
+            // New:          |-------|
+            // Date:     -2         -1          0
+            test('4.1.3.2. New ends on same day as existing ends', async ({ page }, testInfo) => {
+                const property = properties[testInfo.line]
+                const new_claim_end = existing_claim_end
+
+                // Fill in form & submit
+                await page.locator('input[name="started_at"]').fill(new_claim_start.toISODateString())
+                await page.locator('input[name="ended_at"]').fill(new_claim_end.toISODateString())
+                await page.getByRole('button', { name: 'Claim Property' }).click();
+
+                // Wait for and check the response - Fail
+                await expect(page.getByRole('main')).toContainText(/Property Claim Failed|The new claim overlaps with an existing claim|Error Claiming Property/);
+
+                // Check that the claim was not added to the database
+                const res = await page.request.get(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/property_ownership?select=*&property_id=eq.${property.id}&landlord_id=eq.${propertyClaimerUser.id}`, {
+                    headers: {
+                        'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+                        'Authorization': `Bearer ${process.env.SUPABASE_SERVICE_KEY!}`
+                    }
+                })
+                await expect(res).toBeOK();
+                const ownershipRecords = await res.json();
+                await expect(ownershipRecords.length).toBeFalsy();
+            });
+
+            // Existing:  |----------|
+            // New:          |-------------|
+            // Date:     -2         -1          0
+            test('4.2.3.3 New ends after existing ends', async ({ page }, testInfo) => {
+                const property = properties[testInfo.line]
+                const new_claim_end = existing_claim_end.monthsAfter(6)
+
+                // Fill in form & submit
+                await page.locator('input[name="started_at"]').fill(new_claim_start.toISODateString())
+                await page.locator('input[name="ended_at"]').fill(new_claim_end.toISODateString())
+                await page.getByRole('button', { name: 'Claim Property' }).click();
+
+                // Wait for and check the response - Fail
+                await expect(page.getByRole('main')).toContainText(/Property Claim Failed|The new claim overlaps with an existing claim|Error Claiming Property/);
+
+                // Check that the claim was not added to the database
+                const res = await page.request.get(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/property_ownership?select=*&property_id=eq.${property.id}&landlord_id=eq.${propertyClaimerUser.id}`, {
+                    headers: {
+                        'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+                        'Authorization': `Bearer ${process.env.SUPABASE_SERVICE_KEY!}`
+                    }
+                })
+                await expect(res).toBeOK();
+                const ownershipRecords = await res.json();
+                await expect(ownershipRecords.length).toBeFalsy();
+            });
+
+            // Existing:  |----------|
+            // New:          |------------------>
+            // Date:     -2         -1          0
+            test('4.1.3.4. New is open', async ({ page }, testInfo) => {
+                const property = properties[testInfo.line]
+
+                // Fill in form & submit
+                await page.locator('input[name="started_at"]').fill(new_claim_start.toISODateString())
+                await page.getByRole('button', { name: 'I still own this property' }).click();
+                await page.getByRole('button', { name: 'Claim Property' }).click();
+
+                // Wait for and check the response - Fail
+                await expect(page.getByRole('main')).toContainText(/Property Claim Failed|The new claim overlaps with an existing claim|Error Claiming Property/);
+
+                // Check that the claim was not added to the database
+                const res = await page.request.get(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/property_ownership?select=*&property_id=eq.${property.id}&landlord_id=eq.${propertyClaimerUser.id}`, {
+                    headers: {
+                        'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+                        'Authorization': `Bearer ${process.env.SUPABASE_SERVICE_KEY!}`
+                    }
+                })
+                await expect(res).toBeOK();
+                const ownershipRecords = await res.json();
+                await expect(ownershipRecords.length).toBeFalsy();
+            });
+        });
+
+        test.describe('4.1.4. New starts on same day existing ends', () => {
+            const new_claim_start = existing_claim_end
+
+            // Existing:  |----------|
+            // New:                  |-----|   
+            // Date:     -2         -1          0
+            test('4.1.4.1. New ends after exisiting ends', async ({ page }, testInfo) => {
+                const property = properties[testInfo.line]
+                const new_claim_end = existing_claim_end.monthsAfter(6)
+
+                // Fill in form & submit
+                await page.locator('input[name="started_at"]').fill(new_claim_start.toISODateString())
+                await page.locator('input[name="ended_at"]').fill(new_claim_end.toISODateString())
+                await page.getByRole('button', { name: 'Claim Property' }).click();
+
+                // Wait for and check the response - Success
+                await expect(page.getByRole('main')).toContainText('Property Claimed Successfully');
+
+                // Check that the claim was added to the database
+                const res = await page.request.get(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/property_ownership?select=*&property_id=eq.${property.id}&landlord_id=eq.${propertyClaimerUser.id}`, {
+                    headers: {
+                        'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+                        'Authorization': `Bearer ${process.env.SUPABASE_SERVICE_KEY!}`
+                    }
+                })
+
+                // Get the ownership record
+                await expect(res).toBeOK();
+                const ownershipRecord = (await res.json())[0];
+
+                // Check the ownership record details match those expected
+                await expect(ownershipRecord.started_at).toBe(new_claim_start.toISODateString());
+                await expect(ownershipRecord.ended_at).toBe(new_claim_end.toISODateString());
+            });
+
+            // Existing:  |----------|
+            // New:                     |------->   
+            // Date:     -2         -1          0
+            test('4.1.4.2. New is open', async ({ page }, testInfo) => {
+                const property = properties[testInfo.line]
+
+                // Fill in form & submit
+                await page.locator('input[name="started_at"]').fill(new_claim_start.toISODateString())
+                await page.getByRole('button', { name: 'I still own this property' }).click();
+                await page.getByRole('button', { name: 'Claim Property' }).click();
+
+                // Wait for and check the response - Success
+                await expect(page.getByRole('main')).toContainText('Property Claimed Successfully');
+
+                // Check that the claim was added to the database
+                const res = await page.request.get(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/property_ownership?select=*&property_id=eq.${property.id}&landlord_id=eq.${propertyClaimerUser.id}`, {
+                    headers: {
+                        'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+                        'Authorization': `Bearer ${process.env.SUPABASE_SERVICE_KEY!}`
+                    }
+                })
+
+                // Get the ownership record
+                await expect(res).toBeOK();
+                const ownershipRecord = (await res.json())[0];
+
+                // Check the ownership record details match those expected
+                await expect(ownershipRecord.started_at).toBe(new_claim_start.toISODateString());
+                await expect(ownershipRecord.ended_at).toBeNull();
+            });
+        });
+
+        test.describe('4.1.5. New starts after existing ends', () => {
+            const new_claim_start = existing_claim_end.monthsAfter(3)
+
+            // Existing:  |----------|
+            // New:                     |----|   
+            // Date:     -2         -1          0
+            test('4.1.5.1. New ends after exisiting ends', async ({ page }, testInfo) => {
+                const property = properties[testInfo.line]
+                const new_claim_end = existing_claim_end.monthsAfter(6)
+
+                // Fill in form & submit
+                await page.locator('input[name="started_at"]').fill(new_claim_start.toISODateString())
+                await page.locator('input[name="ended_at"]').fill(new_claim_end.toISODateString())
+                await page.getByRole('button', { name: 'Claim Property' }).click();
+
+                // Wait for and check the response - Success
+                await expect(page.getByRole('main')).toContainText('Property Claimed Successfully');
+
+                // Check that the claim was added to the database
+                const res = await page.request.get(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/property_ownership?select=*&property_id=eq.${property.id}&landlord_id=eq.${propertyClaimerUser.id}`, {
+                    headers: {
+                        'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+                        'Authorization': `Bearer ${process.env.SUPABASE_SERVICE_KEY!}`
+                    }
+                })
+
+                // Get the ownership record
+                await expect(res).toBeOK();
+                const ownershipRecord = (await res.json())[0];
+
+                // Check the ownership record details match those expected
+                await expect(ownershipRecord.started_at).toBe(new_claim_start.toISODateString());
+                await expect(ownershipRecord.ended_at).toBe(new_claim_end.toISODateString());
+            });
+
+            // Existing:  |----------|
+            // New:                     |------->   
+            // Date:     -2         -1          0
+            test('4.1.5.2. New is open', async ({ page }, testInfo) => {
+                const property = properties[testInfo.line]
+
+                // Fill in form & submit
+                await page.locator('input[name="started_at"]').fill(new_claim_start.toISODateString())
+                await page.getByRole('button', { name: 'I still own this property' }).click();
+                await page.getByRole('button', { name: 'Claim Property' }).click();
+
+                // Wait for and check the response - Success
+                await expect(page.getByRole('main')).toContainText('Property Claimed Successfully');
+
+                // Check that the claim was added to the database
+                const res = await page.request.get(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/property_ownership?select=*&property_id=eq.${property.id}&landlord_id=eq.${propertyClaimerUser.id}`, {
+                    headers: {
+                        'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+                        'Authorization': `Bearer ${process.env.SUPABASE_SERVICE_KEY!}`
+                    }
+                })
+
+                // Get the ownership record
+                await expect(res).toBeOK();
+                const ownershipRecord = (await res.json())[0];
+
+                // Check the ownership record details match those expected
+                await expect(ownershipRecord.started_at).toBe(new_claim_start.toISODateString());
+                await expect(ownershipRecord.ended_at).toBeNull();
+            });
+        });
+    });
+
+    test.describe('4.2. Single Open Claim ( different owner )', () => {
+        const existing_claim_start = today.yearBefore()
+        // Setup the potentially colliding claim before each test
+        test.beforeEach(async ({ page }, testInfo) => {
+            const property = properties[testInfo.line]
+
+            // Create the existing ownership record
+            const res = await page.request.post(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/property_ownership?select=*`, {
+                headers: {
+                    'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+                    'Authorization': `Bearer ${process.env.SUPABASE_SERVICE_KEY!}`,
+                    'Content-Type': 'application/json',
+                    'Prefer': 'return=representation'
+                },
+                data: {
+                    property_id: property.id,
+                    landlord_id: existingOwnerUser.id,
+                    started_at: existing_claim_start.toISODateString(),
+                    ended_at: null
+                }
+            });
+
+            await expect(res).toBeOK();
+            console.log(await res.json());
+        });
+
+        test.describe('4.2.1. New starts before existing', () => {
+            const new_claim_start = existing_claim_start.yearBefore()
+
+            // Existing:             |---------->
+            // New:       |-----|   
+            // Date:     -2         -1          0
+            test('4.2.1.2. New ends before existing starts', async ({ page }, testInfo) => {
+                const property = properties[testInfo.line]
+                const new_claim_end = existing_claim_start.monthsBefore(6)
+
+                // Fill in form & submit
+                await page.locator('input[name="started_at"]').fill(new_claim_start.toISODateString())
+                await page.locator('input[name="ended_at"]').fill(new_claim_end.toISODateString())
+                await page.getByRole('button', { name: 'Claim Property' }).click();
+
+                // Wait for and check the response - Success
+                await expect(page.getByRole('main')).toContainText('Property Claimed Successfully');
+
+                // Check that the claim was added to the database
+                const res = await page.request.get(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/property_ownership?select=*&property_id=eq.${property.id}&landlord_id=eq.${propertyClaimerUser.id}`, {
+                    headers: {
+                        'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+                        'Authorization': `Bearer ${process.env.SUPABASE_SERVICE_KEY!}`
+                    }
+                })
+
+                // Get the ownership record
+                await expect(res).toBeOK();
+                const ownershipRecord = (await res.json())[0];
+
+                // Check the ownership record details match those expected
+                await expect(ownershipRecord.started_at).toBe(new_claim_start.toISODateString());
+                await expect(ownershipRecord.ended_at).toBe(new_claim_end.toISODateString());
+            })
+        });
+    });
+
+    test.describe('4.3. Single Open Claim ( same owner )', () => {
+        // Setup the potentially colliding claim before each test
+        test.beforeEach(async (testInfo) => { });
+    });
+
+    test.describe('4.4. Two Closed Claims', () => {
+        // Setup the potentially colliding claims before each test
+        test.beforeEach(async (testInfo) => { });
     });
 });

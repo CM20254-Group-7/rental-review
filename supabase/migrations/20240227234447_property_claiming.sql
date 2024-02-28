@@ -10,4 +10,3 @@ using ((auth.uid() = user_id));
 alter table "public"."property_ownership" drop constraint "property_ownership_property_id_fkey";
 alter table "public"."property_ownership" add constraint "property_ownership_property_id_fkey" FOREIGN KEY (property_id) REFERENCES properties(id) ON UPDATE CASCADE ON DELETE CASCADE not valid;
 alter table "public"."property_ownership" validate constraint "property_ownership_property_id_fkey";
-
