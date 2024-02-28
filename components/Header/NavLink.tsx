@@ -12,7 +12,6 @@ export const NavLink: React.FC<{
     const [active, setActive] = useState(pathName === href);
 
     useEffect(() => {
-        console.log(pathName, href);
         setActive(pathName === href);
     }, [pathName]);
 
