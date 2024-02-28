@@ -413,639 +413,332 @@ test.describe('3. Claim Property Form', () => {
         //  - check that the database contains the correct / no new ownership record
 
         test.describe('3.5.A. Start Date in future', () => {
-            test('3.5.A.1. Safe Pass', async ({ page }, testInfo) => {
-                const property = properties[testInfo.workerIndex]
-                // Use open claim to isolate issues
-                await page.getByRole('button', { name: 'I still own this property' }).click();
+            const start_dates = [
+                {
+                    name: 'Safe Pass',
+                    date: today.yearBefore(),
+                    shouldPass: true
+                },
+                {
+                    name: 'Near Pass',
+                    date: today.dayBefore(),
+                    shouldPass: true
+                },
+                {
+                    name: 'Boundary',
+                    date: today,
+                    shouldPass: true
+                },
+                {
+                    name: 'Near Fail',
+                    date: today.dayAfter(),
+                    shouldPass: false
+                },
+                {
+                    name: 'Safe Fail',
+                    date: today.yearAfter(),
+                    shouldPass: false
+                }
+            ]
 
-                // set test start date (1 year ago)
-                await page.locator('input[name="started_at"]').fill(today.yearBefore().toISODateString());
-                await page.getByRole('button', { name: 'Claim Property' }).click();
+            for (const [start_index, start] of start_dates.entries()) {
+                test(`3.5.A.${start_index + 1}. ${start.name}`, async ({ page }, testInfo) => {
+                    const property = properties[testInfo.workerIndex]
+                    // Use open claim to isolate issues
+                    await page.getByRole('button', { name: 'I still own this property' }).click();
 
-                // Check error not shown
-                await expect(page.getByRole('main')).not.toContainText('Start date must be in the past');
+                    // set test start date
+                    await page.locator('input[name="started_at"]').fill(start.date.toISODateString());
+                    await page.getByRole('button', { name: 'Claim Property' }).click();
 
-                // wait for success message
-                await expect(page.getByRole('main')).toContainText('Property Claimed Successfully');
-                // Check ownerhip record added to database
-                const res = await page.request.get(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/property_ownership?select=*&property_id=eq.${property.id}`, {
-                    headers: {
-                        'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-                        'Authorization': `Bearer ${process.env.SUPABASE_SERVICE_KEY!}`
+                    // Wait for success/error message
+                    if (start.shouldPass) {
+                        await expect(page.getByRole('main')).toContainText('Property Claimed Successfully');
                     }
-                })
-
-                // Get the ownership record
-                await expect(res).toBeOK();
-                const ownershipRecord = (await res.json())[0];
-
-                // Check the ownership record details match those expected
-                await expect(ownershipRecord.started_at).toBe(today.yearBefore().toISODateString());
-                await expect(ownershipRecord.ended_at).toBeNull();
-                await expect(ownershipRecord.landlord_id).toBe(propertyClaimerUser.id);
-            });
-
-            test('3.5.A.2. Near Pass', async ({ page }, testInfo) => {
-                const property = properties[testInfo.workerIndex]
-                // Use open claim to isolate issues
-                await page.getByRole('button', { name: 'I still own this property' }).click();
-
-                // set test start date (1 year ago)
-                await page.locator('input[name="started_at"]').fill(today.dayBefore().toISODateString());
-                await page.getByRole('button', { name: 'Claim Property' }).click();
-
-                // Check error not shown
-                await expect(page.getByRole('main')).not.toContainText('Start date must be in the past');
-
-                // wait for success message
-                await expect(page.getByRole('main')).toContainText('Property Claimed Successfully');
-                // Check ownerhip record added to database
-                const res = await page.request.get(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/property_ownership?select=*&property_id=eq.${property.id}`, {
-                    headers: {
-                        'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-                        'Authorization': `Bearer ${process.env.SUPABASE_SERVICE_KEY!}`
+                    else {
+                        await expect(page.getByRole('main')).toContainText('Start date must be in the past');
                     }
-                })
 
-                // Get the ownership record
-                await expect(res).toBeOK();
-                const ownershipRecord = (await res.json())[0];
+                    // Get the ownership record if it exists
+                    const res = await page.request.get(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/property_ownership?select=*&property_id=eq.${property.id}`, {
+                        headers: {
+                            'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+                            'Authorization': `Bearer ${process.env.SUPABASE_SERVICE_KEY!}`
+                        }
+                    })
+                    await expect(res).toBeOK();
+                    const ownershipRecord = await res.json();
 
-                // Check the ownership record details match those expected
-                await expect(ownershipRecord.started_at).toBe(today.dayBefore().toISODateString());
-                await expect(ownershipRecord.ended_at).toBeNull();
-                await expect(ownershipRecord.landlord_id).toBe(propertyClaimerUser.id);
-            });
-
-            test('3.5.A.3. Boundary (should pass)', async ({ page }, testInfo) => {
-                const property = properties[testInfo.workerIndex]
-                // Use open claim to isolate issues
-                await page.getByRole('button', { name: 'I still own this property' }).click();
-
-                // set test start date (1 year ago)
-                await page.locator('input[name="started_at"]').fill(today.toISODateString());
-                await page.getByRole('button', { name: 'Claim Property' }).click();
-
-                // Check error not shown
-                await expect(page.getByRole('main')).not.toContainText('Start date must be in the past');
-
-                // wait for success message
-                await expect(page.getByRole('main')).toContainText('Property Claimed Successfully');
-                // Check ownerhip record added to database
-                const res = await page.request.get(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/property_ownership?select=*&property_id=eq.${property.id}`, {
-                    headers: {
-                        'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-                        'Authorization': `Bearer ${process.env.SUPABASE_SERVICE_KEY!}`
+                    if (start.shouldPass) {
+                        // Check the ownership record details match those expected
+                        await expect(ownershipRecord[0].started_at).toBe(start.date.toISODateString());
+                        await expect(ownershipRecord[0].ended_at).toBeNull();
+                        await expect(ownershipRecord[0].landlord_id).toBe(propertyClaimerUser.id);
                     }
-                })
-
-                // Get the ownership record
-                await expect(res).toBeOK();
-                const ownershipRecord = (await res.json())[0];
-
-                // Check the ownership record details match those expected
-                await expect(ownershipRecord.started_at).toBe(today.toISODateString());
-                await expect(ownershipRecord.ended_at).toBeNull();
-                await expect(ownershipRecord.landlord_id).toBe(propertyClaimerUser.id);
-            });
-
-            test('3.5.A.2. Near fail', async ({ page }, testInfo) => {
-                const property = properties[testInfo.workerIndex]
-                // Use open claim to isolate issues
-                await page.getByRole('button', { name: 'I still own this property' }).click();
-
-                // set test start date (1 year ago)
-                await page.locator('input[name="started_at"]').fill(today.dayAfter().toISODateString());
-                await page.getByRole('button', { name: 'Claim Property' }).click();
-
-                // Check error shown
-                await expect(page.getByRole('main')).toContainText('Start date must be in the past');
-
-                // Check ownerhip record added to database
-                const res = await page.request.get(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/property_ownership?select=*&property_id=eq.${property.id}`, {
-                    headers: {
-                        'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-                        'Authorization': `Bearer ${process.env.SUPABASE_SERVICE_KEY!}`
+                    else {
+                        // check the ownership records are an empty array
+                        await expect(ownershipRecord.length).toBeFalsy();
                     }
-                })
-
-                // Get the ownership record
-                await expect(res).toBeOK();
-                const ownershipRecords = await res.json();
-
-                // check the ownership records are an empty array
-                await expect(ownershipRecords.length).toBeFalsy();
-            });
-
-            test('3.5.A.5. Safe fail', async ({ page }, testInfo) => {
-                const property = properties[testInfo.workerIndex]
-                // Use open claim to isolate issues
-                await page.getByRole('button', { name: 'I still own this property' }).click();
-
-                // set test start date (1 year ago)
-                await page.locator('input[name="started_at"]').fill(today.yearAfter().toISODateString());
-                await page.getByRole('button', { name: 'Claim Property' }).click();
-
-                // Check error shown
-                await expect(page.getByRole('main')).toContainText('Start date must be in the past');
-
-                // Check ownerhip record added to database
-                const res = await page.request.get(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/property_ownership?select=*&property_id=eq.${property.id}`, {
-                    headers: {
-                        'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-                        'Authorization': `Bearer ${process.env.SUPABASE_SERVICE_KEY!}`
-                    }
-                })
-
-                // Get the ownership record
-                await expect(res).toBeOK();
-                const ownershipRecords = await res.json();
-
-                // check the ownership records are an empty array
-                await expect(ownershipRecords.length).toBeFalsy();
-            });
+                });
+            }
         });
 
         test.describe('3.5.B. End Date in future', () => {
-            // Use safe pass start date (2 years ago)for all tests
-            const start_date = today.yearBefore().yearBefore().toISODateString();
+            const start_date = today.yearsBefore(2)
+            const end_dates = [
+                {
+                    name: 'Safe Pass',
+                    date: today.yearBefore(),
+                    shouldPass: true
+                },
+                {
+                    name: 'Near Pass',
+                    date: today.dayBefore(),
+                    shouldPass: true
+                },
+                {
+                    name: 'Boundary',
+                    date: today,
+                    shouldPass: true
+                },
+                {
+                    name: 'Near Fail',
+                    date: today.dayAfter(),
+                    shouldPass: false
+                },
+                {
+                    name: 'Safe Fail',
+                    date: today.yearAfter(),
+                    shouldPass: false
+                }
+            ]
 
-            test('3.5.B.1. Safe Pass', async ({ page }, testInfo) => {
-                const property = properties[testInfo.workerIndex]
-                // Use safe pass start date
-                await page.locator('input[name="started_at"]').fill(start_date);
+            for (const [end_index, end] of end_dates.entries()) {
+                test(`3.5.A.${end_index + 1}. ${end.name}`, async ({ page }, testInfo) => {
+                    const property = properties[testInfo.workerIndex]
+                    // Use safe pass start date
+                    await page.locator('input[name="started_at"]').fill(start_date.toISODateString());
 
-                // Set test end date (1 year ago)
-                await page.locator('input[name="ended_at"]').fill(today.yearBefore().toISODateString());
-                await page.getByRole('button', { name: 'Claim Property' }).click();
+                    // Set test end date
+                    await page.locator('input[name="ended_at"]').fill(end.date.toISODateString());
+                    await page.getByRole('button', { name: 'Claim Property' }).click();
 
-                // Check error not shown
-                await expect(page.getByRole('main')).not.toContainText('End date must be in the past');
-
-                // wait for success message
-                await expect(page.getByRole('main')).toContainText('Property Claimed Successfully');
-                // Check ownerhip record added to database
-                const res = await page.request.get(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/property_ownership?select=*&property_id=eq.${property.id}`, {
-                    headers: {
-                        'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-                        'Authorization': `Bearer ${process.env.SUPABASE_SERVICE_KEY!}`
+                    // Wait for success/error message
+                    if (end.shouldPass) {
+                        await expect(page.getByRole('main')).toContainText('Property Claimed Successfully');
                     }
-                })
-
-                // Get the ownership record
-                await expect(res).toBeOK();
-                const ownershipRecord = (await res.json())[0];
-
-                // Check the ownership record details match those expected
-                await expect(ownershipRecord.started_at).toBe(start_date);
-                await expect(ownershipRecord.ended_at).toBe(today.yearBefore().toISODateString());
-                await expect(ownershipRecord.landlord_id).toBe(propertyClaimerUser.id);
-            });
-
-            test('3.5.B.2. Near Pass', async ({ page }, testInfo) => {
-                const property = properties[testInfo.workerIndex]
-                // Use safe pass start date
-                await page.locator('input[name="started_at"]').fill(start_date);
-
-                // Set test end date (1 year ago)
-                await page.locator('input[name="ended_at"]').fill(today.dayBefore().toISODateString());
-                await page.getByRole('button', { name: 'Claim Property' }).click();
-
-                // Check error not shown
-                await expect(page.getByRole('main')).not.toContainText('End date must be in the past');
-
-                // wait for success message
-                await expect(page.getByRole('main')).toContainText('Property Claimed Successfully');
-                // Check ownerhip record added to database
-                const res = await page.request.get(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/property_ownership?select=*&property_id=eq.${property.id}`, {
-                    headers: {
-                        'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-                        'Authorization': `Bearer ${process.env.SUPABASE_SERVICE_KEY!}`
+                    else {
+                        await expect(page.getByRole('main')).toContainText('Start date must be in the past');
                     }
-                })
 
-                // Get the ownership record
-                await expect(res).toBeOK();
-                const ownershipRecord = (await res.json())[0];
+                    // Get the ownership record if it exists
+                    const res = await page.request.get(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/property_ownership?select=*&property_id=eq.${property.id}`, {
+                        headers: {
+                            'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+                            'Authorization': `Bearer ${process.env.SUPABASE_SERVICE_KEY!}`
+                        }
+                    })
+                    await expect(res).toBeOK();
+                    const ownershipRecord = await res.json();
 
-                // Check the ownership record details match those expected
-                await expect(ownershipRecord.started_at).toBe(start_date);
-                await expect(ownershipRecord.ended_at).toBe(today.dayBefore().toISODateString());
-                await expect(ownershipRecord.landlord_id).toBe(propertyClaimerUser.id);
-            });
-
-            test('3.5.B.3. Boundary (should pass)', async ({ page }, testInfo) => {
-                const property = properties[testInfo.workerIndex]
-                // Use safe pass start date
-                await page.locator('input[name="started_at"]').fill(start_date);
-
-                // Set test end date (1 year ago)
-                await page.locator('input[name="ended_at"]').fill(today.toISODateString());
-                await page.getByRole('button', { name: 'Claim Property' }).click();
-
-                // Check error not shown
-                await expect(page.getByRole('main')).not.toContainText('End date must be in the past');
-
-                // wait for success message
-                await expect(page.getByRole('main')).toContainText('Property Claimed Successfully');
-                // Check ownerhip record added to database
-                const res = await page.request.get(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/property_ownership?select=*&property_id=eq.${property.id}`, {
-                    headers: {
-                        'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-                        'Authorization': `Bearer ${process.env.SUPABASE_SERVICE_KEY!}`
+                    if (end.shouldPass) {
+                        // Check the ownership record details match those expected
+                        await expect(ownershipRecord[0].started_at).toBe(end.date.toISODateString());
+                        await expect(ownershipRecord[0].ended_at).toBeNull();
+                        await expect(ownershipRecord[0].landlord_id).toBe(propertyClaimerUser.id);
                     }
-                })
-
-                // Get the ownership record
-                await expect(res).toBeOK();
-                const ownershipRecord = (await res.json())[0];
-
-                // Check the ownership record details match those expected
-                await expect(ownershipRecord.started_at).toBe(start_date);
-                await expect(ownershipRecord.ended_at).toBe(today.toISODateString());
-                await expect(ownershipRecord.landlord_id).toBe(propertyClaimerUser.id);
-            });
-
-            test('3.5.B.4. Near Fail', async ({ page }, testInfo) => {
-                const property = properties[testInfo.workerIndex]
-                // Use safe pass start date
-                await page.locator('input[name="started_at"]').fill(start_date);
-
-                // Set test end date (1 year ago)
-                await page.locator('input[name="ended_at"]').fill(today.dayAfter().toISODateString());
-                await page.getByRole('button', { name: 'Claim Property' }).click();
-
-                // Check error shown
-                await expect(page.getByRole('main')).toContainText('End date must be in the past');
-
-                // Check ownerhip record added to database
-                const res = await page.request.get(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/property_ownership?select=*&property_id=eq.${property.id}`, {
-                    headers: {
-                        'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-                        'Authorization': `Bearer ${process.env.SUPABASE_SERVICE_KEY!}`
+                    else {
+                        // check the ownership records are an empty array
+                        await expect(ownershipRecord.length).toBeFalsy();
                     }
-                })
-
-                // Get the ownership record
-                await expect(res).toBeOK();
-                const ownershipRecords = await res.json();
-
-                // check the ownership records are an empty array
-                await expect(ownershipRecords.length).toBeFalsy();
-            });
-
-            test('3.5.B.5. Safe Fail', async ({ page }, testInfo) => {
-                const property = properties[testInfo.workerIndex]
-                // Use safe pass start date
-                await page.locator('input[name="started_at"]').fill(start_date);
-
-                // Set test end date (1 year ago)
-                await page.locator('input[name="ended_at"]').fill(today.yearAfter().toISODateString());
-                await page.getByRole('button', { name: 'Claim Property' }).click();
-
-                // Check error shown
-                await expect(page.getByRole('main')).toContainText('End date must be in the past');
-
-                // Check ownerhip record added to database
-                const res = await page.request.get(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/property_ownership?select=*&property_id=eq.${property.id}`, {
-                    headers: {
-                        'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-                        'Authorization': `Bearer ${process.env.SUPABASE_SERVICE_KEY!}`
-                    }
-                })
-
-                // Get the ownership record
-                await expect(res).toBeOK();
-                const ownershipRecords = await res.json();
-
-                // check the ownership records are an empty array
-                await expect(ownershipRecords.length).toBeFalsy();
-            });
+                });
+            }
         });
 
         test.describe('3.5.C. End Date before Start Date', () => {
-            // Use safe pass start date (2 years ago)for all tests
-            const start_date = today.yearBefore().yearBefore();
+            const start_date = today.yearsBefore(2)
+            const end_dates = [
+                {
+                    name: 'Safe Pass',
+                    date: start_date.yearAfter(),
+                    shouldPass: true
+                },
+                {
+                    name: 'Near Pass',
+                    date: start_date.dayAfter(),
+                    shouldPass: true
+                },
+                {
+                    name: 'Boundary',
+                    date: start_date,
+                    shouldPass: false
+                },
+                {
+                    name: 'Near Fail',
+                    date: start_date.dayBefore(),
+                    shouldPass: false
+                },
+                {
+                    name: 'Safe Fail',
+                    date: start_date.yearBefore(),
+                    shouldPass: false
+                }
+            ]
 
-            test('3.5.C.1. Safe Pass', async ({ page }, testInfo) => {
-                const property = properties[testInfo.workerIndex]
-                // Use safe pass start date
-                await page.locator('input[name="started_at"]').fill(start_date.toISODateString());
+            for (const [end_index, end] of end_dates.entries()) {
+                test(`3.5.C.${end_index + 1}. ${end.name}`, async ({ page }, testInfo) => {
+                    const property = properties[testInfo.workerIndex]
+                    // Use safe pass start date
+                    await page.locator('input[name="started_at"]').fill(start_date.toISODateString());
 
-                // Set test end date (1 year ago)
-                await page.locator('input[name="ended_at"]').fill(start_date.yearAfter().toISODateString());
-                await page.getByRole('button', { name: 'Claim Property' }).click();
+                    // Set test end date
+                    await page.locator('input[name="ended_at"]').fill(end.date.toISODateString());
+                    await page.getByRole('button', { name: 'Claim Property' }).click();
 
-                // Check error not shown
-                await expect(page.getByRole('main')).not.toContainText('End date must be after start date');
+                    // Wait for success/error message
+                    if (end.shouldPass) {
+                        await expect(page.getByRole('main')).toContainText('Property Claimed Successfully');
+                    }
+                    else {
+                        await expect(page.getByRole('main')).toContainText('End date must be after start date');
+                    }
 
-                // wait for success message
-                await expect(page.getByRole('main')).toContainText('Property Claimed Successfully');
-                // Check ownerhip record added to database
-                const res = await page.request.get(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/property_ownership?select=*&property_id=eq.${property.id}`, {
-                    headers: {
-                        'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-                        'Authorization': `Bearer ${process.env.SUPABASE_SERVICE_KEY!}`
+                    // Get the ownership record if it exists
+                    const res = await page.request.get(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/property_ownership?select=*&property_id=eq.${property.id}`, {
+                        headers: {
+                            'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+                            'Authorization': `Bearer ${process.env.SUPABASE_SERVICE_KEY!}`
+                        }
+                    })
+                    await expect(res).toBeOK();
+                    const ownershipRecord = await res.json();
+
+                    if (end.shouldPass) {
+                        // Check the ownership record details match those expected
+                        await expect(ownershipRecord[0].started_at).toBe(start_date.toISODateString());
+                        await expect(ownershipRecord[0].ended_at).toBe(end.date.toISODateString());
+                        await expect(ownershipRecord[0].landlord_id).toBe(propertyClaimerUser.id);
+                    }
+                    else {
+                        // check the ownership records are an empty array
+                        await expect(ownershipRecord.length).toBeFalsy();
                     }
                 })
-
-                // Get the ownership record
-                await expect(res).toBeOK();
-                const ownershipRecord = (await res.json())[0];
-
-                // Check the ownership record details match those expected
-                await expect(ownershipRecord.started_at).toBe(start_date.toISODateString());
-                await expect(ownershipRecord.ended_at).toBe(today.yearBefore().toISODateString());
-                await expect(ownershipRecord.landlord_id).toBe(propertyClaimerUser.id);
-            });
-
-            test('3.5.C.2. Near Pass', async ({ page }, testInfo) => {
-                const property = properties[testInfo.workerIndex]
-                // Use safe pass start date
-                await page.locator('input[name="started_at"]').fill(start_date.toISODateString());
-
-                // Set test end date (1 year ago)
-                await page.locator('input[name="ended_at"]').fill(start_date.dayAfter().toISODateString());
-                await page.getByRole('button', { name: 'Claim Property' }).click();
-
-                // Check error not shown
-                await expect(page.getByRole('main')).not.toContainText('End date must be after start date');
-
-                // wait for success message
-                await expect(page.getByRole('main')).toContainText('Property Claimed Successfully');
-                // Check ownerhip record added to database
-                const res = await page.request.get(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/property_ownership?select=*&property_id=eq.${property.id}`, {
-                    headers: {
-                        'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-                        'Authorization': `Bearer ${process.env.SUPABASE_SERVICE_KEY!}`
-                    }
-                })
-
-                // Get the ownership record
-                await expect(res).toBeOK();
-                const ownershipRecord = (await res.json())[0];
-
-                // Check the ownership record details match those expected
-                await expect(ownershipRecord.started_at).toBe(start_date.toISODateString());
-                await expect(ownershipRecord.ended_at).toBe(start_date.dayAfter().toISODateString());
-                await expect(ownershipRecord.landlord_id).toBe(propertyClaimerUser.id);
-            });
-
-            test('3.5.B.3. Boundary (should fail)', async ({ page }, testInfo) => {
-                const property = properties[testInfo.workerIndex]
-                // Use safe pass start date
-                await page.locator('input[name="started_at"]').fill(start_date.toISODateString());
-
-                // Set test end date (1 year ago)
-                await page.locator('input[name="ended_at"]').fill(start_date.toISODateString());
-                await page.getByRole('button', { name: 'Claim Property' }).click();
-
-                // Check error shown
-                await expect(page.getByRole('main')).toContainText('End date must be after start date');
-
-                // Check ownerhip record added to database
-                const res = await page.request.get(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/property_ownership?select=*&property_id=eq.${property.id}`, {
-                    headers: {
-                        'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-                        'Authorization': `Bearer ${process.env.SUPABASE_SERVICE_KEY!}`
-                    }
-                })
-
-                // Get the ownership record
-                await expect(res).toBeOK();
-                const ownershipRecords = await res.json();
-
-                // check the ownership records are an empty array
-                await expect(ownershipRecords.length).toBeFalsy();
-            });
-
-            test('3.5.B.4. Near Fail', async ({ page }, testInfo) => {
-                const property = properties[testInfo.workerIndex]
-                // Use safe pass start date
-                await page.locator('input[name="started_at"]').fill(start_date.toISODateString());
-
-                // Set test end date (1 year ago)
-                await page.locator('input[name="ended_at"]').fill(start_date.dayBefore().toISODateString());
-                await page.getByRole('button', { name: 'Claim Property' }).click();
-
-                // Check error shown
-                await expect(page.getByRole('main')).toContainText('End date must be after start date');
-
-                // Check ownerhip record added to database
-                const res = await page.request.get(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/property_ownership?select=*&property_id=eq.${property.id}`, {
-                    headers: {
-                        'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-                        'Authorization': `Bearer ${process.env.SUPABASE_SERVICE_KEY!}`
-                    }
-                })
-
-                // Get the ownership record
-                await expect(res).toBeOK();
-                const ownershipRecords = await res.json();
-
-                // check the ownership records are an empty array
-                await expect(ownershipRecords.length).toBeFalsy();
-            });
-
-            test('3.5.B.5. Safe Fail', async ({ page }, testInfo) => {
-                const property = properties[testInfo.workerIndex]
-                // Use safe pass start date
-                await page.locator('input[name="started_at"]').fill(start_date.toISODateString());
-
-                // Set test end date (1 year ago)
-                await page.locator('input[name="ended_at"]').fill(start_date.yearBefore().toISODateString());
-                await page.getByRole('button', { name: 'Claim Property' }).click();
-
-                // Check error shown
-                await expect(page.getByRole('main')).toContainText('End date must be after start date');
-
-                // Check ownerhip record added to database
-                const res = await page.request.get(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/property_ownership?select=*&property_id=eq.${property.id}`, {
-                    headers: {
-                        'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-                        'Authorization': `Bearer ${process.env.SUPABASE_SERVICE_KEY!}`
-                    }
-                })
-
-                // Get the ownership record
-                await expect(res).toBeOK();
-                const ownershipRecords = await res.json();
-
-                // check the ownership records are an empty array
-                await expect(ownershipRecords.length).toBeFalsy();
-            });
+            }
         });
 
-        test.describe('3.5.D. Pass Fail Combinations', () => {
-            // For each condition ABC test pass (1) and fail (0)
-            // Represent pass/fail as binary string e.g. 101 for A:pass, B:fail, C:pass
+        test.describe('3.5.D. Pass/Fail (P/F) Combinations (Start-End-Order)', () => {
+            type date = {
+                name: string;
+                start: transformableDate;
+                end: transformableDate;
+                shouldPass: boolean;
+                expectedMessages: RegExp;
+                skip?: undefined
+            } | {
+                name: string;
+                skip: true;
+            }
+            const dates: date[] = [
+                {
+                    name: 'F-F-F',
+                    start: today.yearsAfter(2),
+                    end: today.yearAfter(),
+                    shouldPass: false,
+                    expectedMessages: /Start date must be in the past|End date must be in the past|End date must be after start date/
+                },
+                {
+                    name: 'F-F-P',
+                    start: today.yearAfter(),
+                    end: today.yearsAfter(2),
+                    shouldPass: false,
+                    expectedMessages: /Start date must be in the past|End date must be in the past/
+                },
+                {
+                    name: 'F-P-F',
+                    start: today.yearAfter(),
+                    end: today.yearBefore(),
+                    shouldPass: false,
+                    expectedMessages: /Start date must be in the past|End date must be after start date/
+                },
+                {
+                    // No combination of dates exists that will produce this result
+                    name: 'F-P-P',
+                    skip: true,
+                },
+                {
+                    // No combination of dates exists that will produce this result
+                    name: 'P-F-F',
+                    skip: true,
+                },
+                {
+                    name: 'P-F-P',
+                    start: today.yearBefore(),
+                    end: today.yearAfter(),
+                    shouldPass: false,
+                    expectedMessages: /End date must be in the past/
+                },
+                {
+                    name: 'P-P-F',
+                    start: today.yearBefore(),
+                    end: today.yearsBefore(2),
+                    shouldPass: false,
+                    expectedMessages: /End date must be after start date/
+                },
+                {
+                    name: 'P-P-P',
+                    start: today.yearsBefore(2),
+                    end: today.yearBefore(),
+                    shouldPass: true,
+                    expectedMessages: /Property Claimed Successfully/
+                }
+            ]
 
-            test('3.5.D.1. 000', async ({ page }, testInfo) => {
-                // Test all conditions fail with
-                // Start date 2 years in future
-                // End date 1 year in future
+            for (const [date_index, date] of dates.entries()) {
+                test(`3.5.D.${date_index + 1}. ${date.name}`, async ({ page }, testInfo) => {
+                    
+                    if (date.skip) {
+                        return test.skip();
+                    }
 
-                const property = properties[testInfo.workerIndex]
+                    const property = properties[testInfo.workerIndex]
+                    // Use safe pass start date
+                    await page.locator('input[name="started_at"]').fill(date.start.toISODateString());
 
-                await page.locator('input[name="started_at"]').fill(today.yearAfter().yearAfter().toISODateString());
-                await page.locator('input[name="ended_at"]').fill(today.yearAfter().toISODateString());
-                await page.getByRole('button', { name: 'Claim Property' }).click();
+                    // Set test end date
+                    await page.locator('input[name="ended_at"]').fill(date.end.toISODateString());
+                    await page.getByRole('button', { name: 'Claim Property' }).click();
 
-                // Check error shown (can be any of the 3)
-                await expect(page.getByRole('main')).toContainText(/Start date must be in the past|End date must be in the past|End date must be after start date/);
+                    // Wait for success/error message
+                    if (date.shouldPass) {
+                        await expect(page.getByRole('main')).toContainText('Property Claimed Successfully');
+                    }
+                    else {
+                        await expect(page.getByRole('main')).toContainText(date.expectedMessages);
+                    }
 
-                // Check ownerhip record not added to database
-                const res = await page.request.get(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/property_ownership?select=*&property_id=eq.${property.id}`, {
-                    headers: {
-                        'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-                        'Authorization': `Bearer ${process.env.SUPABASE_SERVICE_KEY!}`
+                    // Get the ownership record if it exists
+                    const res = await page.request.get(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/property_ownership?select=*&property_id=eq.${property.id}`, {
+                        headers: {
+                            'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+                            'Authorization': `Bearer ${process.env.SUPABASE_SERVICE_KEY!}`
+                        }
+                    })
+                    await expect(res).toBeOK();
+                    const ownershipRecord = await res.json();
+
+                    if (date.shouldPass) {
+                        // Check the ownership record details match those expected
+                        await expect(ownershipRecord[0].started_at).toBe(date.start.toISODateString());
+                        await expect(ownershipRecord[0].ended_at).toBe(date.end.toISODateString());
+                        await expect(ownershipRecord[0].landlord_id).toBe(propertyClaimerUser.id);
+                    }
+                    else {
+                        // check the ownership records are an empty array
+                        await expect(ownershipRecord.length).toBeFalsy();
                     }
                 })
-                await expect(res).toBeOK();
-                const ownershipRecords = await res.json();
-                await expect(ownershipRecords.length).toBeFalsy();
-            });
-
-            test('3.5.D.2. 001', async ({ page }, testInfo) => {
-                // Test conditions A & B fail with
-                // Start date 1 years in future
-                // End date 2 year in future
-
-                const property = properties[testInfo.workerIndex]
-
-                await page.locator('input[name="started_at"]').fill(today.yearAfter().toISODateString());
-                await page.locator('input[name="ended_at"]').fill(today.yearAfter().yearAfter().toISODateString());
-                await page.getByRole('button', { name: 'Claim Property' }).click();
-
-                // Check error shown (can be any of the 2 that fail)
-                await expect(page.getByRole('main')).toContainText(/Start date must be in the past|End date must be in the past/);
-
-                // Check ownerhip record not added to database
-                const res = await page.request.get(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/property_ownership?select=*&property_id=eq.${property.id}`, {
-                    headers: {
-                        'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-                        'Authorization': `Bearer ${process.env.SUPABASE_SERVICE_KEY!}`
-                    }
-                })
-                await expect(res).toBeOK();
-                const ownershipRecords = await res.json();
-                await expect(ownershipRecords.length).toBeFalsy();
-            });
-
-            test('3.5.D.3. 010', async ({ page }, testInfo) => {
-                // Test conditions A & C fail with
-                // Start date 1 years in future
-                // End date 1 year in past
-
-                const property = properties[testInfo.workerIndex]
-
-                await page.locator('input[name="started_at"]').fill(today.yearAfter().toISODateString());
-                await page.locator('input[name="ended_at"]').fill(today.yearBefore().toISODateString());
-                await page.getByRole('button', { name: 'Claim Property' }).click();
-
-                // Check error shown (can be any of the 2 that fail)
-                await expect(page.getByRole('main')).toContainText(/Start date must be in the past|End date must be after start date/);
-
-                // Check ownerhip record not added to database
-                const res = await page.request.get(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/property_ownership?select=*&property_id=eq.${property.id}`, {
-                    headers: {
-                        'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-                        'Authorization': `Bearer ${process.env.SUPABASE_SERVICE_KEY!}`
-                    }
-                })
-                await expect(res).toBeOK();
-                const ownershipRecords = await res.json();
-                await expect(ownershipRecords.length).toBeFalsy();
-            });
-            test('3.5.D.4. 011', async ({ page }, testInfo) => {
-                testInfo.skip(true, 'Not possible for start date to be in the future, end date to be in the past, and end date to be after start date');
-            });
-            test('3.5.D.5. 100', async ({ page }, testInfo) => {
-                testInfo.skip(true, 'Not possible for start date to be in the past, end date to be in the future, and end date to be before start date');
-            });
-            test('3.5.D.6. 101', async ({ page }, testInfo) => {
-                // Test condition B fails with
-                // Start date 1 years in past
-                // End date 1 year in future
-
-                const property = properties[testInfo.workerIndex]
-
-                await page.locator('input[name="started_at"]').fill(today.yearBefore().toISODateString());
-                await page.locator('input[name="ended_at"]').fill(today.yearAfter().toISODateString());
-                await page.getByRole('button', { name: 'Claim Property' }).click();
-
-                // Check error shown
-                await expect(page.getByRole('main')).toContainText(/End date must be in the past/);
-
-                // Check ownerhip record not added to database
-                const res = await page.request.get(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/property_ownership?select=*&property_id=eq.${property.id}`, {
-                    headers: {
-                        'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-                        'Authorization': `Bearer ${process.env.SUPABASE_SERVICE_KEY!}`
-                    }
-                })
-                await expect(res).toBeOK();
-                const ownershipRecords = await res.json();
-                await expect(ownershipRecords.length).toBeFalsy();
-            });
-            test('3.5.D.7. 110', async ({ page }, testInfo) => {
-                // Test condition  C fails with
-                // Start date 1 years in past
-                // End date 2 year in past
-
-                const property = properties[testInfo.workerIndex]
-
-                await page.locator('input[name="started_at"]').fill(today.yearBefore().toISODateString());
-                await page.locator('input[name="ended_at"]').fill(today.yearBefore().yearBefore().toISODateString());
-                await page.getByRole('button', { name: 'Claim Property' }).click();
-
-                // Check error shown
-                await expect(page.getByRole('main')).toContainText(/End date must be after start date/);
-
-                // Check ownerhip record not added to database
-                const res = await page.request.get(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/property_ownership?select=*&property_id=eq.${property.id}`, {
-                    headers: {
-                        'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-                        'Authorization': `Bearer ${process.env.SUPABASE_SERVICE_KEY!}`
-                    }
-                })
-                await expect(res).toBeOK();
-                const ownershipRecords = await res.json();
-                await expect(ownershipRecords.length).toBeFalsy();
-            });
-            test('3.5.D.8. 111', async ({ page }, testInfo) => {
-                // Test all conditions pass fail with
-                // Start date 2 years in past
-                // End date 1 year in past
-
-                const property = properties[testInfo.workerIndex]
-
-                await page.locator('input[name="started_at"]').fill(today.yearBefore().yearBefore().toISODateString());
-                await page.locator('input[name="ended_at"]').fill(today.yearBefore().toISODateString());
-                await page.getByRole('button', { name: 'Claim Property' }).click();
-
-                // Check error not shown
-                await expect(page.getByRole('main')).not.toContainText(/Start date must be in the past|End date must be in the past|End date must be after start date/);
-
-                // wait for success message
-                await expect(page.getByRole('main')).toContainText('Property Claimed Successfully');
-                // Check ownerhip record added to database
-                const res = await page.request.get(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/property_ownership?select=*&property_id=eq.${property.id}`, {
-                    headers: {
-                        'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-                        'Authorization': `Bearer ${process.env.SUPABASE_SERVICE_KEY!}`
-                    }
-                })
-
-                // Get the ownership record
-                await expect(res).toBeOK();
-                const ownershipRecord = (await res.json())[0];
-
-                // Check the ownership record details match those expected
-                await expect(ownershipRecord.started_at).toBe(today.yearBefore().yearBefore().toISODateString());
-                await expect(ownershipRecord.ended_at).toBe(today.yearBefore().toISODateString());
-                await expect(ownershipRecord.landlord_id).toBe(propertyClaimerUser.id);
-            });
+            }
         });
     });
 });
