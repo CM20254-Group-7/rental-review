@@ -1,11 +1,20 @@
 import { test, expect } from '@playwright/test';
 import { users } from './helpers';
-import exp from 'constants';
 
 const notALandlordUser = users[2] // user not registered as a landlord - test that cannot access the claim page
 const noPropertyLandlordUser = users[1] // user registered as a landlord, with no claimed properties
 const propertyClaimerUser = users[3] // user registered as a landlord, will attempt to claim properties
 const existingOwnerUser = users[4] // user registered as a landlord, will attempt to claim properties
+
+
+//       -- NOTE --
+// 
+// The 'Error Claiming Property' message does not count as the function rejecting the input
+// It shows up when the function accepts the input, but the database rejects it
+// The function should test each case itself and not rely on database implementation
+// 
+
+
 
 let properties: {
     [key: number]: {
@@ -1020,7 +1029,7 @@ test.describe('4. Claim Collision', () => {
                         if (claim_end.shouldPass) {
                             await expect(page.getByRole('main')).toContainText('Property Claimed Successfully');
                         } else {
-                            await expect(page.getByRole('main')).toContainText(/Property Claim Failed|The new claim overlaps with an existing claim|Error Claiming Property/);
+                            await expect(page.getByRole('main')).toContainText(/Property Claim Failed|The new claim overlaps with an existing claim/);
                         }
 
                         // try and fetch the claim from the database
@@ -1235,7 +1244,7 @@ test.describe('4. Claim Collision', () => {
                                 new_claim_end: today.yearsBefore(2),
                                 shouldPass: false,
                                 shouldCloseExisting: false,
-                                expectedMessages: /These dates overlap one of your own claims\. Please edit your existing claim if the dates are incorrect|new claim overlaps with an existing claim/
+                                expectedMessages: /These dates overlap one of your own claims\. Please edit your existing claim if the dates are incorrect|new claim overlaps with an existing claim|User is already the landlord of this property/
                             },
                             {
                                 // Existing:                        |--------------------->
@@ -1245,7 +1254,7 @@ test.describe('4. Claim Collision', () => {
                                 new_claim_end: today.yearsBefore(1),
                                 shouldPass: false,
                                 shouldCloseExisting: false,
-                                expectedMessages: /These dates overlap one of your own claims\. Please edit your existing claim if the dates are incorrect|new claim overlaps with an existing claim/
+                                expectedMessages: /These dates overlap one of your own claims\. Please edit your existing claim if the dates are incorrect|new claim overlaps with an existing claim|User is already the landlord of this property/
                             },
                             {
                                 // Existing:                        |--------------------->
@@ -1255,7 +1264,7 @@ test.describe('4. Claim Collision', () => {
                                 new_claim_end: null,
                                 shouldPass: false,
                                 shouldCloseExisting: false,
-                                expectedMessages: /These dates overlap one of your own claims\. Please edit your existing claim if the dates are incorrect|new claim overlaps with an existing claim/
+                                expectedMessages: /These dates overlap one of your own claims\. Please edit your existing claim if the dates are incorrect|new claim overlaps with an existing claim|User is already the landlord of this property/
                             }
                         ]
                     },
@@ -1271,7 +1280,7 @@ test.describe('4. Claim Collision', () => {
                                 new_claim_end: today.yearsBefore(1),
                                 shouldPass: false,
                                 shouldCloseExisting: false,
-                                expectedMessages: /These dates overlap one of your own claims\. Please edit your existing claim if the dates are incorrect|new claim overlaps with an existing claim/
+                                expectedMessages: /These dates overlap one of your own claims\. Please edit your existing claim if the dates are incorrect|new claim overlaps with an existing claim|User is already the landlord of this property/
                             },
                             {
                                 // Existing:  |--------------------->
@@ -1281,7 +1290,7 @@ test.describe('4. Claim Collision', () => {
                                 new_claim_end: null,
                                 shouldPass: false,
                                 shouldCloseExisting: false,
-                                expectedMessages: /You have already told us you own this property|new claim overlaps with an existing claim/
+                                expectedMessages: /You have already told us you own this property|new claim overlaps with an existing claim|User is already the landlord of this property/
                             }
                         ]
                     },
@@ -1297,7 +1306,7 @@ test.describe('4. Claim Collision', () => {
                                 new_claim_end: today.monthsBefore(6),
                                 shouldPass: false,
                                 shouldCloseExisting: false,
-                                expectedMessages: /These dates overlap one of your own claims\. Please edit your existing claim if the dates are incorrect|new claim overlaps with an existing claim/
+                                expectedMessages: /These dates overlap one of your own claims\. Please edit your existing claim if the dates are incorrect|new claim overlaps with an existing claim|User is already the landlord of this property/
                             },
                             {
                                 // Existing:  |--------------------->
@@ -1307,7 +1316,7 @@ test.describe('4. Claim Collision', () => {
                                 new_claim_end: null,
                                 shouldPass: false,
                                 shouldCloseExisting: false,
-                                expectedMessages: /You have already told us you own this property\. Please edit your existing claim if the dates are incorrect|new claim overlaps with an existing claim/
+                                expectedMessages: /You have already told us you own this property\. Please edit your existing claim if the dates are incorrect|new claim overlaps with an existing claim|User is already the landlord of this property/
                             }
                         ]
                     }
@@ -1359,7 +1368,7 @@ test.describe('4. Claim Collision', () => {
                             if (end.shouldPass) {
                                 await expect(page.getByRole('main')).toContainText('Property Claimed Successfully');
                             } else {
-                                await expect(page.getByRole('main')).toContainText(/Property Claim Failed|The new claim overlaps with an existing claim|Error Claiming Property/);
+                                await expect(page.getByRole('main')).toContainText(/Property Claim Failed|The new claim overlaps with an existing claim/);
                             }
 
                             // try and fetch the claim from the database
