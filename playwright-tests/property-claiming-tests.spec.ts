@@ -805,7 +805,7 @@ test.describe('4. Claim Collision', () => {
 
         const new_claim_dates: new_claim_test[] = [
             {
-                name: 'New starts before existing',
+                name: 'New starts before existing (safe)',
                 date: existing_claim_start.yearsBefore(2),
                 test_with_ends: [
                     {
@@ -817,8 +817,21 @@ test.describe('4. Claim Collision', () => {
                         // Owner:          New                   Old
                         //            |----------|          |----------|
                         // Date:     -4         -3         -2         -1          0
-                        name: 'New ends before existing starts',
+                        name: 'New ends before existing starts (safe)',
                         date: existing_claim_start.yearBefore(),
+                        shouldPass: true
+                    },
+                    {
+                        // Existing:                        |----------|
+                        // New:       |--------------------|
+                        // Date:     -4         -3         -2         -1          0
+                        // 
+                        // Should become
+                        // Owner:          New                   Old
+                        //            |--------------------||----------|
+                        // Date:     -4         -3         -2         -1          0
+                        name: 'New ends before existing starts (close)',
+                        date: existing_claim_start.dayBefore(),
                         shouldPass: true
                     },
                     {
@@ -838,7 +851,15 @@ test.describe('4. Claim Collision', () => {
                         // Existing:                        |----------|
                         // New:       |--------------------------|
                         // Date:     -4         -3         -2         -1          0
-                        name: 'New ends during existing',
+                        name: 'New ends during existing (close - start',
+                        date: existing_claim_start.dayAfter(),
+                        shouldPass: false
+                    },
+                    {
+                        // Existing:                        |----------|
+                        // New:       |--------------------------|
+                        // Date:     -4         -3         -2         -1          0
+                        name: 'New ends during existing (safe)',
                         date: existing_claim_start.monthsAfter(6),
                         shouldPass: false
                     },
@@ -862,6 +883,64 @@ test.describe('4. Claim Collision', () => {
                         // Existing:                        |----------|
                         // New:       |------------------------------------------->
                         // Date:     -4         -3         -2         -1          0
+                        name: 'New is open',
+                        date: null,
+                        shouldPass: false
+                    }
+                ]
+            },{
+                name: 'New starts before existing (close)',
+                date: existing_claim_start.dayBefore(),
+                test_with_ends: [
+                    {
+                        // Existing:   |----------|
+                        // New:       ||
+                        // Date:      -2         -1          0
+                        // 
+                        // Should become
+                        // Owner:     New   Old
+                        //            ||----------|
+                        // Date:      -2         -1          0
+                        name: 'New ends on same day as existing starts',
+                        date: existing_claim_start,
+                        shouldPass: true
+                    },
+                    {
+                        // Existing:   |----------|
+                        // New:       |-|
+                        // Date:      -2         -1          0
+                        name: 'New ends during existing (close)',
+                        date: existing_claim_start.dayAfter(),
+                        shouldPass: false
+                    },
+                    {
+                        // Existing:   |----------|
+                        // New:       |------|
+                        // Date:      -2         -1          0
+                        name: 'New ends during existing (safe)',
+                        date: existing_claim_start.monthsAfter(6),
+                        shouldPass: false
+                    },
+                    {
+                        // Existing:   |----------|
+                        // New:       |-----------|
+                        // Date:      -2         -1          0
+                        name: 'New ends on same day as existing ends',
+                        date: existing_claim_end,
+                        shouldPass: false
+                    },
+                    {
+                        // Existing:   |----------|
+                        // New:       |----------------|
+                        // Date:      -2         -1          0
+                        name: 'New ends after existing ends',
+                        date: existing_claim_end.monthsAfter(6),
+                        shouldPass: false
+                    },
+                    {
+                        // Existing:   |----------|
+                        // New:       |---------------------->
+                        // Date:      -2         -1          0
                         name: 'New is open',
                         date: null,
                         shouldPass: false
@@ -906,7 +985,44 @@ test.describe('4. Claim Collision', () => {
                 ]
             },
             {
-                name: 'New starts during existing',
+                name: 'New starts during existing (close - start)',
+                date: existing_claim_start.dayAfter(),
+                test_with_ends: [
+                    {
+                        // Existing:  |----------|
+                        // New:        |----|
+                        // Date:     -2         -1          0
+                        name: 'New ends before existing ends',
+                        date: existing_claim_end.monthsBefore(3),
+                        shouldPass: false
+                    }, {
+                        // Existing:  |----------|
+                        // New:        |---------|
+                        // Date:     -2         -1          0
+                        name: 'New ends on same day as existing ends',
+                        date: existing_claim_end,
+                        shouldPass: false
+                    },
+                    {
+                        // Existing:  |----------|
+                        // New:        |--------------|
+                        // Date:     -2         -1          0
+                        name: 'New ends after existing ends',
+                        date: existing_claim_end.monthsAfter(6),
+                        shouldPass: false
+                    },
+                    {
+                        // Existing:  |----------|
+                        // New:        |-------------------->
+                        // Date:     -2         -1          0
+                        name: 'New is open',
+                        date: null,
+                        shouldPass: false
+                    }
+                ]
+            },
+            {
+                name: 'New starts during existing (safe)',
                 date: existing_claim_start.monthsAfter(3),
                 test_with_ends: [
                     {
@@ -917,6 +1033,36 @@ test.describe('4. Claim Collision', () => {
                         date: existing_claim_end.monthsBefore(3),
                         shouldPass: false
                     }, {
+                        // Existing:  |----------|
+                        // New:          |-------|
+                        // Date:     -2         -1          0
+                        name: 'New ends on same day as existing ends',
+                        date: existing_claim_end,
+                        shouldPass: false
+                    },
+                    {
+                        // Existing:  |----------|
+                        // New:          |------------|
+                        // Date:     -2         -1          0
+                        name: 'New ends after existing ends',
+                        date: existing_claim_end.monthsAfter(6),
+                        shouldPass: false
+                    },
+                    {
+                        // Existing:  |----------|
+                        // New:          |------------------>
+                        // Date:     -2         -1          0
+                        name: 'New is open',
+                        date: null,
+                        shouldPass: false
+                    }
+                ]
+            },
+            {
+                name: 'New starts during existing (close - end)',
+                date: existing_claim_end.dayBefore(),
+                test_with_ends: [
+                    {
                         // Existing:  |----------|
                         // New:          |-------|
                         // Date:     -2         -1          0
@@ -975,7 +1121,38 @@ test.describe('4. Claim Collision', () => {
                 ]
             },
             {
-                name: 'New starts after existing ends',
+                name: 'New starts after existing ends (close)',
+                date: existing_claim_end.dayAfter(),
+                test_with_ends: [
+                    {
+                        // Existing:  |----------|
+                        // New:                   |----|
+                        // Date:     -2         -1          0
+                        // 
+                        // Should become
+                        // Owner:         Old        New
+                        //            |----------||----|
+                        // Date:     -2         -1          0
+                        name: 'New is closed',
+                        date: existing_claim_end.monthsAfter(6),
+                        shouldPass: true
+                    }, {
+                        // Existing:  |----------|
+                        // New:                   |--------->
+                        // Date:     -2         -1          0
+                        // 
+                        // Should become
+                        // Owner:         Old        New
+                        //            |----------||--------->
+                        // Date:     -2         -1          0
+                        name: 'New is open',
+                        date: null,
+                        shouldPass: true
+                    },
+                ]
+            },
+            {
+                name: 'New starts after existing ends (safe)',
                 date: existing_claim_end.monthsAfter(3),
                 test_with_ends: [
                     {
