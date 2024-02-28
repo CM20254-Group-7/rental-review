@@ -9,7 +9,7 @@
 -- |                     |                  | property-claiming-tests | Must be registered as a landlord                           |
 -- | user.3@example.com  | User.3.Password  |   landlord-page-tests   | Must not be registered as a landlord                       |
 -- |                     |                  | property-claiming-tests | Must not be registered as a landlord                       |
--- | user.4@example.com  | User.4.Password  |                         |                                                            |
+-- | user.4@example.com  | User.4.Password  | property-claiming-tests | Must be registered as a landlord, and will claim properties|
 -- | user.5@example.com  | User.5.Password  |                         |                                                            |
 -- | user.6@example.com  | User.6.Password  |                         |                                                            |
 -- | user.7@example.com  | User.7.Password  |                         |                                                            |
@@ -50,9 +50,10 @@ INSERT INTO "public"."properties" (                    "id"              ,      
 -- |   User.1   |                     |                                |
 -- |   User.2   |                     |                                |
 
-INSERT INTO "public"."landlord_private_profiles" (               "user_id"              , "phone_number" , "postcode" ,     "country"    , "county" , "city" , "street" ,    "house"    , "first_name" , "last_name" ) VALUES
-                                                  ('b1b284f9-2c24-4f2e-bd4e-9c7ab7fe88e3', '12345678'     , 'TES T12'  , 'United Kingdom',  NULL    , NULL   ,  NULL    , '1 Test House', 'Joe'        , 'Doe'     ),
-                                                  ('44db487d-ace4-43c8-bd7c-38b32b0bc711', '87654321'     , 'TES T34'  , 'United Kingdom',  NULL    , NULL   ,  NULL    , '2 Test House', 'Matthew'    , 'Nash'    );
+INSERT INTO "public"."landlord_private_profiles" (               "user_id"               , "phone_number" , "postcode" ,     "country"   , "county" , "city" , "street" ,    "house"    , "first_name" , "last_name" ) VALUES
+                                                  ('b1b284f9-2c24-4f2e-bd4e-9c7ab7fe88e3', '12345678'     , 'TES T12'  , 'United Kingdom',  NULL    , NULL   ,  NULL    , '1 Test House', 'Joe'        , 'Doe'       ),
+                                                  ('44db487d-ace4-43c8-bd7c-38b32b0bc711', '87654321'     , 'TES T34'  , 'United Kingdom',  NULL    , NULL   ,  NULL    , '2 Test House', 'Matthew'    , 'Nash'      ),
+                                                  ('482afef6-1b2f-4ac2-a449-9bc318f55936', '1029384756'   , 'TES T56'  , 'United Kingdom',  NULL    , NULL   ,  NULL    , '3 Test House', 'John'       , 'Smith'     );
 
 
 -- Sample Landlord Public Profiles
@@ -64,7 +65,8 @@ INSERT INTO "public"."landlord_private_profiles" (               "user_id"      
 
 INSERT INTO "public"."landlord_public_profiles" (               "user_id"               , "website" ,       "bio"      , "verified" , "profile_image_id" , "type" ,    "display_email"     , "display_name" ) VALUES
                                                  ('b1b284f9-2c24-4f2e-bd4e-9c7ab7fe88e3',  NULL     , 'Cool landlord'  ,    TRUE    ,  NULL              ,    1   , 'display1@example.com' , 'Test Name 1'  ),
-                                                 ('44db487d-ace4-43c8-bd7c-38b32b0bc711',  NULL     , 'Cooler landlord',    TRUE    ,  NULL              ,    1   , 'display2@example.com' , 'Test Name 2'  );
+                                                 ('44db487d-ace4-43c8-bd7c-38b32b0bc711',  NULL     , 'Cooler landlord',    TRUE    ,  NULL              ,    1   , 'display2@example.com' , 'Test Name 2'  ),
+                                                 ('482afef6-1b2f-4ac2-a449-9bc318f55936',  NULL     , 'Evil landlord'  ,    TRUE    ,  NULL              ,    1   , 'display3@example.com' , 'Test Name 3'  );
 
 
 -- Sample Property Ownership
