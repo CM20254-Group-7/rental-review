@@ -45,7 +45,7 @@ const ClaimPropertySchema = z
     })
     // If ended_at is not null, it must be after started_at
     .superRefine(({ started_at, ended_at }, ctx) => {
-        if (ended_at && started_at > ended_at) {
+        if (ended_at && started_at >= ended_at) {
             ctx.addIssue({
                 code: z.ZodIssueCode.custom,
                 message: 'End date must be after start date',

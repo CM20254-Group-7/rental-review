@@ -1013,7 +1013,5 @@ test.describe('3. Claim Property Form', () => {
                 await expect(ownershipRecord.landlord_id).toBe(thirdUser.id);
             });
         });
-
-
     });
 });
