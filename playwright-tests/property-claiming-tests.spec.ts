@@ -18,20 +18,52 @@ class transformableDate extends Date {
         return this.toISOString().split('T')[0];
     }
 
+    yearsBefore(years: number) {
+        return new transformableDate(this.getFullYear() - years, this.getMonth(), this.getDate());
+    }
+
     yearBefore() {
-        return new transformableDate(this.getFullYear() - 1, this.getMonth(), this.getDate());
+        return this.yearsBefore(1);
+    }
+
+    yearsAfter(years: number) {
+        return new transformableDate(this.getFullYear() + years, this.getMonth(), this.getDate());
     }
 
     yearAfter() {
-        return new transformableDate(this.getFullYear() + 1, this.getMonth(), this.getDate());
+        return this.yearsAfter(1);
+    }
+
+    monthsBefore(months: number) {
+        return new transformableDate(this.getFullYear(), this.getMonth() - months, this.getDate());
+    }
+
+    monthBefore() {
+        return this.monthsBefore(1);
+    }
+
+    monthsAfter(months: number) {
+        return new transformableDate(this.getFullYear(), this.getMonth() + months, this.getDate());
+    }
+
+    monthAfter() {
+        return this.monthsAfter(1);
+    }
+
+    daysBefore(days: number) {
+        return new transformableDate(this.getFullYear(), this.getMonth(), this.getDate() - days);
     }
 
     dayBefore() {
-        return new transformableDate(this.getFullYear(), this.getMonth(), this.getDate() - 1);
+        return this.daysBefore(1);
+    }
+
+    daysAfter(days: number) {
+        return new transformableDate(this.getFullYear(), this.getMonth(), this.getDate() + days);
     }
 
     dayAfter() {
-        return new transformableDate(this.getFullYear(), this.getMonth(), this.getDate() + 1);
+        return this.daysAfter(1);
     }
 }
 
