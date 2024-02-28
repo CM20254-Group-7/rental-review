@@ -166,7 +166,7 @@ export const claimProperty = async (
                 };
 
             // - new ownership starts while the existing one is ongoing
-            if (started_at > existing_start && started_at < existing_end)
+            if (started_at >= existing_start && started_at < existing_end)
                 return {
                     message: 'The new claim overlaps with an existing claim'
                 };
