@@ -28,12 +28,36 @@ const userLabels = [
   'User 10',
 ];
 
+const userLandlordProfiles = [
+  {
+    displayName: 'Test Name 1',
+    displayEmail: 'display1@example.com',
+    userBio: 'Cool landlord',
+    properties: ['1 Test Road', '2 Test Road'],
+  },
+  {
+    displayName: 'Test Name 2',
+    displayEmail: 'display2@example.com',
+    userBio: 'Cooler landlord',
+    properties: [],
+  },
+  undefined,
+  undefined,
+  undefined,
+  undefined,
+  undefined,
+  undefined,
+  undefined,
+  undefined,
+];
+
 export const users = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) => ({
   file: `playwright/.auth/user${i}.json`,
   email: `user.${i}@example.com`,
   password: `User.${i}.Password`,
   id: userIds[i - 1],
   label: userLabels[i - 1],
+  landlordProfile: userLandlordProfiles[i - 1],
 }));
 
 const propertyIds = [
