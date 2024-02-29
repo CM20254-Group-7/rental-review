@@ -52,13 +52,15 @@ test.describe('Property details page test', () => {
     await expect(page.getByRole('main')).toContainText(secondProperty.address);
   });
 
-  // TODO: Add test for checking average property rating
   test('Average property rating test', async ({ page }) => {
+    // TODO: Add test for checking average property rating
+    test.fixme();
     await page.goto('http://localhost:3000/properties/6a83d02b-9da1-4a4a-9719-05e8a8c9228d');
   });
 
-  // TODO: Add test for checking average landlord rating
   test('Average landlord rating test', async ({ page }) => {
+    // TODO: Add test for checking average property rating
+    test.fixme();
     await page.goto('http://localhost:3000/properties/6a83d02b-9da1-4a4a-9719-05e8a8c9228d');
   });
 });
