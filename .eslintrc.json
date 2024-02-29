@@ -85,6 +85,17 @@
         "import/prefer-default-export": "off"
       }
     },
+    // allow restricted syntax in tests
+    {
+      "files": [
+        "**/*.test.ts",
+        "**/*.spec.ts",
+        "playwright-tests/**"
+      ],
+      "rules": {
+        "no-restricted-syntax": "off"
+      }
+    },
     // Temp: Disable camelcase for review creation page as it uses a lot of snake_case for form fields
     {
       "files": [
