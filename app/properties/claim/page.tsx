@@ -1,4 +1,4 @@
-import { createClient } from '@/utils/supabase/server';
+import createClient from '@/utils/supabase/server';
 import { createClient as createServiceClient } from '@supabase/supabase-js'; // TESTING ONLY - REMOVE ME
 import { Database } from '@/supabase.types';
 import { cookies } from 'next/headers';

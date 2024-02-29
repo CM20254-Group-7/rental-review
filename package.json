@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "@heroicons/react": "^2.1.1",
+    "@microsoft/eslint-formatter-sarif": "^2.1.7",
     "@supabase/ssr": "latest",
     "@supabase/supabase-js": "latest",
     "autoprefixer": "10.4.15",

@@ -1,4 +1,4 @@
-import { createClient } from '@/utils/supabase/server';
+import createClient from '@/utils/supabase/server';
 import { cookies } from 'next/headers';
 import StarRatingLayout from '@/components/StarRating';
 import React, { cache } from 'react';

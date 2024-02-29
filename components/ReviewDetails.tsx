@@ -1,6 +1,6 @@
 'use Server';
 
-import { createClient } from '@/utils/supabase/server';
+import createClient from '@/utils/supabase/server';
 import { cookies } from 'next/headers';
 import Link from 'next/link';
 import React from 'react';

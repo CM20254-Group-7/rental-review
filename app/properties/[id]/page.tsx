@@ -1,6 +1,6 @@
 import Image from 'next/image';
 
-import { createClient } from '@/utils/supabase/server';
+import createClient from '@/utils/supabase/server';
 import { cookies } from 'next/headers';
 import { notFound } from 'next/navigation';
 import { NextPage } from 'next';

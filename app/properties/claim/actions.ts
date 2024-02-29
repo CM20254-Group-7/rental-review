@@ -9,7 +9,7 @@
 'use server';
 
 import { Database } from '@/supabase.types';
-import { createClient as createServerClient } from '@/utils/supabase/server';
+import createServerClient from '@/utils/supabase/server';
 import { createClient as createServiceClient } from '@supabase/supabase-js';
 import { cookies } from 'next/headers';
 import { z } from 'zod';

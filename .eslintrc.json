@@ -1,14 +1,29 @@
 {
+  "ignorePatterns": [
+    "node_modules/*",
+    ".next/*",
+    "tests-examples/*",
+    "supabase.types.ts"
+  ],
   "extends": [
     "airbnb",
     "next/core-web-vitals"
   ],
   "rules": {
     //   "prettier/prettier": "error",
-      "no-unused-vars": "warn",
-      "jsx-quotes": ["error", "prefer-single"],
-      "no-console": "warn",
-      "max-len": "off",
+    "no-unused-vars": "warn",
+    "jsx-quotes": [
+      "error",
+      "prefer-single"
+    ],
+    "no-console": "warn",
+    "max-len": "off",
+    "camelcase": [
+      "warn",
+      {
+        "ignoreDestructuring": true
+      }
+    ],
     //   "func-names": "off",
     //   "no-process-exit": "off",
     //   "object-shorthand": "off",
@@ -38,6 +53,17 @@
         "jsx": "never",
         "ts": "never",
         "tsx": "never"
+      }
+    ],
+    "import/no-extraneous-dependencies": [
+      "error",
+      {
+        "devDependencies": [
+          "playwright-tests/**",
+          "**/*.test.ts",
+          "**/*.spec.ts",
+          "playwright.config.ts"
+        ]
       }
     ]
   }

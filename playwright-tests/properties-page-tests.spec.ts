@@ -1,9 +1,8 @@
 import { test, expect } from '@playwright/test';
 import { properties } from './helpers';
 
-
 // This test uses 2 properties
-const firstProperty = properties[0];  // 1 Test Road
+const firstProperty = properties[0]; // 1 Test Road
 const secondProperty = properties[1]; // 2 Test Road
 
 test('Existing property test: Address', async ({ page }) => {

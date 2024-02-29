@@ -1,4 +1,4 @@
-import { createClient } from '@/utils/supabase/server';
+import createClient from '@/utils/supabase/server';
 import Link from 'next/link';
 import { cookies } from 'next/headers';
 import UserManagementButton from './UserManagementButton';

@@ -4,7 +4,7 @@
 'use server';
 
 import { Database } from '@/supabase.types';
-import { createClient as createServerClient } from '@/utils/supabase/server';
+import createServerClient from '@/utils/supabase/server';
 import { createClient } from '@supabase/supabase-js';
 import { cookies } from 'next/headers';
 import { z } from 'zod';
@@ -30,35 +30,35 @@ const newReviewSchema = z.object({
 });
 
 export type State = {
-    errors?: {
-        property_id?: string[]
-        property_address?: string[],
-        review_date?: string[],
-        review_body?: string[],
-        property_rating?: string[],
-        landlord_rating?: string[]
-    };
-    message?: string | null;
+  errors?: {
+    property_id?: string[]
+    property_address?: string[],
+    review_date?: string[],
+    review_body?: string[],
+    property_rating?: string[],
+    landlord_rating?: string[]
+  };
+  message?: string | null;
 };
 
 // given either the id of an existing property or the address of a new one, creates a review written by the currently logged in user
 export const createReview = async (
-  property : {
-        id: string | undefined,
-        address: string | undefined,
-        beds: number | undefined,
-        baths: number | undefined,
-        country: string | undefined,
-        county: string | undefined,
-        description: string | undefined,
-        house: string | undefined,
-        property_type: string | undefined,
-        postcode: string | undefined,
-        street: string | undefined
-    },
+  property: {
+    id: string | undefined,
+    address: string | undefined,
+    beds: number | undefined,
+    baths: number | undefined,
+    country: string | undefined,
+    county: string | undefined,
+    description: string | undefined,
+    house: string | undefined,
+    property_type: string | undefined,
+    postcode: string | undefined,
+    street: string | undefined
+  },
   prevState: State,
   formData: FormData,
-) : Promise<State> => {
+): Promise<State> => {
   // Validate input
   const validatedFields = newReviewSchema.safeParse({
     property_id: property.id,
@@ -105,8 +105,8 @@ export const createReview = async (
 
   // create service client
   const serviceSupabase = createClient<Database>(
-        process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        process.env.SUPABASE_SERVICE_KEY!,
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_KEY!,
   );
 
   if (!property_id) {
