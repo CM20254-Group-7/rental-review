@@ -1,6 +1,3 @@
-/* eslint-disable prefer-const */
-/* eslint-disable camelcase */
-
 'use server';
 
 import { Database } from '@/supabase.types';
@@ -85,8 +82,8 @@ export const createReview = async (
     };
   }
 
-  let {
-    property_id,
+  let { property_id } = validatedFields.data;
+  const {
     property_address,
     property_baths,
     property_beds,

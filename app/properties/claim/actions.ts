@@ -1,11 +1,3 @@
-/* eslint-disable no-continue */
-/* eslint-disable no-shadow */
-/* eslint-disable no-else-return */
-/* eslint-disable no-restricted-syntax */
-/* eslint-disable max-len */
-/* eslint-disable no-use-before-define */
-/* eslint-disable camelcase */
-
 'use server';
 
 import { Database } from '@/supabase.types';

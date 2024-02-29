@@ -3,7 +3,11 @@
     "node_modules/*",
     ".next/*",
     "tests-examples/*",
-    "supabase.types.ts"
+    "supabase.types.ts",
+
+    // Temp: disable checking property claiming as it is being edited in another branch
+    "app/properties/claim/actions.ts",
+    "app/properties/claim/form.tsx"
   ],
   "extends": [
     "airbnb",
@@ -21,7 +25,8 @@
     "camelcase": [
       "warn",
       {
-        "ignoreDestructuring": true
+        "ignoreDestructuring": true,
+        "properties": "never"
       }
     ],
     //   "func-names": "off",
@@ -66,5 +71,29 @@
         ]
       }
     ]
-  }
+  },
+  "overrides": [
+    // Do not require default exports in API Routes
+    {
+      "files": [
+        "**/route.ts",
+        "middleware.ts",
+        "pages/api/**/*.ts",
+        "app/api/**/*.tsx"
+      ],
+      "rules": {
+        "import/prefer-default-export": "off"
+      }
+    },
+    // Temp: Disable camelcase for review creation page as it uses a lot of snake_case for form fields
+    {
+      "files": [
+        "app/reviews/create/form.tsx",
+        "app/reviews/create/actions.ts"
+      ],
+      "rules": {
+        "camelcase": "off"
+      }
+    }
+  ]
 }

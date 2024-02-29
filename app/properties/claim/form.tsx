@@ -1,5 +1,3 @@
-/* eslint-disable camelcase */
-
 'use client';
 
 import React from 'react';
