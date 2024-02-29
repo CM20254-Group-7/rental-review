@@ -4,11 +4,11 @@ import { users } from './helpers';
 // This test uses 3 users
 // for each it will check what is displayed on the landlord's profile page
 const firstUser = users[0]; // Landlord with 2 properties
-const secondUser  = users[1]; // Landlord with no properties
-const thirdUser  = users[2]; // Not a landlord
+const secondUser = users[1]; // Landlord with no properties
+const thirdUser = users[2]; // Not a landlord
 
 test.describe('Landlord Profile Page Tests', () => {
-  test(`${secondUser.label} - No owned properties`,  async ({ page }) => {
+  test(`${secondUser.label} - No owned properties`, async ({ page }) => {
     await page.goto(`http://localhost:3000/profiles/${secondUser.id}`);
     await expect(page.getByRole('main')).toContainText(`${secondUser.landlordProfile!.displayName}`);
     await expect(page.getByRole('main')).toContainText(`${secondUser.landlordProfile!.displayEmail}`);

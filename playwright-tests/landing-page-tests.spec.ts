@@ -28,11 +28,11 @@ test('login link', async ({ page }) => {
 });
 
 test('search properties link', async ({ page }) => {
-    await page.goto('./');
+  await page.goto('./');
 
-    // Click the Search Properties link
-    await page.getByRole('link', { name: 'Properties' }).click();
+  // Click the Search Properties link
+  await page.getByRole('link', { name: 'Properties' }).click();
 
-    // Expects page to have changed to properties
-    await expect(page).toHaveURL('./properties');
-  });
+  // Expects page to have changed to properties
+  await expect(page).toHaveURL('./properties');
+});
