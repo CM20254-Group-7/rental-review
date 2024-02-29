@@ -1248,248 +1248,248 @@ test.describe('4. Claim Collision', () => {
       }[];
     }[];
   }[] = [
-    {
-      label: 'different owner',
-      tag: 'A',
-      user: existingOwnerUser,
-      existingClaimStart: today.yearsBefore(2),
-      newClaimStartTests: [
-        {
-          label: 'new starts before existing',
-          newClaimStartDate: today.yearsBefore(4),
-          newClaimEndTests: [
-            {
-              // Existing:                        |--------------------->
-              // New:       |----------|
-              // Date:     -4         -3         -2         -1          0
-              //
-              // Should become:
-              // Owner:         New                         Old
-              //            |----------|          |--------------------->
-              // Date:     -4         -3         -2         -1          0
-              label: 'new ends before existing starts',
-              newClaimEndDate: today.yearsBefore(3),
-              shouldPass: true,
-              shouldCloseExisting: false,
-              expectedMessages: /Property Claimed Successfully/,
-            },
-            {
-              // Existing:                        |--------------------->
-              // New:       |---------------------|
-              // Date:     -4         -3         -2         -1          0
-              //
-              // Should become:
-              // Owner:               New                   Old
-              //            |---------------------|--------------------->
-              // Date:     -4         -3         -2         -1          0
-              label: 'new ends on same day as existing starts',
-              newClaimEndDate: today.yearsBefore(2),
-              shouldPass: true,
-              shouldCloseExisting: false,
-              expectedMessages: /Property Claimed Successfully/,
-            },
-            {
-              // Existing:                        |--------------------->
-              // New:       |--------------------------------|
-              // Date:     -4         -3         -2         -1          0
-              label: 'new ends after existing',
-              newClaimEndDate: today.yearsBefore(1),
-              shouldPass: false,
-              shouldCloseExisting: false,
-              expectedMessages: /These dates overlap someone elses claim\. Please contact support if you believe this is a mistake|new claim overlaps with an existing claim/,
-            },
-            {
-              // Existing:                        |--------------------->
-              // New:       |------------------------------------------->
-              // Date:     -4         -3         -2         -1          0
-              label: 'new is open',
-              newClaimEndDate: null,
-              shouldPass: false,
-              shouldCloseExisting: false,
-              expectedMessages: /These dates overlap someone elses claim\. Please contact support if you believe this is a mistake|new claim overlaps with an existing claim/,
-            },
-          ],
-        },
-        {
-          label: 'new starts on same day as existing',
-          newClaimStartDate: today.yearsBefore(2),
-          newClaimEndTests: [
-            {
-              // Existing:  |--------------------->
-              // New:       |----------|
-              // Date:     -2         -1          0
-              label: 'new is closed',
-              newClaimEndDate: today.yearsBefore(1),
-              shouldPass: false,
-              shouldCloseExisting: false,
-              expectedMessages: /These dates overlap someone elses claim\. Please contact support if you believe this is a mistake|new claim overlaps with an existing claim/,
-            },
-            {
-              // Existing:  |--------------------->
-              // New:       |--------------------->
-              // Date:     -2         -1          0
-              label: 'new is open',
-              newClaimEndDate: null,
-              shouldPass: false,
-              shouldCloseExisting: false,
-              expectedMessages: /These dates overlap someone elses claim\. Please contact support if you believe this is a mistake|new claim overlaps with an existing claim/,
-            },
-          ],
-        },
-        {
-          label: 'new starts after existing',
-          newClaimStartDate: today.yearsBefore(1),
-          newClaimEndTests: [
-            {
-              // Existing:  |--------------------->
-              // New:                  |-----|
-              // Date:     -2         -1          0
-              //
-              // Should become:
-              // Owner:         Old      New
-              //            |----------|-----|
-              // Date:     -2         -1          0
+      {
+        label: 'different owner',
+        tag: 'A',
+        user: existingOwnerUser,
+        existingClaimStart: today.yearsBefore(2),
+        newClaimStartTests: [
+          {
+            label: 'new starts before existing',
+            newClaimStartDate: today.yearsBefore(4),
+            newClaimEndTests: [
+              {
+                // Existing:                        |--------------------->
+                // New:       |----------|
+                // Date:     -4         -3         -2         -1          0
+                //
+                // Should become:
+                // Owner:         New                         Old
+                //            |----------|          |--------------------->
+                // Date:     -4         -3         -2         -1          0
+                label: 'new ends before existing starts',
+                newClaimEndDate: today.yearsBefore(3),
+                shouldPass: true,
+                shouldCloseExisting: false,
+                expectedMessages: /Property Claimed Successfully/,
+              },
+              {
+                // Existing:                        |--------------------->
+                // New:       |---------------------|
+                // Date:     -4         -3         -2         -1          0
+                //
+                // Should become:
+                // Owner:               New                   Old
+                //            |---------------------|--------------------->
+                // Date:     -4         -3         -2         -1          0
+                label: 'new ends on same day as existing starts',
+                newClaimEndDate: today.yearsBefore(2),
+                shouldPass: true,
+                shouldCloseExisting: false,
+                expectedMessages: /Property Claimed Successfully/,
+              },
+              {
+                // Existing:                        |--------------------->
+                // New:       |--------------------------------|
+                // Date:     -4         -3         -2         -1          0
+                label: 'new ends after existing',
+                newClaimEndDate: today.yearsBefore(1),
+                shouldPass: false,
+                shouldCloseExisting: false,
+                expectedMessages: /These dates overlap someone elses claim\. Please contact support if you believe this is a mistake|new claim overlaps with an existing claim/,
+              },
+              {
+                // Existing:                        |--------------------->
+                // New:       |------------------------------------------->
+                // Date:     -4         -3         -2         -1          0
+                label: 'new is open',
+                newClaimEndDate: null,
+                shouldPass: false,
+                shouldCloseExisting: false,
+                expectedMessages: /These dates overlap someone elses claim\. Please contact support if you believe this is a mistake|new claim overlaps with an existing claim/,
+              },
+            ],
+          },
+          {
+            label: 'new starts on same day as existing',
+            newClaimStartDate: today.yearsBefore(2),
+            newClaimEndTests: [
+              {
+                // Existing:  |--------------------->
+                // New:       |----------|
+                // Date:     -2         -1          0
+                label: 'new is closed',
+                newClaimEndDate: today.yearsBefore(1),
+                shouldPass: false,
+                shouldCloseExisting: false,
+                expectedMessages: /These dates overlap someone elses claim\. Please contact support if you believe this is a mistake|new claim overlaps with an existing claim/,
+              },
+              {
+                // Existing:  |--------------------->
+                // New:       |--------------------->
+                // Date:     -2         -1          0
+                label: 'new is open',
+                newClaimEndDate: null,
+                shouldPass: false,
+                shouldCloseExisting: false,
+                expectedMessages: /These dates overlap someone elses claim\. Please contact support if you believe this is a mistake|new claim overlaps with an existing claim/,
+              },
+            ],
+          },
+          {
+            label: 'new starts after existing',
+            newClaimStartDate: today.yearsBefore(1),
+            newClaimEndTests: [
+              {
+                // Existing:  |--------------------->
+                // New:                  |-----|
+                // Date:     -2         -1          0
+                //
+                // Should become:
+                // Owner:         Old      New
+                //            |----------|-----|
+                // Date:     -2         -1          0
 
-              label: 'new is closed',
-              newClaimEndDate: today.monthsBefore(6),
-              shouldPass: true,
-              shouldCloseExisting: true,
-              expectedMessages: /Property Claimed Successfully/,
-            },
-            {
-              // Existing:  |--------------------->
-              // New:                  |---------->
-              // Date:     -2         -1          0
-              //
-              // Should become:
-              // Owner:         Old      New
-              //            |----------|---------->
-              // Date:     -2         -1          0
-              label: 'new is open',
-              newClaimEndDate: null,
-              shouldPass: true,
-              shouldCloseExisting: true,
-              expectedMessages: /Property Claimed Successfully/,
-            },
-          ],
-        },
-      ],
-    },
-    {
-      label: 'same owner',
-      user: propertyClaimerUser,
-      tag: 'B',
-      existingClaimStart: today.yearsBefore(2),
-      newClaimStartTests: [
-        {
-          label: 'new starts before existing',
-          newClaimStartDate: today.yearsBefore(4),
-          newClaimEndTests: [
-            {
-              // Existing:                        |--------------------->
-              // New:       |----------|
-              // Date:     -4         -3         -2         -1          0
-              //
-              // Should become:
-              // Owner:         New        None             New
-              //            |----------|          |--------------------->
-              // Date:     -4         -3         -2         -1          0
-              label: 'new ends before existing starts',
-              newClaimEndDate: today.yearsBefore(3),
-              shouldPass: true,
-              shouldCloseExisting: false,
-              expectedMessages: /Property Claimed Successfully/,
-            },
-            {
-              // Existing:                        |--------------------->
-              // New:       |---------------------|
-              // Date:     -4         -3         -2         -1          0
-              label: 'new ends on same day as existing starts',
-              newClaimEndDate: today.yearsBefore(2),
-              shouldPass: false,
-              shouldCloseExisting: false,
-              expectedMessages: /These dates overlap one of your own claims\. Please edit your existing claim if the dates are incorrect|new claim overlaps with an existing claim|User is already the landlord of this property/,
-            },
-            {
-              // Existing:                        |--------------------->
-              // New:       |--------------------------------|
-              // Date:     -4         -3         -2         -1          0
-              label: 'new ends after existing',
-              newClaimEndDate: today.yearsBefore(1),
-              shouldPass: false,
-              shouldCloseExisting: false,
-              expectedMessages: /These dates overlap one of your own claims\. Please edit your existing claim if the dates are incorrect|new claim overlaps with an existing claim|User is already the landlord of this property/,
-            },
-            {
-              // Existing:                        |--------------------->
-              // New:       |------------------------------------------->
-              // Date:     -4         -3         -2         -1          0
-              label: 'new is open',
-              newClaimEndDate: null,
-              shouldPass: false,
-              shouldCloseExisting: false,
-              expectedMessages: /These dates overlap one of your own claims\. Please edit your existing claim if the dates are incorrect|new claim overlaps with an existing claim|User is already the landlord of this property/,
-            },
-          ],
-        },
-        {
-          label: 'new starts on same day as existing',
-          newClaimStartDate: today.yearsBefore(2),
-          newClaimEndTests: [
-            {
-              // Existing:  |--------------------->
-              // New:       |----------|
-              // Date:     -2         -1          0
-              label: 'new is closed',
-              newClaimEndDate: today.yearsBefore(1),
-              shouldPass: false,
-              shouldCloseExisting: false,
-              expectedMessages: /These dates overlap one of your own claims\. Please edit your existing claim if the dates are incorrect|new claim overlaps with an existing claim|User is already the landlord of this property/,
-            },
-            {
-              // Existing:  |--------------------->
-              // New:       |--------------------->
-              // Date:     -2         -1          0
-              label: 'new is open',
-              newClaimEndDate: null,
-              shouldPass: false,
-              shouldCloseExisting: false,
-              expectedMessages: /You have already told us you own this property|new claim overlaps with an existing claim|User is already the landlord of this property/,
-            },
-          ],
-        },
-        {
-          label: 'new starts after existing',
-          newClaimStartDate: today.yearsBefore(1),
-          newClaimEndTests: [
-            {
-              // Existing:  |--------------------->
-              // New:                  |-----|
-              // Date:     -2         -1          0
-              label: 'new is closed',
-              newClaimEndDate: today.monthsBefore(6),
-              shouldPass: false,
-              shouldCloseExisting: false,
-              expectedMessages: /These dates overlap one of your own claims\. Please edit your existing claim if the dates are incorrect|new claim overlaps with an existing claim|User is already the landlord of this property/,
-            },
-            {
-              // Existing:  |--------------------->
-              // New:                  |---------->
-              // Date:     -2         -1          0
-              label: 'new is open',
-              newClaimEndDate: null,
-              shouldPass: false,
-              shouldCloseExisting: false,
-              expectedMessages: /You have already told us you own this property\. Please edit your existing claim if the dates are incorrect|new claim overlaps with an existing claim|User is already the landlord of this property/,
-            },
-          ],
-        },
-      ],
-    },
-  ];
+                label: 'new is closed',
+                newClaimEndDate: today.monthsBefore(6),
+                shouldPass: true,
+                shouldCloseExisting: true,
+                expectedMessages: /Property Claimed Successfully/,
+              },
+              {
+                // Existing:  |--------------------->
+                // New:                  |---------->
+                // Date:     -2         -1          0
+                //
+                // Should become:
+                // Owner:         Old      New
+                //            |----------|---------->
+                // Date:     -2         -1          0
+                label: 'new is open',
+                newClaimEndDate: null,
+                shouldPass: true,
+                shouldCloseExisting: true,
+                expectedMessages: /Property Claimed Successfully/,
+              },
+            ],
+          },
+        ],
+      },
+      {
+        label: 'same owner',
+        user: propertyClaimerUser,
+        tag: 'B',
+        existingClaimStart: today.yearsBefore(2),
+        newClaimStartTests: [
+          {
+            label: 'new starts before existing',
+            newClaimStartDate: today.yearsBefore(4),
+            newClaimEndTests: [
+              {
+                // Existing:                        |--------------------->
+                // New:       |----------|
+                // Date:     -4         -3         -2         -1          0
+                //
+                // Should become:
+                // Owner:         New        None             New
+                //            |----------|          |--------------------->
+                // Date:     -4         -3         -2         -1          0
+                label: 'new ends before existing starts',
+                newClaimEndDate: today.yearsBefore(3),
+                shouldPass: true,
+                shouldCloseExisting: false,
+                expectedMessages: /Property Claimed Successfully/,
+              },
+              {
+                // Existing:                        |--------------------->
+                // New:       |---------------------|
+                // Date:     -4         -3         -2         -1          0
+                label: 'new ends on same day as existing starts',
+                newClaimEndDate: today.yearsBefore(2),
+                shouldPass: false,
+                shouldCloseExisting: false,
+                expectedMessages: /These dates overlap one of your own claims\. Please edit your existing claim if the dates are incorrect|new claim overlaps with an existing claim|User is already the landlord of this property/,
+              },
+              {
+                // Existing:                        |--------------------->
+                // New:       |--------------------------------|
+                // Date:     -4         -3         -2         -1          0
+                label: 'new ends after existing',
+                newClaimEndDate: today.yearsBefore(1),
+                shouldPass: false,
+                shouldCloseExisting: false,
+                expectedMessages: /These dates overlap one of your own claims\. Please edit your existing claim if the dates are incorrect|new claim overlaps with an existing claim|User is already the landlord of this property/,
+              },
+              {
+                // Existing:                        |--------------------->
+                // New:       |------------------------------------------->
+                // Date:     -4         -3         -2         -1          0
+                label: 'new is open',
+                newClaimEndDate: null,
+                shouldPass: false,
+                shouldCloseExisting: false,
+                expectedMessages: /These dates overlap one of your own claims\. Please edit your existing claim if the dates are incorrect|new claim overlaps with an existing claim|User is already the landlord of this property/,
+              },
+            ],
+          },
+          {
+            label: 'new starts on same day as existing',
+            newClaimStartDate: today.yearsBefore(2),
+            newClaimEndTests: [
+              {
+                // Existing:  |--------------------->
+                // New:       |----------|
+                // Date:     -2         -1          0
+                label: 'new is closed',
+                newClaimEndDate: today.yearsBefore(1),
+                shouldPass: false,
+                shouldCloseExisting: false,
+                expectedMessages: /These dates overlap one of your own claims\. Please edit your existing claim if the dates are incorrect|new claim overlaps with an existing claim|User is already the landlord of this property/,
+              },
+              {
+                // Existing:  |--------------------->
+                // New:       |--------------------->
+                // Date:     -2         -1          0
+                label: 'new is open',
+                newClaimEndDate: null,
+                shouldPass: false,
+                shouldCloseExisting: false,
+                expectedMessages: /You have already told us you own this property|new claim overlaps with an existing claim|User is already the landlord of this property/,
+              },
+            ],
+          },
+          {
+            label: 'new starts after existing',
+            newClaimStartDate: today.yearsBefore(1),
+            newClaimEndTests: [
+              {
+                // Existing:  |--------------------->
+                // New:                  |-----|
+                // Date:     -2         -1          0
+                label: 'new is closed',
+                newClaimEndDate: today.monthsBefore(6),
+                shouldPass: false,
+                shouldCloseExisting: false,
+                expectedMessages: /These dates overlap one of your own claims\. Please edit your existing claim if the dates are incorrect|new claim overlaps with an existing claim|User is already the landlord of this property/,
+              },
+              {
+                // Existing:  |--------------------->
+                // New:                  |---------->
+                // Date:     -2         -1          0
+                label: 'new is open',
+                newClaimEndDate: null,
+                shouldPass: false,
+                shouldCloseExisting: false,
+                expectedMessages: /You have already told us you own this property\. Please edit your existing claim if the dates are incorrect|new claim overlaps with an existing claim|User is already the landlord of this property/,
+              },
+            ],
+          },
+        ],
+      },
+    ];
 
-  for (const claim of openClaimTests) {
-    test.describe(`4.2${claim.tag}. Single Open Claim (${claim.label})`, () => {
+  for (const existingClaim of openClaimTests) {
+    test.describe(`4.2${existingClaim.tag}. Single Open Claim (${existingClaim.label})`, () => {
       // Create the exising claim for each test
       test.beforeEach(async ({ page }, testInfo) => {
         const property = properties[testInfo.workerIndex];
@@ -1504,18 +1504,18 @@ test.describe('4. Claim Collision', () => {
           },
           data: {
             property_id: property.id,
-            landlord_id: claim.user.id,
-            started_at: claim.existingClaimStart.toISODateString(),
+            landlord_id: existingClaim.user.id,
+            started_at: existingClaim.existingClaimStart.toISODateString(),
           },
         });
 
         await expect(res).toBeOK();
       });
 
-      for (const [startIndex, startDateTest] of claim.newClaimStartTests.entries()) {
-        test.describe(`4.2${claim.tag}.${startIndex + 1}. ${startDateTest.label}`, () => {
+      for (const [startIndex, startDateTest] of existingClaim.newClaimStartTests.entries()) {
+        test.describe(`4.2${existingClaim.tag}.${startIndex + 1}. ${startDateTest.label}`, () => {
           for (const [endIndex, endDateTest] of startDateTest.newClaimEndTests.entries()) {
-            test(`4.2${claim.tag}.${startIndex + 1}.${endIndex + 1}. ${endDateTest.label}`, async ({ page }, testInfo) => {
+            test(`4.2${existingClaim.tag}.${startIndex + 1}.${endIndex + 1}. ${endDateTest.label}`, async ({ page }, testInfo) => {
               const property = properties[testInfo.workerIndex];
 
               // Fill in form & submit
@@ -1545,6 +1545,18 @@ test.describe('4. Claim Collision', () => {
               await expect(res).toBeOK();
               const ownershipRecords = await res.json();
 
+              // if the start dates & landlords are the same there shoild be one record who's details match the existing claim
+              if (
+                existingClaim.user.id == propertyClaimerUser.id
+                && startDateTest.newClaimStartDate.toISODateString() === existingClaim.existingClaimStart.toISODateString()
+              ) {
+                await expect(ownershipRecords.length).toBe(1);
+                await expect(ownershipRecords[0].started_at).toBe(existingClaim.existingClaimStart.toISODateString());
+                await expect(ownershipRecords[0].ended_at).toBeNull();
+
+                return
+              }
+
               // Check that the claim was added to the database if it should have passed
               if (endDateTest.shouldPass) {
                 // Check the ownership record details match those expected
@@ -1558,7 +1570,7 @@ test.describe('4. Claim Collision', () => {
               } else await expect(ownershipRecords.length).toBeFalsy();
 
               // Check that the existing claim was closed if it should have been
-              const existingRes = await page.request.get(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/property_ownership?select=*&property_id=eq.${property.id}&landlord_id=eq.${claim.user.id}&started_at=eq.${claim.existingClaimStart.toISODateString()}`, {
+              const existingRes = await page.request.get(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/property_ownership?select=*&property_id=eq.${property.id}&landlord_id=eq.${existingClaim.user.id}&started_at=eq.${existingClaim.existingClaimStart.toISODateString()}`, {
                 headers: {
                   apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
                   Authorization: `Bearer ${process.env.SUPABASE_SERVICE_KEY!}`,
@@ -1642,555 +1654,555 @@ test.describe('4. Claim Collision', () => {
         expectedMessages: RegExp;
       }[];
     }[] = [
-      {
-        name: 'New starts before both existing',
-        newClaimStartDate: existingClaim1Start.yearBefore(),
-        new_end_tests: [
-          {
-            // Existing:             |----------|          |----------|
-            // New:       |-----|
-            // Date:     -5         -4         -3         -2         -1          0
-            //
-            // Should become:
-            // Owner:       New          Old                   Old
-            //            |-----|    |----------|          |----------|
-            // Date:     -5         -4         -3         -2         -1          0
-            name: 'New ends before both existing',
-            newClaimEndDate: existingClaim1Start.monthsBefore(6),
-            shouldPass: true,
-            expectedMessages: /Property Claimed Successfully/,
-          },
-          {
-            // Existing:             |----------|          |----------|
-            // New:       |----------|
-            // Date:     -5         -4         -3         -2         -1          0
-            //
-            // Should become:
-            // Owner:       New          Old                   Old
-            //            |----------|----------|          |----------|
-            // Date:     -5         -4         -3         -2         -1          0
-            name: 'New ends on same day as first existing starts',
-            newClaimEndDate: existingClaim1Start,
-            shouldPass: true,
-            expectedMessages: /Property Claimed Successfully/,
-          },
-          {
-            // Existing:             |----------|          |----------|
-            // New:       |---------------|
-            // Date:     -5         -4         -3         -2         -1          0
-            name: 'New ends during first existing',
-            newClaimEndDate: existingClaim1Start.monthsAfter(6),
-            shouldPass: false,
-            expectedMessages: /These dates overlap someone elses claim\. Please contact support if you believe this is a mistake|new claim overlaps with an existing claim/,
-          },
-          {
-            // Existing:             |----------|          |----------|
-            // New:       |---------------------|
-            // Date:     -5         -4         -3         -2         -1          0
-            name: 'New ends on same day as first existing ends',
-            newClaimEndDate: existingClaim1End,
-            shouldPass: false,
-            expectedMessages: /These dates overlap someone elses claim\. Please contact support if you believe this is a mistake|new claim overlaps with an existing claim/,
-          },
-          {
-            // Existing:             |----------|          |----------|
-            // New:       |---------------------------|
-            // Date:     -5         -4         -3         -2         -1          0
-            name: 'New ends between existing',
-            newClaimEndDate: existingClaim1End.monthsAfter(6),
-            shouldPass: false,
-            expectedMessages: /These dates overlap someone elses claim\. Please contact support if you believe this is a mistake|new claim overlaps with an existing claim/,
-          },
-          {
-            // Existing:             |----------|          |----------|
-            // New:       |--------------------------------|
-            // Date:     -5         -4         -3         -2         -1          0
-            name: 'New ends on same day as second existing starts',
-            newClaimEndDate: existingClaim2Start,
-            shouldPass: false,
-            expectedMessages: /These dates overlap someone elses claim\. Please contact support if you believe this is a mistake|new claim overlaps with an existing claim/,
-          },
-          {
-            // Existing:             |----------|          |----------|
-            // New:       |--------------------------------------|
-            // Date:     -5         -4         -3         -2         -1          0
-            name: 'New ends during second existing',
-            newClaimEndDate: existingClaim2Start.monthsAfter(6),
-            shouldPass: false,
-            expectedMessages: /These dates overlap someone elses claim\. Please contact support if you believe this is a mistake|new claim overlaps with an existing claim/,
-          },
-          {
-            // Existing:             |----------|          |----------|
-            // New:       |-------------------------------------------|
-            // Date:     -5         -4         -3         -2         -1          0
-            name: 'New ends on same day as second existing ends',
-            newClaimEndDate: existingClaim2End,
-            shouldPass: false,
-            expectedMessages: /These dates overlap someone elses claim\. Please contact support if you believe this is a mistake|new claim overlaps with an existing claim/,
-          },
-          {
-            // Existing:             |----------|          |----------|
-            // New:       |-------------------------------------------------|
-            // Date:     -5         -4         -3         -2         -1          0
-            name: 'New ends after both existing',
-            newClaimEndDate: existingClaim2End.monthsAfter(6),
-            shouldPass: false,
-            expectedMessages: /These dates overlap someone elses claim\. Please contact support if you believe this is a mistake|new claim overlaps with an existing claim/,
-          },
-          {
-            // Existing:             |----------|          |----------|
-            // New:       |------------------------------------------------------>
-            // Date:     -5         -4         -3         -2         -1          0
-            name: 'New is open',
-            newClaimEndDate: null,
-            shouldPass: false,
-            expectedMessages: /These dates overlap someone elses claim\. Please contact support if you believe this is a mistake|new claim overlaps with an existing claim/,
-          },
-        ],
-      }, {
-        name: 'New starts on same day as first existing',
-        newClaimStartDate: existingClaim1Start,
-        new_end_tests: [
-          {
-            // Existing:  |----------|          |----------|
-            // New:       |----|
-            // Date:     -4         -3         -2         -1          0
-            name: 'New ends during first existing',
-            newClaimEndDate: existingClaim1Start.monthsAfter(6),
-            shouldPass: false,
-            expectedMessages: /These dates overlap someone elses claim\. Please contact support if you believe this is a mistake|new claim overlaps with an existing claim/,
-          },
-          {
-            // Existing:  |----------|          |----------|
-            // New:       |----------|
-            // Date:     -4         -3         -2         -1          0
-            name: 'New ends on same day as first existing ends',
-            newClaimEndDate: existingClaim1End,
-            shouldPass: false,
-            expectedMessages: /These dates overlap someone elses claim\. Please contact support if you believe this is a mistake|new claim overlaps with an existing claim/,
-          },
-          {
-            // Existing:  |----------|          |----------|
-            // New:       |---------------|
-            // Date:     -4         -3         -2         -1          0
-            name: 'New ends between existing',
-            newClaimEndDate: existingClaim1End.monthsAfter(6),
-            shouldPass: false,
-            expectedMessages: /These dates overlap someone elses claim\. Please contact support if you believe this is a mistake|new claim overlaps with an existing claim/,
-          },
-          {
-            // Existing:  |----------|          |----------|
-            // New:       |---------------------|
-            // Date:     -4         -3         -2         -1          0
-            name: 'New ends on same day as second existing starts',
-            newClaimEndDate: existingClaim2Start,
-            shouldPass: false,
-            expectedMessages: /These dates overlap someone elses claim\. Please contact support if you believe this is a mistake|new claim overlaps with an existing claim/,
-          },
-          {
-            // Existing:  |----------|          |----------|
-            // New:       |---------------------------|
-            // Date:     -4         -3         -2         -1          0
-            name: 'New ends during second existing',
-            newClaimEndDate: existingClaim2Start.monthsAfter(6),
-            shouldPass: false,
-            expectedMessages: /These dates overlap someone elses claim\. Please contact support if you believe this is a mistake|new claim overlaps with an existing claim/,
-          },
-          {
-            // Existing:  |----------|          |----------|
-            // New:       |--------------------------------|
-            // Date:     -4         -3         -2         -1          0
-            name: 'New ends on same day as second existing ends',
-            newClaimEndDate: existingClaim2End,
-            shouldPass: false,
-            expectedMessages: /These dates overlap someone elses claim\. Please contact support if you believe this is a mistake|new claim overlaps with an existing claim/,
-          },
-          {
-            // Existing:  |----------|          |----------|
-            // New:       |--------------------------------------|
-            // Date:     -4         -3         -2         -1          0
-            name: 'New ends after both existing',
-            newClaimEndDate: existingClaim2End.monthsAfter(6),
-            shouldPass: false,
-            expectedMessages: /These dates overlap someone elses claim\. Please contact support if you believe this is a mistake|new claim overlaps with an existing claim/,
-          },
-          {
+        {
+          name: 'New starts before both existing',
+          newClaimStartDate: existingClaim1Start.yearBefore(),
+          new_end_tests: [
+            {
+              // Existing:             |----------|          |----------|
+              // New:       |-----|
+              // Date:     -5         -4         -3         -2         -1          0
+              //
+              // Should become:
+              // Owner:       New          Old                   Old
+              //            |-----|    |----------|          |----------|
+              // Date:     -5         -4         -3         -2         -1          0
+              name: 'New ends before both existing',
+              newClaimEndDate: existingClaim1Start.monthsBefore(6),
+              shouldPass: true,
+              expectedMessages: /Property Claimed Successfully/,
+            },
+            {
+              // Existing:             |----------|          |----------|
+              // New:       |----------|
+              // Date:     -5         -4         -3         -2         -1          0
+              //
+              // Should become:
+              // Owner:       New          Old                   Old
+              //            |----------|----------|          |----------|
+              // Date:     -5         -4         -3         -2         -1          0
+              name: 'New ends on same day as first existing starts',
+              newClaimEndDate: existingClaim1Start,
+              shouldPass: true,
+              expectedMessages: /Property Claimed Successfully/,
+            },
+            {
+              // Existing:             |----------|          |----------|
+              // New:       |---------------|
+              // Date:     -5         -4         -3         -2         -1          0
+              name: 'New ends during first existing',
+              newClaimEndDate: existingClaim1Start.monthsAfter(6),
+              shouldPass: false,
+              expectedMessages: /These dates overlap someone elses claim\. Please contact support if you believe this is a mistake|new claim overlaps with an existing claim/,
+            },
+            {
+              // Existing:             |----------|          |----------|
+              // New:       |---------------------|
+              // Date:     -5         -4         -3         -2         -1          0
+              name: 'New ends on same day as first existing ends',
+              newClaimEndDate: existingClaim1End,
+              shouldPass: false,
+              expectedMessages: /These dates overlap someone elses claim\. Please contact support if you believe this is a mistake|new claim overlaps with an existing claim/,
+            },
+            {
+              // Existing:             |----------|          |----------|
+              // New:       |---------------------------|
+              // Date:     -5         -4         -3         -2         -1          0
+              name: 'New ends between existing',
+              newClaimEndDate: existingClaim1End.monthsAfter(6),
+              shouldPass: false,
+              expectedMessages: /These dates overlap someone elses claim\. Please contact support if you believe this is a mistake|new claim overlaps with an existing claim/,
+            },
+            {
+              // Existing:             |----------|          |----------|
+              // New:       |--------------------------------|
+              // Date:     -5         -4         -3         -2         -1          0
+              name: 'New ends on same day as second existing starts',
+              newClaimEndDate: existingClaim2Start,
+              shouldPass: false,
+              expectedMessages: /These dates overlap someone elses claim\. Please contact support if you believe this is a mistake|new claim overlaps with an existing claim/,
+            },
+            {
+              // Existing:             |----------|          |----------|
+              // New:       |--------------------------------------|
+              // Date:     -5         -4         -3         -2         -1          0
+              name: 'New ends during second existing',
+              newClaimEndDate: existingClaim2Start.monthsAfter(6),
+              shouldPass: false,
+              expectedMessages: /These dates overlap someone elses claim\. Please contact support if you believe this is a mistake|new claim overlaps with an existing claim/,
+            },
+            {
+              // Existing:             |----------|          |----------|
+              // New:       |-------------------------------------------|
+              // Date:     -5         -4         -3         -2         -1          0
+              name: 'New ends on same day as second existing ends',
+              newClaimEndDate: existingClaim2End,
+              shouldPass: false,
+              expectedMessages: /These dates overlap someone elses claim\. Please contact support if you believe this is a mistake|new claim overlaps with an existing claim/,
+            },
+            {
+              // Existing:             |----------|          |----------|
+              // New:       |-------------------------------------------------|
+              // Date:     -5         -4         -3         -2         -1          0
+              name: 'New ends after both existing',
+              newClaimEndDate: existingClaim2End.monthsAfter(6),
+              shouldPass: false,
+              expectedMessages: /These dates overlap someone elses claim\. Please contact support if you believe this is a mistake|new claim overlaps with an existing claim/,
+            },
+            {
+              // Existing:             |----------|          |----------|
+              // New:       |------------------------------------------------------>
+              // Date:     -5         -4         -3         -2         -1          0
+              name: 'New is open',
+              newClaimEndDate: null,
+              shouldPass: false,
+              expectedMessages: /These dates overlap someone elses claim\. Please contact support if you believe this is a mistake|new claim overlaps with an existing claim/,
+            },
+          ],
+        }, {
+          name: 'New starts on same day as first existing',
+          newClaimStartDate: existingClaim1Start,
+          new_end_tests: [
+            {
+              // Existing:  |----------|          |----------|
+              // New:       |----|
+              // Date:     -4         -3         -2         -1          0
+              name: 'New ends during first existing',
+              newClaimEndDate: existingClaim1Start.monthsAfter(6),
+              shouldPass: false,
+              expectedMessages: /These dates overlap someone elses claim\. Please contact support if you believe this is a mistake|new claim overlaps with an existing claim/,
+            },
+            {
+              // Existing:  |----------|          |----------|
+              // New:       |----------|
+              // Date:     -4         -3         -2         -1          0
+              name: 'New ends on same day as first existing ends',
+              newClaimEndDate: existingClaim1End,
+              shouldPass: false,
+              expectedMessages: /These dates overlap someone elses claim\. Please contact support if you believe this is a mistake|new claim overlaps with an existing claim/,
+            },
+            {
+              // Existing:  |----------|          |----------|
+              // New:       |---------------|
+              // Date:     -4         -3         -2         -1          0
+              name: 'New ends between existing',
+              newClaimEndDate: existingClaim1End.monthsAfter(6),
+              shouldPass: false,
+              expectedMessages: /These dates overlap someone elses claim\. Please contact support if you believe this is a mistake|new claim overlaps with an existing claim/,
+            },
+            {
+              // Existing:  |----------|          |----------|
+              // New:       |---------------------|
+              // Date:     -4         -3         -2         -1          0
+              name: 'New ends on same day as second existing starts',
+              newClaimEndDate: existingClaim2Start,
+              shouldPass: false,
+              expectedMessages: /These dates overlap someone elses claim\. Please contact support if you believe this is a mistake|new claim overlaps with an existing claim/,
+            },
+            {
+              // Existing:  |----------|          |----------|
+              // New:       |---------------------------|
+              // Date:     -4         -3         -2         -1          0
+              name: 'New ends during second existing',
+              newClaimEndDate: existingClaim2Start.monthsAfter(6),
+              shouldPass: false,
+              expectedMessages: /These dates overlap someone elses claim\. Please contact support if you believe this is a mistake|new claim overlaps with an existing claim/,
+            },
+            {
+              // Existing:  |----------|          |----------|
+              // New:       |--------------------------------|
+              // Date:     -4         -3         -2         -1          0
+              name: 'New ends on same day as second existing ends',
+              newClaimEndDate: existingClaim2End,
+              shouldPass: false,
+              expectedMessages: /These dates overlap someone elses claim\. Please contact support if you believe this is a mistake|new claim overlaps with an existing claim/,
+            },
+            {
+              // Existing:  |----------|          |----------|
+              // New:       |--------------------------------------|
+              // Date:     -4         -3         -2         -1          0
+              name: 'New ends after both existing',
+              newClaimEndDate: existingClaim2End.monthsAfter(6),
+              shouldPass: false,
+              expectedMessages: /These dates overlap someone elses claim\. Please contact support if you believe this is a mistake|new claim overlaps with an existing claim/,
+            },
+            {
 
-            // Existing:  |----------|          |----------|
-            // New:       |------------------------------------------->
-            // Date:     -4         -3         -2         -1          0
-            name: 'New is open',
-            newClaimEndDate: null,
-            shouldPass: false,
-            expectedMessages: /These dates overlap someone elses claim\. Please contact support if you believe this is a mistake|new claim overlaps with an existing claim/,
-          },
-        ],
-      }, {
-        name: 'New starts during first existing',
-        newClaimStartDate: existingClaim1Start.monthsAfter(3),
-        new_end_tests: [
-          {
-            // Existing:  |----------|          |----------|
-            // New:          |----|
-            // Date:     -4         -3         -2         -1          0
-            name: 'New ends during first existing',
-            newClaimEndDate: existingClaim1End.monthsBefore(3),
-            shouldPass: false,
-            expectedMessages: /These dates overlap someone elses claim\. Please contact support if you believe this is a mistake|new claim overlaps with an existing claim/,
-          },
-          {
-            // Existing:  |----------|          |----------|
-            // New:          |-------|
-            // Date:     -4         -3         -2         -1          0
-            name: 'New ends on same day as first existing ends',
-            newClaimEndDate: existingClaim1End,
-            shouldPass: false,
-            expectedMessages: /These dates overlap someone elses claim\. Please contact support if you believe this is a mistake|new claim overlaps with an existing claim/,
-          },
-          {
-            // Existing:  |----------|          |----------|
-            // New:          |-------------|
-            // Date:     -4         -3         -2         -1          0
-            name: 'New ends between existing',
-            newClaimEndDate: existingClaim1End.monthsAfter(6),
-            shouldPass: false,
-            expectedMessages: /These dates overlap someone elses claim\. Please contact support if you believe this is a mistake|new claim overlaps with an existing claim/,
-          },
-          {
-            // Existing:  |----------|          |----------|
-            // New:          |------------------|
-            // Date:     -4         -3         -2         -1          0
-            name: 'New ends on same day as second existing starts',
-            newClaimEndDate: existingClaim2Start,
-            shouldPass: false,
-            expectedMessages: /These dates overlap someone elses claim\. Please contact support if you believe this is a mistake|new claim overlaps with an existing claim/,
-          },
-          {
-            // Existing:  |----------|          |----------|
-            // New:          |------------------------|
-            // Date:     -4         -3         -2         -1          0
-            name: 'New ends during second existing',
-            newClaimEndDate: existingClaim2Start.monthsAfter(6),
-            shouldPass: false,
-            expectedMessages: /These dates overlap someone elses claim\. Please contact support if you believe this is a mistake|new claim overlaps with an existing claim/,
+              // Existing:  |----------|          |----------|
+              // New:       |------------------------------------------->
+              // Date:     -4         -3         -2         -1          0
+              name: 'New is open',
+              newClaimEndDate: null,
+              shouldPass: false,
+              expectedMessages: /These dates overlap someone elses claim\. Please contact support if you believe this is a mistake|new claim overlaps with an existing claim/,
+            },
+          ],
+        }, {
+          name: 'New starts during first existing',
+          newClaimStartDate: existingClaim1Start.monthsAfter(3),
+          new_end_tests: [
+            {
+              // Existing:  |----------|          |----------|
+              // New:          |----|
+              // Date:     -4         -3         -2         -1          0
+              name: 'New ends during first existing',
+              newClaimEndDate: existingClaim1End.monthsBefore(3),
+              shouldPass: false,
+              expectedMessages: /These dates overlap someone elses claim\. Please contact support if you believe this is a mistake|new claim overlaps with an existing claim/,
+            },
+            {
+              // Existing:  |----------|          |----------|
+              // New:          |-------|
+              // Date:     -4         -3         -2         -1          0
+              name: 'New ends on same day as first existing ends',
+              newClaimEndDate: existingClaim1End,
+              shouldPass: false,
+              expectedMessages: /These dates overlap someone elses claim\. Please contact support if you believe this is a mistake|new claim overlaps with an existing claim/,
+            },
+            {
+              // Existing:  |----------|          |----------|
+              // New:          |-------------|
+              // Date:     -4         -3         -2         -1          0
+              name: 'New ends between existing',
+              newClaimEndDate: existingClaim1End.monthsAfter(6),
+              shouldPass: false,
+              expectedMessages: /These dates overlap someone elses claim\. Please contact support if you believe this is a mistake|new claim overlaps with an existing claim/,
+            },
+            {
+              // Existing:  |----------|          |----------|
+              // New:          |------------------|
+              // Date:     -4         -3         -2         -1          0
+              name: 'New ends on same day as second existing starts',
+              newClaimEndDate: existingClaim2Start,
+              shouldPass: false,
+              expectedMessages: /These dates overlap someone elses claim\. Please contact support if you believe this is a mistake|new claim overlaps with an existing claim/,
+            },
+            {
+              // Existing:  |----------|          |----------|
+              // New:          |------------------------|
+              // Date:     -4         -3         -2         -1          0
+              name: 'New ends during second existing',
+              newClaimEndDate: existingClaim2Start.monthsAfter(6),
+              shouldPass: false,
+              expectedMessages: /These dates overlap someone elses claim\. Please contact support if you believe this is a mistake|new claim overlaps with an existing claim/,
 
-          },
-          {
-            // Existing:  |----------|          |----------|
-            // New:          |-----------------------------|
-            // Date:     -4         -3         -2         -1          0
-            name: 'New ends on same day as second existing ends',
-            newClaimEndDate: existingClaim2End,
-            shouldPass: false,
-            expectedMessages: /These dates overlap someone elses claim\. Please contact support if you believe this is a mistake|new claim overlaps with an existing claim/,
-          },
-          {
-            // Existing:  |----------|          |----------|
-            // New:          |-----------------------------------|
-            // Date:     -4         -3         -2         -1          0
-            name: 'New ends after both existing',
-            newClaimEndDate: existingClaim2End.monthsAfter(6),
-            shouldPass: false,
-            expectedMessages: /These dates overlap someone elses claim\. Please contact support if you believe this is a mistake|new claim overlaps with an existing claim/,
-          },
-          {
-            // Existing:  |----------|          |----------|
-            // New:          |---------------------------------------->
-            // Date:     -4         -3         -2         -1          0
-            name: 'New is open',
-            newClaimEndDate: null,
-            shouldPass: false,
-            expectedMessages: /These dates overlap someone elses claim\. Please contact support if you believe this is a mistake|new claim overlaps with an existing claim/,
-          },
-        ],
-      }, {
-        name: 'New starts on same day as first existing ends',
-        newClaimStartDate: existingClaim1End,
-        new_end_tests: [
-          {
-            // Existing:  |----------|          |----------|
-            // New:                  |-----|
-            // Date:     -4         -3         -2         -1          0
-            //
-            // Should become:
-            // Owner:         Old      New          Old
-            //            |----------|-----|    |----------|
-            // Date:     -4         -3         -2         -1          0
-            name: 'New ends between existing',
-            newClaimEndDate: existingClaim1End.monthsAfter(6),
-            shouldPass: true,
-            expectedMessages: /Property Claimed Successfully/,
-          },
-          {
-            // Existing:  |----------|          |----------|
-            // New:                  |----------|
-            // Date:     -4         -3         -2         -1          0
-            //
-            // Should become:
-            // Owner:         Old         New       Old
-            //            |----------|----------|----------|
-            // Date:     -4         -3         -2         -1          0
-            name: 'New ends on same day as second existing starts',
-            newClaimEndDate: existingClaim2Start,
-            shouldPass: true,
-            expectedMessages: /Property Claimed Successfully/,
-          },
-          {
-            // Existing:  |----------|          |----------|
-            // New:                  |----------------|
-            // Date:     -4         -3         -2         -1          0
-            name: 'New ends during second existing',
-            newClaimEndDate: existingClaim2Start.monthsAfter(6),
-            shouldPass: false,
-            expectedMessages: /These dates overlap someone elses claim\. Please contact support if you believe this is a mistake|new claim overlaps with an existing claim/,
-          },
-          {
-            // Existing:  |----------|          |----------|
-            // New:                  |---------------------|
-            // Date:     -4         -3         -2         -1          0
-            name: 'New ends on same day as second existing ends',
-            newClaimEndDate: existingClaim2End,
-            shouldPass: false,
-            expectedMessages: /These dates overlap someone elses claim\. Please contact support if you believe this is a mistake|new claim overlaps with an existing claim/,
-          },
-          {
-            // Existing:  |----------|          |----------|
-            // New:                  |--------------------------|
-            // Date:     -4         -3         -2         -1          0
-            name: 'New ends after both existing',
-            newClaimEndDate: existingClaim2End.monthsAfter(6),
-            shouldPass: false,
-            expectedMessages: /These dates overlap someone elses claim\. Please contact support if you believe this is a mistake|new claim overlaps with an existing claim/,
-          },
-          {
-            // Existing:  |----------|          |----------|
-            // New:                  |-------------------------------->
-            // Date:     -4         -3         -2         -1          0
-            name: 'New is open',
-            newClaimEndDate: null,
-            shouldPass: false,
-            expectedMessages: /These dates overlap someone elses claim\. Please contact support if you believe this is a mistake|new claim overlaps with an existing claim/,
-          },
-        ],
-      }, {
-        name: 'New starts between existing',
-        newClaimStartDate: existingClaim1End.monthsAfter(3),
-        new_end_tests: [
-          {
-            // Existing:  |----------|          |----------|
-            // New:                     |-----|
-            // Date:     -4         -3         -2         -1          0
-            //
-            // Should become:
-            // Owner:         Old         New       Old
-            //            |----------|  |-----| |----------|
-            // Date:     -4         -3         -2         -1          0
-            name: 'New ends between existing',
-            newClaimEndDate: existingClaim2Start.monthsBefore(3),
-            shouldPass: true,
-            expectedMessages: /Property Claimed Successfully/,
-          },
-          {
-            // Existing:  |----------|          |----------|
-            // New:                     |-------|
-            // Date:     -4         -3         -2         -1          0
-            //
-            // Should become:
-            // Owner:         Old          New      Old
-            //            |----------|  |-------|----------|
-            // Date:     -4         -3         -2         -1          0
-            name: 'New ends on same day as second existing starts',
-            newClaimEndDate: existingClaim2Start,
-            shouldPass: true,
-            expectedMessages: /Property Claimed Successfully/,
-          },
-          {
-            // Existing:  |----------|          |----------|
-            // New:                     |------------|
-            // Date:     -4         -3         -2         -1          0
-            name: 'New ends during second existing',
-            newClaimEndDate: existingClaim2Start.monthsAfter(6),
-            shouldPass: false,
-            expectedMessages: /These dates overlap someone elses claim\. Please contact support if you believe this is a mistake|new claim overlaps with an existing claim/,
-          },
-          {
-            // Existing:  |----------|          |----------|
-            // New:                     |------------------|
-            // Date:     -4         -3         -2         -1          0
-            name: 'New ends on same day as second existing ends',
-            newClaimEndDate: existingClaim2End,
-            shouldPass: false,
-            expectedMessages: /These dates overlap someone elses claim\. Please contact support if you believe this is a mistake|new claim overlaps with an existing claim/,
-          },
-          {
-            // Existing:  |----------|          |----------|
-            // New:                     |------------------------|
-            // Date:     -4         -3         -2         -1          0
-            name: 'New ends after both existing',
-            newClaimEndDate: existingClaim2End.monthsAfter(6),
-            shouldPass: false,
-            expectedMessages: /These dates overlap someone elses claim\. Please contact support if you believe this is a mistake|new claim overlaps with an existing claim/,
-          },
-          {
-            // Existing:  |----------|          |----------|
-            // New:                     |----------------------------->
-            // Date:     -4         -3         -2         -1          0
-            name: 'New is open',
-            newClaimEndDate: null,
-            shouldPass: false,
-            expectedMessages: /These dates overlap someone elses claim\. Please contact support if you believe this is a mistake|new claim overlaps with an existing claim/,
-          },
-        ],
-      }, {
-        name: 'New starts on same day as second existing starts',
-        newClaimStartDate: existingClaim2Start,
-        new_end_tests: [
-          {
-            // Existing:  |----------|          |----------|
-            // New:                             |-----|
-            // Date:     -4         -3         -2         -1          0
-            name: 'New ends during second existing',
-            newClaimEndDate: existingClaim2Start.monthsAfter(6),
-            shouldPass: false,
-            expectedMessages: /These dates overlap someone elses claim\. Please contact support if you believe this is a mistake|new claim overlaps with an existing claim/,
-          },
-          {
-            // Existing:  |----------|          |----------|
-            // New:                             |----------|
-            // Date:     -4         -3         -2         -1          0
-            name: 'New ends on same day as second existing ends',
-            newClaimEndDate: existingClaim2End,
-            shouldPass: false,
-            expectedMessages: /These dates overlap someone elses claim\. Please contact support if you believe this is a mistake|new claim overlaps with an existing claim/,
-          },
-          {
-            // Existing:  |----------|          |----------|
-            // New:                             |----------------|
-            // Date:     -4         -3         -2         -1          0
-            name: 'New ends after both existing',
-            newClaimEndDate: existingClaim2End.monthsAfter(6),
-            shouldPass: false,
-            expectedMessages: /These dates overlap someone elses claim\. Please contact support if you believe this is a mistake|new claim overlaps with an existing claim/,
-          },
-          {
-            // Existing:  |----------|          |----------|
-            // New:                             |--------------------->
-            // Date:     -4         -3         -2         -1          0
-            name: 'New is open',
-            newClaimEndDate: null,
-            shouldPass: false,
-            expectedMessages: /These dates overlap someone elses claim\. Please contact support if you believe this is a mistake|new claim overlaps with an existing claim/,
-          },
-        ],
-      }, {
-        name: 'New starts during second existing',
-        newClaimStartDate: existingClaim2Start.monthsAfter(3),
-        new_end_tests: [
-          {
-            // Existing:  |----------|          |----------|
-            // New:                                |----|
-            // Date:     -4         -3         -2         -1          0
-            name: 'New ends during second existing',
-            newClaimEndDate: existingClaim2End.monthsBefore(3),
-            shouldPass: false,
-            expectedMessages: /These dates overlap someone elses claim\. Please contact support if you believe this is a mistake|new claim overlaps with an existing claim/,
-          },
-          {
-            // Existing:  |----------|          |----------|
-            // New:                                |-------|
-            // Date:     -4         -3         -2         -1          0
-            name: 'New ends on same day as second existing ends',
-            newClaimEndDate: existingClaim2End,
-            shouldPass: false,
-            expectedMessages: /These dates overlap someone elses claim\. Please contact support if you believe this is a mistake|new claim overlaps with an existing claim/,
-          },
-          {
-            // Existing:  |----------|          |----------|
-            // New:                                |-------------|
-            // Date:     -4         -3         -2         -1          0
-            name: 'New ends after both existing',
-            newClaimEndDate: existingClaim2End.monthsAfter(6),
-            shouldPass: false,
-            expectedMessages: /These dates overlap someone elses claim\. Please contact support if you believe this is a mistake|new claim overlaps with an existing claim/,
-          },
-          {
-            // Existing:  |----------|          |----------|
-            // New:                                |------------------>
-            // Date:     -4         -3         -2         -1          0
-            name: 'New is open',
-            newClaimEndDate: null,
-            shouldPass: false,
-            expectedMessages: /These dates overlap someone elses claim\. Please contact support if you believe this is a mistake|new claim overlaps with an existing claim/,
-          },
-        ],
-      }, {
-        name: 'New starts on same day as second existing ends',
-        newClaimStartDate: existingClaim2End,
-        new_end_tests: [
-          {
-            // Existing:  |----------|          |----------|
-            // New:                                        |----|
-            // Date:     -4         -3         -2         -1          0
-            //
-            // Should become:
-            // Owner:         Old                    Old    New
-            //            |----------|          |----------|----|
-            // Date:     -4         -3         -2         -1          0
-            name: 'New ends after both existing',
-            newClaimEndDate: existingClaim2End.monthsAfter(6),
-            shouldPass: true,
-            expectedMessages: /Property Claimed Successfully/,
-          },
-          {
-            // Existing:  |----------|          |----------|
-            // New:                                        |---------->
-            // Date:     -4         -3         -2         -1          0
-            //
-            // Should become:
-            // Owner:         Old                    Old        New
-            //            |----------|          |----------|---------->
-            // Date:     -4         -3         -2         -1          0
-            name: 'New is open',
-            newClaimEndDate: null,
-            shouldPass: true,
-            expectedMessages: /Property Claimed Successfully/,
-          },
-        ],
-      }, {
-        name: 'New starts after both existing',
-        newClaimStartDate: existingClaim2End.monthsAfter(3),
-        new_end_tests: [
-          {
-            // Existing:  |----------|          |----------|
-            // New:                                            |---|
-            // Date:     -4         -3         -2         -1          0
-            //
-            // Should become:
-            // Owner:         Old                    Old        New
-            //            |----------|          |----------|   |---|
-            // Date:     -4         -3         -2         -1          0
-            name: 'New ends after both existing',
-            newClaimEndDate: existingClaim2End.monthsAfter(9),
-            shouldPass: true,
-            expectedMessages: /Property Claimed Successfully/,
-          },
-          {
-            // Existing:  |----------|          |----------|
-            // New:                                            |------>
-            // Date:     -4         -3         -2         -1          0
-            //
-            // Should become:
-            // Owner:         Old                    Old          New
-            //            |----------|          |----------|    |----->
-            // Date:     -4         -3         -2         -1          0
-            name: 'New is open',
-            newClaimEndDate: null,
-            shouldPass: true,
-            expectedMessages: /Property Claimed Successfully/,
-          },
-        ],
-      },
-    ];
+            },
+            {
+              // Existing:  |----------|          |----------|
+              // New:          |-----------------------------|
+              // Date:     -4         -3         -2         -1          0
+              name: 'New ends on same day as second existing ends',
+              newClaimEndDate: existingClaim2End,
+              shouldPass: false,
+              expectedMessages: /These dates overlap someone elses claim\. Please contact support if you believe this is a mistake|new claim overlaps with an existing claim/,
+            },
+            {
+              // Existing:  |----------|          |----------|
+              // New:          |-----------------------------------|
+              // Date:     -4         -3         -2         -1          0
+              name: 'New ends after both existing',
+              newClaimEndDate: existingClaim2End.monthsAfter(6),
+              shouldPass: false,
+              expectedMessages: /These dates overlap someone elses claim\. Please contact support if you believe this is a mistake|new claim overlaps with an existing claim/,
+            },
+            {
+              // Existing:  |----------|          |----------|
+              // New:          |---------------------------------------->
+              // Date:     -4         -3         -2         -1          0
+              name: 'New is open',
+              newClaimEndDate: null,
+              shouldPass: false,
+              expectedMessages: /These dates overlap someone elses claim\. Please contact support if you believe this is a mistake|new claim overlaps with an existing claim/,
+            },
+          ],
+        }, {
+          name: 'New starts on same day as first existing ends',
+          newClaimStartDate: existingClaim1End,
+          new_end_tests: [
+            {
+              // Existing:  |----------|          |----------|
+              // New:                  |-----|
+              // Date:     -4         -3         -2         -1          0
+              //
+              // Should become:
+              // Owner:         Old      New          Old
+              //            |----------|-----|    |----------|
+              // Date:     -4         -3         -2         -1          0
+              name: 'New ends between existing',
+              newClaimEndDate: existingClaim1End.monthsAfter(6),
+              shouldPass: true,
+              expectedMessages: /Property Claimed Successfully/,
+            },
+            {
+              // Existing:  |----------|          |----------|
+              // New:                  |----------|
+              // Date:     -4         -3         -2         -1          0
+              //
+              // Should become:
+              // Owner:         Old         New       Old
+              //            |----------|----------|----------|
+              // Date:     -4         -3         -2         -1          0
+              name: 'New ends on same day as second existing starts',
+              newClaimEndDate: existingClaim2Start,
+              shouldPass: true,
+              expectedMessages: /Property Claimed Successfully/,
+            },
+            {
+              // Existing:  |----------|          |----------|
+              // New:                  |----------------|
+              // Date:     -4         -3         -2         -1          0
+              name: 'New ends during second existing',
+              newClaimEndDate: existingClaim2Start.monthsAfter(6),
+              shouldPass: false,
+              expectedMessages: /These dates overlap someone elses claim\. Please contact support if you believe this is a mistake|new claim overlaps with an existing claim/,
+            },
+            {
+              // Existing:  |----------|          |----------|
+              // New:                  |---------------------|
+              // Date:     -4         -3         -2         -1          0
+              name: 'New ends on same day as second existing ends',
+              newClaimEndDate: existingClaim2End,
+              shouldPass: false,
+              expectedMessages: /These dates overlap someone elses claim\. Please contact support if you believe this is a mistake|new claim overlaps with an existing claim/,
+            },
+            {
+              // Existing:  |----------|          |----------|
+              // New:                  |--------------------------|
+              // Date:     -4         -3         -2         -1          0
+              name: 'New ends after both existing',
+              newClaimEndDate: existingClaim2End.monthsAfter(6),
+              shouldPass: false,
+              expectedMessages: /These dates overlap someone elses claim\. Please contact support if you believe this is a mistake|new claim overlaps with an existing claim/,
+            },
+            {
+              // Existing:  |----------|          |----------|
+              // New:                  |-------------------------------->
+              // Date:     -4         -3         -2         -1          0
+              name: 'New is open',
+              newClaimEndDate: null,
+              shouldPass: false,
+              expectedMessages: /These dates overlap someone elses claim\. Please contact support if you believe this is a mistake|new claim overlaps with an existing claim/,
+            },
+          ],
+        }, {
+          name: 'New starts between existing',
+          newClaimStartDate: existingClaim1End.monthsAfter(3),
+          new_end_tests: [
+            {
+              // Existing:  |----------|          |----------|
+              // New:                     |-----|
+              // Date:     -4         -3         -2         -1          0
+              //
+              // Should become:
+              // Owner:         Old         New       Old
+              //            |----------|  |-----| |----------|
+              // Date:     -4         -3         -2         -1          0
+              name: 'New ends between existing',
+              newClaimEndDate: existingClaim2Start.monthsBefore(3),
+              shouldPass: true,
+              expectedMessages: /Property Claimed Successfully/,
+            },
+            {
+              // Existing:  |----------|          |----------|
+              // New:                     |-------|
+              // Date:     -4         -3         -2         -1          0
+              //
+              // Should become:
+              // Owner:         Old          New      Old
+              //            |----------|  |-------|----------|
+              // Date:     -4         -3         -2         -1          0
+              name: 'New ends on same day as second existing starts',
+              newClaimEndDate: existingClaim2Start,
+              shouldPass: true,
+              expectedMessages: /Property Claimed Successfully/,
+            },
+            {
+              // Existing:  |----------|          |----------|
+              // New:                     |------------|
+              // Date:     -4         -3         -2         -1          0
+              name: 'New ends during second existing',
+              newClaimEndDate: existingClaim2Start.monthsAfter(6),
+              shouldPass: false,
+              expectedMessages: /These dates overlap someone elses claim\. Please contact support if you believe this is a mistake|new claim overlaps with an existing claim/,
+            },
+            {
+              // Existing:  |----------|          |----------|
+              // New:                     |------------------|
+              // Date:     -4         -3         -2         -1          0
+              name: 'New ends on same day as second existing ends',
+              newClaimEndDate: existingClaim2End,
+              shouldPass: false,
+              expectedMessages: /These dates overlap someone elses claim\. Please contact support if you believe this is a mistake|new claim overlaps with an existing claim/,
+            },
+            {
+              // Existing:  |----------|          |----------|
+              // New:                     |------------------------|
+              // Date:     -4         -3         -2         -1          0
+              name: 'New ends after both existing',
+              newClaimEndDate: existingClaim2End.monthsAfter(6),
+              shouldPass: false,
+              expectedMessages: /These dates overlap someone elses claim\. Please contact support if you believe this is a mistake|new claim overlaps with an existing claim/,
+            },
+            {
+              // Existing:  |----------|          |----------|
+              // New:                     |----------------------------->
+              // Date:     -4         -3         -2         -1          0
+              name: 'New is open',
+              newClaimEndDate: null,
+              shouldPass: false,
+              expectedMessages: /These dates overlap someone elses claim\. Please contact support if you believe this is a mistake|new claim overlaps with an existing claim/,
+            },
+          ],
+        }, {
+          name: 'New starts on same day as second existing starts',
+          newClaimStartDate: existingClaim2Start,
+          new_end_tests: [
+            {
+              // Existing:  |----------|          |----------|
+              // New:                             |-----|
+              // Date:     -4         -3         -2         -1          0
+              name: 'New ends during second existing',
+              newClaimEndDate: existingClaim2Start.monthsAfter(6),
+              shouldPass: false,
+              expectedMessages: /These dates overlap someone elses claim\. Please contact support if you believe this is a mistake|new claim overlaps with an existing claim/,
+            },
+            {
+              // Existing:  |----------|          |----------|
+              // New:                             |----------|
+              // Date:     -4         -3         -2         -1          0
+              name: 'New ends on same day as second existing ends',
+              newClaimEndDate: existingClaim2End,
+              shouldPass: false,
+              expectedMessages: /These dates overlap someone elses claim\. Please contact support if you believe this is a mistake|new claim overlaps with an existing claim/,
+            },
+            {
+              // Existing:  |----------|          |----------|
+              // New:                             |----------------|
+              // Date:     -4         -3         -2         -1          0
+              name: 'New ends after both existing',
+              newClaimEndDate: existingClaim2End.monthsAfter(6),
+              shouldPass: false,
+              expectedMessages: /These dates overlap someone elses claim\. Please contact support if you believe this is a mistake|new claim overlaps with an existing claim/,
+            },
+            {
+              // Existing:  |----------|          |----------|
+              // New:                             |--------------------->
+              // Date:     -4         -3         -2         -1          0
+              name: 'New is open',
+              newClaimEndDate: null,
+              shouldPass: false,
+              expectedMessages: /These dates overlap someone elses claim\. Please contact support if you believe this is a mistake|new claim overlaps with an existing claim/,
+            },
+          ],
+        }, {
+          name: 'New starts during second existing',
+          newClaimStartDate: existingClaim2Start.monthsAfter(3),
+          new_end_tests: [
+            {
+              // Existing:  |----------|          |----------|
+              // New:                                |----|
+              // Date:     -4         -3         -2         -1          0
+              name: 'New ends during second existing',
+              newClaimEndDate: existingClaim2End.monthsBefore(3),
+              shouldPass: false,
+              expectedMessages: /These dates overlap someone elses claim\. Please contact support if you believe this is a mistake|new claim overlaps with an existing claim/,
+            },
+            {
+              // Existing:  |----------|          |----------|
+              // New:                                |-------|
+              // Date:     -4         -3         -2         -1          0
+              name: 'New ends on same day as second existing ends',
+              newClaimEndDate: existingClaim2End,
+              shouldPass: false,
+              expectedMessages: /These dates overlap someone elses claim\. Please contact support if you believe this is a mistake|new claim overlaps with an existing claim/,
+            },
+            {
+              // Existing:  |----------|          |----------|
+              // New:                                |-------------|
+              // Date:     -4         -3         -2         -1          0
+              name: 'New ends after both existing',
+              newClaimEndDate: existingClaim2End.monthsAfter(6),
+              shouldPass: false,
+              expectedMessages: /These dates overlap someone elses claim\. Please contact support if you believe this is a mistake|new claim overlaps with an existing claim/,
+            },
+            {
+              // Existing:  |----------|          |----------|
+              // New:                                |------------------>
+              // Date:     -4         -3         -2         -1          0
+              name: 'New is open',
+              newClaimEndDate: null,
+              shouldPass: false,
+              expectedMessages: /These dates overlap someone elses claim\. Please contact support if you believe this is a mistake|new claim overlaps with an existing claim/,
+            },
+          ],
+        }, {
+          name: 'New starts on same day as second existing ends',
+          newClaimStartDate: existingClaim2End,
+          new_end_tests: [
+            {
+              // Existing:  |----------|          |----------|
+              // New:                                        |----|
+              // Date:     -4         -3         -2         -1          0
+              //
+              // Should become:
+              // Owner:         Old                    Old    New
+              //            |----------|          |----------|----|
+              // Date:     -4         -3         -2         -1          0
+              name: 'New ends after both existing',
+              newClaimEndDate: existingClaim2End.monthsAfter(6),
+              shouldPass: true,
+              expectedMessages: /Property Claimed Successfully/,
+            },
+            {
+              // Existing:  |----------|          |----------|
+              // New:                                        |---------->
+              // Date:     -4         -3         -2         -1          0
+              //
+              // Should become:
+              // Owner:         Old                    Old        New
+              //            |----------|          |----------|---------->
+              // Date:     -4         -3         -2         -1          0
+              name: 'New is open',
+              newClaimEndDate: null,
+              shouldPass: true,
+              expectedMessages: /Property Claimed Successfully/,
+            },
+          ],
+        }, {
+          name: 'New starts after both existing',
+          newClaimStartDate: existingClaim2End.monthsAfter(3),
+          new_end_tests: [
+            {
+              // Existing:  |----------|          |----------|
+              // New:                                            |---|
+              // Date:     -4         -3         -2         -1          0
+              //
+              // Should become:
+              // Owner:         Old                    Old        New
+              //            |----------|          |----------|   |---|
+              // Date:     -4         -3         -2         -1          0
+              name: 'New ends after both existing',
+              newClaimEndDate: existingClaim2End.monthsAfter(9),
+              shouldPass: true,
+              expectedMessages: /Property Claimed Successfully/,
+            },
+            {
+              // Existing:  |----------|          |----------|
+              // New:                                            |------>
+              // Date:     -4         -3         -2         -1          0
+              //
+              // Should become:
+              // Owner:         Old                    Old          New
+              //            |----------|          |----------|    |----->
+              // Date:     -4         -3         -2         -1          0
+              name: 'New is open',
+              newClaimEndDate: null,
+              shouldPass: true,
+              expectedMessages: /Property Claimed Successfully/,
+            },
+          ],
+        },
+      ];
 
     for (const [startIndex, startTest] of newClaimTests.entries()) {
       test.describe(`4.3.${startIndex + 1}. ${startTest.name}`, () => {

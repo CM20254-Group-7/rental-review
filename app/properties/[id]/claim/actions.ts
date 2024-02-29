@@ -17,30 +17,24 @@ const colisionState = (
 ): 'good' | 'bad' | 'close existing' => {
   // If existing claim is open
   if (existingEndDate === null) {
-    console.log(existingStartDate, existingEndDate, newStartDate, newEndDate, isSameLandlord)
     // If new claim starts after existing claim, close existing claim unless it is the same landlord
     if (newStartDate > existingStartDate) {
-      console.log(1)
       return isSameLandlord? 'bad' : 'close existing';
     }
     // If the new claim starts on the same day as the existing claim, fail, as the old claim would be invalid if closed on the same day it starts
     if (newStartDate === existingStartDate) {
-      console.log(2)
       return 'bad';
     }
     // If new claim starts before existing claim, fail if the new claim does not end before the existing claim starts
     if (newEndDate === null || newEndDate > existingStartDate) {
-      console.log(3)
       return 'bad';
     }
     // if the claim is being made by the same landlord, require the new claim to end at least one day before the existing claim
     // convert to strings because the dates are not the same object and JS is weird about equality
     if (isSameLandlord && existingStartDate.toISOString() === newEndDate.toISOString()) {
-      console.log(4)
       return 'bad';
     }
 
-    console.log(5)
     return 'good';
   }
   // otherwise, existing claim is closed
