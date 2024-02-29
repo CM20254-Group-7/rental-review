@@ -13,6 +13,7 @@ test.describe('Landlord Profile Page Tests', () => {
     await expect(page.getByRole('main')).toContainText(`${secondUser.landlordProfile!.displayName}`);
     await expect(page.getByRole('main')).toContainText(`${secondUser.landlordProfile!.displayEmail}`);
     await expect(page.getByRole('main')).toContainText(`${secondUser.landlordProfile!.userBio}`);
+
     await expect(page.getByRole('main')).toContainText('No properties');
   });
 
