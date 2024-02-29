@@ -159,7 +159,7 @@ test.describe(`${secondUser.label} tests`, () => {
         'Content-Type': 'application/json',
       },
     });
-    const { accesss_token: accessToken } = await userRes.json();
+    const { access_token: accessToken } = await userRes.json();
 
     // use the access token to get user 1's profile
     const testRes = await page.request.get(`${apiBaseURL}/rest/v1/user_profiles?email=eq.${firstUser.email}&select=email`, {
