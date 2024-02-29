@@ -31,7 +31,7 @@ test('search properties link', async ({ page }) => {
     await page.goto('./');
 
     // Click the Search Properties link
-    await page.getByRole('link', { name: 'Search Properties' }).click();
+    await page.getByRole('link', { name: 'Properties' }).click();
 
     // Expects page to have changed to properties
     await expect(page).toHaveURL('./properties');
