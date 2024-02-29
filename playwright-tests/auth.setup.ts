@@ -4,7 +4,7 @@ import { loginAsUser } from './helpers';
 const usedUsers: number[] = [1, 2, 3, 4];
 
 for (const user of usedUsers) {
-  setup(`authenticate user ${user} with login page`, async ({ browser, page, request }, testInfo) => {
+  setup(`authenticate user ${user} with login page`, async ({ page }) => {
     await loginAsUser(page, user);
   });
 }
