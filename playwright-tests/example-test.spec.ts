@@ -14,5 +14,5 @@ test('login link', async ({ page }) => {
   await page.getByRole('link', { name: 'Login' }).click();
 
   // Expects page to have changed to login
-  await expect(page).toHaveURL('./login')
+  await expect(page).toHaveURL('./login');
 });

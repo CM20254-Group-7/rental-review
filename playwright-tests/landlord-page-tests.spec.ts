@@ -3,26 +3,27 @@ import { users } from './helpers';
 
 // This test uses 3 users
 // for each it will check what is displayed on the landlord's profile page
-const firstUser  = users[1]; // Landlord with no properties
-const secondUser = users[0]; // Landlord with 2 properties
-const thirdUser  = users[2]; // Not a landlord
+const firstUser = users[0]; // Landlord with 2 properties
+const secondUser = users[1]; // Landlord with no properties
+const thirdUser = users[2]; // Not a landlord
 
 test.describe('Landlord Profile Page Tests', () => {
-  test(`${firstUser.label} - No owned properties`,  async ({ page }) => {
-    await page.goto(`http://localhost:3000/profiles/${firstUser.id}`);
-    await expect(page.getByRole('main')).toContainText('Test Name 2');
-    await expect(page.getByRole('main')).toContainText('display2@example.com');
-    await expect(page.getByRole('main')).toContainText('Cooler landlord');
+  test(`${secondUser.label} - No owned properties`, async ({ page }) => {
+    await page.goto(`http://localhost:3000/profiles/${secondUser.id}`);
+    await expect(page.getByRole('main')).toContainText(`${secondUser.landlordProfile!.displayName}`);
+    await expect(page.getByRole('main')).toContainText(`${secondUser.landlordProfile!.displayEmail}`);
+    await expect(page.getByRole('main')).toContainText(`${secondUser.landlordProfile!.userBio}`);
+
     await expect(page.getByRole('main')).toContainText('No properties');
   });
 
-  test(`${secondUser.label} - Two owned properties`, async ({ page }) => {
-    await page.goto(`http://localhost:3000/profiles/${secondUser.id}`);
-    await expect(page.getByRole('main')).toContainText('Test Name 1');
-    await expect(page.getByRole('main')).toContainText('display1@example.com');
-    await expect(page.getByRole('main')).toContainText('Cool landlord');
-    await expect(page.getByRole('list')).toContainText('1 Test Road');
-    await expect(page.getByRole('list')).toContainText('2 Test Road');
+  test(`${firstUser.label} - Two owned properties`, async ({ page }) => {
+    await page.goto(`http://localhost:3000/profiles/${firstUser.id}`);
+    await expect(page.getByRole('main')).toContainText(`${firstUser.landlordProfile!.displayName}`);
+    await expect(page.getByRole('main')).toContainText(`${firstUser.landlordProfile!.displayEmail}`);
+    await expect(page.getByRole('main')).toContainText(`${firstUser.landlordProfile!.userBio}`);
+    await expect(page.getByRole('list')).toContainText(`${firstUser.landlordProfile!.properties[0]}`);
+    await expect(page.getByRole('list')).toContainText(`${firstUser.landlordProfile!.properties[1]}`);
   });
 
   test(`${thirdUser.label} - Not a landlord`, async ({ page }) => {
