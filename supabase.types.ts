@@ -361,6 +361,12 @@ export interface Database {
       [_ in never]: never
     }
     Functions: {
+      average_landlord_rating: {
+        Args: {
+          id: string
+        }
+        Returns: number
+      }
       get_average_property_rating: {
         Args: {
           property_id: string
@@ -373,6 +379,55 @@ export interface Database {
           property_id: string
           address: string
           average_rating: number
+        }[]
+      }
+      landlord_public_profiles_with_ratings: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          user_id: string
+          website: string
+          bio: string
+          profile_image_id: string
+          verified: boolean
+          type: string
+          display_email: string
+          display_name: string
+          average_rating: number
+        }[]
+      }
+      property_owner_on_date: {
+        Args: {
+          property_id: string
+          query_date: string
+        }
+        Returns: string
+      }
+      reviews_for_landlord: {
+        Args: {
+          id: string
+        }
+        Returns: {
+          property_id: string
+          reviewer_id: string
+          review_date: string
+          review_id: string
+          landlord_rating: number
+          property_rating: number
+          review_body: string
+          landlord_id: string
+        }[]
+      }
+      reviews_with_landlords: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          property_id: string
+          reviewer_id: string
+          review_date: string
+          review_id: string
+          landlord_rating: number
+          property_rating: number
+          review_body: string
+          landlord_id: string
         }[]
       }
     }
