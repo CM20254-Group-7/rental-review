@@ -19,7 +19,7 @@ const colisionState = (
   if (existingEndDate === null) {
     // If new claim starts after existing claim, close existing claim unless it is the same landlord
     if (newStartDate > existingStartDate) {
-      return isSameLandlord? 'bad' : 'close existing';
+      return isSameLandlord ? 'bad' : 'close existing';
     }
     // If the new claim starts on the same day as the existing claim, fail, as the old claim would be invalid if closed on the same day it starts
     if (newStartDate === existingStartDate) {
@@ -258,7 +258,7 @@ export const claimProperty = async (
         existingClaimEndDate,
         newClaimStartDate,
         newClaimEndDate,
-        isSameLandlord
+        isSameLandlord,
       ),
     };
   });
