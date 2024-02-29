@@ -26,14 +26,14 @@ const userLabels = [
   'User 8',
   'User 9',
   'User 10',
-]
+];
 
 const userLandlordProfiles = [
   {
     displayName: 'Test Name 1',
     displayEmail: 'display1@example.com',
     userBio: 'Cool landlord',
-    properties: ["1 Test Road", "2 Test Road"],
+    properties: ['1 Test Road', '2 Test Road'],
   },
   {
     displayName: 'Test Name 2',
@@ -51,16 +51,14 @@ const userLandlordProfiles = [
   undefined,
 ];
 
-export const users = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) => {
-  return {
-    file: `playwright/.auth/user${i}.json`,
-    email: `user.${i}@example.com`,
-    password: `User.${i}.Password`,
-    id: userIds[i - 1],
-    label: userLabels[i - 1],
-    landlordProfile: userLandlordProfiles[i - 1],
-  };
-});
+export const users = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) => ({
+  file: `playwright/.auth/user${i}.json`,
+  email: `user.${i}@example.com`,
+  password: `User.${i}.Password`,
+  id: userIds[i - 1],
+  label: userLabels[i - 1],
+  landlordProfile: userLandlordProfiles[i - 1],
+}));
 
 
 const propertyIds = [
@@ -79,7 +77,6 @@ export const properties = [1, 2].map((i) => ({
   // They are all owned by the same user according to the mock data
   owner: 'Test Name 1',
 }));
-
 
 export const loginUserWithUI = async (
   page: Page,

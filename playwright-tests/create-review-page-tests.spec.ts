@@ -43,7 +43,7 @@ test.describe('User 1 tests', () => {
     await expect(page.locator('form')).toContainText('No Property Selected');
   });
 
-    // This is not implemented yet, so not tested
+  // This is not implemented yet, so not tested
   test('reviewing new property as User 1', async ({ page }) => {
     // TODO: do full workflow to get to new property review page
     test.fixme();
@@ -65,7 +65,7 @@ test.describe('User 1 tests', () => {
     await expect(page.locator('form')).toContainText('Review Created');
   });
 
-    // reviews page not implemented, so .../create/... returns 404 error
+  // reviews page not implemented, so .../create/... returns 404 error
   test('reviewing existing property as User 1', async ({ page }) => {
     test.fixme();
 

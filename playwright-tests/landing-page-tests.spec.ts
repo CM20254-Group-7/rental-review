@@ -15,7 +15,7 @@ test('homebutton link', async ({ page }) => {
 
   // Expects to be back at the home page
   await expect(page).toHaveURL('./');
-})
+});
 
 test('login link', async ({ page }) => {
   await page.goto('./');
@@ -24,7 +24,7 @@ test('login link', async ({ page }) => {
   await page.getByRole('link', { name: 'Login' }).click();
 
   // Expects page to have changed to login
-  await expect(page).toHaveURL('./login')
+  await expect(page).toHaveURL('./login');
 });
 
 test('search properties link', async ({ page }) => {
