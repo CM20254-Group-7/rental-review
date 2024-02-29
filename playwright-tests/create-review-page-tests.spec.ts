@@ -4,8 +4,8 @@ import createReviewPage from '@/app/reviews/create/page';
 
 // tests will need to be edited to simply check that Anon cannot review.
 test.describe('Anon User Tests', () => {
-    test.fixme('Anon cannot create review.', async ({ page }) => {
-        createReviewPage();
+    test('Anon cannot create review.', async ({ page }) => {
+        test.fixme();
 
         // clicks "Create Review" button
         /* TODO: maybe remove this line depending on how createReviewPage()
@@ -22,7 +22,9 @@ test.describe('User 1 tests', () => {
     test.use({ storageState: users[0].file });
     const dateTime = new Date();
 
-    test.fixme('reviewing without selecting a property', async ({ page }) => {
+    test('reviewing without selecting a property', async ({ page }) => {
+        test.fixme();
+        
         await page.goto('./reviews/create/')
 
         // fills in date
@@ -43,8 +45,9 @@ test.describe('User 1 tests', () => {
     })
 
     // This is not implemented yet, so not tested
-    test.fixme('reviewing new property as User 1', async ({ page }) => {
+    test('reviewing new property as User 1', async ({ page }) => {
         // TODO: do full workflow to get to new property review page
+        test.fixme();
 
         // fills in date
         await page.getByLabel('Review Date').fill(`${dateTime.getDate()}`);
@@ -64,7 +67,9 @@ test.describe('User 1 tests', () => {
     })
 
     // reviews page not implemented, so .../create/... returns 404 error
-    test.fixme('reviewing existing property as User 1', async ({ page }) => {
+    test('reviewing existing property as User 1', async ({ page }) => {
+        test.fixme();
+        
         // Goes to the createReview page of a pre-existing property
         await page.goto('./reviews/create/1ececec8-4bbf-445f-8de0-f563caf0bf01')
 
@@ -85,7 +90,9 @@ test.describe('User 1 tests', () => {
         await expect(page.locator('form')).toContainText('Property Already Exists');
     })
 
-    test.fixme('reviewing property already reviewd by User 1 as User 1', async ({ page }) => {
+    test('reviewing property already reviewd by User 1 as User 1', async ({ page }) => {
+        test.fixme();
+        
         // TODO: change propertyId to one that User 1 made
         await page.goto('./reviews/create/1ececec8-4bbf-445f-8de0-f563caf0bf01')
 
