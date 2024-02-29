@@ -1535,7 +1535,7 @@ test.describe('4. Claim Collision', () => {
               }
 
               // try and fetch the claim from the database
-              const res = await page.request.get(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/property_ownership?select=*&property_id=eq.${property.id}&landlord_id=eq.${propertyClaimerUser.id}`, {
+              const res = await page.request.get(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/property_ownership?select=*&property_id=eq.${property.id}&landlord_id=eq.${propertyClaimerUser.id}&started_at=eq.${startDateTest.newClaimStartDate.toISODateString()}`, {
                 headers: {
                   apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
                   Authorization: `Bearer ${process.env.SUPABASE_SERVICE_KEY!}`,
@@ -1558,7 +1558,7 @@ test.describe('4. Claim Collision', () => {
               } else await expect(ownershipRecords.length).toBeFalsy();
 
               // Check that the existing claim was closed if it should have been
-              const existingRes = await page.request.get(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/property_ownership?select=*&property_id=eq.${property.id}&landlord_id=eq.${claim.user.id}`, {
+              const existingRes = await page.request.get(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/property_ownership?select=*&property_id=eq.${property.id}&landlord_id=eq.${claim.user.id}&started_at=eq.${claim.existingClaimStart.toISODateString()}`, {
                 headers: {
                   apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
                   Authorization: `Bearer ${process.env.SUPABASE_SERVICE_KEY!}`,

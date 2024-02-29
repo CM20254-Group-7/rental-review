@@ -13,18 +13,34 @@ const colisionState = (
   existingEndDate: Date | null,
   newStartDate: Date,
   newEndDate: Date | null,
+  isSameLandlord: boolean,
 ): 'good' | 'bad' | 'close existing' => {
   // If existing claim is open
   if (existingEndDate === null) {
-    // If new claim starts after existing claim, close existing claim
+    console.log(existingStartDate, existingEndDate, newStartDate, newEndDate, isSameLandlord)
+    // If new claim starts after existing claim, close existing claim unless it is the same landlord
     if (newStartDate > existingStartDate) {
-      return 'close existing';
+      console.log(1)
+      return isSameLandlord? 'bad' : 'close existing';
+    }
+    // If the new claim starts on the same day as the existing claim, fail, as the old claim would be invalid if closed on the same day it starts
+    if (newStartDate === existingStartDate) {
+      console.log(2)
+      return 'bad';
     }
     // If new claim starts before existing claim, fail if the new claim does not end before the existing claim starts
     if (newEndDate === null || newEndDate > existingStartDate) {
+      console.log(3)
+      return 'bad';
+    }
+    // if the claim is being made by the same landlord, require the new claim to end at least one day before the existing claim
+    // convert to strings because the dates are not the same object and JS is weird about equality
+    if (isSameLandlord && existingStartDate.toISOString() === newEndDate.toISOString()) {
+      console.log(4)
       return 'bad';
     }
 
+    console.log(5)
     return 'good';
   }
   // otherwise, existing claim is closed
@@ -237,19 +253,8 @@ export const claimProperty = async (
     );
   }
 
-  // If not empty, for each existing property ownership record, there several cases to consider:
-  // 1. The existing claim is closed
-  //    1.1 The existing claim does not overlap with the new claim, continue
-  //    1.2 The existing claim overlaps with the new claim, fail
-  // 2. The existing claim is open
-  //    2.1 The new claim starts after the existing claim, close the existing claim & continue
-  //    2.2 The new claim starts before the existing claim
-  //        2.2.1 The new claim is closed and ends before the existing claim starts, continue
-  //        2.2.2 The new claim is open or ends after the existing claim starts, fail
-
-  // To handle 2.1, track whether there is an open claim to close as we iterate through the existing claims
-
   const collisionStates = existingPropertyOwnerships.map((existingPropertyOwnership) => {
+    const isSameLandlord = existingPropertyOwnership.landlord_id === activeUserLandlordId;
     const existingClaimStartDate = new Date(existingPropertyOwnership.started_at);
     const existingClaimEndDate = existingPropertyOwnership.ended_at ? new Date(existingPropertyOwnership.ended_at) : null;
     return {
@@ -259,6 +264,7 @@ export const claimProperty = async (
         existingClaimEndDate,
         newClaimStartDate,
         newClaimEndDate,
+        isSameLandlord
       ),
     };
   });
