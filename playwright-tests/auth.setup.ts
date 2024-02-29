@@ -1,7 +1,6 @@
 import { test as setup } from '@playwright/test';
 import { loginAsUser } from './helpers';
 
-const apiBaseURL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 
 const usedUsers: number[] = [1,2,3,4];
 
