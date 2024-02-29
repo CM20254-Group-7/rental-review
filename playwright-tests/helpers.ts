@@ -60,7 +60,6 @@ export const users = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) => ({
   landlordProfile: userLandlordProfiles[i - 1],
 }));
 
-
 const propertyIds = [
   '1ececec8-4bbf-445f-8de0-f563caf0bf01',
   '6a83d02b-9da1-4a4a-9719-05e8a8c9228d',

@@ -28,4 +28,3 @@ test('PropertyId not provided test', async ({ page }) => {
   await expect(page.getByRole('main')).toContainText(firstProperty.address);
   await expect(page.getByRole('main')).toContainText(secondProperty.address);
 });
-

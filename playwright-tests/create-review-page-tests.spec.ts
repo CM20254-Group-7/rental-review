@@ -12,7 +12,7 @@ test.describe('Anon User Tests', () => {
     await page.getByRole('button', { name: 'Create Review' }).click();
 
     // checks Anon receives relevant message
-    await expect(page.locator('form')).toContainText('User Not Logged In')
+    await expect(page.locator('form')).toContainText('User Not Logged In');
   });
 });
 
