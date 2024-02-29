@@ -99,12 +99,11 @@ const setPropertyOwnershipWithClose = async (
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.SUPABASE_SERVICE_KEY!,
   );
-  const newEndedAt = new Date(startedAt.getDate() - 1);
 
   const { error } = await supabase
     .from('property_ownership')
     .update({
-      ended_at: newEndedAt.toISOString(),
+      ended_at: startedAt.toISOString(),
     })
     .eq('property_id', selectedPropertyId)
     .eq('started_at', openClaimToClose.toISOString());
