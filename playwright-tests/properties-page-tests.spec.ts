@@ -53,9 +53,30 @@ test.describe('Property details page test', () => {
   });
 
   test('Average property rating test', async ({ page }) => {
-    // TODO: Add test for checking average property rating
-    test.fixme();
     await page.goto('http://localhost:3000/properties/6a83d02b-9da1-4a4a-9719-05e8a8c9228d');
+    // Select the specific section containing the stars
+    const section = await page.$('body > main > div > div > div.flex.flex-row.w-full.justify-between.gap-2.bg-secondary\\/30.shadow-lg.shadow-secondary\\/40 > div.flex-1.flex.flex-col.w-full.px-8.sm\\:max-w-md.justify-top.gap-2.py-4 > div.flex.flex-row.w-full.px-0.justify-start.items-center.gap-2 > div');
+
+    // Use querySelectorAll within the section to select all SVG elements representing stars
+    const stars = await section.$$('svg[data-slot="icon"]');
+
+    // Count the number of yellow and grey stars
+    let yellowStars = 0;
+    let greyStars = 0;
+    for (const star of stars) {
+        const starClass = await star.getAttribute('class');
+        if (starClass.includes('text-yellow-300')) {
+            yellowStars++;
+        } else if (starClass.includes('text-gray-400')) {
+            greyStars++;
+        }
+    }
+
+    // Assert that there are exactly 2 yellow stars
+    await expect(yellowStars).toBe(3);
+
+    // Assert that there are exactly 3 grey stars
+    await expect(greyStars).toBe(2);
   });
 
   test('Average landlord rating test', async ({ page }) => {
