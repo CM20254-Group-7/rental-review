@@ -31,7 +31,7 @@ const newAccountSchema = accountDetails
 export const updateInfo = async (prevState: State, formData: FormData): Promise<State> => {
     
     const validatedFields = newAccountSchema.safeParse({
-        new_email: formData.get('new_email'),
+        new_email: formData.get('email'),
 
     })
 
@@ -46,15 +46,25 @@ export const updateInfo = async (prevState: State, formData: FormData): Promise<
         new_email
     } = validatedFields.data
 
-
-
     const cookieStore = cookies()
     const supabase = createClient(cookieStore)
-    
+
     const { data, error } = await supabase.auth.updateUser({
         email: new_email
-    })
-    return redirect('/account')
+      })
+
+    if (error) {
+
+        return {
+            errors: {
+                auth: [error.message]
+            },
+        }
+    }
+    return (
+        
+        redirect ('/')
+    )
 
 }
 
