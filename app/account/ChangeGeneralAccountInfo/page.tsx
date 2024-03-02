@@ -1,19 +1,17 @@
-'use client'
-import Link from 'next/link'
+'use client';
 
-import { UpdateProfileForm } from './forms'
-export default function ChangeGeneralAccountInfo() {
+import UpdateProfileForm from './forms';
 
-    return (
-      <div className="relative flex-1 flex px-8 justify-center place-items-center">
+const ChangeGeneralAccountInfo = () => (
+  <div className='relative flex-1 flex px-8 justify-center place-items-center'>
 
-          <div className="grid grid-cols-1 [@media(min-width:996px)]:grid-cols-2 gap-8 w-full">
+    <div className='grid grid-cols-1 [@media(min-width:996px)]:grid-cols-2 gap-8 w-full'>
 
-            <UpdateProfileForm />
+      <UpdateProfileForm />
 
-          </div>   
-        </div>
+    </div>
+  </div>
 
-        
-    )
-}  
+);
+
+export default ChangeGeneralAccountInfo;
