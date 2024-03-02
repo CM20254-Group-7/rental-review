@@ -374,7 +374,15 @@ export interface Database {
         Args: Record<PropertyKey, never>
         Returns: {
           property_id: string
-          address: string
+          baths: number
+          beds: number
+          country: string
+          county: string
+          description: string
+          house: string
+          postcode: string
+          property_type: string
+          street: string
           average_rating: number
         }[]
       }
