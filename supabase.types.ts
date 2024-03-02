@@ -124,7 +124,6 @@ export interface Database {
       }
       properties: {
         Row: {
-          address: string
           baths: number | null
           beds: number | null
           country: string | null
@@ -137,7 +136,6 @@ export interface Database {
           street: string | null
         }
         Insert: {
-          address: string
           baths?: number | null
           beds?: number | null
           country?: string | null
@@ -150,7 +148,6 @@ export interface Database {
           street?: string | null
         }
         Update: {
-          address?: string
           baths?: number | null
           beds?: number | null
           country?: string | null
