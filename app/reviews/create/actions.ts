@@ -9,13 +9,11 @@ import { z } from 'zod';
 const newReviewSchema = z.object({
   property_id: z.string().uuid().optional(),
 
-  property_house: z.string(),
-  property_street: z.string(),
-  property_county: z.string(),
-  property_postcode: z.string(),
-  property_country: z.string(),
-
-  property_type: z.string(),
+  property_house: z.string().nullish(),
+  property_street: z.string().nullish(),
+  property_county: z.string().nullish(),
+  property_postcode: z.string().nullish(),
+  property_country: z.string().nullish(),
 
   review_date: z.coerce.date(),
 
@@ -34,8 +32,6 @@ export type State = {
     property_postcode?: string[],
     property_country?: string[],
 
-    property_type?: string[],
-
     review_date?: string[],
     review_body?: string[],
     property_rating?: string[],
@@ -48,16 +44,11 @@ export type State = {
 export const createReview = async (
   property: {
     id: string | undefined,
-    address: string | undefined,
-    beds: number | undefined,
-    baths: number | undefined,
-    country: string | undefined,
-    county: string | undefined,
-    description: string | undefined,
+    street: string | undefined,
     house: string | undefined,
-    property_type: string | undefined,
+    county: string | undefined,
     postcode: string | undefined,
-    street: string | undefined
+    country: string | undefined,
   },
   prevState: State,
   formData: FormData,
@@ -65,14 +56,9 @@ export const createReview = async (
   // Validate input
   const validatedFields = newReviewSchema.safeParse({
     property_id: property.id,
-    property_address: property.address,
-    property_baths: property.baths,
-    property_beds: property.beds,
     property_country: property.country,
     property_county: property.county,
-    property_description: property.description,
     property_house: property.house,
-    property_type: property.property_type,
     property_postcode: property.postcode,
     property_street: property.street,
     review_date: formData.get('review_date'),
@@ -96,8 +82,6 @@ export const createReview = async (
     property_postcode,
     property_country,
 
-    property_type,
-
     review_date,
     review_body,
     property_rating,
@@ -111,22 +95,28 @@ export const createReview = async (
   );
 
   if (!property_id) {
-    if (!property_address) {
+    if (!property_house || !property_street || !property_postcode) {
       return {
-        message: 'No Property Selected',
+        message: 'Property address Must be provided if property id is not. Must include house, street and postcode at minimum.',
       };
     }
 
     // TODO: Handle property creation
 
     // Check if property with address exists
-    const { data: existingProperty } = await serviceSupabase
+    let query = serviceSupabase
       .from('properties')
       .select('id')
-      .eq('address', property_address)
-      .maybeSingle();
-    // If it does - Error
+      .eq('house', property_house)
+      .eq('street', property_street)
+      .eq('postcode', property_postcode);
 
+    if (property_county) query = query.eq('county', property_county);
+    if (property_country) query = query.eq('country', property_country);
+
+    const { data: existingProperty } = await query.maybeSingle();
+
+    // If it does - Error
     if (existingProperty) {
       return {
         message: 'Property Already Exists',
@@ -137,7 +127,11 @@ export const createReview = async (
     const { data: newProperty, error: newPropertyError } = await serviceSupabase
       .from('properties')
       .insert({
-        address: property_address, baths: property_baths, beds: property_beds, country: property_country, county: property_county, description: property_description, house: property_house, postcode: property_postcode, property_type, street: property_street,
+        house: property_house,
+        street: property_street,
+        county: property_county,
+        postcode: property_postcode,
+        country: property_country,
       })
       .select('id')
       .single();
