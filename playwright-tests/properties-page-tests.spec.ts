@@ -1,3 +1,4 @@
+/* eslint-disable no-await-in-loop */
 import { test, expect } from '@playwright/test';
 
 import { properties } from './helpers';
@@ -60,28 +61,28 @@ test.describe('Property details page test', () => {
       // Select the specific section containing the stars
       const section = await page.$('body > main > div > div > div.flex.flex-row.w-full.justify-between.gap-2.bg-secondary\\/30.shadow-lg.shadow-secondary\\/40 > div.flex-1.flex.flex-col.w-full.px-8.sm\\:max-w-md.justify-top.gap-2.py-4 > div.flex.flex-row.w-full.px-0.justify-start.items-center.gap-2 > div');
       if (!section) {
-          throw new Error('Section not found');
+        throw new Error('Section not found');
       }
 
       // Get all the svg of the stars
       const stars = await section.$$('svg[data-slot="icon"]');
       if (!stars) {
-          throw new Error('Stars not found');
+        throw new Error('Stars not found');
       }
 
       // Count the number of yellow and grey stars
       let yellowStars = 0;
       let greyStars = 0;
       for (const star of stars) {
-          const starClass = await star.getAttribute('class');
-          if (!starClass) {
-              throw new Error('Star class not found');
-          }
-          if (starClass.includes('text-yellow-300')) {
-              yellowStars++;
-          } else if (starClass.includes('text-gray-400')) {
-              greyStars++;
-          }
+        const starClass = await star.getAttribute('class');
+        if (!starClass) {
+          throw new Error('Star class not found');
+        }
+        if (starClass.includes('text-yellow-300')) {
+          yellowStars += 1;
+        } else if (starClass.includes('text-gray-400')) {
+          greyStars += 1;
+        }
       }
 
       // Check if the number of stars is correct
@@ -94,28 +95,28 @@ test.describe('Property details page test', () => {
       // Select the specific section containing the stars
       const section = await page.$('body > main > div > div > div.flex.flex-row.w-full.justify-between.gap-2.bg-secondary\\/30.shadow-lg.shadow-secondary\\/40 > div.flex-1.flex.flex-col.w-full.px-8.sm\\:max-w-md.justify-top.gap-2.py-4 > div:nth-child(5) > div');
       if (!section) {
-          throw new Error('Section not found');
+        throw new Error('Section not found');
       }
 
       // Get all the svg of the stars
       const stars = await section.$$('svg[data-slot="icon"]');
       if (!stars) {
-          throw new Error('Stars not found');
+        throw new Error('Stars not found');
       }
 
       // Count the number of yellow and grey stars
       let yellowStars = 0;
       let greyStars = 0;
       for (const star of stars) {
-          const starClass = await star.getAttribute('class');
-          if (!starClass) {
-              throw new Error('Star class not found');
-          }
-          if (starClass.includes('text-yellow-300')) {
-              yellowStars++;
-          } else if (starClass.includes('text-gray-400')) {
-              greyStars++;
-          }
+        const starClass = await star.getAttribute('class');
+        if (!starClass) {
+          throw new Error('Star class not found');
+        }
+        if (starClass.includes('text-yellow-300')) {
+          yellowStars += 1;
+        } else if (starClass.includes('text-gray-400')) {
+          greyStars += 1;
+        }
       }
 
       // Check if the number of stars is correct
