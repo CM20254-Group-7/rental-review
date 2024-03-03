@@ -9,7 +9,7 @@ DROP function get_properties_with_ratings;
 
 CREATE OR REPLACE FUNCTION public.get_properties_with_ratings()
  RETURNS TABLE(
-    property_id uuid,
+    id uuid,
     baths smallint,
     beds smallint,
     country text,
@@ -29,3 +29,67 @@ BEGIN
   from properties;
 END; $function$
 ;
+
+create or replace function plain_text_address (property_id uuid)
+  returns text
+  language SQL
+as $function$
+  select P.house 
+    || COALESCE(', ' || P.street, '')
+    || COALESCE(', ' || P.county, '')
+    || COALESCE(', ' || P.postcode, '')
+    || COALESCE(', ' || P.country, '')
+    || COALESCE(', ' || P.county, '') as address
+  from properties P
+  where P.id = property_id
+$function$;
+
+CREATE or replace function public.get_properties_with_addresses()
+ returns table(
+    id uuid,
+    baths smallint,
+    beds smallint,
+    country text,
+    county text,
+    description text,
+    house text,
+    postcode text,
+    property_type text,
+    street text,
+    address text
+  )
+ language plpgsql
+as $function$
+#variable_conflict use_column 
+begin
+  return QUERY select *, plain_text_address(id) as address
+  from properties;
+end;
+$function$;
+
+CREATE or replace function public.properties_full()
+ returns table(
+    id uuid,
+    baths smallint,
+    beds smallint,
+    country text,
+    county text,
+    description text,
+    house text,
+    postcode text,
+    property_type text,
+    street text,
+    address text,
+    average_rating numeric
+  )
+ language plpgsql
+as $function$
+#variable_conflict use_column 
+begin
+  return QUERY select 
+    *, 
+    plain_text_address(id) as address, 
+    get_average_property_rating(id) as average_rating
+  from properties;
+end;
+$function$;

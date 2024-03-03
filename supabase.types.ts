@@ -370,10 +370,26 @@ export interface Database {
         }
         Returns: number
       }
+      get_properties_with_addresses: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          id: string
+          baths: number
+          beds: number
+          country: string
+          county: string
+          description: string
+          house: string
+          postcode: string
+          property_type: string
+          street: string
+          address: string
+        }[]
+      }
       get_properties_with_ratings: {
         Args: Record<PropertyKey, never>
         Returns: {
-          property_id: string
+          id: string
           baths: number
           beds: number
           country: string
@@ -397,6 +413,29 @@ export interface Database {
           type: string
           display_email: string
           display_name: string
+          average_rating: number
+        }[]
+      }
+      plain_text_address: {
+        Args: {
+          property_id: string
+        }
+        Returns: string
+      }
+      properties_full: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          id: string
+          baths: number
+          beds: number
+          country: string
+          county: string
+          description: string
+          house: string
+          postcode: string
+          property_type: string
+          street: string
+          address: string
           average_rating: number
         }[]
       }
