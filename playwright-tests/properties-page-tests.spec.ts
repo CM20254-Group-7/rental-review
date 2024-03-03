@@ -1,4 +1,3 @@
-/* eslint-disable no-await-in-loop */
 import { test, expect } from '@playwright/test';
 
 import { properties } from './helpers';
@@ -70,14 +69,21 @@ test.describe('Property details page test', () => {
         throw new Error('Stars not found');
       }
 
-      // Count the number of yellow and grey stars
-      let yellowStars = 0;
-      let greyStars = 0;
-      for (const star of stars) {
+      // Collect promises for all star classes
+      const starClassPromises = stars.map(async (star) => {
         const starClass = await star.getAttribute('class');
         if (!starClass) {
           throw new Error('Star class not found');
         }
+        return starClass;
+      });
+
+      // Wait for all promises to resolve
+      const starClasses = await Promise.all(starClassPromises);
+      // Count the number of yellow and grey stars
+      let yellowStars = 0;
+      let greyStars = 0;
+      for (const starClass of starClasses) {
         if (starClass.includes('text-yellow-300')) {
           yellowStars += 1;
         } else if (starClass.includes('text-gray-400')) {
@@ -104,14 +110,21 @@ test.describe('Property details page test', () => {
         throw new Error('Stars not found');
       }
 
-      // Count the number of yellow and grey stars
-      let yellowStars = 0;
-      let greyStars = 0;
-      for (const star of stars) {
+      // Collect promises for all star classes
+      const starClassPromises = stars.map(async (star) => {
         const starClass = await star.getAttribute('class');
         if (!starClass) {
           throw new Error('Star class not found');
         }
+        return starClass;
+      });
+
+      // Wait for all promises to resolve
+      const starClasses = await Promise.all(starClassPromises);
+      // Count the number of yellow and grey stars
+      let yellowStars = 0;
+      let greyStars = 0;
+      for (const starClass of starClasses) {
         if (starClass.includes('text-yellow-300')) {
           yellowStars += 1;
         } else if (starClass.includes('text-gray-400')) {
@@ -120,8 +133,8 @@ test.describe('Property details page test', () => {
       }
 
       // Check if the number of stars is correct
-      await expect(yellowStars).toBe(2);
-      await expect(greyStars).toBe(5 - yellowStars);
+      expect(yellowStars).toBe(2);
+      expect(greyStars).toBe(5 - yellowStars);
     });
   });
 });
