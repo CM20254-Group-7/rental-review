@@ -43,19 +43,21 @@ const getPropertyDetails = cache(async (propertyId: string): Promise<PropertyDet
   };
 });
 
-async function getLandlordId(propertyId: string): Promise<string | null> {
+const getLandlordId = cache(async (propertyId: string): Promise<string | null> => {
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
+
   const { data, error } = await supabase
     .from('property_ownership')
     .select('landlord_id')
     .eq('property_id', propertyId)
-    .maybeSingle();
+    .is('ended_at', null)
+    .single();
 
   if (error || !data) return null;
 
   return data.landlord_id;
-}
+});
 
 const PropertyDetailPage: NextPage<{
   params: {
