@@ -93,3 +93,6 @@ begin
   from properties;
 end;
 $function$;
+
+ALTER TABLE properties
+ADD UNIQUE (house, street, county, postcode, country)

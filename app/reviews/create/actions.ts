@@ -8,16 +8,14 @@ import { z } from 'zod';
 
 const newReviewSchema = z.object({
   property_id: z.string().uuid().optional(),
-  property_address: z.string().optional(),
-  property_baths: z.number().int().min(1),
-  property_beds: z.number().int().min(1),
-  property_country: z.string(),
-  property_county: z.string(),
-  property_description: z.string().optional(),
+
   property_house: z.string(),
-  property_type: z.string(),
-  property_postcode: z.string(),
   property_street: z.string(),
+  property_county: z.string(),
+  property_postcode: z.string(),
+  property_country: z.string(),
+
+  property_type: z.string(),
 
   review_date: z.coerce.date(),
 
@@ -29,7 +27,15 @@ const newReviewSchema = z.object({
 export type State = {
   errors?: {
     property_id?: string[]
-    property_address?: string[],
+
+    property_house?: string[],
+    property_street?: string[],
+    property_county?: string[],
+    property_postcode?: string[],
+    property_country?: string[],
+
+    property_type?: string[],
+
     review_date?: string[],
     review_body?: string[],
     property_rating?: string[],
@@ -84,16 +90,14 @@ export const createReview = async (
 
   let { property_id } = validatedFields.data;
   const {
-    property_address,
-    property_baths,
-    property_beds,
-    property_country,
-    property_county,
-    property_description,
     property_house,
-    property_type,
-    property_postcode,
     property_street,
+    property_county,
+    property_postcode,
+    property_country,
+
+    property_type,
+
     review_date,
     review_body,
     property_rating,
