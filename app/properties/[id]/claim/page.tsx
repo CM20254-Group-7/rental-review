@@ -42,9 +42,9 @@ const ClaimPropertyPage: NextPage<{ params: { id: string } }> = async ({ params:
 
   // Check a property with the provided id exists
   const { data: propertyData, error: propertyError } = await supabase
-    .from('properties')
-    .select('id, address')
+    .rpc('properties_full')
     .eq('id', propertyId)
+    .select('id, address')
     .maybeSingle();
 
   if (propertyError || !propertyData) notFound();
