@@ -6,7 +6,7 @@ import { notFound } from 'next/navigation';
 import { NextPage } from 'next';
 import { Suspense, cache } from 'react';
 import { ArrowPathIcon } from '@heroicons/react/24/solid';
-import { OwnershipDetails } from './OwnershipDetails';
+import CurrentOwnerIndicator from '@/components/CurrentOwnerIndicator';
 import AverageRating from './AverageRating';
 import AverageLandlordRating from './AverageLandlordRating';
 import ReviewResults from './ReviewResults';
@@ -89,7 +89,7 @@ const PropertyDetailPage: NextPage<{
             <div className='flex flex-row w-full px-0 justify-start items-center gap-2'>
               <p className='font-semibold'>Average Rating:</p>
               <Suspense fallback={<ArrowPathIcon className='w-5 h-5 animate-spin' />}>
-                <AverageRating propertyId={propertyDetails.id} />
+                <AverageLandlordRating landlordId={landlordId ?? ''} />
               </Suspense>
             </div>
 
@@ -99,17 +99,9 @@ const PropertyDetailPage: NextPage<{
 
             {/* Ownership */}
             <div className='flex flex-row gap-1'>
-              <p className='font-semibold'>Owned By:</p>
+              {/* <p className='font-semibold'>Owned By:</p> */}
               <Suspense fallback={<ArrowPathIcon className='w-5 h-5 animate-spin' />}>
-                <OwnershipDetails propertyId={propertyDetails.id} />
-              </Suspense>
-            </div>
-
-            {/* Average Landlord Rating */}
-            <div className='flex flex-row gap-1'>
-              <p className='font-semibold'>Average Landlord Rating:</p>
-              <Suspense fallback={<ArrowPathIcon className='w-5 h-5 animate-spin' />}>
-                <AverageLandlordRating landlordId={landlordId ?? ''} />
+                <CurrentOwnerIndicator propertyId={propertyDetails.id} />
               </Suspense>
             </div>
           </div>
