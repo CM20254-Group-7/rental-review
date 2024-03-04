@@ -9,6 +9,8 @@
     "gen-types": "npx supabase gen types typescript --local > supabase.types.ts"
   },
   "dependencies": {
+    "@headlessui/react": "^1.7.18",
+    "@headlessui/tailwindcss": "^0.2.0",
     "@heroicons/react": "^2.1.1",
     "@microsoft/eslint-formatter-sarif": "^2.1.7",
     "@supabase/ssr": "latest",
