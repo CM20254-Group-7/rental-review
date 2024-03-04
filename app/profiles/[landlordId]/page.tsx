@@ -3,6 +3,7 @@ import { NextPage } from 'next';
 import { cookies } from 'next/headers';
 import { notFound } from 'next/navigation';
 import { Suspense, cache } from 'react';
+import Image from 'next/image';
 import { CurrentPropertyResults, PreviousPropertyResults, PropertyResultsLoading } from './PropertyResults';
 import ReviewResults, { ReviewResultsLoading } from './ReviewResults';
 
@@ -27,46 +28,83 @@ const landlordProfilePage: NextPage<{ params: { landlordId: string } }> = async 
   if (!landlordBio) notFound();
 
   return (
-    <div>
-      {/* Might need to change the format of thing whole div */}
-      <h1 style={{ fontSize: '100px' }}>Landlord Profile</h1>
-      <p>
-        Name:
-        {landlordBio.display_name}
-      </p>
-      <p>
-        Email:
-        {landlordBio.display_email}
-      </p>
-      <p>
-        Bio:
-        {landlordBio.bio}
-      </p>
-
-      <div>
-        <h2>Properties</h2>
-        <div>
-          <div>
-            <h3>Currently Owned</h3>
-            <Suspense fallback={<PropertyResultsLoading />}>
-              <CurrentPropertyResults landlordId={landlordId} />
-            </Suspense>
+    <div className='flex-1 flex flex-col w-full px-16 justify-top items-center gap-2 py-20'>
+      {/* Content Boundary */}
+      <div className='flex flex-col w-full max-w-4xl bg-secondary/10 shadow-md shadow-secondary/40 rounded-lg overflow-clip border'>
+        {/* Details Header */}
+        <div className='flex flex-row w-full justify-between gap-2 bg-secondary/30 shadow-lg shadow-secondary/40'>
+          {/* Images - Currently not implemented so shows example image with disclaimer */}
+          <div className='flex items-center justify-center p-4'>
+            <div className='relative h-full aspect-square rounded-full overflow-clip'>
+              <Image
+                className='absolute w-full max-w-md rounded-lg'
+                src='/landlord.jpeg'
+                width={3000}
+                height={3000}
+                alt='Image of a person'
+              />
+              <div className='w-full h-full bg-background/40 backdrop-blur flex flex-col place-items-center justify-center'>
+                <p className='p-10 text-lg font-semibold text-foreground'>Landlord Profile Pictures Coming Soon</p>
+              </div>
+            </div>
           </div>
-          <div>
-            <h3>Previously Owned</h3>
-            <Suspense fallback={<PropertyResultsLoading />}>
-              <PreviousPropertyResults landlordId={landlordId} />
-            </Suspense>
+
+          {/* General Property Details */}
+          <div className='flex-1 flex flex-col w-full px-8 sm:max-w-md justify-top gap-2 py-4'>
+            {/* Title - Uses Name */}
+            <div className='flex flex-col w-full'>
+              <h2 className='text-2xl font-semibold mb-1 w-fit text-accent'>{landlordBio.display_name}</h2>
+              <span className='border border-b w-full border-accent' />
+            </div>
+            <div className='flex flex-row gap-2'>
+              <h3>Contact:</h3>
+              <a
+                href={`mailto:${landlordBio.display_email}`}
+                className='underline text-accent hover:text-accent-hover transition-colors duration-300 ease-in-out'
+              >
+                {landlordBio.display_email}
+              </a>
+            </div>
+            <div className='flex flex-col gap-2'>
+              <h3>About Me:</h3>
+              <p className='italic'>{landlordBio.bio}</p>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div>
-        <h2>Reviews</h2>
-        <div>
-          <Suspense fallback={<ReviewResultsLoading />}>
-            <ReviewResults landlordId={landlordId} />
-          </Suspense>
+        {/* Property List */}
+        <div className='flex flex-col gap-6 px-8 py-6'>
+          <div className='flex flex-col w-full'>
+            <h2 className='text-2xl font-semibold mb-1 w-fit text-accent'>Properties</h2>
+            <span className='border border-b w-full border-accent' />
+          </div>
+          <div className='flex flex-col gap-4 justify-center items-center'>
+            <div>
+              <h3>Currently Owned</h3>
+              <Suspense fallback={<PropertyResultsLoading />}>
+                <CurrentPropertyResults landlordId={landlordId} />
+              </Suspense>
+            </div>
+            <div>
+              <h3>Previously Owned</h3>
+              <Suspense fallback={<PropertyResultsLoading />}>
+                <PreviousPropertyResults landlordId={landlordId} />
+              </Suspense>
+            </div>
+          </div>
+        </div>
+
+        {/* Review List */}
+        <div className='flex flex-col gap-6 px-8 py-6'>
+          <div className='flex flex-col w-full'>
+            <h2 className='text-2xl font-semibold mb-1 w-fit text-accent'>Reviews</h2>
+            <span className='border border-b w-full border-accent' />
+          </div>
+          <div className='flex flex-col gap-4 justify-center items-center'>
+            <Suspense fallback={<ReviewResultsLoading />}>
+              <ReviewResults landlordId={landlordId} />
+            </Suspense>
+          </div>
         </div>
       </div>
     </div>
