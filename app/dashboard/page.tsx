@@ -1,4 +1,3 @@
-import { NextPage } from 'next';
 import React from 'react';
 import StarRatingLayout from '@/components/StarRating';
 
@@ -54,6 +53,16 @@ export default function dashboardPage() {
         <ReviewCard />
         <ReviewCard />
         <ReviewCard />
+      </div>
+
+      <div className="flex flex-col gap-1 items-center">
+        <h3 className="font-bold text-2xl text-accent">Are you a landlord?</h3>
+        <p className="mb-6 text-lg">
+          Click button below to access landlord dashboard (not implemented yet)
+        </p>
+        <button className="bg-accent text-gray-900 font-bold py-2 px-4 rounded-md mb-6">
+          Landlord Dashboard
+        </button>
       </div>
     </div>
   );
