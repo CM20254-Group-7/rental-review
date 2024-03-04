@@ -12,13 +12,17 @@ const SideBar: React.FC = () => (
   </div>
 );
 
-const PropertiesPage: NextPage = () => (
+const PropertiesPage: NextPage<{
+  searchParams?: {
+    address?: string
+  }
+}> = ({ searchParams }) => (
   <div className='flex-1 w-screen flex flex-row'>
     <SideBar />
     <div className='flex w-full justify-center flex-1 py-20'>
       <div className='flex flex-col w-full max-w-prose gap-8 items-center'>
         <Suspense fallback={<PropertyResultsSkeleton />}>
-          <PropertyResults />
+          <PropertyResults searchParams={searchParams} />
           <div className='flex flex-col items-center gap-2'>
             <p>Can&apos;t see your property?</p>
             <Link href='/reviews/create'>

@@ -3,17 +3,17 @@
 import React, { useState } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { ChevronDownIcon, ChevronRightIcon } from '@heroicons/react/24/solid';
-import { set } from 'zod';
 
 const AddressSearch: React.FC = () => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();
 
-  /*
   const [advanced, setAdvanced] = useState(searchParams.get('showAdvancedPropertySearch') === 'true');
   const toggleAdvanced = () => {
-    const params = new URLSearchParams(searchParams?.toString());         if (advanced) {
+    const params = new URLSearchParams(searchParams?.toString());
+
+    if (advanced) {
       params.delete('showAdvancedPropertySearch');
     } else {
       params.set('showAdvancedPropertySearch', 'true');
@@ -21,7 +21,6 @@ const AddressSearch: React.FC = () => {
     replace(`${pathname}?${params.toString()}`);
     setAdvanced(!advanced);
   };
-  */
 
   const handleSearch = (searchQuery?: string) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -72,11 +71,9 @@ const AddressSearch: React.FC = () => {
           - postal code
           - country
           - property type
-
-          Logic to show/hide form already implemented, just uncomment the form below & toggleAdvanced function above
         */}
 
-        {/* <button
+        <button
           className='flex flex-row ml-auto text-sm hover:underline items-center px-2'
           type='button'
           onClick={toggleAdvanced}
@@ -87,10 +84,10 @@ const AddressSearch: React.FC = () => {
         </button>
 
         {advanced && (
-          <div>
-
+          <div className='text-center'>
+            Coming Soon
           </div>
-        )} */}
+        )}
       </div>
     </div>
   );

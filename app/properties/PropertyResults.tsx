@@ -3,13 +3,23 @@ import { cookies } from 'next/headers';
 import Link from 'next/link';
 import React, { cache } from 'react';
 
-const getPropertyResults = cache(async () => {
+const getPropertyResults = cache(async (searchQuery?: {
+  address?: string
+}) => {
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
 
-  const { data: properties, error: propertiesError } = await supabase
-    .from('properties')
-    .select('*');
+  const query = supabase
+    .rpc('properties_full');
+
+  if (searchQuery?.address) {
+    query.textSearch('address', searchQuery.address, {
+      type: 'websearch',
+      config: 'english',
+    });
+  }
+
+  const { data: properties, error: propertiesError } = await query.select('*');
 
   if (propertiesError) {
     return {
@@ -21,8 +31,12 @@ const getPropertyResults = cache(async () => {
     properties,
   };
 });
-const PropertyResults: React.FC = async () => {
-  const { properties } = await getPropertyResults();
+const PropertyResults: React.FC<{
+  searchParams?: {
+    address?: string
+  }
+}> = async ({ searchParams }) => {
+  const { properties } = await getPropertyResults(searchParams);
 
   if (properties.length === 0) {
     return (
