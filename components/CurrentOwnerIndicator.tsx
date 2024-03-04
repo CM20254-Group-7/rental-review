@@ -23,10 +23,10 @@ const getCurrentOwner = cache(async (propertyId: string): Promise<LandlordProfil
   const supabase = useClient(cookieStore);
 
   const { data: currentOwnerId } = await supabase
-    .rpc('property_owner_on_date', {
-      property_id: propertyId,
-      query_date: new Date().toISOString(),
-    });
+    .from('property_ownership')
+    .select('landlord_id')
+    .eq('property_id', propertyId)
+    .is('end_date', null);
 
   if (!currentOwnerId) return null;
 
