@@ -111,61 +111,32 @@ export default async function landlordProfilePage({ params }: { params: { landlo
           </div>
         </div>
       </div>
+
+      {/* Properties */}
+      {propertyDetails !== null && (
+      <div className='flex flex-col w-full max-w-prose gap-8 items-center'>
+        {propertyDetails.length === 0 ? (
+          <p>No properties</p>
+        ) : (
+          <div>
+            <div className='flex flex-col w-full'>
+              <h2 className='text-2xl font-semibold mb-1 w-fit text-accent'>Properties Owned</h2>
+              <span className='border border-b w-full border-accent' />
+            </div>
+            <div className='mt-4'>
+              <ul className='space-y-4'>
+                {propertyDetails.map((property, index) => (
+                  <li key={property.address} className='border rounded-md p-4'>
+                    <h3 className='text-lg font-semibold mb-2'>{property.address}</h3>
+                    <a href={`/properties/${landlordProperties[index].property_id}`} className='text-blue-600 hover:underline'>Property Details</a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        )}
+      </div>
+      )}
     </div>
-
-  // TODO: Add properties section
-  //       - Fetch properties from the database
-  //       - Display properties similar to how the reviews are displayed on the property page
-  //       - Add a link to the property page
-  //       - Show "No properties" if the landlord has no properties
-
-  // OLD CODE
-  // CAN BE REMOVED LATER
-  // USE THIS AS A REFERENCE FOR THE NEW CODE
-  // <div>
-  //   {/* Might need to change the format of thing whole div */}
-  //   <h1 style={{ fontSize: '100px' }}>Landlord Profile</h1>
-
-  //   {/* only show the rating if the landlord has it */}
-  //   {landlordRating !== null && (
-  //     <div>
-  //       <h2>Rating</h2>
-  //       <p>{landlordRating}</p>
-  //     </div>
-  //   )}
-
-  //   <p>
-  //     Name:
-  //     {landlordData.display_name}
-  //   </p>
-  //   <p>
-  //     Email:
-  //     {landlordData.display_email}
-  //   </p>
-  //   <p>
-  //     Bio:
-  //     {landlordBio.bio}
-  //   </p>
-  //   {/* only show the properties if the landlord has it */}
-  //   {propertyDetails !== null && (
-  //     <div>
-  //       {propertyDetails.length === 0 ? (
-  //         <p>No properties</p>
-  //       ) : (
-  //         <div>
-  //           <h2>Properties</h2>
-  //           <ul>
-  //             {propertyDetails.map((property) => (
-  //               <li key={property.address}>
-  //                 <h3>{property.address}</h3>
-  //                 <p style={{ textAlign: 'center', backgroundColor: 'red' }}>NEED TO ADD LINK TO THE PROPERTY!!!</p>
-  //               </li>
-  //             ))}
-  //           </ul>
-  //         </div>
-  //       )}
-  //     </div>
-  //   )}
-  // </div>
   );
 }
