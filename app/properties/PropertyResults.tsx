@@ -21,6 +21,9 @@ const getPropertyResults = cache(async (searchQuery?: {
       case 'address':
         return 'address';
 
+      case 'recent':
+        return 'last_reviewed';
+
       case 'rating':
         return 'average_rating';
 
@@ -40,7 +43,6 @@ const getPropertyResults = cache(async (searchQuery?: {
   const { data: properties, error: propertiesError } = await query;
 
   if (propertiesError) {
-    console.log('Error fetching properties', propertiesError);
     return {
       properties: [],
     };
@@ -56,7 +58,7 @@ const PropertyResults: React.FC<{
     sortBy?: string
     sortOrder?: string
   }
-}> = async ({searchParams}) => {
+}> = async ({ searchParams }) => {
   const { properties } = await getPropertyResults(searchParams);
 
   if (properties.length === 0) {
