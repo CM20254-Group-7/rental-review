@@ -8,7 +8,7 @@ const getPropertyResults = cache(async () => {
   const supabase = createClient(cookieStore);
 
   const { data: properties, error: propertiesError } = await supabase
-    .from('properties')
+    .rpc('properties_full')
     .select('*');
 
   if (propertiesError) {

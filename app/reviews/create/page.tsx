@@ -3,26 +3,40 @@
 // TEST PAGE FOR CREATE ACTION - PLEASE REPLACE
 import { useFormState } from 'react-dom';
 import { NextPage } from 'next';
+import { notFound } from 'next/navigation';
 import { createReview } from './actions';
 
-const CreateReviewPage: NextPage = () => {
+const CreateReviewPage: NextPage<{
+  searchParams?: {
+    propertyId?: string;
+    house?: string;
+    street?: string;
+    county?: string;
+    postcode?: string;
+    country?: string;
+  };
+}> = ({ searchParams }) => {
+  if (!searchParams) notFound();
+
   // define example propertyId and address, these should be determined by params in implementation
-  const examplePropertyId = undefined; // '7cda6a4c-868d-436d-a05b-25d6eeaed351'
-  const exampleAddress = '1234 Example St, Example, EX 12345';
-  const exampleBeds = 2;
-  const exampleBaths = 8;
-  const exampleCountry = 'Angola';
-  const exampleCounty = 'Somerset';
-  const exampleDescription = 'Its good innit';
-  const exampleHouse = '43';
-  const exampleType = 'Flat';
-  const examplePostcode = 'BA1 AAA';
-  const exampleStreet = 'Bath Street';
+  const {
+    propertyId,
+    house,
+    street,
+    county,
+    postcode,
+    country,
+  } = searchParams;
 
   // bind the id & address to the createReview function
   const initialState = { message: null, errors: {} };
   const createReviewWithProperty = createReview.bind(null, {
-    id: examplePropertyId, address: exampleAddress, beds: exampleBeds, baths: exampleBaths, country: exampleCountry, county: exampleCounty, description: exampleDescription, house: exampleHouse, property_type: exampleType, postcode: examplePostcode, street: exampleStreet,
+    id: propertyId,
+    house,
+    street,
+    county,
+    postcode,
+    country,
   });
   const [state, dispatch] = useFormState(createReviewWithProperty, initialState);
 
