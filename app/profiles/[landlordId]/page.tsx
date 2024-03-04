@@ -2,40 +2,28 @@ import createClient from '@/utils/supabase/server';
 import { NextPage } from 'next';
 import { cookies } from 'next/headers';
 import { notFound } from 'next/navigation';
-import { Suspense } from 'react';
+import { Suspense, cache } from 'react';
 import { CurrentPropertyResults, PreviousPropertyResults, PropertyResultsLoading } from './PropertyResults';
 
-const landlordProfilePage: NextPage<{ params: { landlordId: string } }> = async ({ params: { landlordId } }) => {
+const getLandlordBio = cache(async (landlordId: string) => {
   // set up the supabase client
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
 
   // check if a landlord with the provided id exists and get their info
-  const { data: landlordData, error: landlordError } = await supabase
+  const { data: landlordData } = await supabase
     .from('landlord_public_profiles')
     .select('*')
     .eq('user_id', landlordId)
     .single();
 
-  // landlord not found
-  if (landlordError || !landlordData) {
-    notFound();
-  }
+  return { ...landlordData };
+});
 
-  // get the landlord bio
-  const { data: landlordBio, error: landlordBioError } = await supabase
-    .from('landlord_public_profiles')
-    .select('bio')
-    .eq('user_id', landlordId)
-    .single();
+const landlordProfilePage: NextPage<{ params: { landlordId: string } }> = async ({ params: { landlordId } }) => {
+  const landlordBio = await getLandlordBio(landlordId);
 
-  if (landlordBioError) {
-    return (
-      <div>
-        <h1>ERROR: Unable to fetch landlord bio</h1>
-      </div>
-    );
-  }
+  if (!landlordBio) notFound();
 
   return (
     <div>
@@ -43,11 +31,11 @@ const landlordProfilePage: NextPage<{ params: { landlordId: string } }> = async 
       <h1 style={{ fontSize: '100px' }}>Landlord Profile</h1>
       <p>
         Name:
-        {landlordData.display_name}
+        {landlordBio.display_name}
       </p>
       <p>
         Email:
-        {landlordData.display_email}
+        {landlordBio.display_email}
       </p>
       <p>
         Bio:
