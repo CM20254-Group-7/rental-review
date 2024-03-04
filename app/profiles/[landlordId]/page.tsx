@@ -104,7 +104,6 @@ export default async function landlordProfilePage({ params }: { params: { landlo
           )}
         </div>
       )}
-
     </div>
   );
 }
