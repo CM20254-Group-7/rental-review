@@ -7,8 +7,10 @@ import { ArrowDownIcon, ArrowUpIcon } from '@heroicons/react/24/solid';
 import { usePathname, useSearchParams, useRouter } from 'next/navigation';
 import React from 'react';
 
-export const defaultSortBy = 'rating';
-export const defaultSortOrder = 'desc';
+const defaultSortBy = 'rating';
+const defaultSortOrder = 'desc';
+
+const capitalize = (str: string) => str.charAt(0).toUpperCase() + str.slice(1);
 
 const SortBy: React.FC = () => {
   const searchParams = useSearchParams();
@@ -39,7 +41,7 @@ const SortBy: React.FC = () => {
     <div className='flex flex-col gap-2'>
       <p>Sort By</p>
       <div className='flex flex-col px-2 py-4 border-y border-foreground/30 gap-2'>
-        {['rating', 'date', 'address'].map((sortBy) => {
+        {['rating', 'address'].map((sortBy) => {
           const selected = searchParams.get('sortBy') === sortBy || (!searchParams.get('sortBy') && sortBy === defaultSortBy);
 
           return (
@@ -53,7 +55,7 @@ const SortBy: React.FC = () => {
                 className={`px-2 py-1 ${selected ? 'cursor-default' : 'cursor-pointer'} w-full text-left`}
                 disabled={selected}
               >
-                {sortBy}
+                {capitalize(sortBy)}
               </button>
               {selected && (
                 <div className='flex flex-row gap-2'>
