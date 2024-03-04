@@ -2,23 +2,14 @@ import { NextPage } from 'next';
 import Link from 'next/link';
 import React, { Suspense } from 'react';
 import PropertyResults, { PropertyResultsSkeleton } from './PropertyResults';
+import AddressSearch from './AddressSearch';
 
 const SideBar: React.FC = () => (
-  <form
+  <div
     className='flex flex-col gap-1 text-foreground border-r px-2 py-4'
   >
-    <input
-      className='mt-5 rounded-md px-4 py-2 bg-inherit border mb-1'
-      name='address'
-      placeholder='13 Argyle Terrace, Staverton, Bath, BA2 3DF...'
-    />
-    <button
-      className='border border-foreground/20 rounded-md px-4 py-2 text-foreground mb-5'
-      type='submit'
-    >
-      Search (no functionality yet)
-    </button>
-  </form>
+    <AddressSearch />
+  </div>
 );
 
 const PropertiesPage: NextPage = () => (
