@@ -60,5 +60,3 @@ from reviews;
 END;
 $function$
 ;
-
-
