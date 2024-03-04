@@ -1,5 +1,6 @@
 import createClient from '@/utils/supabase/server';
 import { cookies } from 'next/headers';
+import Link from 'next/link';
 import React from 'react';
 
 const getCurrentlyOwnedProperties = async (landlordId: string) => {
@@ -38,16 +39,30 @@ const getPreviouslyOwnedProperties = async (landlordId: string) => {
   return PreviousPropertyDetails || [];
 };
 
+const PropertyResult: React.FC<{
+  address: string;
+  id: string;
+  key: string;
+}> = ({ address, id, key }) => (
+  <Link
+    key={key}
+    href={`/properties/${id}`}
+  >
+    <h4>{address}</h4>
+  </Link>
+);
+
 export const CurrentPropertyResults: React.FC<{ landlordId: string }> = async ({ landlordId }) => {
   const currentProperties = await getCurrentlyOwnedProperties(landlordId);
 
   if (!currentProperties) return <p>No Claimed Properties Yet</p>;
 
   return currentProperties.map((property) => (
-    <li key={property.address}>
-      <h3>{property.address}</h3>
-      <p style={{ textAlign: 'center', backgroundColor: 'red' }}>NEED TO ADD LINK TO THE PROPERTY!!!</p>
-    </li>
+    <PropertyResult
+      key={property.address}
+      address={property.address}
+      id={property.id}
+    />
   ));
 };
 
@@ -57,10 +72,11 @@ export const PreviousPropertyResults: React.FC<{ landlordId: string }> = async (
   if (!previousProperties) return <p>No Previous Properties</p>;
 
   return previousProperties.map((property) => (
-    <li key={property.address}>
-      <h3>{property.address}</h3>
-      <p style={{ textAlign: 'center', backgroundColor: 'red' }}>NEED TO ADD LINK TO THE PROPERTY!!!</p>
-    </li>
+    <PropertyResult
+      key={property.address}
+      address={property.address}
+      id={property.id}
+    />
   ));
 };
 
