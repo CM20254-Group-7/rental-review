@@ -1,11 +1,9 @@
 import createClient from '@/utils/supabase/server';
+import { NextPage } from 'next';
 import { cookies } from 'next/headers';
 import { notFound } from 'next/navigation';
 
-export default async function landlordProfilePage({ params }: { params: { landlordId: string } }) {
-  // check if a landlord id was provided
-  const { landlordId } = params;
-
+const landlordProfilePage: NextPage<{ params: { landlordId: string } }> = async ({ params: { landlordId } }) => {
   // set up the supabase client
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
@@ -106,4 +104,6 @@ export default async function landlordProfilePage({ params }: { params: { landlo
       )}
     </div>
   );
-}
+};
+
+export default landlordProfilePage;
