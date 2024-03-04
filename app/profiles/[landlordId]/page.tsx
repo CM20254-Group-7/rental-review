@@ -4,6 +4,7 @@ import { cookies } from 'next/headers';
 import { notFound } from 'next/navigation';
 import { Suspense, cache } from 'react';
 import { CurrentPropertyResults, PreviousPropertyResults, PropertyResultsLoading } from './PropertyResults';
+import ReviewResults, { ReviewResultsLoading } from './ReviewResults';
 
 const getLandlordBio = cache(async (landlordId: string) => {
   // set up the supabase client
@@ -41,7 +42,7 @@ const landlordProfilePage: NextPage<{ params: { landlordId: string } }> = async 
         Bio:
         {landlordBio.bio}
       </p>
-      {/* only show the properties if the landlord has it */}
+
       <div>
         <h2>Properties</h2>
         <div>
@@ -57,6 +58,15 @@ const landlordProfilePage: NextPage<{ params: { landlordId: string } }> = async 
               <PreviousPropertyResults landlordId={landlordId} />
             </Suspense>
           </div>
+        </div>
+      </div>
+
+      <div>
+        <h2>Reviews</h2>
+        <div>
+          <Suspense fallback={<ReviewResultsLoading />}>
+            <ReviewResults landlordId={landlordId} />
+          </Suspense>
         </div>
       </div>
     </div>
