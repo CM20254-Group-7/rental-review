@@ -92,6 +92,15 @@
         "no-restricted-syntax": "off"
       }
     },
+    // Allow require to be used in tailwind config
+    {
+      "files": [
+        "tailwind.config.js"
+      ],
+      "rules": {
+        "global-require": "off"
+      }
+    },
     // Temp: Disable camelcase for review creation page as it uses a lot of snake_case for form fields
     {
       "files": [
