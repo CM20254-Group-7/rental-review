@@ -12,27 +12,14 @@ import ReviewResults from './ReviewResults';
 
 export const revalidate = 60 * 60; // revalidate every hour
 
-interface PropertyDetails {
-  address: string;
-  baths: number | null;
-  beds: number | null;
-  country: string | null;
-  county: string | null;
-  description: string | null;
-  house: string | null;
-  id: string;
-  postcode: string | null;
-  property_type: string | null;
-  street: string | null;
-}
-const getPropertyDetails = cache(async (propertyId: string): Promise<PropertyDetails | null> => {
+const getPropertyDetails = cache(async (propertyId: string) => {
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
 
   const { data, error } = await supabase
-    .from('properties')
-    .select('*')
+    .rpc('properties_full')
     .eq('id', propertyId)
+    .select('*')
     .single();
 
   if (error || !data) return null;

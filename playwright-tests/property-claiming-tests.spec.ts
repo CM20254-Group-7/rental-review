@@ -80,7 +80,10 @@ const today = new TransformableDate();
 // To ensure tests do not interfere with each other, we will create a unique property for each test
 // Each will be be on 'Property Claiming Road' with the house number = the line number of the test, and in a city representing the browser
 test.beforeEach('Create Unique Property for test', async ({ page }, testInfo) => {
-  const address = `${testInfo.workerIndex}, Property Claiming Road, ${testInfo.project.name} City`;
+  const house = `${testInfo.workerIndex}`;
+  const street = 'Property Claiming Road';
+  const county = `${testInfo.project.name} City`;
+  const address = `${house}, ${street}, ${county}`;
 
   const res = await page.request.post(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/properties?select=*`, {
     headers: {
@@ -90,19 +93,23 @@ test.beforeEach('Create Unique Property for test', async ({ page }, testInfo) =>
       Prefer: 'return=representation',
     },
     data: {
-      address,
       house: `${testInfo.workerIndex}`,
       street: 'Property Claiming Road',
-      county: testInfo.project.name,
+      county: `${testInfo.project.name} City`,
     },
   });
 
   await expect(res).toBeOK();
   const newProperty = (await res.json())[0];
 
-  await expect(newProperty.address).toBe(address);
+  await expect(newProperty.house).toBe(house);
+  await expect(newProperty.street).toBe(street);
+  await expect(newProperty.county).toBe(county);
 
-  properties[testInfo.workerIndex] = newProperty;
+  properties[testInfo.workerIndex] = {
+    ...newProperty,
+    address,
+  };
 });
 
 test.afterEach('Delete Unique Property for test', async ({ page }, testInfo) => {
