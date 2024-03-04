@@ -416,6 +416,12 @@ export interface Database {
           average_rating: number
         }[]
       }
+      most_recent_review_date_for_property: {
+        Args: {
+          id: string
+        }
+        Returns: string
+      }
       plain_text_address: {
         Args: {
           property_id: string
@@ -437,6 +443,7 @@ export interface Database {
           street: string
           address: string
           average_rating: number
+          last_reviewed: string
         }[]
       }
       property_owner_on_date: {
