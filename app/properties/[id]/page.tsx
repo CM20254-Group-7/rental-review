@@ -6,9 +6,8 @@ import { notFound } from 'next/navigation';
 import { NextPage } from 'next';
 import { Suspense, cache } from 'react';
 import { ArrowPathIcon } from '@heroicons/react/24/solid';
-import { OwnershipDetails } from './OwnershipDetails';
+import CurrentOwnerIndicator from '@/components/CurrentOwnerIndicator';
 import AverageRating from './AverageRating';
-import AverageLandlordRating from './AverageLandlordRating';
 import ReviewResults from './ReviewResults';
 
 export const revalidate = 60 * 60; // revalidate every hour
@@ -30,22 +29,6 @@ const getPropertyDetails = cache(async (propertyId: string) => {
   };
 });
 
-const getLandlordId = cache(async (propertyId: string): Promise<string | null> => {
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
-
-  const { data, error } = await supabase
-    .from('property_ownership')
-    .select('landlord_id')
-    .eq('property_id', propertyId)
-    .is('ended_at', null)
-    .single();
-
-  if (error || !data) return null;
-
-  return data.landlord_id;
-});
-
 const PropertyDetailPage: NextPage<{
   params: {
     id: string
@@ -54,8 +37,6 @@ const PropertyDetailPage: NextPage<{
   const propertyDetails = await getPropertyDetails(params.id);
 
   if (!propertyDetails) notFound();
-
-  const landlordId = await getLandlordId(propertyDetails.id);
 
   return (
     <div className='flex-1 flex flex-col w-full px-16 justify-top items-center gap-2 py-20'>
@@ -99,17 +80,9 @@ const PropertyDetailPage: NextPage<{
 
             {/* Ownership */}
             <div className='flex flex-row gap-1'>
-              <p className='font-semibold'>Owned By:</p>
+              {/* <p className='font-semibold'>Owned By:</p> */}
               <Suspense fallback={<ArrowPathIcon className='w-5 h-5 animate-spin' />}>
-                <OwnershipDetails propertyId={propertyDetails.id} />
-              </Suspense>
-            </div>
-
-            {/* Average Landlord Rating */}
-            <div className='flex flex-row gap-1'>
-              <p className='font-semibold'>Average Landlord Rating:</p>
-              <Suspense fallback={<ArrowPathIcon className='w-5 h-5 animate-spin' />}>
-                <AverageLandlordRating landlordId={landlordId ?? ''} />
+                <CurrentOwnerIndicator propertyId={propertyDetails.id} />
               </Suspense>
             </div>
           </div>
