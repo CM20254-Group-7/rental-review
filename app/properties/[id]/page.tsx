@@ -6,33 +6,20 @@ import { notFound } from 'next/navigation';
 import { NextPage } from 'next';
 import { Suspense, cache } from 'react';
 import { ArrowPathIcon } from '@heroicons/react/24/solid';
-import { OwnershipDetails } from './OwnershipDetails';
+import CurrentOwnerIndicator from '@/components/CurrentOwnerIndicator';
 import AverageRating from './AverageRating';
 import ReviewResults from './ReviewResults';
 
 export const revalidate = 60 * 60; // revalidate every hour
 
-interface PropertyDetails {
-  address: string;
-  baths: number | null;
-  beds: number | null;
-  country: string | null;
-  county: string | null;
-  description: string | null;
-  house: string | null;
-  id: string;
-  postcode: string | null;
-  property_type: string | null;
-  street: string | null;
-}
-const getPropertyDetails = cache(async (propertyId: string): Promise<PropertyDetails | null> => {
+const getPropertyDetails = cache(async (propertyId: string) => {
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
 
   const { data, error } = await supabase
-    .from('properties')
-    .select('*')
+    .rpc('properties_full')
     .eq('id', propertyId)
+    .select('*')
     .single();
 
   if (error || !data) return null;
@@ -79,14 +66,6 @@ const PropertyDetailPage: NextPage<{
               <span className='border border-b w-full border-accent' />
             </div>
 
-            {/* Ownership */}
-            <div className='flex flex-row gap-1'>
-              <p className='font-semibold'>Owned By:</p>
-              <Suspense fallback={<ArrowPathIcon className='w-5 h-5 animate-spin' />}>
-                <OwnershipDetails propertyId={propertyDetails.id} />
-              </Suspense>
-            </div>
-
             {/* Average Ratings */}
             <div className='flex flex-row w-full px-0 justify-start items-center gap-2'>
               <p className='font-semibold'>Average Rating:</p>
@@ -95,12 +74,17 @@ const PropertyDetailPage: NextPage<{
               </Suspense>
             </div>
 
-            {/*
-              Other Known Property Details
-              currently only description,
-              consider expaniding to include details like No. of bedrooms
-            */}
+            {/* Property Details */}
+            {/* Might want to add more things like no. baths etc */}
             <text>{propertyDetails.description}</text>
+
+            {/* Ownership */}
+            <div className='flex flex-row gap-1'>
+              {/* <p className='font-semibold'>Owned By:</p> */}
+              <Suspense fallback={<ArrowPathIcon className='w-5 h-5 animate-spin' />}>
+                <CurrentOwnerIndicator propertyId={propertyDetails.id} />
+              </Suspense>
+            </div>
           </div>
         </div>
 

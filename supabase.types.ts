@@ -124,7 +124,6 @@ export interface Database {
       }
       properties: {
         Row: {
-          address: string
           baths: number | null
           beds: number | null
           country: string | null
@@ -137,7 +136,6 @@ export interface Database {
           street: string | null
         }
         Insert: {
-          address: string
           baths?: number | null
           beds?: number | null
           country?: string | null
@@ -150,7 +148,6 @@ export interface Database {
           street?: string | null
         }
         Update: {
-          address?: string
           baths?: number | null
           beds?: number | null
           country?: string | null
@@ -361,18 +358,127 @@ export interface Database {
       [_ in never]: never
     }
     Functions: {
+      average_landlord_rating: {
+        Args: {
+          id: string
+        }
+        Returns: number
+      }
       get_average_property_rating: {
         Args: {
           property_id: string
         }
         Returns: number
       }
+      get_properties_with_addresses: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          id: string
+          baths: number
+          beds: number
+          country: string
+          county: string
+          description: string
+          house: string
+          postcode: string
+          property_type: string
+          street: string
+          address: string
+        }[]
+      }
       get_properties_with_ratings: {
         Args: Record<PropertyKey, never>
         Returns: {
+          id: string
+          baths: number
+          beds: number
+          country: string
+          county: string
+          description: string
+          house: string
+          postcode: string
+          property_type: string
+          street: string
+          average_rating: number
+        }[]
+      }
+      landlord_public_profiles_with_ratings: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          user_id: string
+          website: string
+          bio: string
+          profile_image_id: string
+          verified: boolean
+          type: string
+          display_email: string
+          display_name: string
+          average_rating: number
+        }[]
+      }
+      most_recent_review_date_for_property: {
+        Args: {
+          id: string
+        }
+        Returns: string
+      }
+      plain_text_address: {
+        Args: {
           property_id: string
+        }
+        Returns: string
+      }
+      properties_full: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          id: string
+          baths: number
+          beds: number
+          country: string
+          county: string
+          description: string
+          house: string
+          postcode: string
+          property_type: string
+          street: string
           address: string
           average_rating: number
+          last_reviewed: string
+        }[]
+      }
+      property_owner_on_date: {
+        Args: {
+          property_id: string
+          query_date: string
+        }
+        Returns: string
+      }
+      reviews_for_landlord: {
+        Args: {
+          id: string
+        }
+        Returns: {
+          property_id: string
+          reviewer_id: string
+          review_date: string
+          review_id: string
+          landlord_rating: number
+          property_rating: number
+          review_body: string
+          landlord_id: string
+        }[]
+      }
+      reviews_with_landlords: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          property_id: string
+          reviewer_id: string
+          review_date: string
+          review_id: string
+          landlord_rating: number
+          property_rating: number
+          review_body: string
+          landlord_id: string
         }[]
       }
     }
