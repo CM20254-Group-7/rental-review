@@ -3,13 +3,44 @@ import { cookies } from 'next/headers';
 import Link from 'next/link';
 import React, { cache } from 'react';
 
-const getPropertyResults = cache(async () => {
+const defaultSortBy = 'rating';
+const defaultSortOrder = 'desc';
+
+const getPropertyResults = cache(async (searchQuery?: {
+  sortBy?: string,
+  sortOrder?: string,
+}) => {
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
 
-  const { data: properties, error: propertiesError } = await supabase
-    .from('properties')
-    .select('*');
+  const sortBy = searchQuery?.sortBy || defaultSortBy;
+  const sortOrder = searchQuery?.sortOrder || defaultSortOrder;
+
+  const sortField = (() => {
+    switch (sortBy) {
+      case 'address':
+        return 'address';
+
+      case 'recent':
+        return 'last_reviewed';
+
+      case 'rating':
+        return 'average_rating';
+
+      default:
+        return null;
+    }
+  })();
+  const sortAsc = sortOrder === 'asc';
+
+  const baseQuery = supabase
+    .rpc('properties_full');
+
+  let query = baseQuery.select('*');
+
+  if (sortField) query = query.order(sortField, { ascending: sortAsc });
+
+  const { data: properties, error: propertiesError } = await query;
 
   if (propertiesError) {
     return {
@@ -21,8 +52,14 @@ const getPropertyResults = cache(async () => {
     properties,
   };
 });
-const PropertyResults: React.FC = async () => {
-  const { properties } = await getPropertyResults();
+
+const PropertyResults: React.FC<{
+  searchParams?: {
+    sortBy?: string
+    sortOrder?: string
+  }
+}> = async ({ searchParams }) => {
+  const { properties } = await getPropertyResults(searchParams);
 
   if (properties.length === 0) {
     return (

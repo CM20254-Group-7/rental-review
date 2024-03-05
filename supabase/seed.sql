@@ -11,9 +11,9 @@
 -- |                     |                  | property-claiming-tests | Must not be registered as a landlord                       |
 -- | user.4@example.com  | User.4.Password  | property-claiming-tests | Must be registered as a landlord, and will claim properties|
 -- | user.5@example.com  | User.5.Password  | property-claiming-tests | Must be registered as a landlord, and will claim properties|
--- | user.6@example.com  | User.6.Password  |                         |                                                            |
--- | user.7@example.com  | User.7.Password  |                         |                                                            |
--- | user.8@example.com  | User.8.Password  |                         |                                                            |
+-- | user.6@example.com  | User.6.Password  |   property-page-tests   | Have a review on 1 Test Road                               |
+-- | user.7@example.com  | User.7.Password  |   property-page-tests   | Have reviews on 1 & 2 Test Road                            |
+-- | user.8@example.com  | User.8.Password  |   property-page-tests   | Have a review on 1 Test Road (landlord changed)            |
 -- | user.9@example.com  | User.9.Password  |                         |                                                            |
 -- | user.10@example.com | User.10.Password |                         |                                                            |
 
@@ -36,9 +36,9 @@ INSERT INTO "auth"."users" (            "instance_id"             ,             
 -- | 1 Test Road | landlord-page-tests | Must have been owned by User.1 |
 -- | 2 Test Road | landlord-page-tests | Must have been owned by User.1 |
 
-INSERT INTO "public"."properties" (                    "id"              ,      "address"    ) VALUES
-                                  ('1ececec8-4bbf-445f-8de0-f563caf0bf01', '1 Test Road'     ),
-                                  ('6a83d02b-9da1-4a4a-9719-05e8a8c9228d', '2 Test Road'     );
+INSERT INTO "public"."properties" (                    "id"              , "house" ,   "street"  , "postcode" ) VALUES
+                                  ('1ececec8-4bbf-445f-8de0-f563caf0bf01', '1'     , 'Test Road' , 'AB1 234'  ),
+                                  ('6a83d02b-9da1-4a4a-9719-05e8a8c9228d', '2'     , 'Test Road' , 'AB1 234'  );
                                   
 
 
@@ -81,3 +81,33 @@ INSERT INTO "public"."landlord_public_profiles" (               "user_id"       
 INSERT INTO "public"."property_ownership" (               "property_id"           , "started_at" ,              "landlord_id"            , "ended_at" ) VALUES
                                            ('1ececec8-4bbf-445f-8de0-f563caf0bf01', '2024-02-20' , 'b1b284f9-2c24-4f2e-bd4e-9c7ab7fe88e3', '2024-02-21' ),
                                            ('6a83d02b-9da1-4a4a-9719-05e8a8c9228d', '2024-01-20' , 'b1b284f9-2c24-4f2e-bd4e-9c7ab7fe88e3', NULL );
+
+-- Sample Reviewer Private Profiles
+--
+-- No tests directly use this table yet, however the property review require it to exist.
+-- 
+-- |    User    |       Used for       |                          Details                          |
+-- |   User.2   |                      | Must have (at least) 1 property review (1 Test Road)      |
+-- |   User.3   |                      | Must have (at least) 2 property reviews (1 & 2 Test Road) |
+
+INSERT INTO "public"."reviewer_private_profiles" (               "user_id"              ,             "property_id"             ,               "reviewer_id"           ) VALUES
+                                                 ('482afef6-1b2f-4ac2-a449-9bc318f55936', '1ececec8-4bbf-445f-8de0-f563caf0bf01', '9e6bf369-8347-4878-8f9d-67671d175734'),
+                                                 ('4dfc3778-a1f2-410d-ae3d-9c92a469db8d', '1ececec8-4bbf-445f-8de0-f563caf0bf01', '07ad8a9b-6b9b-47c8-943c-e45a041370e0'),
+                                                 ('4dfc3778-a1f2-410d-ae3d-9c92a469db8d', '6a83d02b-9da1-4a4a-9719-05e8a8c9228d', 'a9d236d8-2d41-467b-8970-bb614673f919'),
+                                                 ('470b631a-addd-4380-acf3-b476e136d5f6', '6a83d02b-9da1-4a4a-9719-05e8a8c9228d', '4f4ada56-4133-408a-ae63-3e02f9676ddb');
+                                                 
+
+-- Sample Property Reviews
+--
+-- | Property Address |  Reviewer   |       Used for       |                           Details                         |
+-- |   1 Test Road    |   User.4    |                      | Review date, landlord rating, property_rating and review body must match '2024-01-01', '4', '1', 'The landlord is fantastic, but the property is in a horrible state.'                                                                                               |
+-- |   1 Test Road    |   User.5    |                      | Review date, landlord rating, property_rating and review body must match '2024-02-01', '3', '3', 'Everything is fine.'                                                                                                                                               |
+-- |   2 Test Road    |   User.5    |                      | Review date, landlord rating, property_rating and review body must match '2024-02-21', '2', '5', 'The landlord never responded to my queries and did not offer to fix the leakage in the bathroom. However, the property is impressive, with a beautiful city view.' |
+-- |   2 Test Road    |   User.6    |                      | Review date, landlord rating, property_rating and review body must match '2023-02-21', '5', '1', 'Friendly landlord, but the property is a mess.'
+
+INSERT INTO "public"."reviews" (           "review_id"                ,             "property_id"             ,               "reviewer_id"           , "review_date", "landlord_rating", "property_rating",   "review_body"  ) VALUES
+                               ('92f38488-210e-4637-9e82-48d2d7c5dd9b', '1ececec8-4bbf-445f-8de0-f563caf0bf01', '9e6bf369-8347-4878-8f9d-67671d175734', '2024-01-01' , '4'              , '1'              , 'The landlord is fantastic, but the property is in a horrible state.'                                                                                               ),
+                               ('1cf1903b-5657-4301-9509-58d3e1c6a6a9', '6a83d02b-9da1-4a4a-9719-05e8a8c9228d', '07ad8a9b-6b9b-47c8-943c-e45a041370e0', '2024-02-01' , '3'              , '3'              , 'Everything is fine.'                                                                                                                                               ),
+                               ('0e067144-b72b-4872-b0d0-a604c2350936', '6a83d02b-9da1-4a4a-9719-05e8a8c9228d', 'a9d236d8-2d41-467b-8970-bb614673f919', '2024-02-21' , '2'              , '5'              , 'The landlord never responded to my queries and did not offer to fix the leakage in the bathroom. However, the property is impressive, with a beautiful city view.' ),
+                               ('f3e3e3e3-3e3e-3e3e-3e3e-3e3e3e3e3e3e', '6a83d02b-9da1-4a4a-9719-05e8a8c9228d', '4f4ada56-4133-408a-ae63-3e02f9676ddb', '2023-02-21' , '5'              , '1'              , 'Friendly landlord, but the property is a mess.'                                                                                               );
+                                

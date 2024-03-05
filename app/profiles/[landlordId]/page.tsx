@@ -54,9 +54,9 @@ export default async function landlordProfilePage({ params }: { params: { landlo
   let propertyDetails: { address: string }[] = [];
   if (landlordProperties !== null) {
     const { data: details, error: propertyDetailsError } = await supabase
-      .from('properties')
-      .select('address')
-      .in('id', landlordProperties.map((property) => property.property_id));
+      .rpc('properties_full')
+      .in('id', landlordProperties.map((property) => property.property_id))
+      .select('id, address');
 
     if (propertyDetailsError) {
       return (
@@ -104,7 +104,6 @@ export default async function landlordProfilePage({ params }: { params: { landlo
           )}
         </div>
       )}
-
     </div>
   );
 }
