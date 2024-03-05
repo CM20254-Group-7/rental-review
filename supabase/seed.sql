@@ -68,7 +68,7 @@ INSERT INTO "public"."landlord_public_profiles" (               "user_id"       
                                                  ('b1b284f9-2c24-4f2e-bd4e-9c7ab7fe88e3',  NULL     , 'Cool landlord'  ,    TRUE    ,  NULL              ,    1   , 'display1@example.com' , 'Test Name 1'  ),
                                                  ('44db487d-ace4-43c8-bd7c-38b32b0bc711',  NULL     , 'Cooler landlord',    TRUE    ,  NULL              ,    1   , 'display2@example.com' , 'Test Name 2'  ),
                                                  ('482afef6-1b2f-4ac2-a449-9bc318f55936',  NULL     , 'Evil landlord'  ,    TRUE    ,  NULL              ,    1   , 'display3@example.com' , 'Test Name 3'  ),
-                                                 ('4dfc3778-a1f2-410d-ae3d-9c92a469db8d',  NULL     , 'Lazy landlord'  ,    TRUE    ,  NULL              ,    1   , 'display4@example.com' , 'Test Name 3'  );
+                                                 ('4dfc3778-a1f2-410d-ae3d-9c92a469db8d',  NULL     , 'Lazy landlord'  ,    TRUE    ,  NULL              ,    1   , 'display4@example.com' , 'Test Name 4'  );
 
 
 -- Sample Property Ownership

@@ -67,11 +67,13 @@ const PropertyDetailPage: NextPage<{
             </div>
 
             {/* Average Ratings */}
-            <div className='flex flex-row w-full px-0 justify-start items-center gap-2'>
-              <p className='font-semibold'>Average Rating:</p>
-              <Suspense fallback={<ArrowPathIcon className='w-5 h-5 animate-spin' />}>
-                <AverageRating propertyId={propertyDetails.id} />
-              </Suspense>
+            <div className='flex flex-col w-full'>
+              <h2 className='text-lg font-semibold mb-1 w-fit text-accent'>Average Rating</h2>
+              <p className='text-base'>
+                <Suspense fallback={<ArrowPathIcon className='w-5 h-5 animate-spin' />}>
+                  <AverageRating propertyId={propertyDetails.id} />
+                </Suspense>
+              </p>
             </div>
 
             {/* Property Details */}

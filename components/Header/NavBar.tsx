@@ -13,6 +13,10 @@ const NavBar: React.FC = () => (
           text='Properties'
           href='/properties'
         />
+        <NavLink
+          text='Landlords'
+          href='/profiles'
+        />
         {/* Space for other links here */}
       </div>
       <AuthButton />

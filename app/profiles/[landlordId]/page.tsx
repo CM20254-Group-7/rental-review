@@ -5,6 +5,7 @@ import { cookies } from 'next/headers';
 import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
 import { ArrowPathIcon } from '@heroicons/react/24/solid';
+import Link from 'next/link';
 import AverageLandlordRating from './AverageLandlordRating';
 import ReviewResults from './ReviewResults';
 
@@ -113,12 +114,16 @@ export default async function landlordProfilePage({ params }: { params: { landlo
                   <div className='mt-4'>
                     <ul className='space-y-4'>
                       {propertyDetails.map((property, index) => (
-                        <li key={property.address} className='border rounded-md p-4'>
-                          <h3 className='text-lg font-semibold mb-2'>{property.address}</h3>
-                          {landlordProperties && (
-                            <a href={`/properties/${landlordProperties[index].property_id}`} className='text-blue-600 hover:underline'>Property Details</a>
-                          )}
-                        </li>
+                        <Link
+                          className='flex flex-col w-full items-center rounded-xl bg-secondary/10 hover:bg-secondary/20 p-6 pb-8 gap-4 border shadow-md shadow-secondary/40 hover:shadow-lg hover:shadow-secondary/40'
+                          href={landlordProperties ? `/properties/${landlordProperties[index]?.property_id}` : ''}
+                          key={landlordProperties && landlordProperties[index]?.property_id}
+                        >
+                          {/* Card Header */}
+                          <div className='flex flex-col w-full'>
+                            <h2 className='text-2xl font-semibold mb-1 w-fit'>{property.address}</h2>
+                          </div>
+                        </Link>
                       ))}
                     </ul>
                   </div>

@@ -19,7 +19,7 @@ const AverageLandlordRating: React.FC<{ landlordId: string; }> = async ({ landlo
 
   if (!averageRating) {
     return (
-      <p>No Ratings yet</p>
+      <p>No Ratings Yet</p>
     );
   }
 

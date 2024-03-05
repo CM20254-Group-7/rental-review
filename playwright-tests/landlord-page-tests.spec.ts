@@ -8,11 +8,42 @@ const secondUser = users[1]; // Landlord with no properties
 const thirdUser = users[2]; // Not a landlord
 
 test.describe('Landlord profile landing page tests', () => {
-  test('Contains landlords', async ({ page }) => {
-    test.fixme();
-    // Need to get the profile landing page done first
-    await page.goto('http://localhost:3000/profiles');
-    await expect(page.getByRole('main')).toContainText('Profile Page');
+  test.describe('Contains landlords', () => {
+    test.describe(`${firstUser.label} has correct details`, () => {
+      test(`${firstUser.label} has correct name`, async ({ page }) => {
+        await page.goto('http://localhost:3000/profiles');
+        await expect(page.getByRole('main')).toContainText('Test Name 1');
+      });
+      test(`${firstUser.label} has correct bio`, async ({ page }) => {
+        await page.goto('http://localhost:3000/profiles');
+        await expect(page.getByRole('main')).toContainText('Cool landlord');
+      });
+    });
+
+    test.describe(`${secondUser.label} has correct details`, () => {
+      test(`${secondUser.label} has correct name`, async ({ page }) => {
+        await page.goto('http://localhost:3000/profiles');
+        await expect(page.getByRole('main')).toContainText('Test Name 2');
+      });
+      test(`${secondUser.label} has correct bio`, async ({ page }) => {
+        await page.goto('http://localhost:3000/profiles');
+        await expect(page.getByRole('main')).toContainText('Cooler landlord');
+      });
+    });
+  });
+
+  test.describe('Links to correct profile', () => {
+    test(`Link to ${firstUser.label}`, async ({ page }) => {
+      await page.goto('http://localhost:3000/profiles');
+      await page.getByRole('link', { name: 'Test Name 1 Cool landlord' }).click();
+      await expect(page.getByRole('main')).toContainText('Test Name 1');
+    });
+
+    test(`Link to ${secondUser.label}`, async ({ page }) => {
+      await page.goto('http://localhost:3000/profiles');
+      await page.getByRole('link', { name: 'Test Name 2 Cooler landlord' }).click();
+      await expect(page.getByRole('main')).toContainText('Test Name 2');
+    });
   });
 });
 
@@ -29,10 +60,8 @@ test.describe('Landlord profile details page tests', () => {
     });
 
     test('LandlordId not provided test', async ({ page }) => {
-      test.fixme();
-      // Need to get the profile landing page done first
       await page.goto('http://localhost:3000/profiles');
-      await expect(page.getByRole('main')).toContainText('Profile Page');
+      await expect(page.getByRole('main')).toContainText('Landlords');
     });
   });
 
@@ -71,6 +100,54 @@ test.describe('Landlord profile details page tests', () => {
         test(`${secondUser.label} has correct bio`, async ({ page }) => {
           await page.goto(`http://localhost:3000/profiles/${secondUser.id}`);
           await expect(page.getByRole('main')).toContainText(`${secondUser.landlordProfile!.userBio}`);
+        });
+      });
+
+      test.describe('Rating tests', () => {
+        test(`${firstUser.label} has correct rating`, async ({ page }) => {
+          await page.goto(`http://localhost:3000/profiles/${firstUser.id}`);
+          // Select the specific section containing the stars
+          const section = await page.$('body > main > div > div > div.flex.flex-row.w-full.justify-between.gap-2.bg-secondary\\/30.shadow-lg.shadow-secondary\\/40 > div.flex-1.flex.flex-col.w-full.px-8.sm\\:max-w-md.justify-top.gap-2.py-4 > div:nth-child(2)');
+          if (!section) {
+            throw new Error('Section not found');
+          }
+
+          // Get all the svg of the stars
+          const stars = await section.$$('svg[data-slot="icon"]');
+          if (!stars) {
+            throw new Error('Stars not found');
+          }
+
+          // Collect promises for all star classes
+          const starClassPromises = stars.map(async (star) => {
+            const starClass = await star.getAttribute('class');
+            if (!starClass) {
+              throw new Error('Star class not found');
+            }
+            return starClass;
+          });
+
+          // Wait for all promises to resolve
+          const starClasses = await Promise.all(starClassPromises);
+          // Count the number of yellow and grey stars
+          let yellowStars = 0;
+          let greyStars = 0;
+          for (const starClass of starClasses) {
+            if (starClass.includes('text-yellow-300')) {
+              yellowStars += 1;
+            } else if (starClass.includes('text-gray-400')) {
+              greyStars += 1;
+            }
+          }
+
+          // Check if the number of stars is correct
+          await expect(yellowStars).toBe(2);
+          await expect(greyStars).toBe(5 - yellowStars);
+        });
+
+        test(`${secondUser.label} has correct rating`, async ({ page }) => {
+          await page.goto(`http://localhost:3000/profiles/${secondUser.id}`);
+          await expect(page.getByRole('main')).toContainText('No Ratings Yet');
         });
       });
     });
