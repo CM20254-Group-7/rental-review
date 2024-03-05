@@ -2,18 +2,21 @@ import { NextPage } from 'next';
 import Link from 'next/link';
 import React, { Suspense } from 'react';
 import PropertyResults, { PropertyResultsSkeleton } from './PropertyResults';
+import AddressSearch from './AddressSearch';
 import SortBy from './SortBy';
 
 const SideBar: React.FC = () => (
   <div
     className='flex flex-col gap-1 text-foreground border-r px-2 py-4'
   >
+    <AddressSearch />
     <SortBy />
   </div>
 );
 
 const PropertiesPage: NextPage<{
   searchParams?: {
+    address?: string
     sortBy?: string
     sortOrder?: string
   }
