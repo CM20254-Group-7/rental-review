@@ -6,6 +6,7 @@ import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
 import { ArrowPathIcon } from '@heroicons/react/24/solid';
 import AverageLandlordRating from './AverageLandlordRating';
+import ReviewResults from './ReviewResults';
 
 export default async function landlordProfilePage({ params }: { params: { landlordId: string } }) {
   // check if a landlord id was provided
@@ -28,34 +29,19 @@ export default async function landlordProfilePage({ params }: { params: { landlo
   }
 
   // get the properties associated with the landlord and get their info
-  const { data: landlordProperties, error: landlordPropertiesError } = await supabase
+  const { data: landlordProperties } = await supabase
     .from('property_ownership')
     .select('property_id')
     .eq('landlord_id', landlordId);
 
-  if (landlordPropertiesError) {
-    return (
-      <div>
-        <h1>ERROR: Unable to fetch landlord properties</h1>
-      </div>
-    );
-  }
-
   let propertyDetails: { address: string }[] = [];
   if (landlordProperties !== null) {
-    const { data: details, error: propertyDetailsError } = await supabase
+    const { data: details } = await supabase
       .rpc('properties_full')
       .in('id', landlordProperties.map((property) => property.property_id))
       .select('id, address');
 
-    if (propertyDetailsError) {
-      return (
-        <div>
-          <h1>ERROR: Unable to fetch property details</h1>
-        </div>
-      );
-    }
-    propertyDetails = details;
+    propertyDetails = details || [];
   }
 
   return (
@@ -119,25 +105,38 @@ export default async function landlordProfilePage({ params }: { params: { landlo
           </div>
 
           {propertyDetails !== null && (
-          <div className='flex flex-col w-full max-w-prose gap-8 items-center'>
-            {propertyDetails.length === 0 ? (
-              <p>No properties</p>
-            ) : (
-              <div>
-                <div className='mt-4'>
-                  <ul className='space-y-4'>
-                    {propertyDetails.map((property, index) => (
-                      <li key={property.address} className='border rounded-md p-4'>
-                        <h3 className='text-lg font-semibold mb-2'>{property.address}</h3>
-                        <a href={`/properties/${landlordProperties[index].property_id}`} className='text-blue-600 hover:underline'>Property Details</a>
-                      </li>
-                    ))}
-                  </ul>
+            <div className='flex flex-col w-full max-w-prose gap-8 items-center'>
+              {propertyDetails.length === 0 ? (
+                <p>No properties</p>
+              ) : (
+                <div>
+                  <div className='mt-4'>
+                    <ul className='space-y-4'>
+                      {propertyDetails.map((property, index) => (
+                        <li key={property.address} className='border rounded-md p-4'>
+                          <h3 className='text-lg font-semibold mb-2'>{property.address}</h3>
+                          {landlordProperties && (
+                            <a href={`/properties/${landlordProperties[index].property_id}`} className='text-blue-600 hover:underline'>Property Details</a>
+                          )}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
-              </div>
-            )}
-          </div>
+              )}
+            </div>
           )}
+        </div>
+
+        {/* Review List */}
+        <div className='flex flex-col gap-6 px-8 py-6'>
+          <div className='flex flex-col w-full'>
+            <h2 className='text-2xl font-semibold mb-1 w-fit text-accent'>Reviews</h2>
+            <span className='border border-b w-full border-accent' />
+          </div>
+          <div className='flex flex-col gap-4 justify-center items-center'>
+            <ReviewResults landlordId={landlordId} />
+          </div>
         </div>
       </div>
     </div>

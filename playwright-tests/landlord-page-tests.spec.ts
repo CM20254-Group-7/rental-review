@@ -87,5 +87,20 @@ test.describe('Landlord profile details page tests', () => {
         await expect(page.getByRole('list')).toContainText(`${firstUser.landlordProfile!.properties[1]}`);
       });
     });
+
+    test.describe('Shows the relevant reviews', () => {
+      test(`${firstUser.label} - Shows reviews`, async ({ page }) => {
+        await page.goto(`http://localhost:3000/profiles/${firstUser.id}`);
+        await expect(page.getByRole('main')).toContainText('Everything is fine.');
+        await expect(page.getByRole('main')).toContainText('01/02/2024');
+        await expect(page.getByRole('main')).toContainText('The landlord never responded to my queries and did not offer to fix the leakage in the bathroom. However, the property is impressive, with a beautiful city view.');
+        await expect(page.getByRole('main')).toContainText('21/02/2024');
+      });
+
+      test(`${secondUser.label} - No reviews`, async ({ page }) => {
+        await page.goto(`http://localhost:3000/profiles/${secondUser.id}`);
+        await expect(page.getByRole('main')).toContainText('No reviews');
+      });
+    });
   });
 });
