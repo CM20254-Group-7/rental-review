@@ -75,19 +75,19 @@ export default async function landlordProfilePage({ params }: { params: { landlo
             {/* Average Ratings */}
             <div className='flex flex-col w-full'>
               <h2 className='text-lg font-semibold mb-1 w-fit text-accent'>Average Rating</h2>
-              <p className='text-base'>
+              <div className='text-base'>
                 <Suspense fallback={<ArrowPathIcon className='w-5 h-5 animate-spin' />}>
                   <AverageLandlordRating landlordId={landlordData.user_id} />
                 </Suspense>
-              </p>
+              </div>
             </div>
 
             {/* Email */}
             <div className='flex flex-col w-full'>
               <h2 className='text-lg font-semibold mb-1 w-fit text-accent'>Contact Email</h2>
-              <p className='text-base'>
+              <div className='text-base'>
                 <a href={`mailto:${landlordData.display_email}`} className='text-blue-600 hover:underline'>{landlordData.display_email}</a>
-              </p>
+              </div>
             </div>
 
             {/* Bio */}
