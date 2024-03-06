@@ -26,13 +26,14 @@ const getCurrentOwner = cache(async (propertyId: string): Promise<LandlordProfil
     .from('property_ownership')
     .select('landlord_id')
     .eq('property_id', propertyId)
-    .is('end_date', null);
+    .is('ended_at', null)
+    .maybeSingle();
 
   if (!currentOwnerId) return null;
 
   const { data } = await supabase
     .rpc('landlord_public_profiles_with_ratings')
-    .eq('user_id', currentOwnerId)
+    .eq('user_id', currentOwnerId.landlord_id)
     .select('*')
     .single();
 
