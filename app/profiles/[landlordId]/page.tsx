@@ -4,6 +4,7 @@ import { NextPage } from 'next';
 import { cookies } from 'next/headers';
 import { notFound } from 'next/navigation';
 import { Suspense, cache } from 'react';
+import StarRatingLayout from '@/components/StarRating';
 import { CurrentPropertyResults, PreviousPropertyResults, PropertyResultsLoading } from './PropertyResults';
 import ReviewResults, { ReviewResultsLoading } from './ReviewResults';
 
@@ -14,9 +15,9 @@ const getLandlordBio = cache(async (landlordId: string) => {
 
   // check if a landlord with the provided id exists and get their info
   const { data, error } = await supabase
-    .from('landlord_public_profiles')
-    .select('*')
+    .rpc('landlord_public_profiles_with_ratings')
     .eq('user_id', landlordId)
+    .select('user_id, display_name, display_email, bio, average_rating')
     .single();
 
   if (error || !data) return null;
@@ -58,6 +59,7 @@ const landlordProfilePage: NextPage<{ params: { landlordId: string } }> = async 
               <h2 className='text-2xl font-semibold mb-1 w-fit text-accent'>{landlordBio.display_name}</h2>
               <span className='border border-b w-full border-accent' />
             </div>
+            <StarRatingLayout rating={landlordBio.average_rating} />
             <div className='flex flex-row gap-2'>
               <h3>Contact:</h3>
               <a
