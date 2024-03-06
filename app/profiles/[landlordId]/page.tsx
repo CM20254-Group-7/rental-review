@@ -13,13 +13,15 @@ const getLandlordBio = cache(async (landlordId: string) => {
   const supabase = createClient(cookieStore);
 
   // check if a landlord with the provided id exists and get their info
-  const { data: landlordData } = await supabase
+  const { data, error } = await supabase
     .from('landlord_public_profiles')
     .select('*')
     .eq('user_id', landlordId)
     .single();
 
-  return { ...landlordData };
+  if (error || !data) return null;
+
+  return { ...data };
 });
 
 const landlordProfilePage: NextPage<{ params: { landlordId: string } }> = async ({ params: { landlordId } }) => {
