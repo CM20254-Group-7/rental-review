@@ -9,9 +9,10 @@ const NavBar: React.FC = () => (
     <div className='w-full max-w-[614px] md:max-w-[80%] flex items-center p-3 text-sm'>
       <HomeButton />
       <div className='flex-1 flex flex-row px-8 gap-4'>
+        <NavLink text='Properties' href='/properties' />
         <NavLink
-          text='Properties'
-          href='/properties'
+          text='Dashboard'
+          href='/dashboard' // Remember to change later to appear only when authenticated
         />
         {/* Space for other links here */}
       </div>
