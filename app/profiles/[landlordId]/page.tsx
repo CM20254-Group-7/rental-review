@@ -1,9 +1,9 @@
+import Image from 'next/image';
 import createClient from '@/utils/supabase/server';
 import { NextPage } from 'next';
 import { cookies } from 'next/headers';
 import { notFound } from 'next/navigation';
 import { Suspense, cache } from 'react';
-import Image from 'next/image';
 import { CurrentPropertyResults, PreviousPropertyResults, PropertyResultsLoading } from './PropertyResults';
 import ReviewResults, { ReviewResultsLoading } from './ReviewResults';
 

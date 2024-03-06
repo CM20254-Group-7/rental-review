@@ -9,6 +9,7 @@ const defaultSortOrder = 'desc';
 const getPropertyResults = cache(async (searchQuery?: {
   sortBy?: string,
   sortOrder?: string,
+  address?: string
 }) => {
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
@@ -33,8 +34,15 @@ const getPropertyResults = cache(async (searchQuery?: {
   })();
   const sortAsc = sortOrder === 'asc';
 
-  const baseQuery = supabase
+  let baseQuery = supabase
     .rpc('properties_full');
+
+  if (searchQuery?.address) {
+    baseQuery = baseQuery.textSearch('address', searchQuery.address, {
+      type: 'websearch',
+      config: 'english',
+    });
+  }
 
   let query = baseQuery.select('*');
 
@@ -57,6 +65,7 @@ const PropertyResults: React.FC<{
   searchParams?: {
     sortBy?: string
     sortOrder?: string
+    address?: string
   }
 }> = async ({ searchParams }) => {
   const { properties } = await getPropertyResults(searchParams);
