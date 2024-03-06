@@ -55,7 +55,7 @@ const PropertyResult: React.FC<{
 export const CurrentPropertyResults: React.FC<{ landlordId: string }> = async ({ landlordId }) => {
   const currentProperties = await getCurrentlyOwnedProperties(landlordId);
 
-  if (!currentProperties) return <p>No Claimed Properties Yet</p>;
+  if (currentProperties.length === 0) return <p>No properties are currently owned by this landlord</p>;
 
   return currentProperties.map((property) => (
     <PropertyResult
@@ -69,7 +69,7 @@ export const CurrentPropertyResults: React.FC<{ landlordId: string }> = async ({
 export const PreviousPropertyResults: React.FC<{ landlordId: string }> = async ({ landlordId }) => {
   const previousProperties = await getPreviouslyOwnedProperties(landlordId);
 
-  if (!previousProperties) return <p>No Previous Properties</p>;
+  if (previousProperties.length === 0) return <p>No properties have previously been owned by this landlord</p>;
 
   return previousProperties.map((property) => (
     <PropertyResult
