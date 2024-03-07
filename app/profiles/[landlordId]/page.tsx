@@ -60,37 +60,35 @@ const landlordProfilePage: NextPage<{ params: { landlordId: string } }> = async 
               <span className='border border-b w-full border-accent' />
             </div>
             <StarRatingLayout rating={landlordBio.average_rating} />
-            <div className='flex flex-row gap-2'>
-              <h3>Contact:</h3>
+            <div className='flex flex-col gap-2'>
+              <h3 className='text-lg font-semibold text-accent'>Contact:</h3>
               <a
                 href={`mailto:${landlordBio.display_email}`}
-                className='underline text-accent hover:text-accent-hover transition-colors duration-300 ease-in-out'
+                className='underline text-slate-700/70 hover:text-slate-800 transition-colors duration-300 ease-in-out'
               >
                 {landlordBio.display_email}
               </a>
             </div>
             <div className='flex flex-col gap-2'>
-              <h3>About Me:</h3>
+              <h3 className='text-lg font-semibold text-accent'>About Me:</h3>
               <p className='italic'>{landlordBio.bio}</p>
             </div>
           </div>
         </div>
 
         {/* Property List */}
-        <div className='flex flex-col gap-6 px-8 py-6'>
+        <div className='flex flex-col gap-6 px-8 py-6 items-center'>
           <div className='flex flex-col w-full'>
             <h2 className='text-2xl font-semibold mb-1 w-fit text-accent'>Properties</h2>
             <span className='border border-b w-full border-accent' />
           </div>
-          <div className='flex flex-col gap-4 justify-center items-center'>
-            <div>
-              <h3>Currently Owned</h3>
+          <div className='relative w-fit max-h-[25rem] pb-2 px-4 gap-4 justify-center items-center overflow-y-auto'>
+            <div className='w-fit flex flex-col gap-4'>
+              <h3 className='sticky top-0 whitespace-nowrap w-full shadow-md shadow-bg-secondary-40 bg-secondary/30 backdrop-blur-sm text-accent text-lg font-semibold px-2 py-1'>Current</h3>
               <Suspense fallback={<PropertyResultsLoading />}>
                 <CurrentPropertyResults landlordId={landlordId} />
               </Suspense>
-            </div>
-            <div>
-              <h3>Previously Owned</h3>
+              <h3 className='sticky top-0 whitespace-nowrap w-full shadow-md shadow-bg-secondary-40 bg-secondary/30 backdrop-blur-sm text-accent text-lg font-semibold px-2 py-1'>Previous</h3>
               <Suspense fallback={<PropertyResultsLoading />}>
                 <PreviousPropertyResults landlordId={landlordId} />
               </Suspense>
