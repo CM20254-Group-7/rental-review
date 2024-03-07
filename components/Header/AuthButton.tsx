@@ -11,7 +11,7 @@ export default async function AuthButton() {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (user) return <UserManagementButton email={user.email!} />;
+  if (user) return <UserManagementButton email={user.email!} id={user.id!} />;
 
   return (
     <Link

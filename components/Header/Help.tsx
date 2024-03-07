@@ -43,7 +43,7 @@ const Help: React.FC = () => {
       {isComponentVisible && (
         <div
           ref={ref}
-          className='absolute right-0 top-[100%] w-[60vw] text-sm flex flex-col bg-background border-x border-b hover:shadow-sm hover:shadow-primary/20 transition-all text-foreground justify-center items-center rounded-b-md rounded-t-md'
+          className='z-10 absolute right-0 top-[100%] w-[60vw] text-sm flex flex-col bg-background border-x border-b hover:shadow-sm hover:shadow-primary/20 transition-all text-foreground justify-center items-center rounded-b-md rounded-t-md'
         >
           <div className='ml-2 mr-5 text-wrap'>
             <p className='mb-2'>
