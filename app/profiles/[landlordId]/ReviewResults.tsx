@@ -22,6 +22,8 @@ const ReviewResults: React.FC<{
 }> = async ({ landlordId }) => {
   const reviews = await getReviews(landlordId);
 
+  if (reviews.length === 0) return <p>No reviews found</p>;
+
   return reviews.map((review) => (
     <ReviewDetailsLayout
       key={review.review_id}
