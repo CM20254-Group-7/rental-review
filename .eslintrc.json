@@ -10,6 +10,7 @@
     "next/core-web-vitals"
   ],
   "rules": {
+    "react/require-default-props": "off",
     //   "prettier/prettier": "error",
     "no-unused-vars": "warn",
     "jsx-quotes": [
