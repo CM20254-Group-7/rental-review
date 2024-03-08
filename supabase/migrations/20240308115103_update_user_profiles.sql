@@ -13,4 +13,3 @@ end$function$
 ;
 
 CREATE TRIGGER update_user_profile AFTER UPDATE ON public.user_profiles FOR EACH STATEMENT EXECUTE FUNCTION update_user_email();
-xxx
