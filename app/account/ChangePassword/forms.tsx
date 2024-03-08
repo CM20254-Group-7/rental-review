@@ -79,6 +79,7 @@ ConfirmPasswordField.defaultProps = {
 
 interface FormProps {
   children: React.ReactNode
+  // eslint-disable-next-line no-unused-vars
   dispatch: (formData: FormData) => void
   title: string,
   submitText: string,

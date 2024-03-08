@@ -3,8 +3,9 @@
 import createClient from '@/utils/supabase/server';
 import Link from 'next/link';
 import { cookies } from 'next/headers';
+import { FC } from 'react';
 
-export default async function GetInfo() {
+const GetInfo: FC = async () => {
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
 
@@ -12,8 +13,6 @@ export default async function GetInfo() {
     data: { user },
   } = await supabase.auth.getUser();
 
-  console.log(user);
-  console.log('this is the page user');
   return user ? (
     <div className='flex items-center gap-4'>
       Email:
@@ -28,4 +27,6 @@ export default async function GetInfo() {
       Login
     </Link>
   );
-}
+};
+
+export default GetInfo;

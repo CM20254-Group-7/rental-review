@@ -48,13 +48,9 @@ export const updateInfo = async (prevState: State, formData: FormData): Promise<
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
 
-  const { data, error } = await supabase.auth.updateUser({
+  const { error } = await supabase.auth.updateUser({
     email: newEmail,
   });
-
-  console.log('actions');
-  console.log(data);
-  console.log(data.user?.identities);
 
   if (error) {
     return {

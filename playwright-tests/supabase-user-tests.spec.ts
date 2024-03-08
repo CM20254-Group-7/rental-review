@@ -302,13 +302,13 @@ test.describe('User Profile Tests', () => {
             'Content-Type': 'application/json',
           },
         });
-        const { access_token } = await userRes.json();
+        const { access_token: accessToken } = await userRes.json();
 
         // use the access token to get user 1's profile
         const testRes = await page.request.get(`${apiBaseURL}/rest/v1/user_profiles?email=eq.${firstUser.email}&select=email`, {
           headers: {
             apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-            Authorization: `Bearer ${access_token}`,
+            Authorization: `Bearer ${accessToken}`,
           },
         });
 
@@ -329,13 +329,13 @@ test.describe('User Profile Tests', () => {
             'Content-Type': 'application/json',
           },
         });
-        const { access_token } = await userRes.json();
+        const { access_token: accessToken } = await userRes.json();
 
         // use the access token to get user 2's profile
         const testRes = await page.request.get(`${apiBaseURL}/rest/v1/user_profiles?email=eq.${secondUser.email}&select=email`, {
           headers: {
             apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-            Authorization: `Bearer ${access_token}`,
+            Authorization: `Bearer ${accessToken}`,
           },
         });
 
@@ -367,13 +367,13 @@ test.describe('User Profile Tests', () => {
             'Content-Type': 'application/json',
           },
         });
-        const { access_token } = await userRes.json();
+        const { access_token: accessToken } = await userRes.json();
 
         // use the access token to get user 1's profile
         const testRes = await page.request.get(`${apiBaseURL}/rest/v1/user_profiles?email=eq.${firstUser.email}&select=email`, {
           headers: {
             apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-            Authorization: `Bearer ${access_token}`,
+            Authorization: `Bearer ${accessToken}`,
           },
         });
 
@@ -394,13 +394,13 @@ test.describe('User Profile Tests', () => {
             'Content-Type': 'application/json',
           },
         });
-        const { access_token } = await userRes.json();
+        const { access_token: accessToken } = await userRes.json();
 
         // use the access token to get user 2's profile
         const testRes = await page.request.get(`${apiBaseURL}/rest/v1/user_profiles?email=eq.${secondUser.email}&select=email`, {
           headers: {
             apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-            Authorization: `Bearer ${access_token}`,
+            Authorization: `Bearer ${accessToken}`,
           },
         });
 
