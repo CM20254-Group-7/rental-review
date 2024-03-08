@@ -18,7 +18,7 @@ const LandlordDashboard: NextPage = async () => {
       <div className='flex flex-col gap-1 items-center'>
         <h3 className='font-bold text-2xl text-accent'>Landlord Dashboard</h3>
         <p className='mb-6 text-lg'>TODO: Put general landlord info here</p>
-        <p>Maybe add a 'your rating over time' graph</p>
+        <p>Maybe add a &apos;your rating over time&apos; graph</p>
         <p>Could list the current ranking position?</p>
       </div>
     </div>

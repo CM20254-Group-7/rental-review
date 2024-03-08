@@ -1,4 +1,5 @@
 import { NextPage } from 'next';
+import Link from 'next/link';
 import { CurrentPropertyResults, PreviousPropertyResults } from './PropertyResults';
 
 const OwnedPropertiesPage: NextPage = () => (
@@ -19,6 +20,16 @@ const OwnedPropertiesPage: NextPage = () => (
           <PreviousPropertyResults />
         </div>
       </div>
+    </div>
+
+    <div className='flex flex-col gap-2 items-center'>
+      <h2 className='text-lg font-semibold'>Anything we&apos;re missing?</h2>
+      <Link
+        href='/properties'
+        className='bg-accent hover:bg-accent/90 hover:shadow-md shadow-accent transition-all w-fit font-bold py-2 px-4 rounded-md mb-6'
+      >
+        Find more in our Property Catalogue
+      </Link>
     </div>
   </div>
 );
