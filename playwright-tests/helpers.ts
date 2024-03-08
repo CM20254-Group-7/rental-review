@@ -20,7 +20,7 @@ const userLandlordProfiles = [
     displayName: 'Test Name 1',
     displayEmail: 'display1@example.com',
     userBio: 'Cool landlord',
-    properties: ['1, Test Road, AB1 234', '2, Test Road, AB1 234'],
+    properties: ['1, Test Road', '2, Test Road'],
   },
   {
     displayName: 'Test Name 2',
