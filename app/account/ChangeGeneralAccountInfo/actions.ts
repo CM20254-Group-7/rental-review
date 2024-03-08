@@ -52,9 +52,9 @@ export const updateInfo = async (prevState: State, formData: FormData): Promise<
     email: newEmail,
   });
 
-  console.log('actions')
-  console.log(data)
-  console.log(data.user?.identities)
+  console.log('actions');
+  console.log(data);
+  console.log(data.user?.identities);
 
   if (error) {
     return {
