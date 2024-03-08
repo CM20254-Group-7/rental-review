@@ -1,5 +1,3 @@
-'use client';
-
 import { useFormState } from 'react-dom';
 import React from 'react';
 import { State, updatePassword } from './actions';

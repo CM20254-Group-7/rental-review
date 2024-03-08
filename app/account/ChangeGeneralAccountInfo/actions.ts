@@ -36,7 +36,6 @@ export const updateInfo = async (prevState: State, formData: FormData): Promise<
   });
 
   if (!validatedFields.success) {
-    console.log(validatedFields.error.flatten().fieldErrors);
     return {
       errors: validatedFields.error.flatten().fieldErrors,
       message: 'Invalid Fields. Failed to update infomation.',
@@ -49,9 +48,13 @@ export const updateInfo = async (prevState: State, formData: FormData): Promise<
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
 
-  const { error } = await supabase.auth.updateUser({
+  const { data, error } = await supabase.auth.updateUser({
     email: newEmail,
   });
+
+  console.log('actions')
+  console.log(data)
+  console.log(data.user?.identities)
 
   if (error) {
     return {

@@ -1,5 +1,3 @@
-'use client';
-
 import UpdateProfileForm from './forms';
 
 const ChangeGeneralAccountInfo = () => (
