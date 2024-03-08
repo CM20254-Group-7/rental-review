@@ -468,6 +468,7 @@ export interface Database {
           landlord_rating: number
           property_rating: number
           review_body: string
+          review_posted: string
           landlord_id: string
         }[]
       }
@@ -481,6 +482,7 @@ export interface Database {
           landlord_rating: number
           property_rating: number
           review_body: string
+          review_posted: string
           landlord_id: string
         }[]
       }
