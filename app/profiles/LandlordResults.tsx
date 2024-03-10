@@ -2,7 +2,7 @@ import createClient from '@/utils/supabase/server';
 import { cookies } from 'next/headers';
 import Link from 'next/link';
 import React, { cache } from 'react';
-import Image from 'next/image';
+import StarRatingLayout from '@/components/StarRating';
 
 const getLandlordResults = cache(async () => {
   const cookieStore = cookies();
@@ -35,31 +35,39 @@ const LandlordResults: React.FC = async () => {
       </div>
     );
   }
+
   return (
-    <div>
+    <div className='grid grid-cols-1 gap-4'>
       {landlords.map((landlord, index) => (
         <div key={landlord.user_id} className='flex items-center justify-between mb-4'>
-          {/* Ranking with Crown */}
-          <span className='text-xl font-semibold mr-2'>
-            {index < 3 && '👑 '}
-            {index + 1}
-            .
-          </span>
-          {/* Landlord Details */}
-          <Link href={`/profiles/${landlord.user_id}`}>
-            <div
-              className='flex flex-col w-full items-center rounded-xl bg-secondary/10 hover:bg-secondary/20 p-6 pb-8 gap-4 border shadow-md shadow-secondary/40 hover:shadow-lg hover:shadow-secondary/40 relative'
-            >
-              <div className='flex items-center'>
-                <h2 className='text-2xl font-semibold mb-1 w-fit text-accent'>{landlord.display_name}</h2>
-              </div>
-
-              {/* Card Body */}
-              <div className='flex flex-col w-full gap-2'>
-                <p>{landlord.bio}</p>
-              </div>
+          <div className='w-full flex items-center'>
+            {/* Rank Number Column */}
+            <div className='w-12 text-center'>
+              {/* Ranking with Crown */}
+              <span className='text-xl font-semibold'>
+                {index < 3 ? '👑 ' : ''}
+                {index + 1}
+                .
+              </span>
             </div>
-          </Link>
+            {/* Landlord Details Column */}
+
+            <div className='w-full pl-4'>
+              <Link href={`/profiles/${landlord.user_id}`}>
+                <div
+                  className='flex flex-col w-full items-center rounded-xl bg-secondary/10 hover:bg-secondary/20 p-6 pb-8 gap-4 border shadow-md shadow-secondary/40 hover:shadow-lg hover:shadow-secondary/40 relative'
+                >
+                  <div className='flex items-center'>
+                    <h2 className='text-2xl font-semibold mb-1 w-fit text-accent'>{landlord.display_name}</h2>
+                  </div>
+                  {/* Card Body */}
+                  <div className='flex flex-col w-full gap-2'>
+                    <StarRatingLayout rating={landlord.average_rating} />
+                  </div>
+                </div>
+              </Link>
+            </div>
+          </div>
         </div>
       ))}
     </div>

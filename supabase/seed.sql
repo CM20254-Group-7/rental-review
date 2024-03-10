@@ -15,7 +15,7 @@
 -- | user.7@example.com  | User.7.Password  |   property-page-tests   | Have reviews on 1 & 2 Test Road                            |
 -- | user.8@example.com  | User.8.Password  |   property-page-tests   | Have a review on 1 Test Road (landlord changed)            |
 -- | user.9@example.com  | User.9.Password  |   landlord-page-tests   | Must have owned 1 property                                 |
--- |                     |                  |                         | Average rating must be lower than User 1                   |
+-- |                     |                  |                         | Average rating must be the highest                         |
 -- | user.10@example.com | User.10.Password |                         |                                                            |
 
 INSERT INTO "auth"."users" (            "instance_id"             ,                  "id"                 ,      "aud"     ,     "role"     ,        "email"       ,                      "encrypted_password"                     ,      "email_confirmed_at"      , "invited_at", "confirmation_token", "confirmation_sent_at", "recovery_token", "recovery_sent_at", "email_change_token_new", "email_change", "email_change_sent_at",        "last_sign_in_at"       ,               "raw_app_meta_data"              , "raw_user_meta_data", "is_super_admin",          "created_at"          ,          "updated_at"          , "phone", "phone_confirmed_at", "phone_change", "phone_change_token", "phone_change_sent_at", "email_change_token_current", "email_change_confirm_status", "banned_until", "reauthentication_token", "reauthentication_sent_at", "is_sso_user", "deleted_at") VALUES

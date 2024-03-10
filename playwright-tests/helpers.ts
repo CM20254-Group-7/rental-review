@@ -34,7 +34,12 @@ const userLandlordProfiles = [
   undefined,
   undefined,
   undefined,
-  undefined,
+  {
+    displayName: 'Test Name 5',
+    displayEmail: 'display5@example.com',
+    userBio: 'Best landlord',
+    properties: ['2, Test Road'],
+  },
   undefined,
 ];
 
