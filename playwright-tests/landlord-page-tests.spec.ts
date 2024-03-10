@@ -83,8 +83,8 @@ test.describe('Landlord profile details page tests', () => {
 
       test(`${firstUser.label} - Two owned properties`, async ({ page }) => {
         await page.goto(`http://localhost:3000/profiles/${firstUser.id}`);
-        await expect(page.getByRole('list')).toContainText(`${firstUser.landlordProfile!.properties[0]}`);
-        await expect(page.getByRole('list')).toContainText(`${firstUser.landlordProfile!.properties[1]}`);
+        await expect(page.getByRole('main')).toContainText(`${firstUser.landlordProfile!.properties[0]}`);
+        await expect(page.getByRole('main')).toContainText(`${firstUser.landlordProfile!.properties[1]}`);
       });
     });
   });
