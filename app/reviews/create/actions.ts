@@ -56,11 +56,11 @@ export const createReview = async (
   // Validate input
   const validatedFields = newReviewSchema.safeParse({
     property_id: property.id,
-    property_country: property.country,
-    property_county: property.county,
-    property_house: property.house,
-    property_postcode: property.postcode,
-    property_street: property.street,
+    property_country: formData.get('country'),
+    property_county: formData.get('county'),
+    property_house: formData.get('house'),
+    property_postcode: formData.get('postcode'),
+    property_street: formData.get('street'),
     review_date: formData.get('review_date'),
     review_body: formData.get('review_body'),
     property_rating: formData.get('property_rating'),
