@@ -2,24 +2,34 @@ import { NextResponse, type NextRequest } from 'next/server';
 import createClient from '@/utils/supabase/middleware';
 
 export async function middleware(request: NextRequest) {
-  try {
-    // This `try/catch` block is only here for the interactive tutorial.
-    // Feel free to remove once you have Supabase connected.
-    const { supabase, response } = createClient(request);
+  const response = NextResponse.next();
 
-    // Refresh session if expired - required for Server Components
-    // https://supabase.com/docs/guides/auth/auth-helpers/nextjs#managing-session-with-middleware
-    await supabase.auth.getSession();
+  // if user is on login page, & is already logged in, redirect to dashboard (or the redirict param if it exists)
+  if (request.nextUrl.pathname === '/login') {
+    const { supabase } = createClient(request);
+    const { data: { user } } = await supabase.auth.getUser();
+    if (user) {
+      const redirectTo = new URL(request.nextUrl.searchParams.get('redirect') || '/dashboard', request.url);
 
-    return response;
-  } catch (e) {
-    // If you are here, a Supabase client could not be created!
-    // This is likely because you have not set up environment variables.
-    // Check out http://localhost:3000 for Next Steps.
-    return NextResponse.next({
-      request: {
-        headers: request.headers,
-      },
-    });
+      return NextResponse.redirect(redirectTo);
+    }
   }
+
+  // if user is on a page that requires authentication, and is not logged in, redirect to login (with the current page as the redirect param)
+  if (
+    request.nextUrl.pathname.startsWith('/dashboard') // all dashboard pages
+    || request.nextUrl.pathname.startsWith('/account') // all account pages
+    || request.nextUrl.pathname.match(/^\/properties\/[a-zA-Z0-9-]+\/claim/)// all properties claim pages
+    || request.nextUrl.pathname === '/reviews/create' // review creation page
+  ) {
+    const { supabase } = createClient(request);
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      const redirectTo = new URL(`/login?redirect=${request.nextUrl.pathname}&message=${'You must be logged in to access this page.'}`, request.url);
+
+      return NextResponse.redirect(redirectTo);
+    }
+  }
+
+  return response;
 }
