@@ -4,7 +4,7 @@
 import { useFormState } from 'react-dom';
 import { NextPage } from 'next';
 import { notFound } from 'next/navigation';
-import { createReview } from '../../../reviews/create/actions';
+import { createReview } from './actions';
 
 const CreateReviewPage: NextPage<{
   searchParams?: {
