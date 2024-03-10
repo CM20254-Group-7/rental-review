@@ -25,7 +25,7 @@ export async function middleware(request: NextRequest) {
     const { supabase } = createClient(request);
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) {
-      const redirectTo = new URL(`/login?redirect=${request.nextUrl.pathname}`, request.url);
+      const redirectTo = new URL(`/login?redirect=${request.nextUrl.pathname}&message=${'You must be logged in to access this page.'}`, request.url);
 
       return NextResponse.redirect(redirectTo);
     }
