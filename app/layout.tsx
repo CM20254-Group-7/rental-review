@@ -1,4 +1,4 @@
-import { GeistSans } from 'geist/font/sans';
+// import { GeistSans } from 'geist/font/sans';
 import './globals.css';
 import NavBar from '@/components/Header/NavBar';
 import Footer from '@/components/Footer/Footer';
@@ -20,7 +20,7 @@ const Layout: NextPage<{
 }> = ({
   children,
 }) => (
-  <html lang='en' className={GeistSans.className}>
+  <html lang='en'>
     <body className='bg-background text-foreground'>
       <main className='min-h-screen flex flex-col items-center'>
         <NavBar />

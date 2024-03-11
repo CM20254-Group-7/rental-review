@@ -283,6 +283,7 @@ export interface Database {
           review_body: string
           review_date: string
           review_id: string
+          review_posted: string
           reviewer_id: string
         }
         Insert: {
@@ -292,6 +293,7 @@ export interface Database {
           review_body: string
           review_date: string
           review_id?: string
+          review_posted?: string
           reviewer_id: string
         }
         Update: {
@@ -301,6 +303,7 @@ export interface Database {
           review_body?: string
           review_date?: string
           review_id?: string
+          review_posted?: string
           reviewer_id?: string
         }
         Relationships: [
@@ -485,6 +488,7 @@ export interface Database {
           landlord_rating: number
           property_rating: number
           review_body: string
+          review_posted: string
           landlord_id: string
         }[]
       }
@@ -498,6 +502,7 @@ export interface Database {
           landlord_rating: number
           property_rating: number
           review_body: string
+          review_posted: string
           landlord_id: string
         }[]
       }
