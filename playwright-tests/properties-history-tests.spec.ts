@@ -30,9 +30,6 @@ const secondPropertyHistory = ownershipHistories[1]; // 2 Test Road
 
 test.describe(`${firstPropertyHistory.propertyAddress} ownership history tests`, () => {
   test('Contains correct start and end dates', async ({ page }) => {
-    console.log(firstPropertyHistory.startDate[0]);
-    console.log(fuzzyMatchDate(new Date(firstPropertyHistory.startDate[0])));
-    console.log(fuzzyMatchDate(new Date('20/02/2024')));
     await page.goto(`http://localhost:3000/properties/${firstPropertyHistory.propertyId}/ownership-history`);
     await expect(page.getByRole('main')).toContainText(fuzzyMatchDate(new Date(firstPropertyHistory.startDate[0])));
     await expect(page.getByRole('main')).toContainText(fuzzyMatchDate(new Date(firstPropertyHistory.endDate[0])));
