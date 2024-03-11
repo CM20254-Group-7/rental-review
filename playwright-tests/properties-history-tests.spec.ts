@@ -165,6 +165,7 @@ test.describe(`${secondPropertyHistory.propertyAddress} ownership history tests`
       await expect(greyStars).toBe(5 - yellowStars);
     });
   });
+
   test.describe('History ordered by newest first', () => {
     test(`${secondPropertyHistory.landlord?.[0]} comes before ${secondPropertyHistory.landlord?.[1]}`, async ({ page }) => {
       await page.goto(`http://localhost:3000/properties/${secondPropertyHistory.propertyId}/ownership-history`);
