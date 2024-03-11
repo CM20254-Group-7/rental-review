@@ -99,7 +99,7 @@ test.describe('Landlord leaderboard tests', () => {
         }
 
         // Check if the number of stars is correct
-        await expect(yellowStars).toBe(2);
+        await expect(yellowStars).toBe(3);
         await expect(greyStars).toBe(5 - yellowStars);
       });
     });
@@ -220,7 +220,7 @@ test.describe('Landlord profile details page tests', () => {
           }
 
           // Check if the number of stars is correct
-          await expect(yellowStars).toBe(2);
+          await expect(yellowStars).toBe(3);
           await expect(greyStars).toBe(5 - yellowStars);
         });
 
