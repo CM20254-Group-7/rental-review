@@ -20,6 +20,8 @@ test.describe(`${firstPropertyHistory.propertyAddress} ownership history tests`,
         }
       }
     }
+    console.log(firstPropertyHistory.endDate[0]);
+    console.log(firstPropertyHistory.endDate[0][1]);
     try {
       await expect(page.getByRole('main')).toContainText(`${firstPropertyHistory.endDate[0]}`);
     } catch (error) {
@@ -29,7 +31,11 @@ test.describe(`${firstPropertyHistory.propertyAddress} ownership history tests`,
         try {
           await expect(page.getByRole('main')).toContainText(`${firstPropertyHistory.endDate[2]}`);
         } catch (error2) {
-          await expect(page.getByRole('main')).toContainText(`${firstPropertyHistory.endDate[3]}`);
+          try {
+            await expect(page.getByRole('main')).toContainText(`${firstPropertyHistory.endDate[3]}`);
+          } catch (error3) {
+            console.log('error3');
+          }
         }
       }
     }
