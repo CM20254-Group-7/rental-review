@@ -112,6 +112,7 @@ test.describe(`${secondPropertyHistory.propertyAddress} ownership history tests`
       await expect(greyStars).toBe(5 - yellowStars);
     });
   });
+
   test.describe('Past ownership test', () => {
     test('Contains correct start and end dates', async ({ page }) => {
       await page.goto(`http://localhost:3000/properties/${secondPropertyHistory.propertyId}/ownership-history`);
