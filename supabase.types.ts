@@ -219,6 +219,36 @@ export interface Database {
           }
         ]
       }
+      review_tags: {
+        Row: {
+          review_id: string
+          tag: string
+        }
+        Insert: {
+          review_id: string
+          tag: string
+        }
+        Update: {
+          review_id?: string
+          tag?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "review_tags_review_id_fkey"
+            columns: ["review_id"]
+            isOneToOne: false
+            referencedRelation: "reviews"
+            referencedColumns: ["review_id"]
+          },
+          {
+            foreignKeyName: "review_tags_tag_fkey"
+            columns: ["tag"]
+            isOneToOne: false
+            referencedRelation: "tags"
+            referencedColumns: ["tag"]
+          }
+        ]
+      }
       reviewer_private_profiles: {
         Row: {
           property_id: string
@@ -289,6 +319,18 @@ export interface Database {
             referencedColumns: ["reviewer_id"]
           }
         ]
+      }
+      tags: {
+        Row: {
+          tag: string
+        }
+        Insert: {
+          tag: string
+        }
+        Update: {
+          tag?: string
+        }
+        Relationships: []
       }
       uploaded_files: {
         Row: {
