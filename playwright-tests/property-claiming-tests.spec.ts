@@ -143,16 +143,14 @@ test.describe('1. Page Access', () => {
 
       await page.goto(`/properties/${property.id}/claim`);
 
-      await expect(page.getByRole('main')).toContainText('Go to Login');
-      await page.getByRole('link', { name: 'Go to Login' }).click();
-      await expect(page).toHaveURL(/.*login/);
+      await expect(page.url()).toContain(`/login?redirect=/properties/${property.id}/claim`);
     });
 
     test('1.1.3. Redirected back to claim property page after login', async ({ page }, testInfo) => {
       const property = properties[testInfo.workerIndex];
 
       await page.goto(`/properties/${property.id}/claim`);
-      await page.getByRole('link', { name: 'Go to Login' }).click();
+      await expect(page.url()).toContain(`/login?redirect=/properties/${property.id}/claim`);
       await page
         .locator('form')
         .filter({ hasText: 'Returning User? Sign In Here.' })

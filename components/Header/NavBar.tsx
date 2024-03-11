@@ -10,10 +10,14 @@ const NavBar: React.FC = () => (
 
       <HomeButton />
       <div className='flex-1 flex flex-row px-8 gap-4'>
-        <NavLink text='Properties' href='/properties' />
         <NavLink
           text='Dashboard'
           href='/dashboard' // Remember to change later to appear only when authenticated
+        />
+        <NavLink text='Properties' href='/properties' />
+        <NavLink
+          text='Landlords'
+          href='/profiles'
         />
         {/* Space for other links here */}
       </div>
