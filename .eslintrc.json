@@ -10,6 +10,7 @@
     "next/core-web-vitals"
   ],
   "rules": {
+    "react/require-default-props": "off",
     "jsx-a11y/label-has-associated-control": "off",
     "jsx-a11y/control-has-associated-label": "off",
     //   "prettier/prettier": "error",
