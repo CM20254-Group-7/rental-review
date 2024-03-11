@@ -8,7 +8,7 @@ const secondUser = users[1]; // Landlord with no properties
 const thirdUser = users[2]; // Not a landlord
 const fourthUser = users[8]; // Landlord with highest
 
-test.describe('Landlord profile landing page tests', () => {
+test.describe('Landlord leaderboard tests', () => {
   test.describe('Contains landlords', () => {
     test.describe(`${firstUser.label} has correct details`, () => {
       test(`${firstUser.label} has correct name`, async ({ page }) => {

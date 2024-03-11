@@ -67,24 +67,22 @@ const PropertyDetailPage: NextPage<{
             </div>
 
             {/* Average Ratings */}
-            <div className='flex flex-row w-full px-0 justify-start items-center gap-2'>
-              <p className='font-semibold'>Average Rating:</p>
-              <Suspense fallback={<ArrowPathIcon className='w-5 h-5 animate-spin' />}>
-                <AverageRating propertyId={propertyDetails.id} />
-              </Suspense>
-            </div>
+            <AverageRating propertyId={propertyDetails.id} />
 
             {/* Property Details */}
             {/* Might want to add more things like no. baths etc */}
-            <text>{propertyDetails.description}</text>
+            {propertyDetails.description && (
+              <div className='flex flex-col gap-2'>
+                <h3 className='text-lg font-semibold text-accent'>Description:</h3>
+                <p>{propertyDetails.description}</p>
+              </div>
+            )}
 
             {/* Ownership */}
-            <div className='flex flex-row gap-1'>
-              {/* <p className='font-semibold'>Owned By:</p> */}
-              <Suspense fallback={<ArrowPathIcon className='w-5 h-5 animate-spin' />}>
-                <CurrentOwnerIndicator propertyId={propertyDetails.id} />
-              </Suspense>
-            </div>
+            <h3 className='text-lg font-semibold text-accent'>Current Owner:</h3>
+            <Suspense fallback={<ArrowPathIcon className='w-5 h-5 animate-spin' />}>
+              <CurrentOwnerIndicator propertyId={propertyDetails.id} />
+            </Suspense>
           </div>
         </div>
 
