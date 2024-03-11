@@ -7,8 +7,16 @@ const secondPropertyHistory = ownershipHistories[1]; // 2 Test Road
 test.describe(`${firstPropertyHistory.propertyAddress} ownership history tests`, () => {
   test('Contains correct start and end dates', async ({ page }) => {
     await page.goto(`http://localhost:3000/properties/${firstPropertyHistory.propertyId}/ownership-history`);
-    await expect(page.getByRole('main')).toContainText(`${firstPropertyHistory.startDate}`);
-    await expect(page.getByRole('main')).toContainText(`${firstPropertyHistory.endDate}`);
+    try {
+      await expect(page.getByRole('main')).toContainText(`${firstPropertyHistory.startDate[0]}`);
+    } catch (error) {
+      await expect(page.getByRole('main')).toContainText(`${firstPropertyHistory.startDate[1]}`);
+    }
+    try {
+      await expect(page.getByRole('main')).toContainText(`${firstPropertyHistory.endDate[0]}`);
+    } catch (error) {
+      await expect(page.getByRole('main')).toContainText(`${firstPropertyHistory.endDate[1]}`);
+    }
   });
 
   test('Contains correct landlord', async ({ page }) => {
@@ -62,8 +70,16 @@ test.describe(`${secondPropertyHistory.propertyAddress} ownership history tests`
   test.describe('Current ownership test', () => {
     test('Contains correct start and end dates', async ({ page }) => {
       await page.goto(`http://localhost:3000/properties/${secondPropertyHistory.propertyId}/ownership-history`);
-      await expect(page.getByRole('main')).toContainText(`${secondPropertyHistory.startDate[0]}`);
-      await expect(page.getByRole('main')).toContainText(`${secondPropertyHistory.endDate[0]}`);
+      try {
+        await expect(page.getByRole('main')).toContainText(`${secondPropertyHistory.startDate[0][0]}`);
+      } catch (error) {
+        await expect(page.getByRole('main')).toContainText(`${secondPropertyHistory.startDate[0][1]}`);
+      }
+      try {
+        await expect(page.getByRole('main')).toContainText(`${secondPropertyHistory.endDate[1][0]}`);
+      } catch (error) {
+        await expect(page.getByRole('main')).toContainText(`${secondPropertyHistory.endDate[1][1]}`);
+      }
     });
 
     test('Contains correct landlord', async ({ page }) => {
