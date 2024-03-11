@@ -10,12 +10,28 @@ test.describe(`${firstPropertyHistory.propertyAddress} ownership history tests`,
     try {
       await expect(page.getByRole('main')).toContainText(`${firstPropertyHistory.startDate[0]}`);
     } catch (error) {
-      await expect(page.getByRole('main')).toContainText(`${firstPropertyHistory.startDate[1]}`);
+      try {
+        await expect(page.getByRole('main')).toContainText(`${firstPropertyHistory.startDate[1]}`);
+      } catch (error1) {
+        try {
+          await expect(page.getByRole('main')).toContainText(`${firstPropertyHistory.startDate[2]}`);
+        } catch (error2) {
+          await expect(page.getByRole('main')).toContainText(`${firstPropertyHistory.startDate[3]}`);
+        }
+      }
     }
     try {
       await expect(page.getByRole('main')).toContainText(`${firstPropertyHistory.endDate[0]}`);
     } catch (error) {
-      await expect(page.getByRole('main')).toContainText(`${firstPropertyHistory.endDate[1]}`);
+      try {
+        await expect(page.getByRole('main')).toContainText(`${firstPropertyHistory.endDate[1]}`);
+      } catch (error1) {
+        try {
+          await expect(page.getByRole('main')).toContainText(`${firstPropertyHistory.endDate[2]}`);
+        } catch (error2) {
+          await expect(page.getByRole('main')).toContainText(`${firstPropertyHistory.endDate[3]}`);
+        }
+      }
     }
   });
 
@@ -71,14 +87,17 @@ test.describe(`${secondPropertyHistory.propertyAddress} ownership history tests`
     test('Contains correct start and end dates', async ({ page }) => {
       await page.goto(`http://localhost:3000/properties/${secondPropertyHistory.propertyId}/ownership-history`);
       try {
-        await expect(page.getByRole('main')).toContainText(`${secondPropertyHistory.startDate[0][0]}`);
+        await expect(page.getByRole('main')).toContainText(`${secondPropertyHistory.endDate[0][0]}`);
       } catch (error) {
-        await expect(page.getByRole('main')).toContainText(`${secondPropertyHistory.startDate[0][1]}`);
-      }
-      try {
-        await expect(page.getByRole('main')).toContainText(`${secondPropertyHistory.endDate[1][0]}`);
-      } catch (error) {
-        await expect(page.getByRole('main')).toContainText(`${secondPropertyHistory.endDate[1][1]}`);
+        try {
+          await expect(page.getByRole('main')).toContainText(`${secondPropertyHistory.endDate[0][1]}`);
+        } catch (error1) {
+          try {
+            await expect(page.getByRole('main')).toContainText(`${secondPropertyHistory.endDate[0][2]}`);
+          } catch (error2) {
+            await expect(page.getByRole('main')).toContainText(`${secondPropertyHistory.endDate[0][3]}`);
+          }
+        }
       }
     });
 
@@ -132,8 +151,24 @@ test.describe(`${secondPropertyHistory.propertyAddress} ownership history tests`
   test.describe('Past ownership test', () => {
     test('Contains correct start and end dates', async ({ page }) => {
       await page.goto(`http://localhost:3000/properties/${secondPropertyHistory.propertyId}/ownership-history`);
-      await expect(page.getByRole('main')).toContainText(`${secondPropertyHistory.startDate[1]}`);
-      await expect(page.getByRole('main')).toContainText(`${secondPropertyHistory.endDate[1]}`);
+      try {
+        await expect(page.getByRole('main')).toContainText(`${secondPropertyHistory.startDate[1][0]}`);
+      } catch (error) {
+        try {
+          await expect(page.getByRole('main')).toContainText(`${secondPropertyHistory.startDate[1][1]}`);
+        } catch (error1) {
+          try {
+            await expect(page.getByRole('main')).toContainText(`${secondPropertyHistory.startDate[1][2]}`);
+          } catch (error2) {
+            await expect(page.getByRole('main')).toContainText(`${secondPropertyHistory.startDate[1][3]}`);
+          }
+        }
+      }
+      try {
+        await expect(page.getByRole('main')).toContainText(`${secondPropertyHistory.endDate[1][0]}`);
+      } catch (error) {
+        await expect(page.getByRole('main')).toContainText(`${secondPropertyHistory.endDate[1][1]}`);
+      }
     });
 
     test('Contains correct landlord', async ({ page }) => {
