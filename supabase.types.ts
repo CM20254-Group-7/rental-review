@@ -197,6 +197,36 @@ export interface Database {
           }
         ]
       }
+      property_tags: {
+        Row: {
+          property_id: string
+          tag_id: string
+        }
+        Insert: {
+          property_id: string
+          tag_id: string
+        }
+        Update: {
+          property_id?: string
+          tag_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "property_tags_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "property_tags_tag_id_fkey"
+            columns: ["tag_id"]
+            isOneToOne: false
+            referencedRelation: "tags"
+            referencedColumns: ["tag_id"]
+          }
+        ]
+      }
       review_photos: {
         Row: {
           photo_id: number
@@ -304,6 +334,21 @@ export interface Database {
             referencedColumns: ["reviewer_id"]
           }
         ]
+      }
+      tags: {
+        Row: {
+          tag_id: string
+          tag_name: string
+        }
+        Insert: {
+          tag_id: string
+          tag_name: string
+        }
+        Update: {
+          tag_id?: string
+          tag_name?: string
+        }
+        Relationships: []
       }
       uploaded_files: {
         Row: {
