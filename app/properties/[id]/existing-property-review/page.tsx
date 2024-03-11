@@ -3,12 +3,11 @@
 // TEST PAGE FOR CREATE ACTION - PLEASE REPLACE
 import { useFormState } from 'react-dom';
 import { NextPage } from 'next';
-import { notFound } from 'next/navigation';
+import { notFound, useParams } from 'next/navigation';
 import { createReview } from './actions';
 
 const CreateReviewPage: NextPage<{
   searchParams?: {
-    propertyId?: string;
     house?: string;
     street?: string;
     county?: string;
@@ -20,13 +19,13 @@ const CreateReviewPage: NextPage<{
 
   // define example propertyId and address, these should be determined by params in implementation
   const {
-    propertyId,
     house,
     street,
     county,
     postcode,
     country,
   } = searchParams;
+  const propertyId = (useParams().id as string); // Dynamically read property id from URL
 
   // bind the id & address to the createReview function
   const initialState = { message: null, errors: {} };
