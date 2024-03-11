@@ -87,18 +87,19 @@ test.describe(`${secondPropertyHistory.propertyAddress} ownership history tests`
     test('Contains correct start and end dates', async ({ page }) => {
       await page.goto(`http://localhost:3000/properties/${secondPropertyHistory.propertyId}/ownership-history`);
       try {
-        await expect(page.getByRole('main')).toContainText(`${secondPropertyHistory.endDate[0][0]}`);
+        await expect(page.getByRole('main')).toContainText(`${secondPropertyHistory.startDate[0][0]}`);
       } catch (error) {
         try {
-          await expect(page.getByRole('main')).toContainText(`${secondPropertyHistory.endDate[0][1]}`);
+          await expect(page.getByRole('main')).toContainText(`${secondPropertyHistory.startDate[0][1]}`);
         } catch (error1) {
           try {
-            await expect(page.getByRole('main')).toContainText(`${secondPropertyHistory.endDate[0][2]}`);
+            await expect(page.getByRole('main')).toContainText(`${secondPropertyHistory.startDate[0][2]}`);
           } catch (error2) {
-            await expect(page.getByRole('main')).toContainText(`${secondPropertyHistory.endDate[0][3]}`);
+            await expect(page.getByRole('main')).toContainText(`${secondPropertyHistory.startDate[0][3]}`);
           }
         }
       }
+      await expect(page.getByRole('main')).toContainText(`${secondPropertyHistory.endDate[0]}`);
     });
 
     test('Contains correct landlord', async ({ page }) => {
