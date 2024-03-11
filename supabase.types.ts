@@ -71,15 +71,7 @@ export interface Database {
           street?: string | null
           user_id?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "landlord_private_profiles_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: true
-            referencedRelation: "user_profiles"
-            referencedColumns: ["user_id"]
-          }
-        ]
+        Relationships: []
       }
       landlord_public_profiles: {
         Row: {
@@ -250,13 +242,6 @@ export interface Database {
             isOneToOne: false
             referencedRelation: "properties"
             referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "reviewer_private_profiles_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "user_profiles"
-            referencedColumns: ["user_id"]
           }
         ]
       }
@@ -338,14 +323,7 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: "user_profiles_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: true
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "user_public_profiles_id_fkey"
+            foreignKeyName: "user_profiles_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: true
             referencedRelation: "users"
