@@ -64,9 +64,9 @@ const propertyAddresses = [
 
 export const ownershipHistories = [
   {
-    startDate: ['20/02/2024', '20/2/2024', '02/20/2024', '2/20/2024'],
-    endDate: ['21/02/2024', '21/2/2024', '02/21/2024', '2/21/2024'],
-    landlord: users[0].landlordProfile?.displayName,
+    startDate: ['2024-02-20'],
+    endDate: ['2024-02-21'],
+    landlord: [users[0].landlordProfile?.displayName],
     propertyAddress: propertyAddresses[0],
     propertyId: propertyIds[0],
     landlordRating: [2],
@@ -74,8 +74,8 @@ export const ownershipHistories = [
 
   {
     // allow the dates in either format
-    startDate: [['20/01/2024', '01/20/2024', '20/1/2024', '1/20/2024'], ['01/01/2021', '1/01/2021', '01/1/2021', '1/1/2021']],
-    endDate: ['Present', ['31/12/2021', '12/31/2021']],
+    startDate: ['2024-01-20', '2021-01-01'],
+    endDate: ['Present', '2021-12-31'],
     landlord: [users[0].landlordProfile?.displayName, users[8].landlordProfile?.displayName],
     propertyAddress: propertyAddresses[1],
     propertyId: propertyIds[1],
