@@ -59,7 +59,7 @@ test.describe(`${firstPropertyHistory.propertyAddress} ownership history tests`,
 });
 
 test.describe(`${secondPropertyHistory.propertyAddress} ownership history tests`, () => {
-  test.describe('Recent ownership test', () => {
+  test.describe('Current ownership test', () => {
     test('Contains correct start and end dates', async ({ page }) => {
       await page.goto(`http://localhost:3000/properties/${secondPropertyHistory.propertyId}/ownership-history`);
       await expect(page.getByRole('main')).toContainText(`${secondPropertyHistory.startDate[0]}`);
@@ -163,6 +163,25 @@ test.describe(`${secondPropertyHistory.propertyAddress} ownership history tests`
       // Check if the number of stars is correct
       await expect(yellowStars).toBe(secondPropertyHistory.landlordRating[1]);
       await expect(greyStars).toBe(5 - yellowStars);
+    });
+  });
+  test.describe('History ordered by newest first', () => {
+    test(`${secondPropertyHistory.landlord?.[0]} comes before ${secondPropertyHistory.landlord?.[1]}`, async ({ page }) => {
+      await page.goto(`http://localhost:3000/properties/${secondPropertyHistory.propertyId}/ownership-history`);
+      const currentOwnership = await page.getByRole('link', { name: `${secondPropertyHistory.landlord?.[0]}` });
+      const pastOwnership = await page.getByRole('link', { name: `${secondPropertyHistory.landlord?.[1]}` });
+
+      // Get the positions of the elements
+      const currentOwnershipPosition = await currentOwnership.boundingBox();
+      const pastOwnershipPosition = await pastOwnership.boundingBox();
+
+      // Throw error if the positions are not found
+      if (!currentOwnershipPosition || !pastOwnershipPosition) {
+        throw new Error('Position not found');
+      }
+
+      // Check if the current ownership comes before the past ownership
+      await expect(currentOwnershipPosition.y).toBeLessThan(pastOwnershipPosition.y);
     });
   });
 });
