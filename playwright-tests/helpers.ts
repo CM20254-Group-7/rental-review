@@ -62,6 +62,26 @@ const propertyAddresses = [
   '2, Test Road, AB1 234',
 ];
 
+export const ownershipHistories = [
+  {
+    startDate: '20/02/2024',
+    endDate: '21/02/2024',
+    landlord: users[0].landlordProfile?.displayName,
+    propertyAddress: propertyAddresses[0],
+    propertyId: propertyIds[0],
+    landlordRating: [2],
+  },
+
+  {
+    startDate: ['20/01/2024', '01/01/2021'],
+    endDate: ['Present', '31/12/2021'],
+    landlord: [users[0].landlordProfile?.displayName, users[8].landlordProfile?.displayName],
+    propertyAddress: propertyAddresses[1],
+    propertyId: propertyIds[1],
+    landlordRating: [2, 5],
+  },
+];
+
 export const properties = [1, 2].map((i) => ({
   id: propertyIds[i - 1],
   address: propertyAddresses[i - 1],
