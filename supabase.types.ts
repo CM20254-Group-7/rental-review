@@ -189,36 +189,6 @@ export interface Database {
           }
         ]
       }
-      property_tags: {
-        Row: {
-          property_id: string
-          tag_id: string
-        }
-        Insert: {
-          property_id: string
-          tag_id: string
-        }
-        Update: {
-          property_id?: string
-          tag_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "property_tags_property_id_fkey"
-            columns: ["property_id"]
-            isOneToOne: false
-            referencedRelation: "properties"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "property_tags_tag_id_fkey"
-            columns: ["tag_id"]
-            isOneToOne: false
-            referencedRelation: "tags"
-            referencedColumns: ["tag_id"]
-          }
-        ]
-      }
       review_photos: {
         Row: {
           photo_id: number
@@ -246,6 +216,36 @@ export interface Database {
             isOneToOne: false
             referencedRelation: "reviews"
             referencedColumns: ["review_id"]
+          }
+        ]
+      }
+      review_tags: {
+        Row: {
+          review_id: string
+          tag: string
+        }
+        Insert: {
+          review_id: string
+          tag: string
+        }
+        Update: {
+          review_id?: string
+          tag?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "review_tags_review_id_fkey"
+            columns: ["review_id"]
+            isOneToOne: false
+            referencedRelation: "reviews"
+            referencedColumns: ["review_id"]
+          },
+          {
+            foreignKeyName: "review_tags_tag_fkey"
+            columns: ["tag"]
+            isOneToOne: false
+            referencedRelation: "tags"
+            referencedColumns: ["tag"]
           }
         ]
       }
@@ -322,16 +322,13 @@ export interface Database {
       }
       tags: {
         Row: {
-          tag_id: string
-          tag_name: string
+          tag: string
         }
         Insert: {
-          tag_id: string
-          tag_name: string
+          tag: string
         }
         Update: {
-          tag_id?: string
-          tag_name?: string
+          tag?: string
         }
         Relationships: []
       }
