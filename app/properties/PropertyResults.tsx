@@ -1,3 +1,5 @@
+import CurrentOwnerIndicator from '@/components/CurrentOwnerIndicator';
+import StarRatingLayout from '@/components/StarRating';
 import createClient from '@/utils/supabase/server';
 import { cookies } from 'next/headers';
 import Link from 'next/link';
@@ -86,14 +88,48 @@ const PropertyResults: React.FC<{
     >
       {/* Card Header */}
       <div className='flex flex-col w-full'>
-        <h2 className='text-2xl font-semibold mb-1 w-fit text-accent'>{property.address}</h2>
+        <div className='flex flex-row justify-between'>
+          <h2 className='text-2xl font-semibold mb-1 w-fit text-accent'>{property.address}</h2>
+          <StarRatingLayout rating={property.average_rating} />
+        </div>
         <span className='border border-b w-full border-accent' />
       </div>
 
-      {/* Property Details here */}
-      {/* <div className='flex flex-col gap-2'>
-
-      </div> */}
+      <div className='grid grid-cols-1 md:grid-cols-2 w-full'>
+        <div className='flex flex-col gap-2 justify-center items-center'>
+          {(property.description || property.beds || property.baths)
+            ? (
+              <>
+                {property.description && (
+                <p className='text-sm'>{property.description}</p>
+                )}
+                <div className='flex flex-col gap-2'>
+                  {property.beds && (
+                  <p className='text-sm font-semibold'>
+                    Bedrooms:
+                    {property.beds}
+                  </p>
+                  )}
+                  {property.baths && (
+                  <p className='text-sm font-semibold'>
+                    Bathrooms:
+                    {property.baths}
+                  </p>
+                  )}
+                </div>
+              </>
+            ) : (
+              <p className='text-sm font-semibold'>
+                No details available
+              </p>
+            )}
+        </div>
+        <div className='flex flex-row justify-end w-full'>
+          <CurrentOwnerIndicator
+            propertyId={property.id}
+          />
+        </div>
+      </div>
     </Link>
   ));
 };
