@@ -73,7 +73,7 @@ export const ownershipHistories = [
   },
 
   {
-    startDate: ['20/01/2024' || '01/20/2024', '01/01/2021' || '01/01/2021'],
+    startDate: ['20/01/2024' || '01/20/2024', '01/01/2021' || '1/1/2021'],
     endDate: ['Present', '31/12/2021' || '12/31/2021'],
     landlord: [users[0].landlordProfile?.displayName, users[8].landlordProfile?.displayName],
     propertyAddress: propertyAddresses[1],
