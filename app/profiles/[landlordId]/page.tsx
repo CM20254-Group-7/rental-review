@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 
 import createClient from '@/utils/supabase/server';
 import { cookies } from 'next/headers';
@@ -58,11 +59,26 @@ export default async function landlordProfilePage({ params }: { params: { landlo
     propertyDetails = details;
   }
 
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
   return (
-    <div className='flex-1 flex flex-col w-full px-16 justify-top items-center gap-2 py-20'>
+    <div className='flex-1 flex flex-col w-full px-16 justify-top items-center gap-2 py-16'>
       {/* Content Boundary */}
+      {(user?.id === landlordId) && (
+      <div className='flex-1 flex flex-col w-full max-w-4xl justify-top items-end'>
+        <Link
+          href={`profiles/${landlordId}/edit`}
+          className='ml-5 py-2 px-3 text-sm flex flex-row bg-background hover:bg-secondary/10 border hover:shadow-sm hover:shadow-primary/20 transition-all text-accent justify-center items-center gap-2 rounded-md'
+        >
+          Edit
+        </Link>
+      </div>
+      )}
       <div className='flex flex-col w-full max-w-4xl bg-secondary/10 shadow-md shadow-secondary/40 rounded-lg overflow-clip border'>
         {/* Details Header */}
+
         <div className='flex flex-row w-full justify-between gap-2 bg-secondary/30 shadow-lg shadow-secondary/40'>
           {/* Images - Currently not implemented so shows example image with disclaimer */}
           <div className='relative w-full max-w-md aspect-[1000/682] rounded-full overflow-hidden'>
