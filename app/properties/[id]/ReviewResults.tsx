@@ -11,13 +11,14 @@ interface ReviewDetails {
   review_date: Date;
   review_id: string;
   reviewer_id: string;
+  review_tags: string[];
 }
 const getReviewResults = cache(async (propertyId: string): Promise<ReviewDetails[]> => {
   const supabase = createClient(cookies());
 
   const { data, error } = await supabase
     .from('reviews')
-    .select('*')
+    .select('*, review_tags(tag)')
     .eq('property_id', propertyId);
 
   if (error) return [];
@@ -25,6 +26,7 @@ const getReviewResults = cache(async (propertyId: string): Promise<ReviewDetails
   return data.map((review) => ({
     ...review,
     review_date: new Date(review.review_date),
+    review_tags: review.review_tags.map((reviewTag) => reviewTag.tag),
   }));
 });
 
@@ -46,6 +48,7 @@ const ReviewResults: React.FC<{ propertyId: string; }> = async ({ propertyId }) 
       landlordRating={reviewDetails.landlord_rating}
       propertyRating={reviewDetails.property_rating}
       reviewMessage={reviewDetails.review_body}
+      reviewTags={reviewDetails.review_tags}
     />
   ));
 };
