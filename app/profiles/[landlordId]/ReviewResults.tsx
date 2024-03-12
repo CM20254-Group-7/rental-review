@@ -1,5 +1,6 @@
 import { ReviewDetailsLayout } from '@/components/ReviewDetails';
 import createClient from '@/utils/supabase/server';
+import { data } from 'autoprefixer';
 import { cookies } from 'next/headers';
 import React, { cache } from 'react';
 
@@ -9,13 +10,26 @@ const getReviews = cache(async (landlordId: string) => {
 
   const { data: reviews } = await supabase
     .rpc('reviews_for_landlord', { id: landlordId })
-    .select('*, review_tags(*)');
+    .select('*');
 
-  return reviews?.map((review) => ({
-    ...review,
-    review_date: new Date(review.review_date),
-    reviewer_tags: review.review_tags.map((reviewTag) => reviewTag.tag),
-  })) || [];
+  if (!reviews) return [];
+
+  const extendedReviews = (await Promise.all(reviews.map(async (review) => {
+    const { data: reviewTags, error: tagError } = await supabase
+      .from('review_tags')
+      .select('tag')
+      .eq('review_id', review.review_id);
+
+    if (tagError) return [];
+
+    return {
+      ...review,
+      review_date: new Date(review.review_date),
+      review_tags: reviewTags.map((tag) => tag.tag),
+    };
+  }))).flat();
+
+  return extendedReviews;
 });
 
 const ReviewResults: React.FC<{
@@ -34,7 +48,7 @@ const ReviewResults: React.FC<{
       reviewerId={review.reviewer_id}
       landlordRating={review.landlord_rating}
       propertyRating={review.property_rating}
-      reviewTags={review.reviewer_tags}
+      reviewTags={review.review_tags}
     />
   ));
 };
