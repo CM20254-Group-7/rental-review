@@ -4,6 +4,7 @@ import { cache } from 'react';
 import useClient from '@/utils/supabase/server';
 import { NextPage } from 'next';
 import Link from 'next/link';
+import StarRatingLayout from '@/components/StarRating';
 
 type LandlordProfile = {
   bio: string | null;
@@ -21,7 +22,8 @@ const getAllOwners = cache(async (
 ): Promise<{
   start_date: Date,
   end_date: Date | null,
-  landlord: LandlordProfile
+  landlord: LandlordProfile,
+  average_rating: number
 }[]> => {
   'use server';
 
@@ -46,10 +48,19 @@ const getAllOwners = cache(async (
 
     if (!landlordProfile) return null;
 
+    const { data: rating } = await supabase
+      .rpc('average_landlord_rating', { id: ownership.landlord_id });
+
+    let averageRating = 0;
+    if (rating) {
+      averageRating = rating;
+    }
+
     return {
       start_date: new Date(ownership.started_at),
       end_date: ownership.ended_at ? new Date(ownership.ended_at) : null,
       landlord: landlordProfile,
+      average_rating: averageRating,
     };
   }));
 
@@ -61,39 +72,63 @@ const OwnershipHistoryPage: NextPage<{ params: { id: string } }> = async ({ para
   const ownershipHistory = await getAllOwners(propertyId);
 
   return (
-    <div className='flex-1 flex flex-col justify-center text-center gap-4'>
-      <h1>Ownership History</h1>
-      <p>WIP</p>
-      <div className='flex flex-col border rounded-lg p-4'>
+    <div className='flex-1 w-screen flex flex-row justify-center items-center py-20'>
+      <div className='flex flex-col w-full max-w-prose gap-8 items-center'>
+        <h2 className='text-2xl font-semibold mb-1 w-fit text-accent'>Ownership History</h2>
+        <span className='border border-b w-full border-accent' />
         {ownershipHistory.map((ownership) => (
           <Link
-            className='flex flex-col border rounded-md px-4 py-2 hover:bg-foreground/5 hover:shadow-md transition-all'
+            className='flex flex-col w-fit min-w-[25rem] items-center rounded-xl bg-secondary/10 hover:bg-secondary/20 p-6 pb-8 gap-4 border shadow-md shadow-secondary/40 hover:shadow-lg hover:shadow-secondary/40'
             href={`/profiles/${ownership.landlord.user_id}`}
             key={ownership.start_date.toISOString()}
           >
-            <h2>
-              {ownership.start_date.toLocaleDateString()}
+            {/* Timeline */}
+            <div className='flex flex-col w-fit'>
+              <h2 className='text-2xl font-semibold mb-1 w-fit'>
+                {ownership.start_date.toLocaleDateString()}
+                {' '}
+                to
+                {' '}
+                {ownership.end_date ? ` ${ownership.end_date.toLocaleDateString()}` : ' Present'}
+              </h2>
+            </div>
+
+            {/* Landlord details */}
+            <div className='flex flex-col items-center justify-center'>
               {' '}
-              to
-              {ownership.end_date ? ` ${ownership.end_date.toLocaleDateString()}` : ' Present'}
-            </h2>
-            <h3>{ownership.landlord.display_name}</h3>
-            <p>{ownership.landlord.bio}</p>
+              {/* Changed flex to flex-col */}
+              <div className='text-center'>
+                {' '}
+                {/* Container for landlord's name */}
+                <h2 className='text-2xl font-semibold mb-1 w-fit text-accent'>
+                  {ownership.landlord.display_name}
+                </h2>
+              </div>
+              <div className='text-center'>
+                {' '}
+                {/* Container for star rating */}
+                <StarRatingLayout rating={ownership.average_rating} />
+              </div>
+            </div>
+
           </Link>
         ))}
+
+        <div className='flex justify-center'>
+          <Link
+            className='underline hover:font-semibold transition-all mr-4'
+            href={`/properties/${propertyId}/claim`}
+          >
+            Claim This Property
+          </Link>
+          <Link
+            className='underline hover:font-semibold transition-all'
+            href={`/properties/${propertyId}`}
+          >
+            Back to Property
+          </Link>
+        </div>
       </div>
-      <Link
-        className='underline hover:font-semibold  transition-all'
-        href={`/properties/${propertyId}/claim`}
-      >
-        Claim This Property
-      </Link>
-      <Link
-        className='underline hover:font-semibold  transition-all'
-        href={`/properties/${propertyId}`}
-      >
-        Back to Property
-      </Link>
     </div>
   );
 };

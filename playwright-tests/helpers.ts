@@ -34,7 +34,12 @@ const userLandlordProfiles = [
   undefined,
   undefined,
   undefined,
-  undefined,
+  {
+    displayName: 'Test Name 5',
+    displayEmail: 'display5@example.com',
+    userBio: 'Best landlord',
+    properties: ['2, Test Road'],
+  },
   undefined,
 ];
 
@@ -55,6 +60,27 @@ const propertyIds = [
 const propertyAddresses = [
   '1, Test Road, AB1 234',
   '2, Test Road, AB1 234',
+];
+
+export const ownershipHistories = [
+  {
+    startDate: ['2024-02-20'],
+    endDate: ['2024-02-21'],
+    landlord: [users[0].landlordProfile?.displayName],
+    propertyAddress: propertyAddresses[0],
+    propertyId: propertyIds[0],
+    landlordRating: [2],
+  },
+
+  {
+    // allow the dates in either format
+    startDate: ['2024-01-20', '2021-01-01'],
+    endDate: ['Present', '2021-12-31'],
+    landlord: [users[0].landlordProfile?.displayName, users[8].landlordProfile?.displayName],
+    propertyAddress: propertyAddresses[1],
+    propertyId: propertyIds[1],
+    landlordRating: [2, 5],
+  },
 ];
 
 export const properties = [1, 2].map((i) => ({

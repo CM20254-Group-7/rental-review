@@ -23,16 +23,17 @@ const getCurrentOwner = cache(async (propertyId: string): Promise<LandlordProfil
   const supabase = useClient(cookieStore);
 
   const { data: currentOwnerId } = await supabase
-    .rpc('property_owner_on_date', {
-      property_id: propertyId,
-      query_date: new Date().toISOString(),
-    });
+    .from('property_ownership')
+    .select('landlord_id')
+    .eq('property_id', propertyId)
+    .is('ended_at', null)
+    .maybeSingle();
 
   if (!currentOwnerId) return null;
 
   const { data } = await supabase
     .rpc('landlord_public_profiles_with_ratings')
-    .eq('user_id', currentOwnerId)
+    .eq('user_id', currentOwnerId.landlord_id)
     .select('*')
     .single();
 
@@ -43,8 +44,7 @@ const CurrentOwnerIndicator: React.FC<{ propertyId: string }> = async ({ propert
   const currentOwner = await getCurrentOwner(propertyId);
 
   return (
-    <div className='flex flex-col text-center border rounded-md'>
-      <div className='flex px-2 py-1 border-b w-full flex-1'>Owned by</div>
+    <>
       <div className='flex px-2 py-1 w-fit hover:bg-secondary/10'>
         {currentOwner ? (
           <Link
@@ -52,20 +52,21 @@ const CurrentOwnerIndicator: React.FC<{ propertyId: string }> = async ({ propert
             href={`/profiles/${currentOwner.user_id}`}
           >
             <p>{currentOwner.display_name}</p>
-            {currentOwner.average_rating
-              && (
-              <div className='flex flex-row items-center gap-1'>
-                <p className='pt-1'>{currentOwner.average_rating.toFixed(1)}</p>
-                <StarIcon className='h-5 w-5 text-accent' />
-              </div>
-              )}
+            {currentOwner.average_rating && (
+            <div className='flex flex-row items-center gap-1'>
+              <p className='pt-1'>{currentOwner.average_rating.toFixed(1)}</p>
+              <StarIcon className='h-5 w-5 text-accent' />
+            </div>
+            )}
           </Link>
         ) : 'Unknown'}
       </div>
-      <div className='flex px-2 py-1 border-t w-full flex-1 justify-center'>
-        <Link className='text-sm hover:underline' href={`/properties/${propertyId}/ownership-history`}>Full History & Claim</Link>
+      <div className='flex flex-col text-center'>
+        <div className='flex px-2 py-1 border-t w-full flex-1 justify-center'>
+          <Link className='text-sm hover:underline' href={`/properties/${propertyId}/ownership-history`}>View ownership history/claim property</Link>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

@@ -71,15 +71,7 @@ export interface Database {
           street?: string | null
           user_id?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "landlord_private_profiles_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: true
-            referencedRelation: "user_profiles"
-            referencedColumns: ["user_id"]
-          }
-        ]
+        Relationships: []
       }
       landlord_public_profiles: {
         Row: {
@@ -227,6 +219,36 @@ export interface Database {
           }
         ]
       }
+      review_tags: {
+        Row: {
+          review_id: string
+          tag: string
+        }
+        Insert: {
+          review_id: string
+          tag: string
+        }
+        Update: {
+          review_id?: string
+          tag?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "review_tags_review_id_fkey"
+            columns: ["review_id"]
+            isOneToOne: false
+            referencedRelation: "reviews"
+            referencedColumns: ["review_id"]
+          },
+          {
+            foreignKeyName: "review_tags_tag_fkey"
+            columns: ["tag"]
+            isOneToOne: false
+            referencedRelation: "tags"
+            referencedColumns: ["tag"]
+          }
+        ]
+      }
       reviewer_private_profiles: {
         Row: {
           property_id: string
@@ -250,13 +272,6 @@ export interface Database {
             isOneToOne: false
             referencedRelation: "properties"
             referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "reviewer_private_profiles_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "user_profiles"
-            referencedColumns: ["user_id"]
           }
         ]
       }
@@ -268,6 +283,7 @@ export interface Database {
           review_body: string
           review_date: string
           review_id: string
+          review_posted: string
           reviewer_id: string
         }
         Insert: {
@@ -277,6 +293,7 @@ export interface Database {
           review_body: string
           review_date: string
           review_id?: string
+          review_posted?: string
           reviewer_id: string
         }
         Update: {
@@ -286,6 +303,7 @@ export interface Database {
           review_body?: string
           review_date?: string
           review_id?: string
+          review_posted?: string
           reviewer_id?: string
         }
         Relationships: [
@@ -304,6 +322,18 @@ export interface Database {
             referencedColumns: ["reviewer_id"]
           }
         ]
+      }
+      tags: {
+        Row: {
+          tag: string
+        }
+        Insert: {
+          tag: string
+        }
+        Update: {
+          tag?: string
+        }
+        Relationships: []
       }
       uploaded_files: {
         Row: {
@@ -338,14 +368,7 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: "user_profiles_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: true
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "user_public_profiles_id_fkey"
+            foreignKeyName: "user_profiles_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: true
             referencedRelation: "users"
@@ -465,6 +488,7 @@ export interface Database {
           landlord_rating: number
           property_rating: number
           review_body: string
+          review_posted: string
           landlord_id: string
         }[]
       }
@@ -478,6 +502,7 @@ export interface Database {
           landlord_rating: number
           property_rating: number
           review_body: string
+          review_posted: string
           landlord_id: string
         }[]
       }

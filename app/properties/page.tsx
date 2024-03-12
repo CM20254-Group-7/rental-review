@@ -23,7 +23,7 @@ const PropertiesPage: NextPage<{
 }> = ({ searchParams }) => (
   <div className='flex-1 w-screen flex flex-row'>
     <SideBar />
-    <div className='flex w-full justify-center flex-1 py-20'>
+    <div className='flex w-full justify-center flex-1 py-20 px-4'>
       <div className='flex flex-col w-full max-w-prose gap-8 items-center'>
         <Suspense fallback={<PropertyResultsSkeleton />}>
           <PropertyResults searchParams={searchParams} />
