@@ -1,6 +1,16 @@
 import { test, expect } from '@playwright/test';
 import { users } from './helpers';
 
+// Some example data for testing review creation
+const houses = ['test house 4', 'test house 5', 'test house 6', 'test house 7', 'test house 8'];
+const streets = ['test street 4', 'test street 5', 'test street 6', 'test street 7', 'test street 8'];
+const postcodes = ['ABC 123', 'DEF 456', 'GHI 789', 'JKL 012', 'MNO 345', 'PQR 678', 'STU 901', 'VWX 234', 'YZA 567'];
+
+// Function to select a random element from an array
+function getRandomElement(array: string | any[]) {
+  return array[Math.floor(Math.random() * array.length)];
+}
+
 test.describe('Anon User Cannot Review', () => {
   test('Anon cannot create review.', async ({ page }) => {
     // goes to the create review page
@@ -23,9 +33,9 @@ test.describe('User 1 tests', () => {
     await page.goto('./reviews/create/');
 
     // fills in mandatory property details
-    await page.getByLabel('House').fill('test house 2');
-    await page.getByLabel('Street').fill('test street');
-    await page.getByLabel('Postcode').fill('DEF 456');
+    await page.getByLabel('House').fill(getRandomElement(houses));
+    await page.getByLabel('Street').fill(getRandomElement(streets));
+    await page.getByLabel('Postcode').fill(getRandomElement(postcodes));
 
     // fills in date
     await page.getByLabel('Review Date').fill(formattedDate);
