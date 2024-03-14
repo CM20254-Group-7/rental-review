@@ -16,6 +16,7 @@ const getPropertyResults = cache(async (searchQuery?: {
   city?: string
   postalCode?: string
   country?: string
+  tags?: string[]
 }) => {
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
@@ -41,7 +42,8 @@ const getPropertyResults = cache(async (searchQuery?: {
   const sortAsc = sortOrder === 'asc';
 
   let baseQuery = supabase
-    .rpc('properties_full');
+    .from('full_properties')
+    .select('id, address, average_rating, description, beds, baths, tags');
 
   if (searchQuery?.address) {
     baseQuery = baseQuery.textSearch('address', searchQuery.address, {
@@ -78,11 +80,13 @@ const getPropertyResults = cache(async (searchQuery?: {
     });
   }
 
-  let query = baseQuery.select('*');
+  if (searchQuery?.tags && searchQuery.tags.length > 0) {
+    baseQuery = baseQuery.contains('tags', searchQuery.tags);
+  }
 
-  if (sortField) query = query.order(sortField, { ascending: sortAsc });
+  if (sortField) baseQuery = baseQuery.order(sortField, { ascending: sortAsc });
 
-  const { data: properties, error: propertiesError } = await query;
+  const { data: properties, error: propertiesError } = await baseQuery;
 
   if (propertiesError) {
     return {
@@ -100,9 +104,17 @@ const PropertyResults: React.FC<{
     sortBy?: string
     sortOrder?: string
     address?: string
+    street?: string
+    city?: string
+    postalCode?: string
+    country?: string
+    tags?: string | string[]
   }
 }> = async ({ searchParams }) => {
-  const { properties } = await getPropertyResults(searchParams);
+  const { properties } = await getPropertyResults({
+    ...searchParams,
+    tags: searchParams?.tags ? [searchParams.tags].flat() : undefined,
+  });
 
   if (properties.length === 0) {
     return (
@@ -122,7 +134,7 @@ const PropertyResults: React.FC<{
       <div className='flex flex-col w-full'>
         <div className='flex flex-row justify-between'>
           <h2 className='text-2xl font-semibold mb-1 w-fit text-accent'>{property.address}</h2>
-          <StarRatingLayout rating={property.average_rating} />
+          <StarRatingLayout rating={property.average_rating!} />
         </div>
         <span className='border border-b w-full border-accent' />
       </div>
@@ -158,7 +170,7 @@ const PropertyResults: React.FC<{
         </div>
         <div className='flex flex-row justify-end w-full'>
           <CurrentOwnerIndicator
-            propertyId={property.id}
+            propertyId={property.id!}
           />
         </div>
       </div>
