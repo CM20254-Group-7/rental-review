@@ -1,13 +1,12 @@
+import createClient from '@/utils/supabase/server';
+import { cookies } from 'next/headers';
 import NavLink from '@/components/Header/NavLink';
 import React from 'react';
 import AuthButton from './AuthButton';
 import HomeButton from './HomeButton';
 import Help from './Help';
-import createClient from '@/utils/supabase/server';
-import { cookies } from 'next/headers';
 
 const NavBar: React.FC = async () => {
-
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
   const { data: { user }, error: userError } = await supabase.auth.getUser();
@@ -15,7 +14,7 @@ const NavBar: React.FC = async () => {
   if (userError || !user) {
     loggedIn = false;
   }
-  
+
   return (
     <nav className='w-full flex-none flex justify-center border-b shadow-md bg-primary/10 shadow-primary/10 h-16'>
       <div className='w-full max-w-[614px] md:max-w-[80%] flex items-center p-3 text-sm'>
