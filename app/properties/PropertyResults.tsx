@@ -12,6 +12,10 @@ const getPropertyResults = cache(async (searchQuery?: {
   sortBy?: string,
   sortOrder?: string,
   address?: string
+  street?: string
+  city?: string
+  postalCode?: string
+  country?: string
 }) => {
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
@@ -41,6 +45,34 @@ const getPropertyResults = cache(async (searchQuery?: {
 
   if (searchQuery?.address) {
     baseQuery = baseQuery.textSearch('address', searchQuery.address, {
+      type: 'websearch',
+      config: 'english',
+    });
+  }
+
+  if (searchQuery?.street) {
+    baseQuery = baseQuery.textSearch('address', searchQuery.street, {
+      type: 'websearch',
+      config: 'english',
+    });
+  }
+
+  if (searchQuery?.city) {
+    baseQuery = baseQuery.textSearch('address', searchQuery.city, {
+      type: 'websearch',
+      config: 'english',
+    });
+  }
+
+  if (searchQuery?.postalCode) {
+    baseQuery = baseQuery.textSearch('address', searchQuery.postalCode, {
+      type: 'websearch',
+      config: 'english',
+    });
+  }
+
+  if (searchQuery?.country) {
+    baseQuery = baseQuery.textSearch('address', searchQuery.country, {
       type: 'websearch',
       config: 'english',
     });
