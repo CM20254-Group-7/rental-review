@@ -21,7 +21,7 @@ const NavBar: React.FC = async () => {
       <div className='w-full max-w-[614px] md:max-w-[80%] flex items-center p-3 text-sm'>
         <HomeButton />
         <div className='flex-1 flex flex-row px-8 gap-4'>
-          {loggedIn && ( // Conditionally rendering based on loggedIn
+          {loggedIn && (
             <NavLink
               text='Dashboard'
               href='/dashboard'
