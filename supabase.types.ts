@@ -184,6 +184,13 @@ export interface Database {
             foreignKeyName: "property_ownership_property_id_fkey"
             columns: ["property_id"]
             isOneToOne: false
+            referencedRelation: "full_properties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "property_ownership_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
             referencedRelation: "properties"
             referencedColumns: ["id"]
           }
@@ -270,6 +277,13 @@ export interface Database {
             foreignKeyName: "reviewer_private_profiles_property_id_fkey"
             columns: ["property_id"]
             isOneToOne: false
+            referencedRelation: "full_properties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reviewer_private_profiles_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
             referencedRelation: "properties"
             referencedColumns: ["id"]
           }
@@ -307,6 +321,13 @@ export interface Database {
           reviewer_id?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "reviews_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "full_properties"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "reviews_property_id_fkey"
             columns: ["property_id"]
@@ -378,7 +399,28 @@ export interface Database {
       }
     }
     Views: {
-      [_ in never]: never
+      full_properties: {
+        Row: {
+          address: string | null
+          average_rating: number | null
+          baths: number | null
+          beds: number | null
+          country: string | null
+          county: string | null
+          description: string | null
+          house: string | null
+          id: string | null
+          last_reviewed: string | null
+          ownership_history: Json | null
+          postcode: string | null
+          property_type: string | null
+          reviews: Json | null
+          street: string | null
+          tag_counts: Json | null
+          tags: string[] | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       average_landlord_rating: {
