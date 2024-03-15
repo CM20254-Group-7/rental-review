@@ -5,12 +5,12 @@ import createClient from '@/utils/supabase/server';
 import { NextPage } from 'next';
 import { cookies } from 'next/headers';
 import { notFound } from 'next/navigation';
-import { Suspense, cache } from 'react';
+import { Suspense } from 'react';
 import StarRatingLayout from '@/components/StarRating';
 import { CurrentPropertyResults, PreviousPropertyResults, PropertyResultsLoading } from './PropertyResults';
 import ReviewResults, { ReviewResultsLoading } from './ReviewResults';
 
-const getLandlordBio = cache(async (landlordId: string) => {
+const getLandlordBio = async (landlordId: string) => {
   // set up the supabase client
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
@@ -25,20 +25,31 @@ const getLandlordBio = cache(async (landlordId: string) => {
   if (error || !data) return null;
 
   return { ...data };
-});
+};
 
 const landlordProfilePage: NextPage<{ params: { landlordId: string } }> = async ({ params: { landlordId } }) => {
   const landlordBio = await getLandlordBio(landlordId);
 
   if (!landlordBio) notFound();
 
+  const cookieStore = cookies();
+  const supabase = createClient(cookieStore);
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    throw notFound();
+  }
+
   return (
     <div className='flex-1 flex flex-col w-full px-16 justify-top items-center gap-2 py-16'>
       {/* Content Boundary */}
       {(user?.id === landlordId) && (
-      <div className='flex-1 flex flex-col w-full max-w-4xl justify-top items-end'>
+      <div className='flex-2 flex flex-col w-full max-w-4xl justify-top items-end'>
         <Link
-          href={`profiles/${landlordId}/edit`}
+          href={`${landlordId}/edit`}
           className='ml-5 py-2 px-3 text-sm flex flex-row bg-background hover:bg-secondary/10 border hover:shadow-sm hover:shadow-primary/20 transition-all text-accent justify-center items-center gap-2 rounded-md'
         >
           Edit
