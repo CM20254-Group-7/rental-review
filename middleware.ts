@@ -20,7 +20,8 @@ export async function middleware(request: NextRequest) {
     request.nextUrl.pathname.startsWith('/dashboard') // all dashboard pages
     || request.nextUrl.pathname.startsWith('/account') // all account pages
     || request.nextUrl.pathname.match(/^\/properties\/[a-zA-Z0-9-]+\/claim/)// all properties claim pages
-    || request.nextUrl.pathname === '/reviews/create' // review creation page
+    || request.nextUrl.pathname.match(/^\/properties\/[a-zA-Z0-9-]+\/review/) // existing propert review page
+    || request.nextUrl.pathname === '/reviews/create' // rnew property review page
   ) {
     const { supabase } = createClient(request);
     const { data: { user } } = await supabase.auth.getUser();

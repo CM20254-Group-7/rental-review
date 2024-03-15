@@ -109,7 +109,12 @@ INSERT INTO "public"."reviewer_private_profiles" (               "user_id"      
                                                  ('4dfc3778-a1f2-410d-ae3d-9c92a469db8d', '6a83d02b-9da1-4a4a-9719-05e8a8c9228d', 'a9d236d8-2d41-467b-8970-bb614673f919'),
                                                  ('470b631a-addd-4380-acf3-b476e136d5f6', '6a83d02b-9da1-4a4a-9719-05e8a8c9228d', '4f4ada56-4133-408a-ae63-3e02f9676ddb'),
                                                  ('1c6ff33c-5efe-4b45-bd35-13783eebbee2', '6a83d02b-9da1-4a4a-9719-05e8a8c9228d', '038ae11c-4b9e-4824-8f50-7ff8b3e67544');
-                                                 
+
+
+insert into "public"."tags" (      "tag"       ) values
+                            ( 'considerate'    ),
+                            ( 'fast responses' ),
+                            ( 'pet friendly'   );
 
 -- Sample Property Reviews
 --
@@ -127,3 +132,11 @@ INSERT INTO "public"."reviews" (           "review_id"                ,         
                                ('0e067144-b72b-4872-b0d0-a604c2350936', '6a83d02b-9da1-4a4a-9719-05e8a8c9228d', 'a9d236d8-2d41-467b-8970-bb614673f919', '2024-02-21' , '2'              , '5'              , 'The landlord never responded to my queries and did not offer to fix the leakage in the bathroom. However, the property is impressive, with a beautiful city view.' ),
                                ('f3e3e3e3-3e3e-3e3e-3e3e-3e3e3e3e3e3e', '6a83d02b-9da1-4a4a-9719-05e8a8c9228d', '4f4ada56-4133-408a-ae63-3e02f9676ddb', '2023-02-21' , '5'              , '1'              , 'Friendly landlord, but the property is a mess.'                                                                                                                    ),
                                ('a0d56fb3-8c86-48c4-96c1-d6b494c3a0ef', '6a83d02b-9da1-4a4a-9719-05e8a8c9228d', '038ae11c-4b9e-4824-8f50-7ff8b3e67544', '2021-05-17' , '5'              , '5'              , 'Everything is perfect!'                                                                                                                                            );
+
+
+insert into "public"."review_tags" (               "review_id"              ,       "tag"      ) values
+                                   ( '92f38488-210e-4637-9e82-48d2d7c5dd9b' , 'fast responses' ),
+                                   ( '92f38488-210e-4637-9e82-48d2d7c5dd9b' , 'considerate'    ),
+                                   ( '1cf1903b-5657-4301-9509-58d3e1c6a6a9' , 'fast responses' ),
+                                   ( '0e067144-b72b-4872-b0d0-a604c2350936' , 'pet friendly'   ),
+                                   ( 'f3e3e3e3-3e3e-3e3e-3e3e-3e3e3e3e3e3e' , 'pet friendly'   );
