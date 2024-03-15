@@ -97,7 +97,7 @@ const PropertyDetailPage: NextPage<{
             <ReviewResults propertyId={propertyDetails.id} />
           </div>
           <div className='flex flex-col gap-4 justify-center items-center'>
-            <Link href='/properties/[id]/existing-property-review' as={`/properties/${propertyDetails.id}/existing-property-review`}>
+            <Link href='/properties/[id]/review' as={`/properties/${propertyDetails.id}/review`}>
               <button
                 type='submit'
                 className='border border-accent rounded-md px-4 py-2 text-accent mb-5 hover:bg-secondary/10 dark:hover:bg-accent/10 hover:shadow-lg hover:shadow-accent/20'

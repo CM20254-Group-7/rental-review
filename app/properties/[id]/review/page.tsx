@@ -13,15 +13,20 @@ const getTags = cache(async () => {
   return (data || []).map(({ tag }) => tag);
 });
 
-const CreateReviewPage: NextPage = async () => {
+const CreateReviewPage: NextPage<{
+  params: {
+    id: string;
+  };
+}> = async ({ params: { id: propertyId } }) => {
   const tags = await getTags();
 
   return (
-    <div className='flex flex-col flex-1 justify-center'>
-      <h1 className='text-2xl font-bold mt-6'>Create Review</h1>
-      <p className='mb-6'>Fill in the fields below to complete your review</p>
+    <div>
+      <h1 className='text-2xl font-bold mt-6'>Create Review for existing property</h1>
+      <p className='mb-6'>Write your review for this property</p>
 
       <CreateReviewForm
+        propertyId={propertyId}
         tags={tags}
       />
     </div>

@@ -9,30 +9,19 @@ import { cookies } from 'next/headers';
 import { z } from 'zod';
 
 const newReviewSchema = z.object({
-  property_id: z.string().uuid().optional(),
-
-  property_house: z.string().nullish(),
-  property_street: z.string().nullish(),
-  property_county: z.string().nullish(),
-  property_postcode: z.string().nullish(),
-  property_country: z.string().nullish(),
+  property_id: z.string().uuid(),
 
   review_date: z.coerce.date(),
-
   review_body: z.string().min(1).max(1000),
   property_rating: z.coerce.number().int().min(1).max(5),
   landlord_rating: z.coerce.number().int().min(1).max(5),
+
+  tags: z.array(z.string().min(1).max(50)),
 });
 
 export type State = {
   errors?: {
     property_id?: string[]
-
-    property_house?: string[],
-    property_street?: string[],
-    property_county?: string[],
-    property_postcode?: string[],
-    property_country?: string[],
 
     review_date?: string[],
     review_body?: string[],
@@ -44,29 +33,20 @@ export type State = {
 
 // given either the id of an existing property or the address of a new one, creates a review written by the currently logged in user
 export const createReview = async (
-  property: {
-    id: string | undefined,
-    street: string | undefined,
-    house: string | undefined,
-    county: string | undefined,
-    postcode: string | undefined,
-    country: string | undefined,
-  },
+  propertyId: string,
   prevState: State,
   formData: FormData,
 ): Promise<State> => {
   // Validate input
   const validatedFields = newReviewSchema.safeParse({
-    property_id: property.id,
-    property_country: property.country,
-    property_county: property.county,
-    property_house: property.house,
-    property_postcode: property.postcode,
-    property_street: property.street,
+    property_id: propertyId,
+
     review_date: formData.get('review_date'),
     review_body: formData.get('review_body'),
     property_rating: formData.get('property_rating'),
     landlord_rating: formData.get('landlord_rating'),
+
+    tags: formData.getAll('tags'),
   });
 
   if (!validatedFields.success) {
@@ -76,18 +56,15 @@ export const createReview = async (
     };
   }
 
-  let { property_id } = validatedFields.data;
   const {
-    property_house,
-    property_street,
-    property_county,
-    property_postcode,
-    property_country,
+    property_id,
 
     review_date,
     review_body,
     property_rating,
     landlord_rating,
+
+    tags,
   } = validatedFields.data;
 
   // create service client
@@ -95,57 +72,6 @@ export const createReview = async (
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.SUPABASE_SERVICE_KEY!,
   );
-
-  if (!property_id) {
-    if (!property_house || !property_street || !property_postcode) {
-      return {
-        message: 'Property address Must be provided if property id is not. Must include house, street and postcode at minimum.',
-      };
-    }
-
-    // TODO: Handle property creation
-
-    // Check if property with address exists
-    let query = serviceSupabase
-      .from('properties')
-      .select('id')
-      .eq('house', property_house)
-      .eq('street', property_street)
-      .eq('postcode', property_postcode);
-
-    if (property_county) query = query.eq('county', property_county);
-    if (property_country) query = query.eq('country', property_country);
-
-    const { data: existingProperty } = await query.maybeSingle();
-
-    // If it does - Error
-    if (existingProperty) {
-      return {
-        message: 'Property Already Exists',
-      };
-    }
-
-    // If it doesn't - Create Property & set property_id
-    const { data: newProperty, error: newPropertyError } = await serviceSupabase
-      .from('properties')
-      .insert({
-        house: property_house,
-        street: property_street,
-        county: property_county,
-        postcode: property_postcode,
-        country: property_country,
-      })
-      .select('id')
-      .single();
-
-    if (newPropertyError) {
-      return {
-        message: 'Error Creating Property',
-      };
-    }
-
-    property_id = newProperty.id; // replace with actual property_id
-  }
 
   // get user
   const cookieStore = cookies();
@@ -195,7 +121,7 @@ export const createReview = async (
   const { reviewer_id } = reviewerProfile;
 
   // create reviews
-  await serviceSupabase
+  const { data } = await serviceSupabase
     .from('reviews')
     .insert({
       landlord_rating,
@@ -204,7 +130,22 @@ export const createReview = async (
       reviewer_id,
       review_body,
       property_rating,
-    });
+    })
+    .select('review_id');
+
+  if (!data) {
+    return {
+      message: 'Error Creating Review',
+    };
+  }
+
+  // create tags
+  await serviceSupabase
+    .from('review_tags')
+    .insert(tags.map((tag) => ({
+      review_id: data[0].review_id,
+      tag,
+    })));
 
   return {
     message: 'Review Created',
