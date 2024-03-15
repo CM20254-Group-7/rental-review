@@ -39,10 +39,6 @@ const landlordProfilePage: NextPage<{ params: { landlordId: string } }> = async 
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user) {
-    throw notFound();
-  }
-
   return (
     <div className='flex-1 flex flex-col w-full px-16 justify-top items-center gap-2 py-16'>
       {/* Content Boundary */}

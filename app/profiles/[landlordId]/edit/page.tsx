@@ -33,7 +33,7 @@ const editProfilePage: NextPage<{ params: { landlordId: string } }> = async ({ p
   } = await supabase.auth.getUser();
 
   if (!(user?.id === landlordId)) {
-    throw notFound();
+    notFound();
   }
 
   const landlordBio = await getLandlordBio(landlordId);
