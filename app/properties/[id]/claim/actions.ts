@@ -1,5 +1,3 @@
-/* eslint-disable no-restricted-syntax */
-
 'use server';
 
 import { Database } from '@/supabase.types';
