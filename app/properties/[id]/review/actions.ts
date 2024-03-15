@@ -15,6 +15,8 @@ const newReviewSchema = z.object({
   review_body: z.string().min(1).max(1000),
   property_rating: z.coerce.number().int().min(1).max(5),
   landlord_rating: z.coerce.number().int().min(1).max(5),
+
+  tags: z.array(z.string().min(1).max(50)),
 });
 
 export type State = {
@@ -43,6 +45,8 @@ export const createReview = async (
     review_body: formData.get('review_body'),
     property_rating: formData.get('property_rating'),
     landlord_rating: formData.get('landlord_rating'),
+
+    tags: formData.getAll('tags'),
   });
 
   if (!validatedFields.success) {
@@ -59,6 +63,8 @@ export const createReview = async (
     review_body,
     property_rating,
     landlord_rating,
+
+    tags,
   } = validatedFields.data;
 
   // create service client
@@ -115,7 +121,7 @@ export const createReview = async (
   const { reviewer_id } = reviewerProfile;
 
   // create reviews
-  await serviceSupabase
+  const { data } = await serviceSupabase
     .from('reviews')
     .insert({
       landlord_rating,
@@ -124,7 +130,22 @@ export const createReview = async (
       reviewer_id,
       review_body,
       property_rating,
-    });
+    })
+    .select('review_id');
+
+  if (!data) {
+    return {
+      message: 'Error Creating Review',
+    };
+  }
+
+  // create tags
+  await serviceSupabase
+    .from('review_tags')
+    .insert(tags.map((tag) => ({
+      review_id: data[0].review_id,
+      tag,
+    })));
 
   return {
     message: 'Review Created',
