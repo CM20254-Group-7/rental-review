@@ -40,7 +40,7 @@ const LandlordRegistrationPage: NextPage<{ params: {} }> = async () => {
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
 
-  // Get user.id
+  // Get user.id and if not logged in, send to "not logged in"
   const { data: { user }, error: userError } = await supabase.auth.getUser();
   if (userError || !user) return <NotLoggedInMessage />;
 
@@ -53,12 +53,14 @@ const LandlordRegistrationPage: NextPage<{ params: {} }> = async () => {
 
   if (Error || !Data) notFound();
 
+  // Check if a user is a landlord
   const { data: landlord } = await supabase
     .from('landlord_public_profiles')
     .select('user_id')
     .eq('user_id', user.id)
     .single();
 
+  // If they are, change page to a "already landlord" page
   if (landlord) return <AlreadyLandlordMessage />;
 
   return (
