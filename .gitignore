@@ -42,4 +42,9 @@ next-env.d.ts
 /blob-report/
 /playwright/.cache/
 /playwright/.auth/
+
+# Allow platform dependent git attributes to handle file encoding
 .gitattributes
+
+# eslint results
+eslint-results.sarif

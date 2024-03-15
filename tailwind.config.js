@@ -12,9 +12,11 @@ module.exports = {
         primary: 'hsl(var(--primary))',
         secondary: 'hsl(var(--secondary))',
         accent: 'hsl(var(--accent))',
-       },
-       
+      },
+
     },
   },
-  plugins: [],
-}
+  plugins: [
+    require('@headlessui/tailwindcss'),
+  ],
+};

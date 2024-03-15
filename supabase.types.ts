@@ -71,15 +71,7 @@ export interface Database {
           street?: string | null
           user_id?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "landlord_private_profiles_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: true
-            referencedRelation: "user_profiles"
-            referencedColumns: ["user_id"]
-          }
-        ]
+        Relationships: []
       }
       landlord_public_profiles: {
         Row: {
@@ -124,7 +116,6 @@ export interface Database {
       }
       properties: {
         Row: {
-          address: string
           baths: number | null
           beds: number | null
           country: string | null
@@ -137,7 +128,6 @@ export interface Database {
           street: string | null
         }
         Insert: {
-          address: string
           baths?: number | null
           beds?: number | null
           country?: string | null
@@ -150,7 +140,6 @@ export interface Database {
           street?: string | null
         }
         Update: {
-          address?: string
           baths?: number | null
           beds?: number | null
           country?: string | null
@@ -195,6 +184,13 @@ export interface Database {
             foreignKeyName: "property_ownership_property_id_fkey"
             columns: ["property_id"]
             isOneToOne: false
+            referencedRelation: "full_properties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "property_ownership_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
             referencedRelation: "properties"
             referencedColumns: ["id"]
           }
@@ -230,6 +226,36 @@ export interface Database {
           }
         ]
       }
+      review_tags: {
+        Row: {
+          review_id: string
+          tag: string
+        }
+        Insert: {
+          review_id: string
+          tag: string
+        }
+        Update: {
+          review_id?: string
+          tag?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "review_tags_review_id_fkey"
+            columns: ["review_id"]
+            isOneToOne: false
+            referencedRelation: "reviews"
+            referencedColumns: ["review_id"]
+          },
+          {
+            foreignKeyName: "review_tags_tag_fkey"
+            columns: ["tag"]
+            isOneToOne: false
+            referencedRelation: "tags"
+            referencedColumns: ["tag"]
+          }
+        ]
+      }
       reviewer_private_profiles: {
         Row: {
           property_id: string
@@ -251,15 +277,15 @@ export interface Database {
             foreignKeyName: "reviewer_private_profiles_property_id_fkey"
             columns: ["property_id"]
             isOneToOne: false
-            referencedRelation: "properties"
+            referencedRelation: "full_properties"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "reviewer_private_profiles_user_id_fkey"
-            columns: ["user_id"]
+            foreignKeyName: "reviewer_private_profiles_property_id_fkey"
+            columns: ["property_id"]
             isOneToOne: false
-            referencedRelation: "user_profiles"
-            referencedColumns: ["user_id"]
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
           }
         ]
       }
@@ -271,6 +297,7 @@ export interface Database {
           review_body: string
           review_date: string
           review_id: string
+          review_posted: string
           reviewer_id: string
         }
         Insert: {
@@ -280,6 +307,7 @@ export interface Database {
           review_body: string
           review_date: string
           review_id?: string
+          review_posted?: string
           reviewer_id: string
         }
         Update: {
@@ -289,9 +317,17 @@ export interface Database {
           review_body?: string
           review_date?: string
           review_id?: string
+          review_posted?: string
           reviewer_id?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "reviews_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "full_properties"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "reviews_property_id_fkey"
             columns: ["property_id"]
@@ -307,6 +343,18 @@ export interface Database {
             referencedColumns: ["reviewer_id"]
           }
         ]
+      }
+      tags: {
+        Row: {
+          tag: string
+        }
+        Insert: {
+          tag: string
+        }
+        Update: {
+          tag?: string
+        }
+        Relationships: []
       }
       uploaded_files: {
         Row: {
@@ -341,14 +389,7 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: "user_profiles_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: true
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "user_public_profiles_id_fkey"
+            foreignKeyName: "user_profiles_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: true
             referencedRelation: "users"
@@ -358,21 +399,153 @@ export interface Database {
       }
     }
     Views: {
-      [_ in never]: never
+      full_properties: {
+        Row: {
+          address: string | null
+          average_rating: number | null
+          baths: number | null
+          beds: number | null
+          country: string | null
+          county: string | null
+          description: string | null
+          house: string | null
+          id: string | null
+          last_reviewed: string | null
+          ownership_history: Json | null
+          postcode: string | null
+          property_type: string | null
+          reviews: Json | null
+          street: string | null
+          tag_counts: Json | null
+          tags: string[] | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
+      average_landlord_rating: {
+        Args: {
+          id: string
+        }
+        Returns: number
+      }
       get_average_property_rating: {
         Args: {
           property_id: string
         }
         Returns: number
       }
+      get_properties_with_addresses: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          id: string
+          baths: number
+          beds: number
+          country: string
+          county: string
+          description: string
+          house: string
+          postcode: string
+          property_type: string
+          street: string
+          address: string
+        }[]
+      }
       get_properties_with_ratings: {
         Args: Record<PropertyKey, never>
         Returns: {
+          id: string
+          baths: number
+          beds: number
+          country: string
+          county: string
+          description: string
+          house: string
+          postcode: string
+          property_type: string
+          street: string
+          average_rating: number
+        }[]
+      }
+      landlord_public_profiles_with_ratings: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          user_id: string
+          website: string
+          bio: string
+          profile_image_id: string
+          verified: boolean
+          type: string
+          display_email: string
+          display_name: string
+          average_rating: number
+        }[]
+      }
+      most_recent_review_date_for_property: {
+        Args: {
+          id: string
+        }
+        Returns: string
+      }
+      plain_text_address: {
+        Args: {
           property_id: string
+        }
+        Returns: string
+      }
+      properties_full: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          id: string
+          baths: number
+          beds: number
+          country: string
+          county: string
+          description: string
+          house: string
+          postcode: string
+          property_type: string
+          street: string
           address: string
           average_rating: number
+          last_reviewed: string
+        }[]
+      }
+      property_owner_on_date: {
+        Args: {
+          property_id: string
+          query_date: string
+        }
+        Returns: string
+      }
+      reviews_for_landlord: {
+        Args: {
+          id: string
+        }
+        Returns: {
+          property_id: string
+          reviewer_id: string
+          review_date: string
+          review_id: string
+          landlord_rating: number
+          property_rating: number
+          review_body: string
+          review_posted: string
+          landlord_id: string
+        }[]
+      }
+      reviews_with_landlords: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          property_id: string
+          reviewer_id: string
+          review_date: string
+          review_id: string
+          landlord_rating: number
+          property_rating: number
+          review_body: string
+          review_posted: string
+          landlord_id: string
         }[]
       }
     }

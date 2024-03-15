@@ -1,7 +1,7 @@
-'use client'
+'use client';
 
-const DarkModeToggle: React.FC = () => {
-    return null; // not implemented yet
-};
+import React from 'react';
+
+const DarkModeToggle: React.FC = () => null; // not implemented yet
 
 export default DarkModeToggle;
