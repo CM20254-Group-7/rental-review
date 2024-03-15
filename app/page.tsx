@@ -27,7 +27,7 @@ const HomePage: NextPage = () => (
     {/* Descriptions */}
     <div className='flex flex-col w-full max-w-prose justify-center text-justify gap-16'>
       <Card title='General Info'>
-        <p className='text-indent:20px'>
+        <p className='ml-5 mr-5'>
           This web app is designed to help tenants
           view properties and get verified information
           about them from previous tenants. Users are
@@ -38,7 +38,7 @@ const HomePage: NextPage = () => (
       </Card>
 
       <Card title='About Us'>
-        <p className='ml-5 mr-5 mb-10'>
+        <p className='ml-5 mr-5'>
           We are a diverse collection of students
           from the University of Bath, located in
           the United Kingdom. We are working together
@@ -47,7 +47,7 @@ const HomePage: NextPage = () => (
           information about where they&apos;ll be living,
           along with information about landlords
           which might not be freely available.
-          {' '}
+          <br />
           <br />
           The goal of this is to balance the power dynamic
           between tenants and landlords, the latter of which
@@ -58,8 +58,29 @@ const HomePage: NextPage = () => (
           such as the landlord being impossible to contact.
         </p>
       </Card>
-    </div>
 
+      <Card title='Getting Started'>
+        <h2 className='font-semibold mb-1 w-fit text-accent'>Searching for Properties</h2>
+        <p className='ml-5 mr-5 mb-5'>
+          To search for properties, you can click on the properties
+          button at the top of the page. You can then search for a
+          property by entering the address or postcode and clicking
+          the search button.
+        </p>
+        <h2 className='font-semibold mb-1 w-fit text-accent'>Leaving Reviews</h2>
+        <p className='ml-5 mr-5 mb-5'>
+          To leave a review, you will need to sign up and log in to the website.
+          Once you have done this, you can leave a review by clicking on the
+          property you want to leave a review for and click the
+          &quot;Leave Review&quot; button.
+        </p>
+        <h2 className='font-semibold mb-1 w-fit text-accent'>Landlords tasks</h2>
+        <p className='ml-5 mr-5'>
+          Landlords can search for their property and view the reviews left. They
+          can also claim the property and receive an average rating from the reviews.
+        </p>
+      </Card>
+    </div>
   </div>
 );
 
