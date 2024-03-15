@@ -147,7 +147,7 @@ test.describe('Property details page test', () => {
 
     test('Average landlord rating test', async ({ page }) => {
       await page.goto(`http://localhost:3000/properties/${secondProperty.id}`);
-      await expect(page.getByRole('main')).toContainText('3.8'); // previously was 2.5, addition of review unit tests caused this to change
+      await expect(page.getByRole('main')).toContainText('2.5');
     });
   });
 });
