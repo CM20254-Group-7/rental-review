@@ -3,7 +3,7 @@ import { NextPage } from 'next';
 import React from 'react';
 import { cookies } from 'next/headers';
 import createClient from '@/utils/supabase/server';
-import { useRouter, notFound } from 'next/navigation';
+import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { EditProfileForm } from './forms';
 
@@ -53,7 +53,6 @@ const editProfilePage: NextPage<{ params: { landlordId: string } }> = async ({ p
         >
           Back
         </Link>
-        
       </div>
       <div className='flex flex-col w-full max-w-4xl bg-secondary/10 shadow-md shadow-secondary/40 rounded-lg overflow-clip border'>
         {/* Details Header */}

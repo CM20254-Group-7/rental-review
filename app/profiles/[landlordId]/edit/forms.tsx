@@ -8,7 +8,8 @@ export type FieldProps = {
   name: string
   label: string
   text?: string
-  type?: 'password' | 'email' | 'text'
+  // eslint-disable-next-line react/no-unused-prop-types
+  type?: 'email' | 'text'
   placeholder?: string
   required?: boolean
   errors?: string[]
