@@ -1,3 +1,5 @@
+import CurrentOwnerIndicator from '@/components/CurrentOwnerIndicator';
+import StarRatingLayout from '@/components/StarRating';
 import createClient from '@/utils/supabase/server';
 import { cookies } from 'next/headers';
 import Link from 'next/link';
@@ -10,6 +12,11 @@ const getPropertyResults = cache(async (searchQuery?: {
   sortBy?: string,
   sortOrder?: string,
   address?: string
+  street?: string
+  city?: string
+  postalCode?: string
+  country?: string
+  tags?: string[]
 }) => {
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
@@ -35,7 +42,8 @@ const getPropertyResults = cache(async (searchQuery?: {
   const sortAsc = sortOrder === 'asc';
 
   let baseQuery = supabase
-    .rpc('properties_full');
+    .from('full_properties')
+    .select('id, address, average_rating, description, beds, baths, tags');
 
   if (searchQuery?.address) {
     baseQuery = baseQuery.textSearch('address', searchQuery.address, {
@@ -44,11 +52,41 @@ const getPropertyResults = cache(async (searchQuery?: {
     });
   }
 
-  let query = baseQuery.select('*');
+  if (searchQuery?.street) {
+    baseQuery = baseQuery.textSearch('address', searchQuery.street, {
+      type: 'websearch',
+      config: 'english',
+    });
+  }
 
-  if (sortField) query = query.order(sortField, { ascending: sortAsc });
+  if (searchQuery?.city) {
+    baseQuery = baseQuery.textSearch('address', searchQuery.city, {
+      type: 'websearch',
+      config: 'english',
+    });
+  }
 
-  const { data: properties, error: propertiesError } = await query;
+  if (searchQuery?.postalCode) {
+    baseQuery = baseQuery.textSearch('address', searchQuery.postalCode, {
+      type: 'websearch',
+      config: 'english',
+    });
+  }
+
+  if (searchQuery?.country) {
+    baseQuery = baseQuery.textSearch('address', searchQuery.country, {
+      type: 'websearch',
+      config: 'english',
+    });
+  }
+
+  if (searchQuery?.tags && searchQuery.tags.length > 0) {
+    baseQuery = baseQuery.contains('tags', searchQuery.tags);
+  }
+
+  if (sortField) baseQuery = baseQuery.order(sortField, { ascending: sortAsc });
+
+  const { data: properties, error: propertiesError } = await baseQuery;
 
   if (propertiesError) {
     return {
@@ -66,9 +104,17 @@ const PropertyResults: React.FC<{
     sortBy?: string
     sortOrder?: string
     address?: string
+    street?: string
+    city?: string
+    postalCode?: string
+    country?: string
+    tags?: string | string[]
   }
 }> = async ({ searchParams }) => {
-  const { properties } = await getPropertyResults(searchParams);
+  const { properties } = await getPropertyResults({
+    ...searchParams,
+    tags: searchParams?.tags ? [searchParams.tags].flat() : undefined,
+  });
 
   if (properties.length === 0) {
     return (
@@ -86,14 +132,48 @@ const PropertyResults: React.FC<{
     >
       {/* Card Header */}
       <div className='flex flex-col w-full'>
-        <h2 className='text-2xl font-semibold mb-1 w-fit text-accent'>{property.address}</h2>
+        <div className='flex flex-row justify-between'>
+          <h2 className='text-2xl font-semibold mb-1 w-fit text-accent'>{property.address}</h2>
+          <StarRatingLayout rating={property.average_rating!} />
+        </div>
         <span className='border border-b w-full border-accent' />
       </div>
 
-      {/* Property Details here */}
-      {/* <div className='flex flex-col gap-2'>
-
-      </div> */}
+      <div className='grid grid-cols-1 md:grid-cols-2 w-full'>
+        <div className='flex flex-col gap-2 justify-center items-center'>
+          {(property.description || property.beds || property.baths)
+            ? (
+              <>
+                {property.description && (
+                <p className='text-sm'>{property.description}</p>
+                )}
+                <div className='flex flex-col gap-2'>
+                  {property.beds && (
+                  <p className='text-sm font-semibold'>
+                    Bedrooms:
+                    {property.beds}
+                  </p>
+                  )}
+                  {property.baths && (
+                  <p className='text-sm font-semibold'>
+                    Bathrooms:
+                    {property.baths}
+                  </p>
+                  )}
+                </div>
+              </>
+            ) : (
+              <p className='text-sm font-semibold'>
+                No details available
+              </p>
+            )}
+        </div>
+        <div className='flex flex-row justify-end w-full'>
+          <CurrentOwnerIndicator
+            propertyId={property.id!}
+          />
+        </div>
+      </div>
     </Link>
   ));
 };

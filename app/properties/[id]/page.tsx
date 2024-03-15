@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import Image from 'next/image';
 
 import createClient from '@/utils/supabase/server';
@@ -67,24 +68,22 @@ const PropertyDetailPage: NextPage<{
             </div>
 
             {/* Average Ratings */}
-            <div className='flex flex-row w-full px-0 justify-start items-center gap-2'>
-              <p className='font-semibold'>Average Rating:</p>
-              <Suspense fallback={<ArrowPathIcon className='w-5 h-5 animate-spin' />}>
-                <AverageRating propertyId={propertyDetails.id} />
-              </Suspense>
-            </div>
+            <AverageRating propertyId={propertyDetails.id} />
 
             {/* Property Details */}
             {/* Might want to add more things like no. baths etc */}
-            <text>{propertyDetails.description}</text>
+            {propertyDetails.description && (
+              <div className='flex flex-col gap-2'>
+                <h3 className='text-lg font-semibold text-accent'>Description:</h3>
+                <p>{propertyDetails.description}</p>
+              </div>
+            )}
 
             {/* Ownership */}
-            <div className='flex flex-row gap-1'>
-              {/* <p className='font-semibold'>Owned By:</p> */}
-              <Suspense fallback={<ArrowPathIcon className='w-5 h-5 animate-spin' />}>
-                <CurrentOwnerIndicator propertyId={propertyDetails.id} />
-              </Suspense>
-            </div>
+            <h3 className='text-lg font-semibold text-accent'>Current Owner:</h3>
+            <Suspense fallback={<ArrowPathIcon className='w-5 h-5 animate-spin' />}>
+              <CurrentOwnerIndicator propertyId={propertyDetails.id} />
+            </Suspense>
           </div>
         </div>
 
@@ -96,6 +95,16 @@ const PropertyDetailPage: NextPage<{
           </div>
           <div className='flex flex-col gap-4 justify-center items-center'>
             <ReviewResults propertyId={propertyDetails.id} />
+          </div>
+          <div className='flex flex-col gap-4 justify-center items-center'>
+            <Link href='/properties/[id]/review' as={`/properties/${propertyDetails.id}/review`}>
+              <button
+                type='submit'
+                className='border border-accent rounded-md px-4 py-2 text-accent mb-5 hover:bg-secondary/10 dark:hover:bg-accent/10 hover:shadow-lg hover:shadow-accent/20'
+              >
+                Review this Property
+              </button>
+            </Link>
           </div>
         </div>
       </div>

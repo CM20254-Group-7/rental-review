@@ -46,6 +46,7 @@ type Review = {
   landlordRating: number
   propertyRating: number
   reviewMessage: string
+  reviewTags: string[]
 }
 
 interface ReviewDetailsLayoutProps extends Review {
@@ -60,6 +61,7 @@ export const ReviewDetailsLayout: React.FC<ReviewDetailsLayoutProps> = ({
   landlordRating,
   propertyRating,
   reviewMessage,
+  reviewTags,
   link = false,
 }) => (
   <MaybeLink
@@ -70,7 +72,7 @@ export const ReviewDetailsLayout: React.FC<ReviewDetailsLayoutProps> = ({
     {/* <h1>Review Details</h1> */}
     {/* <p>Review ID: {reviewId}</p> */}
     {/* <p>Reviewer ID: {reviewerId}</p> */}
-    <div className='flex flex-col w-full sm:w-4/5 gap-2'>
+    <div className='flex flex-col w-full sm:w-4/5 gap-4'>
 
       <div className='flex flex-col sm:flex-row justify-around place-items-center'>
         <div className='flex flex-col'>
@@ -84,9 +86,19 @@ export const ReviewDetailsLayout: React.FC<ReviewDetailsLayoutProps> = ({
         </div>
       </div>
 
-      <p className='text-lg font-semibold'>Review:</p>
-      <p className='border rounded-md h-fit min-h-[5rem] bg-gray-100/10 py-1 px-2'>{reviewMessage}</p>
+      <div className='flex flex-col w-full gap-2'>
+        <p className='text-lg font-semibold'>Review:</p>
+        <p className='border rounded-md h-fit min-h-[5rem] bg-gray-100/10 py-1 px-2'>{reviewMessage}</p>
+      </div>
+
+      <div className='flex flex-wrap gap-2'>
+        {reviewTags.map((tag) => (
+          <span key={tag} className='border rounded-md px-2 py-1 bg-secondary/20'>{tag}</span>
+        ))}
+      </div>
+
       <p className='ml-auto text-gray-300'>{reviewDate.toLocaleDateString()}</p>
+
     </div>
   </MaybeLink>
 );
@@ -107,7 +119,7 @@ export const ReviewDetails: React.FC<ReviewDetailsProps> = async ({
 
   const { data, error } = await supabase
     .from('reviews')
-    .select('*')
+    .select('*, review_tags(tag)')
     .eq('review_id', reviewId)
     .single();
 
@@ -123,6 +135,7 @@ export const ReviewDetails: React.FC<ReviewDetailsProps> = async ({
       landlordRating={data.landlord_rating}
       propertyRating={data.property_rating}
       reviewMessage={data.review_body}
+      reviewTags={data.review_tags.map((reviewTag) => reviewTag.tag)}
       link={link}
     />
   );
