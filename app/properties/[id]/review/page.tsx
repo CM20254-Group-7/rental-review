@@ -51,7 +51,7 @@ const CreateReviewPage: NextPage<{
         <label htmlFor='review_date'>
           Review Date
           <input
-            className='border p-2 rounded-md ml-4'
+            className='border p-2 rounded-md ml-4 bg-transparent'
             type='date'
             name='review_date'
             id='review_date'
@@ -62,7 +62,7 @@ const CreateReviewPage: NextPage<{
         <label htmlFor='review_body'>
           Review Body
           <textarea
-            className='border p-2 rounded-md ml-4'
+            className='border p-2 rounded-md ml-4 bg-transparent'
             name='review_body'
             id='review_body'
             required
@@ -72,7 +72,7 @@ const CreateReviewPage: NextPage<{
         <label htmlFor='property_rating'>
           Property Rating
           <input
-            className='border p-2 rounded-md ml-4'
+            className='border p-2 rounded-md ml-4 bg-transparent'
             type='number'
             name='property_rating'
             id='property_rating'
@@ -85,7 +85,7 @@ const CreateReviewPage: NextPage<{
         <label htmlFor='landlord_rating'>
           Landlord Rating
           <input
-            className='border p-2 rounded-md ml-4'
+            className='border p-2 rounded-md ml-4 bg-transparent'
             type='number'
             name='landlord_rating'
             id='landlord_rating'

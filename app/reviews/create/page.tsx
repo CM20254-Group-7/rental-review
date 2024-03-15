@@ -41,7 +41,7 @@ const CreateReviewPage: NextPage<{
   const [state, dispatch] = useFormState(createReviewWithProperty, initialState);
 
   return (
-    <div>
+    <div className='flex flex-col flex-1 justify-center'>
       <h1 className='text-2xl font-bold mt-6'>Create Review</h1>
       <p className='mb-6'>Fill in the fields below to complete your review</p>
 
@@ -53,7 +53,7 @@ const CreateReviewPage: NextPage<{
         <label htmlFor='house'>
           House
           <textarea
-            className='border rounded-md ml-4'
+            className='border rounded-md ml-4 bg-transparent'
             name='house'
             id='house'
             required
@@ -63,7 +63,7 @@ const CreateReviewPage: NextPage<{
         <label htmlFor='street'>
           Street
           <textarea
-            className='border rounded-md ml-4'
+            className='border rounded-md ml-4 bg-transparent'
             name='street'
             id='street'
             required
@@ -73,7 +73,7 @@ const CreateReviewPage: NextPage<{
         <label htmlFor='postcode'>
           Postcode
           <textarea
-            className='border rounded-md ml-4'
+            className='border rounded-md ml-4 bg-transparent'
             name='postcode'
             id='postcode'
             required
@@ -83,7 +83,7 @@ const CreateReviewPage: NextPage<{
         <label htmlFor='county'>
           County
           <textarea
-            className='border rounded-md ml-4'
+            className='border rounded-md ml-4 bg-transparent'
             name='county'
             id='county'
           />
@@ -92,7 +92,7 @@ const CreateReviewPage: NextPage<{
         <label htmlFor='country'>
           Country
           <textarea
-            className='border rounded-md ml-4'
+            className='border rounded-md ml-4 bg-transparent'
             name='country'
             id='country'
           />
@@ -102,7 +102,7 @@ const CreateReviewPage: NextPage<{
         <label htmlFor='review_date'>
           Review Date
           <input
-            className='border p-2 rounded-md ml-4'
+            className='border p-2 rounded-md ml-4 bg-transparent'
             type='date'
             name='review_date'
             id='review_date'
@@ -113,7 +113,7 @@ const CreateReviewPage: NextPage<{
         <label htmlFor='review_body'>
           Review Body
           <textarea
-            className='border p-2 rounded-md ml-4'
+            className='border p-2 rounded-md ml-4 bg-transparent'
             name='review_body'
             id='review_body'
             required
@@ -123,7 +123,7 @@ const CreateReviewPage: NextPage<{
         <label htmlFor='property_rating'>
           Property Rating
           <input
-            className='border p-2 rounded-md ml-4'
+            className='border p-2 rounded-md ml-4 bg-transparent'
             type='number'
             name='property_rating'
             id='property_rating'
@@ -136,7 +136,7 @@ const CreateReviewPage: NextPage<{
         <label htmlFor='landlord_rating'>
           Landlord Rating
           <input
-            className='border p-2 rounded-md ml-4'
+            className='border p-2 rounded-md ml-4 bg-transparent'
             type='number'
             name='landlord_rating'
             id='landlord_rating'
