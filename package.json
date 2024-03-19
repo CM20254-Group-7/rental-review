@@ -15,6 +15,7 @@
     "@microsoft/eslint-formatter-sarif": "^2.1.7",
     "@supabase/ssr": "latest",
     "@supabase/supabase-js": "latest",
+    "@tremor/react": "^3.14.1",
     "autoprefixer": "10.4.15",
     "dotenv": "^16.4.5",
     "next": "14.1.1-canary.36",
@@ -26,6 +27,7 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.41.2",
+    "@tailwindcss/forms": "^0.5.7",
     "@types/node": "20.3.1",
     "@types/react": "18.2.8",
     "@types/react-dom": "18.2.14",

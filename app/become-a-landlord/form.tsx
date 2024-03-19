@@ -2,6 +2,7 @@
 
 import { useFormState } from 'react-dom';
 import React from 'react';
+import { TextInput, Textarea } from '@tremor/react';
 import { State, addToLandlordDB } from './actions';
 
 // Only handles general errors
@@ -31,119 +32,111 @@ const LandlordRegistrationForm: React.FC<LandlordRegistrationFormProps> = ({
         className='flex flex-col gap-4 justify-center bg-primary/30 border-x px-4 py-8'
         action={dispatch}
       >
-        <label className='flex flex-col gap-1 justify-center' htmlFor='user_first_name'>
+        <label className='flex flex-col gap-1 justify-center max-w-xs' htmlFor='user_first_name'>
           <p className='text-lg font-bold'>First Name:</p>
-          <input
-            className='border w-[45%]  rounded-md px-2 py-1'
-            type='text'
+          <TextInput
             name='user_first_name'
-            required
+            placeholder='John'
+            error={!(typeof state.errors?.user_first_name === 'undefined')}
+            errorMessage={state.errors?.user_first_name?.join(', ')}
           />
         </label>
 
-        <label className='flex flex-col gap-1 justify-center' htmlFor='user_last_name'>
+        <label className='flex flex-col gap-1 justify-center max-w-xs' htmlFor='user_last_name'>
           <p className='text-lg font-bold'>Last Name:</p>
-          <input
-            className='border w-[45%]  rounded-md px-2 py-1'
-            type='text'
+          <TextInput
             name='user_last_name'
-            required
+            placeholder='Doe'
+            error={!(typeof state.errors?.user_last_name === 'undefined')}
+            errorMessage={state.errors?.user_last_name?.join(', ')}
           />
         </label>
 
-        <label className='flex flex-col gap-1 justify-center' htmlFor='display_name'>
+        <label className='flex flex-col gap-1 justify-center max-w-xs' htmlFor='display_name'>
           <p className='text-lg font-bold'>Display name:</p>
-          <input
-            className='border w-[45%]  rounded-md px-2 py-1'
-            type='text'
+          <TextInput
             name='display_name'
-            required
+            placeholder='John Doe'
+            error={!(typeof state.errors?.display_name === 'undefined')}
+            errorMessage={state.errors?.display_name?.join(', ')}
           />
         </label>
 
-        <label className='flex flex-col gap-1 justify-center' htmlFor='display_email'>
+        <label className='flex flex-col gap-1 justify-center max-w-xs' htmlFor='display_email'>
           <p className='text-lg font-bold'>Email:</p>
-          <input
-            className='border w-[45%]  rounded-md px-2 py-1'
-            type='text'
+          <TextInput
             name='display_email'
-            required
+            placeholder='john@doe.com'
+            error={!(typeof state.errors?.display_email === 'undefined')}
+            errorMessage={state.errors?.display_email?.join(', ')}
           />
         </label>
 
-        <label className='flex flex-col gap-1 justify-center' htmlFor='user_phoneNb'>
+        <label className='flex flex-col gap-1 justify-center max-w-xs' htmlFor='user_phoneNb'>
           <p className='text-lg font-bold'>Phone Number:</p>
-          <input
-            className='border w-[45%]  rounded-md px-2 py-1'
-            type='text'
+          <TextInput
             name='user_phoneNb'
-            required
+            placeholder='1234567890'
+            error={!(typeof state.errors?.user_phoneNb === 'undefined')}
+            errorMessage={state.errors?.user_phoneNb?.join(', ')}
           />
         </label>
 
-        <label className='flex flex-col gap-1 justify-center' htmlFor='user_postcode'>
+        <label className='flex flex-col gap-1 justify-center max-w-xs' htmlFor='user_postcode'>
           <p className='text-lg font-bold'>Postcode:</p>
-          <input
-            className='border w-[45%]  rounded-md px-2 py-1'
-            type='text'
+          <TextInput
             name='user_postcode'
-            required
+            placeholder='AB12 3CD'
+            error={!(typeof state.errors?.user_postcode === 'undefined')}
+            errorMessage={state.errors?.user_postcode?.join(', ')}
           />
         </label>
 
-        <label className='flex flex-col gap-1 justify-center' htmlFor='user_country'>
+        <label className='flex flex-col gap-1 justify-center max-w-xs' htmlFor='user_country'>
           <p className='text-lg font-bold'>Country:</p>
-          <input
-            className='border w-[45%]  rounded-md px-2 py-1'
-            type='text'
+          <TextInput
             name='user_country'
-            required
+            placeholder='United Kingdom'
+            error={!(typeof state.errors?.user_country === 'undefined')}
+            errorMessage={state.errors?.user_country?.join(', ')}
           />
         </label>
 
-        <label className='flex flex-col gap-1 justify-center' htmlFor='user_county'>
+        <label className='flex flex-col gap-1 justify-center max-w-xs' htmlFor='user_county'>
           <p className='text-lg font-bold'>County (optional):</p>
-          <input
-            className='border w-[45%]  rounded-md px-2 py-1'
-            type='text'
+          <TextInput
             name='user_county'
+            placeholder='London'
+            error={!(typeof state.errors?.user_county === 'undefined')}
+            errorMessage={state.errors?.user_county?.join(', ')}
           />
         </label>
 
-        <label className='flex flex-col gap-1 justify-center' htmlFor='user_city'>
-          <p className='text-lg font-bold'>City (optional):</p>
-          <input
-            className='border w-[45%]  rounded-md px-2 py-1'
-            type='text'
-            name='user_city'
-          />
-        </label>
-
-        <label className='flex flex-col gap-1 justify-center' htmlFor='user_street'>
+        <label className='flex flex-col gap-1 justify-center max-w-xs' htmlFor='user_street'>
           <p className='text-lg font-bold'>Street (optional):</p>
-          <input
-            className='border w-[45%]  rounded-md px-2 py-1'
-            type='text'
+          <TextInput
             name='user_street'
+            placeholder='Example Street'
+            error={!(typeof state.errors?.user_street === 'undefined')}
+            errorMessage={state.errors?.user_street?.join(', ')}
           />
         </label>
 
-        <label className='flex flex-col gap-1 justify-center' htmlFor='user_house'>
-          <p className='text-lg font-bold'>Address:</p>
-          <input
-            className='border w-[45%]  rounded-md px-2 py-1'
-            type='text'
+        <label className='flex flex-col gap-1 justify-center max-w-xs' htmlFor='user_house'>
+          <p className='text-lg font-bold'>House Number/Name (optional):</p>
+          <TextInput
             name='user_house'
-            required
+            placeholder='1'
+            error={!(typeof state.errors?.user_house === 'undefined')}
+            errorMessage={state.errors?.user_house?.join(', ')}
           />
         </label>
 
         <label className='flex flex-col gap-1 justify-center' htmlFor='user_bio'>
           <p className='text-lg font-bold'>Bio (optional):</p>
-          <input
-            className='border w-[90%] rounded-md px-2 py-1'
-            type='text'
+          <Textarea
             name='user_bio'
+            placeholder='Tell us a bit about yourself'
           />
         </label>
 
