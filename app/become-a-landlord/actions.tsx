@@ -2,24 +2,29 @@
 
 import { redirect } from 'next/navigation';
 import { cookies } from 'next/headers';
-import createClient from '@/utils/supabase/server';
+import createServerClient from '@/utils/supabase/server';
 import { z } from 'zod';
+import { createClient } from '@supabase/supabase-js';
+import { Database } from '@/supabase.types';
 
 const LandlordRegistrationSchema = z
   .object({
     user_id: z.string().uuid(),
-    display_name: z.string(),
-    display_email: z.string().email(),
-    user_bio: z.string().optional(),
-    user_phoneNb: z.string(),
-    user_postcode: z.string(),
-    user_country: z.string(),
-    user_county: z.string().optional(),
-    user_city: z.string().optional(),
-    user_street: z.string().optional(),
-    user_house: z.string(),
+
     user_first_name: z.string(),
     user_last_name: z.string(),
+    display_name: z.string(),
+
+    display_email: z.string().email(),
+    user_phoneNb: z.string(),
+
+    user_house: z.string().optional(),
+    user_street: z.string().optional(),
+    user_county: z.string().optional(),
+    user_postcode: z.string().length(7).optional(),
+    user_country: z.string().optional(),
+
+    user_bio: z.string().optional(),
   });
 
 export type State = {
@@ -42,7 +47,6 @@ export type State = {
 };
 
 export const addToLandlordDB = async (
-  userId: string,
   prevState: State,
   formData: FormData,
   //   landlordName: string | null,
@@ -50,20 +54,44 @@ export const addToLandlordDB = async (
   //   landlordBio: string | null,
   //   etc
 ): Promise<State> => {
+  // set up the supabase client
+  const cookieStore = cookies();
+  const supabase = createServerClient(cookieStore);
+
+  const { data: { user }, error: userError } = await supabase.auth.getUser();
+
+  if (userError || !user) {
+    return {
+      message: 'Must be logged in to register as a landlord.',
+    };
+  }
+
   const validatedFields = LandlordRegistrationSchema.safeParse({
-    user_id: userId,
-    display_name: formData.get('display_name'),
-    display_email: formData.get('display_email'),
+    user_id: user.id,
+
+    user_first_name: formData.get('user_first_name') !== '' ? formData.get('user_first_name') : undefined,
+    user_last_name: formData.get('user_last_name') !== '' ? formData.get('user_last_name') : undefined,
+    display_name: formData.get('display_name') !== '' ? formData.get('display_name') : undefined,
+
+    display_email: formData.get('display_email') !== '' ? formData.get('display_email') : undefined,
+    user_phoneNb: formData.get('user_phoneNb') !== '' ? formData.get('user_phoneNb') : undefined,
+
+    user_house: formData.get('user_house') !== '' ? formData.get('user_house') : undefined,
+    user_street: formData.get('user_street') !== '' ? formData.get('user_street') : undefined,
+    user_county: formData.get('user_county') !== '' ? formData.get('user_county') : undefined,
+
+    // strip spaces from postcode
+    user_postcode: (() => {
+      const postcode = formData.get('user_postcode');
+
+      if (typeof postcode !== 'string') return undefined;
+      if (postcode === '') return undefined;
+
+      return postcode.replace(/\s/g, '');
+    })(),
+    user_country: formData.get('user_country') !== '' ? formData.get('user_country') : undefined,
+
     user_bio: formData.get('user_bio') !== '' ? formData.get('user_bio') : undefined,
-    user_phoneNb: formData.get('user_phoneNb'),
-    user_postcode: formData.get('user_postcode'),
-    user_country: formData.get('user_country'),
-    user_county: formData.get('user_county') !== '' ? formData.get('user_bio') : undefined,
-    user_city: formData.get('user_city') !== '' ? formData.get('user_bio') : undefined,
-    user_street: formData.get('user_street') !== '' ? formData.get('user_bio') : undefined,
-    user_house: formData.get('user_house'),
-    user_first_name: formData.get('user_first_name'),
-    user_last_name: formData.get('user_last_name'),
   });
 
   if (!validatedFields.success) {
@@ -82,13 +110,11 @@ export const addToLandlordDB = async (
     userPostcode,
     userCountry,
     userCounty,
-    userCity,
     userStreet,
     userHouse,
     userFirstName,
     userLastName,
   } = {
-    ...validatedFields.data,
     landlordId: validatedFields.data.user_id,
     displayName: validatedFields.data.display_name,
     displayEmail: validatedFields.data.display_email,
@@ -97,19 +123,43 @@ export const addToLandlordDB = async (
     userPostcode: validatedFields.data.user_postcode,
     userCountry: validatedFields.data.user_country,
     userCounty: validatedFields.data.user_county,
-    userCity: validatedFields.data.user_city,
     userStreet: validatedFields.data.user_street,
     userHouse: validatedFields.data.user_house,
     userFirstName: validatedFields.data.user_first_name,
     userLastName: validatedFields.data.user_last_name,
   };
 
-  // set up the supabase client
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
+  // create service client to add landlord to db
+  const serviceSupabase = createClient<Database>(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_KEY!,
+  );
+
+  const { error: privateError } = await serviceSupabase
+    .from('landlord_private_profiles')
+    .insert(
+      {
+        country: userCountry,
+        county: userCounty,
+        first_name: userFirstName,
+        house: userHouse,
+        last_name: userLastName,
+        phone_number: userPhoneNb,
+        postcode: userPostcode,
+        street: userStreet,
+        user_id: landlordId,
+      },
+    );
+
+  if (privateError) {
+    console.error(privateError);
+    return {
+      message: 'Failed to Register Landlord.',
+    };
+  }
 
   // Adds information into landlord_public_profiles db
-  await supabase
+  const { error: publicError } = await serviceSupabase
     .from('landlord_public_profiles')
     .insert(
       {
@@ -124,22 +174,19 @@ export const addToLandlordDB = async (
       },
     );
 
-  await supabase
-    .from('landlord_private_profiles')
-    .insert(
-      {
-        city: userCity,
-        country: userCountry,
-        county: userCounty,
-        first_name: userFirstName,
-        house: userHouse,
-        last_name: userLastName,
-        phone_number: userPhoneNb,
-        postcode: userPostcode,
-        street: userStreet,
-        user_id: landlordId,
-      },
-    );
+  if (publicError) {
+    //  delete the private profile if the public profile fails
+    await serviceSupabase
+      .from('landlord_private_profiles')
+      .delete()
+      .eq('user_id', landlordId);
 
-  return (redirect(`/profiles/${userId}`));
+    console.error(publicError);
+
+    return {
+      message: 'Failed to Register Landlord.',
+    };
+  }
+
+  return (redirect(`/profiles/${user.id}`));
 };

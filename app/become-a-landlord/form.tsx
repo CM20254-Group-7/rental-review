@@ -15,9 +15,8 @@ interface LandlordRegistrationFormProps {
 const LandlordRegistrationForm: React.FC<LandlordRegistrationFormProps> = ({
   userId,
 }) => {
-  const addtoLandlordDBwithId = addToLandlordDB.bind(null, userId);
   const initialState = { errors: {}, message: null };
-  const [state, dispatch] = useFormState(addtoLandlordDBwithId, initialState);
+  const [state, dispatch] = useFormState(addToLandlordDB, initialState);
 
   return (
     <div>
