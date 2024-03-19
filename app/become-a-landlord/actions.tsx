@@ -22,7 +22,7 @@ const LandlordRegistrationSchema = z
     user_street: z.string().optional(),
     user_county: z.string().optional(),
     user_postcode: z.string().length(7).optional(),
-    user_country: z.string().optional(),
+    user_country: z.string(),
 
     user_bio: z.string().optional(),
   });
@@ -139,20 +139,19 @@ export const addToLandlordDB = async (
     .from('landlord_private_profiles')
     .insert(
       {
-        country: userCountry,
-        county: userCounty,
+        user_id: landlordId,
         first_name: userFirstName,
-        house: userHouse,
         last_name: userLastName,
         phone_number: userPhoneNb,
-        postcode: userPostcode,
+        house: userHouse,
         street: userStreet,
-        user_id: landlordId,
-      },
+        county: userCounty,
+        postcode: userPostcode,
+        country: userCountry,
+      } as any,
     );
 
   if (privateError) {
-    console.error(privateError);
     return {
       message: 'Failed to Register Landlord.',
     };
@@ -180,8 +179,6 @@ export const addToLandlordDB = async (
       .from('landlord_private_profiles')
       .delete()
       .eq('user_id', landlordId);
-
-    console.error(publicError);
 
     return {
       message: 'Failed to Register Landlord.',
