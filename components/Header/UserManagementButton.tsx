@@ -3,7 +3,8 @@
 import { UserCircleIcon } from '@heroicons/react/24/solid';
 import Link from 'next/link';
 import React, { useState, useEffect, useRef } from 'react';
-import signOut from './actions';
+import createClient from '@/utils/supabase/client';
+import { useRouter } from 'next/navigation';
 
 // define hook to handle click outside of component
 const useComponentVisible = () => {
@@ -57,17 +58,20 @@ const UserManagementButton: React.FC<{ email: string }> = ({ email }) => {
             Manage Account
           </Link>
 
-          <form
-            action={signOut}
-            className='contents'
+          <button
+            type='button'
+            className='py-2 px-4 w-full text-right rounded-b-md no-underline hover:bg-secondary/10'
+            onClick={async (e) => {
+              e.preventDefault();
+
+              const supabase = createClient();
+              await supabase.auth.signOut();
+
+              refresh();
+            }}
           >
-            <button
-              type='submit'
-              className='py-2 px-4 w-full text-right rounded-b-md no-underline hover:bg-secondary/10'
-            >
-              Logout
-            </button>
-          </form>
+            Logout
+          </button>
         </div>
       )}
     </div>
