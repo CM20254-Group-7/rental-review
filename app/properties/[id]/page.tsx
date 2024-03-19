@@ -87,6 +87,19 @@ const PropertyDetailPage: NextPage<{
           </div>
         </div>
 
+        {/* Review Button */}
+        <div className='flex flex-col gap-4 justify-center items-center'>
+          <br />
+          <Link href='/properties/[id]/review' as={`/properties/${propertyDetails.id}/review`}>
+            <button
+              type='submit'
+              className='border border-accent rounded-md px-4 py-2 text-accent mb-5 hover:bg-secondary/10 dark:hover:bg-accent/10 hover:shadow-lg hover:shadow-accent/20'
+            >
+              Review this Property
+            </button>
+          </Link>
+        </div>
+
         {/* Review List */}
         <div className='flex flex-col gap-6 px-8 py-6'>
           <div className='flex flex-col w-full'>
@@ -95,16 +108,6 @@ const PropertyDetailPage: NextPage<{
           </div>
           <div className='flex flex-col gap-4 justify-center items-center'>
             <ReviewResults propertyId={propertyDetails.id} />
-          </div>
-          <div className='flex flex-col gap-4 justify-center items-center'>
-            <Link href='/properties/[id]/review' as={`/properties/${propertyDetails.id}/review`}>
-              <button
-                type='submit'
-                className='border border-accent rounded-md px-4 py-2 text-accent mb-5 hover:bg-secondary/10 dark:hover:bg-accent/10 hover:shadow-lg hover:shadow-accent/20'
-              >
-                Review this Property
-              </button>
-            </Link>
           </div>
         </div>
       </div>
