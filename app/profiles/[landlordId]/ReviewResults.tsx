@@ -1,6 +1,5 @@
 import { ReviewDetailsLayout } from '@/components/ReviewDetails';
 import createClient from '@/utils/supabase/server';
-import { data } from 'autoprefixer';
 import { cookies } from 'next/headers';
 import React, { cache } from 'react';
 
