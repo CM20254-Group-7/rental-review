@@ -145,20 +145,22 @@ const PropertyResults: React.FC<{
             ? (
               <>
                 {property.description && (
-                <p className='text-sm'>{property.description}</p>
+                  <p className='text-sm break-words'>{property.description}</p>
                 )}
                 <div className='flex flex-col gap-2'>
                   {property.beds && (
-                  <p className='text-sm font-semibold'>
-                    Bedrooms:
-                    {property.beds}
-                  </p>
+                    <p className='text-sm font-semibold'>
+                      Bedrooms:
+                      {' '}
+                      {property.beds}
+                    </p>
                   )}
                   {property.baths && (
-                  <p className='text-sm font-semibold'>
-                    Bathrooms:
-                    {property.baths}
-                  </p>
+                    <p className='text-sm font-semibold'>
+                      Bathrooms:
+                      {' '}
+                      {property.baths}
+                    </p>
                   )}
                 </div>
               </>
@@ -168,10 +170,10 @@ const PropertyResults: React.FC<{
               </p>
             )}
         </div>
-        <div className='flex flex-row justify-end w-full'>
-          <CurrentOwnerIndicator
-            propertyId={property.id!}
-          />
+        <div className='flex flex-col gap-2 justify-center items-center md:items-end'>
+          <div>
+            <CurrentOwnerIndicator propertyId={property.id!} />
+          </div>
         </div>
       </div>
     </Link>
