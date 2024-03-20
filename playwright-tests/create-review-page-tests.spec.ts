@@ -14,6 +14,8 @@ test.beforeEach(async ({ page }, testInfo) => {
     const house = `${testInfo.workerIndex}`;
     const street = 'Property Claiming Road';
     const county = `${testInfo.project.name} City`;
+    const postcode = 'PC1 1CR';
+    const country = `${testInfo.project.name} City`;
     const address = `${house}, ${street}, ${county}`;
 
     const res = await page.request.post(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/properties?select=*`, {
@@ -24,10 +26,11 @@ test.beforeEach(async ({ page }, testInfo) => {
         Prefer: 'return=representation',
       },
       data: {
-        house: `${testInfo.workerIndex}`,
-        street: 'Property Claiming Road',
-        county: `${testInfo.project.name} City`,
-        postcode: 'PC1 1CR',
+        house,
+        street,
+        county,
+        postcode,
+        country,
       },
     });
 
@@ -149,9 +152,11 @@ test.describe('User 1 tests', () => {
     await page.getByLabel('House').fill(`${testInfo.workerIndex}`);
     await page.getByLabel('Street').fill('Property Claiming Road');
     await page.getByLabel('Postcode').fill('PC1 1CR');
+    await page.getByLabel(/City/).fill(`${testInfo.project.name} City`);
+    await page.getByLabel('Country').fill('United Kingdom');
 
     // fills in date
-    await page.getByLabel('Review Date').fill(formattedDate);
+    await page.evaluate(`document.getElementById("review_date").setAttribute("value", ${formattedDate})`);
     // fills in review contents
     await page.getByLabel('Review Body').fill('test review');
     // gives review to proeperty and landlord
@@ -173,7 +178,7 @@ test.describe('User 1 tests', () => {
     await page.goto(`/properties/${property.id}/review`);
 
     // fills in date
-    await page.getByLabel('Review Date').fill(formattedDate);
+    await page.evaluate(`document.getElementById("review_date").setAttribute("value", ${formattedDate})`);
     // fills in review contents
     await page.getByLabel('Review Body').fill('test review');
     // gives review to proeperty and landlord
@@ -196,10 +201,12 @@ test.describe('User 1 tests', () => {
     await page.getByLabel('House').fill('1');
     await page.getByLabel('Street').fill('Test Road');
     await page.getByLabel('Postcode').fill('AB1 234');
+    await page.getByLabel('City/County').fill('London');
+    await page.getByLabel('Country').fill('United Kingdom');
 
     // fills in review details
     // fills in date
-    await page.getByLabel('Review Date').fill(formattedDate);
+    await page.evaluate(`document.getElementById("review_date").setAttribute("value", ${formattedDate})`);
     // fills in review contents
     await page.getByLabel('Review Body').fill('test review');
     // gives review to proeperty and landlord
@@ -224,7 +231,7 @@ test.describe('User 4 tests', () => {
     await page.goto('/properties/1ececec8-4bbf-445f-8de0-f563caf0bf01/review');
 
     // fills in date
-    await page.getByLabel('Review Date').fill(formattedDate);
+    await page.evaluate(`document.getElementById("review_date").setAttribute("value", ${formattedDate})`);
 
     // fills in review contents
     await page.getByLabel('Review Body').fill('test review');

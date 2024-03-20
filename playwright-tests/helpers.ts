@@ -58,8 +58,8 @@ const propertyIds = [
 ];
 
 const propertyAddresses = [
-  '1, Test Road, AB1 234',
-  '2, Test Road, AB1 234',
+  '1, Test Road, London, AB1 234',
+  '2, Test Road, London, AB1 234',
 ];
 
 export const ownershipHistories = [

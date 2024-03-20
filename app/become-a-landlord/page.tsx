@@ -7,7 +7,7 @@ import React from 'react';
 import { notFound } from 'next/navigation';
 import LandlordRegistrationForm from './form';
 
-const AlreadyLandlordMessage: React.FC<{}> = () => (
+const AlreadyLandlordMessage: React.FC = () => (
   <div className='flex flex-col flex-1 place-items-center justify-center gap-4'>
     <p id='already_landlord' className='text-lg font-semibold'>
       You&apos;re already a landlord.
@@ -21,7 +21,7 @@ const AlreadyLandlordMessage: React.FC<{}> = () => (
   </div>
 );
 
-const LandlordRegistrationPage: NextPage<{ params: {} }> = async () => {
+const LandlordRegistrationPage: NextPage = async () => {
   // Set up the supabase client
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
@@ -51,9 +51,7 @@ const LandlordRegistrationPage: NextPage<{ params: {} }> = async () => {
 
   return (
     <div className='w-[70%] p-4'>
-      <LandlordRegistrationForm
-        userId={user.id}
-      />
+      <LandlordRegistrationForm />
     </div>
   );
 };

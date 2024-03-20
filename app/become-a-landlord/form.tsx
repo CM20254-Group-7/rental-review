@@ -8,13 +8,7 @@ import { State, addToLandlordDB } from './actions';
 // Only handles general errors
 const ErrorMessage: React.FC<{ state: State }> = ({ state }) => <p>{state.message}</p>;
 
-interface LandlordRegistrationFormProps {
-    userId: string;
-  }
-
-const LandlordRegistrationForm: React.FC<LandlordRegistrationFormProps> = ({
-  userId,
-}) => {
+const LandlordRegistrationForm: React.FC = () => {
   const initialState = { errors: {}, message: null };
   const [state, dispatch] = useFormState(addToLandlordDB, initialState);
 
