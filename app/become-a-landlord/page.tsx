@@ -7,20 +7,6 @@ import React from 'react';
 import { notFound } from 'next/navigation';
 import LandlordRegistrationForm from './form';
 
-const NotLoggedInMessage: React.FC<{}> = () => (
-  <div className='flex flex-col flex-1 place-items-center justify-center gap-4'>
-    <p className='text-lg font-semibold'>
-      You must be logged in to access this page
-    </p>
-    <Link
-      href='/login?redirect=/profiles/landlord-registration'
-      className='text-primary font-semibold underline cursor-pointer'
-    >
-      Go to Login
-    </Link>
-  </div>
-);
-
 const AlreadyLandlordMessage: React.FC<{}> = () => (
   <div className='flex flex-col flex-1 place-items-center justify-center gap-4'>
     <p id='already_landlord' className='text-lg font-semibold'>
@@ -40,9 +26,9 @@ const LandlordRegistrationPage: NextPage<{ params: {} }> = async () => {
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
 
-  // Get user.id and if not logged in, send to "not logged in"
+  // Middleware should redirect if user is not logged in, return null for TypeScript
   const { data: { user }, error: userError } = await supabase.auth.getUser();
-  if (userError || !user) return <NotLoggedInMessage />;
+  if (userError || !user) return null;
 
   // Check a user with the provided id exists
   const { data: Data, error: Error } = await supabase

@@ -306,7 +306,7 @@ test.describe('2. Landlord profile details page tests', () => {
 test.describe.fixme('3. Landlord registration tests', () => {
   test.describe('3.1. Can access page', () => {
     test('3.1.1. Anon - gets redirected to login', async ({ page }) => {
-      await page.goto('http://localhost:3000/profiles/landlord-registration');
+      await page.goto('http://localhost:3000/become-a-landlord');
 
       await expect(page.getByRole('main')).toContainText('Go to Login');
       await page.getByRole('link', { name: 'Go to Login' }).click();
@@ -316,7 +316,7 @@ test.describe.fixme('3. Landlord registration tests', () => {
     test(`3.1.2. ${secondUser.label} - Go to Home Page`, async ({ page }) => {
       test.use({ storageState: secondUser.file });
 
-      await page.goto('http://localhost:3000/profiles/landlord-registration');
+      await page.goto('http://localhost:3000/become-a-landlord');
 
       await expect(page.locator('main')).toContainText('You\'re already a landlord.');
       await page.getByRole('link', { name: 'Go to Home Page' }).click();
@@ -326,7 +326,7 @@ test.describe.fixme('3. Landlord registration tests', () => {
     test(`3.1.3. ${thirdUser.label} - can access page`, async ({ page }) => {
       test.use({ storageState: thirdUser.file });
 
-      await page.goto('http://localhost:3000/profiles/landlord-registration');
+      await page.goto('http://localhost:3000/become-a-landlord');
 
       await expect(page.locator('form_header')).toContainText('Hello there! Let\'s make you a landlord!');
     });
@@ -336,7 +336,7 @@ test.describe.fixme('3. Landlord registration tests', () => {
   test('3.2. Can input information', async ({ page }) => {
     test.use({ storageState: thirdUser.file });
 
-    await page.goto('http://localhost:3000/profiles/landlord-registration');
+    await page.goto('http://localhost:3000/become-a-landlord');
 
     await expect(page.locator('form_header')).toContainText('Hello there! Let\'s make you a landlord!');
 

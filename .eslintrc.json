@@ -56,7 +56,8 @@
         "js": "never",
         "jsx": "never",
         "ts": "never",
-        "tsx": "never"
+        "tsx": "never",
+        "mjs": "never"
       }
     ],
     "import/no-extraneous-dependencies": [
@@ -66,7 +67,8 @@
           "playwright-tests/**",
           "**/*.test.ts",
           "**/*.spec.ts",
-          "playwright.config.ts"
+          "**/*.config.ts",
+          "**/*.config.js"
         ]
       }
     ]
