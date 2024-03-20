@@ -190,7 +190,7 @@ test.describe('1. Page Access', () => {
 
       await expect(page.getByRole('main')).toContainText('Become a Landlord');
       await page.getByRole('link', { name: 'Become a Landlord' }).click();
-      await expect(page).toHaveURL(/.*landlord-registration/);
+      await expect(page).toHaveURL(/become-a-landlord/);
     });
   });
 

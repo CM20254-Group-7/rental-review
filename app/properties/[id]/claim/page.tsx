@@ -27,7 +27,7 @@ const NotALandlordMessage: React.FC = () => (
       You must be registered as a landlord to access this page
     </p>
     <Link
-      href='/profiles/landlord-registration'
+      href='/become-a-landlord'
       className='text-primary font-semibold underline cursor-pointer'
     >
       Become a Landlord
