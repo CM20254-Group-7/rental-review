@@ -3,8 +3,7 @@
 import { UserCircleIcon } from '@heroicons/react/24/solid';
 import Link from 'next/link';
 import React, { useState, useEffect, useRef } from 'react';
-import createClient from '@/utils/supabase/client';
-import { useRouter } from 'next/navigation';
+import signOut from './actions';
 
 // define hook to handle click outside of component
 const useComponentVisible = () => {
@@ -32,8 +31,7 @@ const useComponentVisible = () => {
   return { ref, isComponentVisible, setIsComponentVisible };
 };
 
-const UserManagementButton: React.FC<{ email: string, id: string }> = ({ email, id }) => {
-  const { refresh } = useRouter();
+const UserManagementButton: React.FC<{ email: string }> = ({ email }) => {
   const { ref, isComponentVisible, setIsComponentVisible } = useComponentVisible();
 
   return (
@@ -53,26 +51,23 @@ const UserManagementButton: React.FC<{ email: string, id: string }> = ({ email, 
           className='absolute top-[100%] w-full text-sm flex flex-col bg-background border-x border-b hover:shadow-sm hover:shadow-primary/20 transition-all text-foreground justify-center items-center rounded-b-md'
         >
           <Link
-            href={`/profiles/${id}`}
+            href='/account'
             className='py-2 px-4 border-b w-full text-right no-underline hover:bg-secondary/10'
           >
-            Dashboard
+            Manage Account
           </Link>
 
-          <button
-            type='button'
-            className='py-2 px-4 w-full text-right rounded-b-md no-underline hover:bg-secondary/10'
-            onClick={async (e) => {
-              e.preventDefault();
-
-              const supabase = createClient();
-              await supabase.auth.signOut();
-
-              refresh();
-            }}
+          <form
+            action={signOut}
+            className='contents'
           >
-            Logout
-          </button>
+            <button
+              type='submit'
+              className='py-2 px-4 w-full text-right rounded-b-md no-underline hover:bg-secondary/10'
+            >
+              Logout
+            </button>
+          </form>
         </div>
       )}
     </div>
