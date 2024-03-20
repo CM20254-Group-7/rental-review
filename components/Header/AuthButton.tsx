@@ -12,7 +12,7 @@ const AuthButton: FC = async () => {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (user) return <UserManagementButton email={user.email!} id={user.id!} />;
+  if (user) return <UserManagementButton email={user.email!} />;
 
   return (
     <Link
