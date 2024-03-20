@@ -44,11 +44,10 @@ test('help button & QandA link', async ({ page }) => {
   await page.getByRole('button', { name: 'Help' }).click();
 
   // Check contents of dropdown help page
-  await expect(page.getByRole('navigation')).toContainText(`Oh, you need help? Womp womp. 
-  Have you tried turning it off and on again?`);
+  await expect(page.getByRole('navigation')).toContainText('Q&A page');
 
   // Click on QandA link
-  await page.getByRole('link', { name: 'Q and A' }).click();
+  await page.getByRole('link', { name: 'here' }).click();
 
   // Expects content of QandA page
   await expect(page.getByRole('main')).toContainText('Hello! Unfortunately, no one\'s asked us any questions, so...');
