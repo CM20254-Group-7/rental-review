@@ -21,8 +21,8 @@ const LandlordRegistrationSchema = z
     user_house: z.string().optional(),
     user_street: z.string().optional(),
     user_county: z.string().optional(),
-    user_postcode: z.string().length(7).optional(),
-    user_country: z.string(),
+    user_postcode: z.string().min(5).max(7).optional(),
+    user_country: z.string().optional(),
 
     user_bio: z.string().optional(),
   });

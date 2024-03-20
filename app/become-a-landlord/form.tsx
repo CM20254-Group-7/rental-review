@@ -8,13 +8,7 @@ import { State, addToLandlordDB } from './actions';
 // Only handles general errors
 const ErrorMessage: React.FC<{ state: State }> = ({ state }) => <p>{state.message}</p>;
 
-interface LandlordRegistrationFormProps {
-    userId: string;
-  }
-
-const LandlordRegistrationForm: React.FC<LandlordRegistrationFormProps> = ({
-  userId,
-}) => {
+const LandlordRegistrationForm: React.FC = () => {
   const initialState = { errors: {}, message: null };
   const [state, dispatch] = useFormState(addToLandlordDB, initialState);
 
@@ -81,55 +75,59 @@ const LandlordRegistrationForm: React.FC<LandlordRegistrationFormProps> = ({
           />
         </label>
 
-        <label className='flex flex-col gap-1 justify-center max-w-xs' htmlFor='user_postcode'>
-          <p className='text-lg font-bold'>Postcode:</p>
-          <TextInput
-            name='user_postcode'
-            placeholder='AB12 3CD'
-            error={!(typeof state.errors?.user_postcode === 'undefined')}
-            errorMessage={state.errors?.user_postcode?.join(', ')}
-          />
-        </label>
+        <div className='flex flex-col gap-2'>
+          <h2 className='text-lg font-bold'>Address (optional):</h2>
 
-        <label className='flex flex-col gap-1 justify-center max-w-xs' htmlFor='user_country'>
-          <p className='text-lg font-bold'>Country:</p>
-          <TextInput
-            name='user_country'
-            placeholder='United Kingdom'
-            error={!(typeof state.errors?.user_country === 'undefined')}
-            errorMessage={state.errors?.user_country?.join(', ')}
-          />
-        </label>
+          <label className='flex flex-col gap-1 justify-center max-w-xs' htmlFor='user_house'>
+            <p className='text-lg font-bold sr-only'>House</p>
+            <TextInput
+              name='user_house'
+              placeholder='House:'
+              error={!(typeof state.errors?.user_house === 'undefined')}
+              errorMessage={state.errors?.user_house?.join(', ')}
+            />
+          </label>
 
-        <label className='flex flex-col gap-1 justify-center max-w-xs' htmlFor='user_county'>
-          <p className='text-lg font-bold'>County (optional):</p>
-          <TextInput
-            name='user_county'
-            placeholder='London'
-            error={!(typeof state.errors?.user_county === 'undefined')}
-            errorMessage={state.errors?.user_county?.join(', ')}
-          />
-        </label>
+          <label className='flex flex-col gap-1 justify-center max-w-xs' htmlFor='user_street'>
+            <p className='text-lg font-bold sr-only'>Street</p>
+            <TextInput
+              name='user_street'
+              placeholder='Street'
+              error={!(typeof state.errors?.user_street === 'undefined')}
+              errorMessage={state.errors?.user_street?.join(', ')}
+            />
+          </label>
 
-        <label className='flex flex-col gap-1 justify-center max-w-xs' htmlFor='user_street'>
-          <p className='text-lg font-bold'>Street (optional):</p>
-          <TextInput
-            name='user_street'
-            placeholder='Example Street'
-            error={!(typeof state.errors?.user_street === 'undefined')}
-            errorMessage={state.errors?.user_street?.join(', ')}
-          />
-        </label>
+          <label className='flex flex-col gap-1 justify-center max-w-xs' htmlFor='user_county'>
+            <p className='text-lg font-bold sr-only'>County</p>
+            <TextInput
+              name='user_county'
+              placeholder='City/County'
+              error={!(typeof state.errors?.user_county === 'undefined')}
+              errorMessage={state.errors?.user_county?.join(', ')}
+            />
+          </label>
 
-        <label className='flex flex-col gap-1 justify-center max-w-xs' htmlFor='user_house'>
-          <p className='text-lg font-bold'>House Number/Name (optional):</p>
-          <TextInput
-            name='user_house'
-            placeholder='1'
-            error={!(typeof state.errors?.user_house === 'undefined')}
-            errorMessage={state.errors?.user_house?.join(', ')}
-          />
-        </label>
+          <label className='flex flex-col gap-1 justify-center max-w-xs' htmlFor='user_postcode'>
+            <p className='text-lg font-bold sr-only'>Postcode</p>
+            <TextInput
+              name='user_postcode'
+              placeholder='Postcode'
+              error={!(typeof state.errors?.user_postcode === 'undefined')}
+              errorMessage={state.errors?.user_postcode?.join(', ')}
+            />
+          </label>
+
+          <label className='flex flex-col gap-1 justify-center max-w-xs' htmlFor='user_country'>
+            <p className='text-lg font-bold sr-only'>Country</p>
+            <TextInput
+              name='user_country'
+              placeholder='Country'
+              error={!(typeof state.errors?.user_country === 'undefined')}
+              errorMessage={state.errors?.user_country?.join(', ')}
+            />
+          </label>
+        </div>
 
         <label className='flex flex-col gap-1 justify-center' htmlFor='user_bio'>
           <p className='text-lg font-bold'>Bio (optional):</p>
