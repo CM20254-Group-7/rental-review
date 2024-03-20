@@ -76,7 +76,7 @@ const LandlordRegistrationForm: React.FC = () => {
         </label>
 
         <div className='flex flex-col gap-2'>
-          <h2 className='text-lg font-bold'>Address (optional):</h2>
+          <h2 className='text-lg font-bold'>Address:</h2>
 
           <label className='flex flex-col gap-1 justify-center max-w-xs' htmlFor='user_house'>
             <p className='text-lg font-bold sr-only'>House</p>
