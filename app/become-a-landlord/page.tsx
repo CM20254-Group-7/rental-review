@@ -51,9 +51,7 @@ const LandlordRegistrationPage: NextPage<{ params: {} }> = async () => {
 
   return (
     <div className='w-[70%] p-4'>
-      <LandlordRegistrationForm
-        userId={user.id}
-      />
+      <LandlordRegistrationForm />
     </div>
   );
 };
