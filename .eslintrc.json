@@ -67,7 +67,8 @@
           "playwright-tests/**",
           "**/*.test.ts",
           "**/*.spec.ts",
-          "playwright.config.ts"
+          "**/*.config.ts",
+          "**/*.config.js"
         ]
       }
     ]
