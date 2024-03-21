@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
+import Link from 'next/link';
 
 const useComponentVisible = () => {
   const [isComponentVisible, setIsComponentVisible] = useState(false);
@@ -53,8 +54,7 @@ const Help: React.FC = () => {
             <p className='mb-2'>
               If there is still something you don&apos;t understand, you can always ask for help by
               going to the Q&A page
-              {' '}
-              <a href='./QandA' className='font-bold text-blue-500'> here </a>
+              <Link href='/QandA' className='font-bold text-blue-500'> here</Link>
               .
             </p>
           </div>
