@@ -84,8 +84,9 @@ const landlordProfilePage: NextPage<{ params: { landlordId: string } }> = async 
               <h3 className='text-lg font-semibold text-accent'>Contact:</h3>
               <a
                 href={`mailto:${landlordBio.display_email}`}
-                className='underline text-slate-700/70 hover:text-slate-800 transition-colors duration-300 ease-in-out'
+                className='underline text-blue-500 transition-colors duration-300 ease-in-out hover:text-blue-600'
               >
+
                 {landlordBio.display_email}
               </a>
             </div>
