@@ -13,7 +13,16 @@ const getTags = cache(async () => {
   return (data || []).map(({ tag }) => tag);
 });
 
-const CreateReviewPage: NextPage = async () => {
+const CreateReviewPage: NextPage<{
+  searchParams?: {
+    street?: string
+    city?: string
+    postalCode?: string
+    country?: string
+  }
+}> = async ({
+  searchParams,
+}) => {
   const tags = await getTags();
 
   return (
@@ -23,6 +32,7 @@ const CreateReviewPage: NextPage = async () => {
 
       <CreateReviewForm
         tags={tags}
+        initialPropertyDetails={searchParams}
       />
     </div>
   );

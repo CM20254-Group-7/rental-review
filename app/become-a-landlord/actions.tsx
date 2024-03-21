@@ -18,10 +18,10 @@ const LandlordRegistrationSchema = z
     display_email: z.string().email(),
     user_phoneNb: z.string(),
 
-    user_house: z.string().optional(),
-    user_street: z.string().optional(),
-    user_county: z.string().optional(),
-    user_postcode: z.string().length(7).optional(),
+    user_house: z.string(),
+    user_street: z.string(),
+    user_county: z.string(),
+    user_postcode: z.string().min(5).max(7),
     user_country: z.string(),
 
     user_bio: z.string().optional(),
@@ -148,7 +148,7 @@ export const addToLandlordDB = async (
         county: userCounty,
         postcode: userPostcode,
         country: userCountry,
-      } as any,
+      },
     );
 
   if (privateError) {

@@ -43,7 +43,7 @@ const ReviewResults: React.FC<{ propertyId: string; }> = async ({ propertyId }) 
     <ReviewDetailsLayout
       key={reviewDetails.review_id}
       reviewId={reviewDetails.review_id}
-      reviewerId={reviewDetails.reviewer_id}
+      // reviewerId={reviewDetails.reviewer_id}
       reviewDate={reviewDetails.review_date}
       landlordRating={reviewDetails.landlord_rating}
       propertyRating={reviewDetails.property_rating}

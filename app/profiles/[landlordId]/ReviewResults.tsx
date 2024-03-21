@@ -44,7 +44,7 @@ const ReviewResults: React.FC<{
       reviewId={review.review_id}
       reviewDate={review.review_date}
       reviewMessage={review.review_body}
-      reviewerId={review.reviewer_id}
+      // reviewerId={review.reviewer_id}
       landlordRating={review.landlord_rating}
       propertyRating={review.property_rating}
       reviewTags={review.review_tags}

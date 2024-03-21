@@ -41,7 +41,7 @@ MaybeLink.defaultProps = {
 
 type Review = {
   reviewId: string
-  reviewerId: string
+  // reviewerId: string
   reviewDate: Date
   landlordRating: number
   propertyRating: number
@@ -55,8 +55,7 @@ interface ReviewDetailsLayoutProps extends Review {
 // export seperately to allow pages that already have the data to use the standardised layout
 export const ReviewDetailsLayout: React.FC<ReviewDetailsLayoutProps> = ({
   reviewId,
-  // eslint-disable-next-line no-unused-vars
-  reviewerId,
+  // reviewerId,
   reviewDate,
   landlordRating,
   propertyRating,
@@ -130,7 +129,7 @@ export const ReviewDetails: React.FC<ReviewDetailsProps> = async ({
   return (
     <ReviewDetailsLayout
       reviewId={reviewId}
-      reviewerId={data.review_id}
+      // reviewerId={data.review_id}
       reviewDate={new Date(data.review_date)}
       landlordRating={data.landlord_rating}
       propertyRating={data.property_rating}

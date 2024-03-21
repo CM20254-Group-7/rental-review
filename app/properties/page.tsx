@@ -53,13 +53,22 @@ const PropertiesPage: NextPage<{
             <PropertyResults searchParams={searchParams} />
             <div className='flex flex-col items-center gap-2'>
               <p>Can&apos;t see your property?</p>
-              <Link href='/reviews/create'>
-                <button
-                  type='submit'
-                  className='border border-accent rounded-md px-4 py-2 text-accent mb-5 hover:bg-secondary/10 dark:hover:bg-accent/10 hover:shadow-lg hover:shadow-accent/20'
-                >
-                  Review a New Property
-                </button>
+              <Link
+                href={`/reviews/create${
+                  (searchParams?.street || searchParams?.city || searchParams?.postalCode || searchParams?.country)
+                    ? `?${
+                      [
+                        searchParams?.street ? `street=${searchParams.street}` : [],
+                        searchParams?.city ? `city=${searchParams.city}` : [],
+                        searchParams?.postalCode ? `postalCode=${searchParams.postalCode}` : [],
+                        searchParams?.country ? `country=${searchParams.country}` : [],
+                      ].flat().join('&')
+                    }`
+                    : ''
+                }`}
+                className='border border-accent rounded-md px-4 py-2 text-accent mb-5 hover:bg-secondary/10 dark:hover:bg-accent/10 hover:shadow-lg hover:shadow-accent/20'
+              >
+                Review a New Property
               </Link>
             </div>
           </Suspense>
