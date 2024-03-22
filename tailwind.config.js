@@ -41,7 +41,7 @@ module.exports = {
           content: {
             subtle: '#adadad',
             DEFAULT: '#999999',
-            emphasis: '#7b7b7b',
+            emphasis: '#3d3d3d',
             strong: '#545454',
             inverted: '#ededed',
           },
