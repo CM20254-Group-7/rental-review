@@ -7,17 +7,19 @@ import { cookies } from 'next/headers';
 import { z } from 'zod';
 
 const newReviewSchema = z.object({
-  property_house: z.string().nullish(),
-  property_street: z.string().nullish(),
-  property_county: z.string().nullish(),
-  property_postcode: z.string().nullish(),
-  property_country: z.string().nullish(),
+  property_house: z.string(),
+  property_street: z.string(),
+  property_county: z.string(),
+  property_postcode: z.string(),
+  property_country: z.string(),
 
   review_date: z.coerce.date(),
 
   review_body: z.string().min(1).max(1000),
   property_rating: z.coerce.number().int().min(1).max(5),
   landlord_rating: z.coerce.number().int().min(1).max(5),
+
+  tags: z.array(z.string().min(1).max(50)),
 });
 
 export type State = {
@@ -43,15 +45,18 @@ export const createReview = async (
 ): Promise<State> => {
   // Validate input
   const validatedFields = newReviewSchema.safeParse({
-    property_country: formData.get('country'),
-    property_county: formData.get('county'),
-    property_house: formData.get('house'),
-    property_postcode: formData.get('postcode'),
-    property_street: formData.get('street'),
+    property_house: formData.get('property_house') !== '' ? formData.get('property_house') : undefined,
+    property_street: formData.get('property_street') !== '' ? formData.get('property_street') : undefined,
+    property_county: formData.get('property_county') !== '' ? formData.get('property_county') : undefined,
+    property_postcode: formData.get('property_postcode') !== '' ? formData.get('property_postcode') : undefined,
+    property_country: formData.get('property_country') !== '' ? formData.get('property_country') : undefined,
+
     review_date: formData.get('review_date'),
-    review_body: formData.get('review_body'),
+    review_body: formData.get('review_body') !== '' ? formData.get('review_body') : undefined,
     property_rating: formData.get('property_rating'),
     landlord_rating: formData.get('landlord_rating'),
+
+    tags: formData.getAll('tags'),
   });
 
   if (!validatedFields.success) {
@@ -72,6 +77,8 @@ export const createReview = async (
     review_body,
     property_rating,
     landlord_rating,
+
+    tags,
   } = validatedFields.data;
 
   // create service client
@@ -79,55 +86,6 @@ export const createReview = async (
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.SUPABASE_SERVICE_KEY!,
   );
-
-  if (!property_house || !property_street || !property_postcode) {
-    return {
-      message: 'Property address Must be provided if property id is not. Must include house, street and postcode at minimum.',
-    };
-  }
-
-  // TODO: Handle property creation
-
-  // Check if property with address exists
-  let query = serviceSupabase
-    .from('properties')
-    .select('id')
-    .eq('house', property_house)
-    .eq('street', property_street)
-    .eq('postcode', property_postcode);
-
-  if (property_county) query = query.eq('county', property_county);
-  if (property_country) query = query.eq('country', property_country);
-
-  const { data: existingProperty } = await query.maybeSingle();
-
-  // If it does - Error
-  if (existingProperty) {
-    return {
-      message: 'Property Already Exists',
-    };
-  }
-
-  // If it doesn't - Create Property & set property_id
-  const { data: newProperty, error: newPropertyError } = await serviceSupabase
-    .from('properties')
-    .insert({
-      house: property_house,
-      street: property_street,
-      county: property_county,
-      postcode: property_postcode,
-      country: property_country,
-    })
-    .select('id')
-    .single();
-
-  if (newPropertyError) {
-    return {
-      message: 'Error Creating Property',
-    };
-  }
-
-  const propertyId = newProperty.id; // replace with actual property_id
 
   // get user
   const cookieStore = cookies();
@@ -140,19 +98,40 @@ export const createReview = async (
     };
   }
 
-  const { id: user_id } = user;
-
-  // check that the user has not already reviewed the property
-  const { data: existingReview } = await supabase
-    .from('reviewer_private_profiles')
-    .select('*')
-    .eq('property_id', propertyId)
-    .eq('user_id', user_id)
+  // Check if property with address exists
+  const { data: existingProperty } = await serviceSupabase
+    .from('properties')
+    .select('id')
+    .match({
+      house: property_house,
+      street: property_street,
+      county: property_county,
+      postcode: property_postcode,
+      country: property_country,
+    })
     .maybeSingle();
 
-  if (existingReview) {
+  // If it does - Error
+  if (existingProperty) {
     return {
-      message: 'User has already reviewed this property',
+      message: 'Property Already Exists',
+    };
+  }
+  // If it doesn't - Create Property & set property_id
+  const { data: newProperty, error: newPropertyError } = await serviceSupabase
+    .from('properties')
+    .insert({
+      house: property_house,
+      street: property_street,
+      county: property_county,
+      postcode: property_postcode,
+      country: property_country,
+    })
+    .select('id')
+    .single();
+  if (newPropertyError) {
+    return {
+      message: 'Error Creating Property',
     };
   }
 
@@ -162,13 +141,19 @@ export const createReview = async (
   const { data: reviewerProfile, error: reviewerProfileError } = await serviceSupabase
     .from('reviewer_private_profiles')
     .insert({
-      user_id,
-      property_id: propertyId,
+      user_id: user.id,
+      property_id: newProperty.id,
     })
     .select()
     .single();
 
   if (reviewerProfileError) {
+    // remove the created property
+    await serviceSupabase
+      .from('properties')
+      .delete()
+      .eq('id', newProperty.id);
+
     return {
       message: 'Error Creating Reviewer Profile',
     };
@@ -177,16 +162,65 @@ export const createReview = async (
   const { reviewer_id } = reviewerProfile;
 
   // create reviews
-  await serviceSupabase
+  const { data } = await serviceSupabase
     .from('reviews')
     .insert({
       landlord_rating,
       review_date: review_date.toISOString(),
-      property_id: propertyId,
+      property_id: newProperty.id,
       reviewer_id,
       review_body,
       property_rating,
-    });
+    })
+    .select('review_id')
+    .single();
+
+  if (!data) {
+    // remove the created reviewer profile and property
+    await serviceSupabase
+      .from('reviewer_private_profiles')
+      .delete()
+      .eq('reviewer_id', reviewer_id);
+
+    await serviceSupabase
+      .from('properties')
+      .delete()
+      .eq('id', newProperty.id);
+
+    return {
+      message: 'Error Creating Review',
+    };
+  }
+
+  // create tags
+  const { error: tagError } = await serviceSupabase
+    .from('review_tags')
+    .insert(tags.map((tag) => ({
+      review_id: data.review_id,
+      tag,
+    })));
+
+  if (tagError) {
+    // remove the created reviewer profile, property and review
+    await serviceSupabase
+      .from('reviews')
+      .delete()
+      .eq('review_id', data.review_id);
+
+    await serviceSupabase
+      .from('reviewer_private_profiles')
+      .delete()
+      .eq('reviewer_id', reviewer_id);
+
+    await serviceSupabase
+      .from('properties')
+      .delete()
+      .eq('id', newProperty.id);
+
+    return {
+      message: 'Error Creating Tags',
+    };
+  }
 
   return {
     message: 'Review Created',

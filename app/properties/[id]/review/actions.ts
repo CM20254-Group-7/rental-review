@@ -28,10 +28,9 @@ export type State = {
     property_rating?: string[],
     landlord_rating?: string[]
   };
-  message?: string | null;
+  message?: string;
 };
 
-// given either the id of an existing property or the address of a new one, creates a review written by the currently logged in user
 export const createReview = async (
   propertyId: string,
   prevState: State,

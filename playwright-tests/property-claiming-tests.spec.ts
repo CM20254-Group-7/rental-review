@@ -83,7 +83,9 @@ test.beforeEach('Create Unique Property for test', async ({ page }, testInfo) =>
   const house = `${testInfo.workerIndex}`;
   const street = 'Property Claiming Road';
   const county = `${testInfo.project.name} City`;
-  const address = `${house}, ${street}, ${county}`;
+  const postcode = 'PC1 1PC';
+  const country = 'United Kingdom';
+  const address = `${house}, ${street}, ${county}, ${postcode}, ${country}`;
 
   const res = await page.request.post(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/properties?select=*`, {
     headers: {
@@ -93,9 +95,11 @@ test.beforeEach('Create Unique Property for test', async ({ page }, testInfo) =>
       Prefer: 'return=representation',
     },
     data: {
-      house: `${testInfo.workerIndex}`,
-      street: 'Property Claiming Road',
-      county: `${testInfo.project.name} City`,
+      house,
+      street,
+      county,
+      postcode,
+      country,
     },
   });
 
