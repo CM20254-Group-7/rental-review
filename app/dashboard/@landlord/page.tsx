@@ -3,6 +3,7 @@ import { NextPage } from 'next';
 import { cookies } from 'next/headers';
 import createClient from '@/utils/supabase/server';
 import { Button, Divider } from '@tremor/react';
+import Link from 'next/link';
 import StarRatingLayout from '@/components/StarRating';
 import RatingGraph from './RatingGraph';
 
@@ -136,7 +137,7 @@ const getAverageRatingOverTime = async (landlordId: string) => {
     };
   }, { cumulativeRating: 0, count: 0 });
 
-  // console.log(averageRatings);
+  if (averageRatings.length < 2) return null;
 
   return averageRatings;
 };
@@ -188,7 +189,7 @@ const LandlordDashboard: NextPage = async () => {
   return (
     <div className='flex flex-col'>
       <div className='flex flex-col gap-1 items-center'>
-        <Button>View Your Public Profile</Button>
+        <Link className='contents' href={`/pfoiles/${user.id}`}><Button>View Your Public Profile</Button></Link>
         <Divider />
         <h3 className='font-bold text-2xl text-accent'>Your Rating</h3>
         <Suspense fallback={<p>Loading...</p>}>
