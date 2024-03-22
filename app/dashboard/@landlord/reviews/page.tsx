@@ -3,7 +3,9 @@ import { NextPage } from 'next';
 import { cookies } from 'next/headers';
 import { FC, cache } from 'react';
 import StarRatingLayout from '@/components/StarRating';
+import { BarList, Divider } from '@tremor/react';
 import { BackButton, ForwardButton } from './Pagination';
+import RatingList from './RatingList';
 
 const pageSize = 5;
 
@@ -101,6 +103,29 @@ const ReviewResults: FC<{
   );
 };
 
+const datahero = [
+  {
+    stars: 5,
+    count: 7,
+  },
+  {
+    stars: 4,
+    count: 8,
+  },
+  {
+    stars: 3,
+    count: 8,
+  },
+  {
+    stars: 2,
+    count: 5,
+  },
+  {
+    stars: 1,
+    count: 3,
+  },
+];
+
 const LandlordReviewsDashboardPage: NextPage<{
   searchParams?: {
     landlordReviewsPage: string;
@@ -110,9 +135,40 @@ const LandlordReviewsDashboardPage: NextPage<{
 
   const totalPages = await getTotalPages();
 
+  const cookieStore = cookies();
+  const supabase = createClient(cookieStore);
+
+  // unauthenticated users should be handled by middleware
+  // return null to assert types
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return null;
+
+  const { data: reviewData } = await supabase
+    .rpc('reviews_for_landlord', { id: user.id })
+    .select('landlord_rating');
+
+  if (!reviewData) return <p>No reviews yet</p>;
+
+  const ratingCounts = reviewData.reduce((acc: number[], review) => {
+    const rating = review.landlord_rating;
+    if (!acc[rating]) acc[rating] = 0;
+    acc[rating] += 1;
+    return acc;
+  }, []);
+
+  const ratingData = [1, 2, 3, 4, 5].map((stars) => ({
+    stars,
+    count: ratingCounts[stars] || 0,
+  })).sort((a, b) => b.stars - a.stars);
+
   return (
     <div className='flex flex-col gap-4'>
       <div className='flex flex-col gap-2'>
+        <div>
+          <h2 className='text-lg font-semibold'>Your Ratings</h2>
+          <RatingList data={ratingData} />
+        </div>
+        <Divider />
         <h2 className='text-lg font-semibold'>Your Recent Reviews</h2>
         <div className='w-full overflow-x-scroll pb-2 shadow-inner'>
           <div className='flex flex-row w-fit px-4 py-2 gap-4'>
