@@ -145,7 +145,7 @@ const getAverageRatingOverTime = async (landlordId: string) => {
 const AverageRatingGraph: React.FC<{landlordId: string}> = async ({ landlordId }) => {
   const ratings = await getAverageRatingOverTime(landlordId);
 
-  if (!ratings) return <p>No ratings available</p>;
+  if (!ratings) return null;
 
   return (
     <RatingGraph ratings={ratings} />
@@ -189,7 +189,7 @@ const LandlordDashboard: NextPage = async () => {
   return (
     <div className='flex flex-col'>
       <div className='flex flex-col gap-1 items-center'>
-        <Link className='contents' href={`/pfoiles/${user.id}`}><Button>View Your Public Profile</Button></Link>
+        <Link className='contents' href={`/profiles/${user.id}`}><Button>View Your Public Profile</Button></Link>
         <Divider />
         <h3 className='font-bold text-2xl text-accent'>Your Rating</h3>
         <Suspense fallback={<p>Loading...</p>}>
