@@ -3,7 +3,7 @@ import { NextPage } from 'next';
 import { cookies } from 'next/headers';
 import { FC, cache } from 'react';
 import StarRatingLayout from '@/components/StarRating';
-import { BarList, Divider } from '@tremor/react';
+import { Divider } from '@tremor/react';
 import { BackButton, ForwardButton } from './Pagination';
 import RatingList from './RatingList';
 
@@ -102,29 +102,6 @@ const ReviewResults: FC<{
     </div>
   );
 };
-
-const datahero = [
-  {
-    stars: 5,
-    count: 7,
-  },
-  {
-    stars: 4,
-    count: 8,
-  },
-  {
-    stars: 3,
-    count: 8,
-  },
-  {
-    stars: 2,
-    count: 5,
-  },
-  {
-    stars: 1,
-    count: 3,
-  },
-];
 
 const LandlordReviewsDashboardPage: NextPage<{
   searchParams?: {
