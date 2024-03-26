@@ -23,8 +23,68 @@ const loginDetailsSchema = z.object({
   confirmPassword: z.string(),
 });
 
+// Possible Errors:
+//
+// Missing email or password (gotrue-js)
+//  'You must provide either an email or phone number and a password'
+//  https://github.com/supabase/gotrue-js/blob/9a0298093e98a65969e43e476f24235ff12022e4/src/GoTrueClient.ts#L523
+//
+// Email Logins are disabled
+//  'Email logins are disabled'
+//  https://github.com/supabase/gotrue/blob/73240a0b096977703e3c7d24a224b5641ce47c81/internal/api/token.go#L123
+//
+// Failed to access database
+//  'Database error querying schema'
+//  https://github.com/supabase/gotrue/blob/73240a0b096977703e3c7d24a224b5641ce47c81/internal/api/token.go#L141C31-L141C61
+//
+// Email not confirmed
+//  'Email not confirmed'
+//  https://github.com/supabase/gotrue/blob/73240a0b096977703e3c7d24a224b5641ce47c81/internal/api/token.go#L188-L191
+//
+// JWT could not be set
+//  'Failed to set JWT cookie'
+//  https://github.com/supabase/gotrue/blob/73240a0b096977703e3c7d24a224b5641ce47c81/internal/api/token.go#L208
+//
+// Generic error (shown when the system does want the user to know exactly what failed for security reasons)
+//  'Invalid login credentials'
+//  https://github.com/supabase/gotrue/blob/73240a0b096977703e3c7d24a224b5641ce47c81/internal/api/token.go#L78
+//  can mean:
+//    - Proived email was the empty string - https://github.com/supabase/gotrue/blob/73240a0b096977703e3c7d24a224b5641ce47c81/internal/api/token.go#L134
+//    - no user matching the provided email was found - https://github.com/supabase/gotrue/blob/73240a0b096977703e3c7d24a224b5641ce47c81/internal/api/token.go#L139
+//    - user is banned - https://github.com/supabase/gotrue/blob/73240a0b096977703e3c7d24a224b5641ce47c81/internal/api/token.go#L145
+//    - verification failed - https://github.com/supabase/gotrue/blob/73240a0b096977703e3c7d24a224b5641ce47c81/internal/api/token.go#L181
+//    - incorrect password - https://github.com/supabase/gotrue/blob/73240a0b096977703e3c7d24a224b5641ce47c81/internal/api/token.go#L185
+
 // Sign in form does not contain a confirm field
 const signInSchema = loginDetailsSchema.omit({ confirmPassword: true });
+
+// type signInResponseMessage =
+//   'You must provide either an email or phone number and a password'
+//   | 'Email logins are disabled'
+//   | 'Database error querying schema'
+//   | 'Email not confirmed'
+//   | 'Failed to set JWT cookie'
+//   | 'Invalid login credentials';
+
+const errorMessages: Record<string, string> = {
+  'You must provide either an email or phone number and a password':
+    'You must provide either an email or phone number and a password',
+
+  'Email logins are disabled':
+    'Sign in currently disabled. Please try again later.',
+
+  'Database error querying schema':
+    'Unable to connect to server. Please try again later.',
+
+  'Email not confirmed':
+    'Sign in failed, Confirm your email before logging in',
+
+  'Failed to set JWT cookie':
+    'Sign in failed, unable to set cookie.',
+
+  'Invalid login credentials':
+    'Sign in failed, please check your credentials and try again.',
+};
 
 export const signIn = async (
   redirectTo: string | undefined,
@@ -63,7 +123,7 @@ export const signIn = async (
       errors: {
         auth: [error.message],
       },
-      message: 'Sign in failed, please check your credentials and try again.',
+      message: Object.keys(errorMessages).includes(error.message) ? errorMessages[error.message] : 'Sign in failed, please check your credentials and try again.',
     };
   }
 
