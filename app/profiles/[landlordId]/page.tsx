@@ -103,9 +103,9 @@ const landlordProfilePage: NextPage<{ params: { landlordId: string } }> = async 
             <h2 className='text-2xl font-semibold mb-1 w-fit text-accent'>Properties</h2>
             <span className='border border-b w-full border-accent' />
           </div>
-          <div className='relative w-fit max-h-[25rem] pb-2 px-4 gap-4 justify-center items-center overflow-y-auto'>
-            <div className='w-fit flex flex-col gap-4'>
-              <h3 className='sticky top-0 whitespace-nowrap w-full shadow-md shadow-bg-secondary-40 bg-secondary/30 backdrop-blur-sm text-accent text-lg font-semibold px-2 py-1'>Current</h3>
+          <div className='relative max-h-[25rem] pb-2 px-4 gap-4 justify-center items-center overflow-y-auto'>
+            <div className='w-full flex flex-col gap-4'>
+              <h3 className='sticky top-0 whitespace-nowrap shadow-md shadow-bg-secondary-40 bg-secondary/30 backdrop-blur-sm text-accent text-lg font-semibold px-2 py-1'>Current</h3>
               <Suspense fallback={<PropertyResultsLoading />}>
                 <CurrentPropertyResults landlordId={landlordId} />
               </Suspense>
