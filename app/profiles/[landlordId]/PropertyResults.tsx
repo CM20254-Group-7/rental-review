@@ -45,12 +45,12 @@ const PropertyResult: React.FC<{
   key: string;
 }> = ({ address, id, key }) => (
   <Link
-    className='flex flex-col w-fit min-w-[25rem] items-center rounded-xl bg-secondary/10 hover:bg-secondary/20 p-6 pb-8 gap-4 border shadow-md shadow-secondary/40 hover:shadow-lg hover:shadow-secondary/40'
+    className='flex flex-col min-w-[25rem] rounded-xl bg-secondary/10 hover:bg-secondary/20 p-6 pb-8 gap-4 border shadow-md shadow-secondary/40 hover:shadow-lg hover:shadow-secondary/40'
     href={`/properties/${id}`}
     key={key}
   >
     {/* Card Header */}
-    <div className='flex flex-col w-fit'>
+    <div className='flex flex-col w-fit '>
       <h2 className='text-2xl font-semibold mb-1 w-fit'>{address}</h2>
     </div>
   </Link>
