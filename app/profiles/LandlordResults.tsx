@@ -61,7 +61,7 @@ const LandlordResults: React.FC = async () => {
                     <h2 className='text-2xl font-semibold mb-1 w-fit text-accent'>{landlord.display_name}</h2>
                   </div>
                   {/* Card Body */}
-                  <div className='flex flex-col w-full gap-2'>
+                  <div className='flex flex-col w-full gap-2 items-center'>
                     <StarRatingLayout rating={landlord.average_rating} />
                   </div>
                 </div>
