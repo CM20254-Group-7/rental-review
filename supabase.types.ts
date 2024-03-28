@@ -6,7 +6,7 @@ export type Json =
   | { [key: string]: Json | undefined }
   | Json[]
 
-export interface Database {
+export type Database = {
   graphql_public: {
     Tables: {
       [_ in never]: never
@@ -71,7 +71,15 @@ export interface Database {
           street?: string | null
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "public_landlord_private_profiles_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "user_profiles"
+            referencedColumns: ["user_id"]
+          },
+        ]
       }
       landlord_public_profiles: {
         Row: {
@@ -111,7 +119,7 @@ export interface Database {
             isOneToOne: true
             referencedRelation: "landlord_private_profiles"
             referencedColumns: ["user_id"]
-          }
+          },
         ]
       }
       properties: {
@@ -181,6 +189,13 @@ export interface Database {
             referencedColumns: ["user_id"]
           },
           {
+            foreignKeyName: "property_ownership_landlord_id_fkey"
+            columns: ["landlord_id"]
+            isOneToOne: false
+            referencedRelation: "landlord_public_profiles_full"
+            referencedColumns: ["user_id"]
+          },
+          {
             foreignKeyName: "property_ownership_property_id_fkey"
             columns: ["property_id"]
             isOneToOne: false
@@ -193,7 +208,7 @@ export interface Database {
             isOneToOne: false
             referencedRelation: "properties"
             referencedColumns: ["id"]
-          }
+          },
         ]
       }
       review_photos: {
@@ -223,7 +238,7 @@ export interface Database {
             isOneToOne: false
             referencedRelation: "reviews"
             referencedColumns: ["review_id"]
-          }
+          },
         ]
       }
       review_tags: {
@@ -253,7 +268,7 @@ export interface Database {
             isOneToOne: false
             referencedRelation: "tags"
             referencedColumns: ["tag"]
-          }
+          },
         ]
       }
       reviewer_private_profiles: {
@@ -293,7 +308,7 @@ export interface Database {
             isOneToOne: false
             referencedRelation: "user_profiles"
             referencedColumns: ["user_id"]
-          }
+          },
         ]
       }
       reviews: {
@@ -348,7 +363,7 @@ export interface Database {
             isOneToOne: false
             referencedRelation: "reviewer_private_profiles"
             referencedColumns: ["reviewer_id"]
-          }
+          },
         ]
       }
       tags: {
@@ -401,7 +416,7 @@ export interface Database {
             isOneToOne: true
             referencedRelation: "users"
             referencedColumns: ["id"]
-          }
+          },
         ]
       }
     }
@@ -427,6 +442,44 @@ export interface Database {
           tags: string[] | null
         }
         Relationships: []
+      }
+      landlord_profile_pictures: {
+        Row: {
+          profile_picture: string | null
+          user_id: string | null
+        }
+        Insert: {
+          profile_picture?: string | null
+          user_id?: never
+        }
+        Update: {
+          profile_picture?: string | null
+          user_id?: never
+        }
+        Relationships: []
+      }
+      landlord_public_profiles_full: {
+        Row: {
+          average_rating: number | null
+          bio: string | null
+          display_email: string | null
+          display_name: string | null
+          profile_image_id: string | null
+          profile_picture: string | null
+          type: string | null
+          user_id: string | null
+          verified: boolean | null
+          website: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "landlord_public_profiles_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "landlord_private_profiles"
+            referencedColumns: ["user_id"]
+          },
+        ]
       }
     }
     Functions: {
@@ -672,7 +725,7 @@ export interface Database {
             isOneToOne: false
             referencedRelation: "buckets"
             referencedColumns: ["id"]
-          }
+          },
         ]
       }
     }
@@ -705,7 +758,7 @@ export interface Database {
         Args: {
           name: string
         }
-        Returns: unknown
+        Returns: string[]
       }
       get_size_by_bucket: {
         Args: Record<PropertyKey, never>
@@ -744,14 +797,16 @@ export interface Database {
   }
 }
 
+type PublicSchema = Database[Extract<keyof Database, "public">]
+
 export type Tables<
   PublicTableNameOrOptions extends
-    | keyof (Database["public"]["Tables"] & Database["public"]["Views"])
+    | keyof (PublicSchema["Tables"] & PublicSchema["Views"])
     | { schema: keyof Database },
   TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
     ? keyof (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
         Database[PublicTableNameOrOptions["schema"]]["Views"])
-    : never = never
+    : never = never,
 > = PublicTableNameOrOptions extends { schema: keyof Database }
   ? (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
       Database[PublicTableNameOrOptions["schema"]]["Views"])[TableName] extends {
@@ -759,68 +814,68 @@ export type Tables<
     }
     ? R
     : never
-  : PublicTableNameOrOptions extends keyof (Database["public"]["Tables"] &
-      Database["public"]["Views"])
-  ? (Database["public"]["Tables"] &
-      Database["public"]["Views"])[PublicTableNameOrOptions] extends {
-      Row: infer R
-    }
-    ? R
+  : PublicTableNameOrOptions extends keyof (PublicSchema["Tables"] &
+        PublicSchema["Views"])
+    ? (PublicSchema["Tables"] &
+        PublicSchema["Views"])[PublicTableNameOrOptions] extends {
+        Row: infer R
+      }
+      ? R
+      : never
     : never
-  : never
 
 export type TablesInsert<
   PublicTableNameOrOptions extends
-    | keyof Database["public"]["Tables"]
+    | keyof PublicSchema["Tables"]
     | { schema: keyof Database },
   TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
     ? keyof Database[PublicTableNameOrOptions["schema"]]["Tables"]
-    : never = never
+    : never = never,
 > = PublicTableNameOrOptions extends { schema: keyof Database }
   ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
       Insert: infer I
     }
     ? I
     : never
-  : PublicTableNameOrOptions extends keyof Database["public"]["Tables"]
-  ? Database["public"]["Tables"][PublicTableNameOrOptions] extends {
-      Insert: infer I
-    }
-    ? I
+  : PublicTableNameOrOptions extends keyof PublicSchema["Tables"]
+    ? PublicSchema["Tables"][PublicTableNameOrOptions] extends {
+        Insert: infer I
+      }
+      ? I
+      : never
     : never
-  : never
 
 export type TablesUpdate<
   PublicTableNameOrOptions extends
-    | keyof Database["public"]["Tables"]
+    | keyof PublicSchema["Tables"]
     | { schema: keyof Database },
   TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
     ? keyof Database[PublicTableNameOrOptions["schema"]]["Tables"]
-    : never = never
+    : never = never,
 > = PublicTableNameOrOptions extends { schema: keyof Database }
   ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
       Update: infer U
     }
     ? U
     : never
-  : PublicTableNameOrOptions extends keyof Database["public"]["Tables"]
-  ? Database["public"]["Tables"][PublicTableNameOrOptions] extends {
-      Update: infer U
-    }
-    ? U
+  : PublicTableNameOrOptions extends keyof PublicSchema["Tables"]
+    ? PublicSchema["Tables"][PublicTableNameOrOptions] extends {
+        Update: infer U
+      }
+      ? U
+      : never
     : never
-  : never
 
 export type Enums<
   PublicEnumNameOrOptions extends
-    | keyof Database["public"]["Enums"]
+    | keyof PublicSchema["Enums"]
     | { schema: keyof Database },
   EnumName extends PublicEnumNameOrOptions extends { schema: keyof Database }
     ? keyof Database[PublicEnumNameOrOptions["schema"]]["Enums"]
-    : never = never
+    : never = never,
 > = PublicEnumNameOrOptions extends { schema: keyof Database }
   ? Database[PublicEnumNameOrOptions["schema"]]["Enums"][EnumName]
-  : PublicEnumNameOrOptions extends keyof Database["public"]["Enums"]
-  ? Database["public"]["Enums"][PublicEnumNameOrOptions]
-  : never
+  : PublicEnumNameOrOptions extends keyof PublicSchema["Enums"]
+    ? PublicSchema["Enums"][PublicEnumNameOrOptions]
+    : never
 
