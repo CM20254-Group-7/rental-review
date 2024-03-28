@@ -4,7 +4,7 @@
     ".next/*",
     "tests-examples/*",
     "supabase.types.ts",
-    ""
+    "next.config.js"
   ],
   "extends": [
     "airbnb",

@@ -3,9 +3,10 @@ import './globals.css';
 import NavBar from '@/components/Header/NavBar';
 import Footer from '@/components/Footer/Footer';
 import { NextPage } from 'next';
-import React from 'react';
+import React, { Suspense } from 'react';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
+import Toolbar from '@/components/vercel-toolbar';
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -32,6 +33,9 @@ const Layout: NextPage<{
 
       <SpeedInsights />
       <Analytics />
+      <Suspense>
+        <Toolbar />
+      </Suspense>
     </body>
   </html>
 );
