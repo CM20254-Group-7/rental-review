@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { type ApiData } from '@vercel/flags';
  
 export async function GET() {
-  const apiData = {
+  const apiData: ApiData = {
     definitions: {
       newFeature: {
         description: 'Controls whether the new feature is visible',
