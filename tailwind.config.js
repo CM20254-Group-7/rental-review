@@ -5,6 +5,7 @@ module.exports = {
     './app/**/*.{js,ts,jsx,tsx,mdx}',
     './components/**/*.{js,ts,jsx,tsx,mdx}',
     './node_modules/@tremor/**/*.{js,ts,jsx,tsx}',
+    './node_modules/@nextui-org/theme/dist/components/(avatar).js',
   ],
   theme: {
     extend: {
@@ -136,5 +137,6 @@ module.exports = {
   plugins: [
     require('@headlessui/tailwindcss'),
     require('@tailwindcss/forms'),
+    require('@nextui-org/theme'),
   ],
 };

@@ -14,14 +14,21 @@ const getLandlordBio = cache(async (landlordId: string) => {
 
   // check if a landlord with the provided id exists and get their info
   const { data, error } = await supabase
-    .rpc('landlord_public_profiles_with_ratings')
+    .from('landlord_public_profiles_full')
+    .select('user_id, display_name, display_email, bio, average_rating, profile_picture')
     .eq('user_id', landlordId)
-    .select('user_id, display_name, display_email, bio, average_rating')
     .single();
 
   if (error || !data) return null;
 
-  return { ...data };
+  return {
+    user_id: data.user_id!,
+    display_name: data.display_name!,
+    display_email: data.display_email!,
+    bio: data.bio!,
+    average_rating: data.average_rating!,
+    profile_picture: data.profile_picture,
+  };
 });
 
 const landlordProfilePage: NextPage<{ params: { landlordId: string } }> = async ({ params: { landlordId } }) => {

@@ -1,13 +1,14 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import Image from 'next/image';
 import StarRatingLayout from '@/components/StarRating';
 import createClient from '@/utils/supabase/client';
 import { User } from '@supabase/supabase-js';
 import { useParams } from 'next/navigation';
 import { Button, TextInput, Textarea } from '@tremor/react';
 import { useFormState, useFormStatus } from 'react-dom';
+import Avatar from '@/components/Avatar';
+import { UserCircleIcon } from '@heroicons/react/24/solid';
 import { saveProfile } from './actions';
 
 const MaybeForm: React.FC<{
@@ -47,6 +48,7 @@ const LandlordProfile: React.FC<{
     average_rating: number;
     display_email: string;
     bio: string;
+    profile_picture: string | null;
   }
 }> = ({ landlordBio: initialLandlordBio }) => {
   const params = useParams();
@@ -118,18 +120,34 @@ const LandlordProfile: React.FC<{
   return (
     <div className='relative flex flex-row w-full justify-between gap-2 bg-secondary/30 shadow-lg shadow-secondary/40'>
       {/* Images - Currently not implemented so shows example image with disclaimer */}
-      <div className='flex items-center justify-center p-4'>
-        <div className='relative h-full aspect-square rounded-full overflow-clip'>
-          <Image
-            className='absolute w-full max-w-md rounded-lg'
-            src='/landlord.jpeg'
-            width={3000}
-            height={3000}
-            alt='Image of a person'
+      <div className='flex items-center justify-center p-4 flex-1'>
+        <div className='flex flex-row justify-center relative w-full aspect-square'>
+          <Avatar
+            src={landlordBio.profile_picture ? (
+              supabase.storage
+                .from('landlord_profile_pictures')
+                .getPublicUrl(landlordBio.profile_picture)
+                .data.publicUrl
+            ) : undefined}
+            showFallback
+            fallback={(
+              <div
+                className='relative w-full h-full aspect-square'
+              >
+                <UserCircleIcon className='text-accent blur-sm w-full h-full opacity-60' />
+                <div
+                  className='absolute top-0 left-0 w-full h-full flex items-center justify-center text-foreground text-lg font-semibold'
+                >
+                  No Profile Picture
+                </div>
+              </div>
+            )}
+            // name={landlordBio.display_name}
+            className='w-full h-full aspect-square'
           />
-          <div className='w-full h-full bg-background/40 backdrop-blur flex flex-col place-items-center justify-center'>
+          {/* <div className='w-full h-full bg-background/40 backdrop-blur flex flex-col place-items-center justify-center'>
             <p className='p-10 text-lg font-semibold text-foreground'>Landlord Profile Pictures Coming Soon</p>
-          </div>
+          </div> */}
         </div>
       </div>
 
