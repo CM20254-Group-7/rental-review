@@ -1,4 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {};
 
-module.exports = nextConfig;
+const withVercelToolbar = require('@vercel/toolbar/plugins/next')();
+
+module.exports = withVercelToolbar(nextConfig);
