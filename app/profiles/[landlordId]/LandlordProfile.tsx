@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import StarRatingLayout from '@/components/StarRating';
 import createClient from '@/utils/supabase/client';
 import { User } from '@supabase/supabase-js';
@@ -9,7 +9,7 @@ import { Button, TextInput, Textarea } from '@/components/ClientTremor';
 import { useFormState, useFormStatus } from 'react-dom';
 import Avatar from '@/components/Avatar';
 import { UserCircleIcon } from '@heroicons/react/24/solid';
-import { saveProfile } from './actions';
+import { saveProfile, uploadProfilePicture } from './actions';
 
 const MaybeForm: React.FC<{
   editMode: boolean,
@@ -117,18 +117,19 @@ const LandlordProfile: React.FC<{
     }
   }, [editMode]);
 
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
   return (
     <div className='relative flex flex-row w-full justify-between gap-2 bg-secondary/30 shadow-lg shadow-secondary/40'>
       {/* Images - Currently not implemented so shows example image with disclaimer */}
       <div className='flex items-center justify-center p-4 flex-1'>
         <div className='flex flex-row justify-center relative w-full aspect-square'>
           <Avatar
-            src={landlordBio.profile_picture ? (
-              supabase.storage
+            src={(landlordBio.profile_picture
+              && supabase.storage
                 .from('landlord_profile_pictures')
                 .getPublicUrl(landlordBio.profile_picture)
-                .data.publicUrl
-            ) : undefined}
+                .data.publicUrl) || undefined}
             showFallback
             fallback={(
               <div
@@ -145,9 +146,29 @@ const LandlordProfile: React.FC<{
             // name={landlordBio.display_name}
             className='w-full h-full aspect-square'
           />
-          {/* <div className='w-full h-full bg-background/40 backdrop-blur flex flex-col place-items-center justify-center'>
-            <p className='p-10 text-lg font-semibold text-foreground'>Landlord Profile Pictures Coming Soon</p>
-          </div> */}
+          {isUserLandlord && (
+            <form
+              className='absolute -bottom-2 left-0 w-full flex justify-center'
+              action={uploadProfilePicture}
+            >
+              <Button
+                type='button'
+                variant='light'
+                className='group'
+                onClick={() => { fileInputRef.current?.click(); }}
+              >
+                <label className='text-accent hover:text-accent/80'>Change Picture</label>
+              </Button>
+              <input
+                name='newProfileFile'
+                hidden
+                ref={fileInputRef}
+                type='file'
+                accept='image/*'
+                onChange={(e) => { (e.target.form as HTMLFormElement).requestSubmit(); }}
+              />
+            </form>
+          )}
         </div>
       </div>
 
