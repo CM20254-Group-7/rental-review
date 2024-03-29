@@ -3,7 +3,7 @@
 import { FC, useState } from 'react';
 import {
   DatePicker, DatePickerValue, MultiSelect, MultiSelectItem, NumberInput, Textarea,
-} from '@tremor/react';
+} from '@/components/ClientTremor';
 
 const CreateReviewForm: FC<{
   tags: string[],

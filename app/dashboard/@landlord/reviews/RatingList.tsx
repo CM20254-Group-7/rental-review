@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { BarList } from '@tremor/react';
+import { BarList } from '@/components/ClientTremor';
 import StarRatingLayout from '@/components/StarRating';
 
 const ratingData = (data: { stars: number; count: number; }[]) => data.map(({ stars, count }) => ({

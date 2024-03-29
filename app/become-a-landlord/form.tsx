@@ -2,7 +2,7 @@
 
 import { useFormState } from 'react-dom';
 import React from 'react';
-import { TextInput, Textarea } from '@tremor/react';
+import { TextInput, Textarea } from '@/components/ClientTremor';
 import { State, addToLandlordDB } from './actions';
 
 // Only handles general errors

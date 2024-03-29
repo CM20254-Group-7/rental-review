@@ -5,7 +5,7 @@ import StarRatingLayout from '@/components/StarRating';
 import createClient from '@/utils/supabase/client';
 import { User } from '@supabase/supabase-js';
 import { useParams } from 'next/navigation';
-import { Button, TextInput, Textarea } from '@tremor/react';
+import { Button, TextInput, Textarea } from '@/components/ClientTremor';
 import { useFormState, useFormStatus } from 'react-dom';
 import Avatar from '@/components/Avatar';
 import { UserCircleIcon } from '@heroicons/react/24/solid';
