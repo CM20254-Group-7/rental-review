@@ -1,15 +1,16 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import StarRatingLayout from '@/components/StarRating';
 import createClient from '@/utils/supabase/client';
 import { User } from '@supabase/supabase-js';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { Button, TextInput, Textarea } from '@/components/ClientTremor';
 import { useFormState, useFormStatus } from 'react-dom';
 import Avatar from '@/components/Avatar';
 import { UserCircleIcon } from '@heroicons/react/24/solid';
-import { saveProfile, uploadProfilePicture } from './actions';
+import { ProfilePictureState, saveProfile, uploadProfilePicture } from './actions';
+import { ButtonProps } from '@tremor/react';
 
 const MaybeForm: React.FC<{
   editMode: boolean,
@@ -39,6 +40,18 @@ const SubmitButton: React.FC<{ children: React.ReactNode }> = ({ children }) => 
     >
       {children}
     </Button>
+  );
+};
+
+const ChangeImageButton: React.FC<ButtonProps> = (props) => {
+  const { pending } = useFormStatus();
+
+  return (
+    <Button
+      // eslint-disable-next-line react/jsx-props-no-spreading
+      {...props}
+      disabled={pending}
+    />
   );
 };
 
@@ -83,20 +96,20 @@ const LandlordProfile: React.FC<{
     }
   }, [isUserLandlord]);
 
-  const [state, dispatch] = useFormState(saveProfile.bind(null, landlordId), {});
-  const [message, setMessage] = useState(state.message);
+  const [profileState, profileDispatch] = useFormState(saveProfile.bind(null, landlordId), {});
+  const [message, setMessage] = useState(profileState.message);
 
   useEffect(() => {
-    if (state.newLandlordBio) {
+    if (profileState.newLandlordBio) {
       setLandlordBio((prev) => ({
         ...prev,
-        display_email: state.newLandlordBio!.email,
-        bio: state.newLandlordBio!.bio,
+        display_email: profileState.newLandlordBio!.email,
+        bio: profileState.newLandlordBio!.bio,
       }));
       setEditMode(false);
     }
-    setMessage(state.message);
-  }, [state]);
+    setMessage(profileState.message);
+  }, [profileState]);
 
   // 5 seconds after success message, clear the message
   useEffect(() => {
@@ -119,17 +132,31 @@ const LandlordProfile: React.FC<{
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  const urlForPath = useCallback((path: string) => supabase.storage
+    .from('landlord_profile_pictures')
+    .getPublicUrl(path)
+    .data.publicUrl, [supabase.storage]);
+
+  const [avatarUrl, setAvatarUrl] = useState<string | undefined>(
+    landlordBio.profile_picture
+      ? urlForPath(landlordBio.profile_picture)
+      : undefined,
+  );
+
+  const initialUrlState: ProfilePictureState | undefined = undefined;
+  const [urlState, urlDispatch] = useFormState(uploadProfilePicture, initialUrlState);
+
+  useEffect(() => {
+    if (urlState?.newUrl) setAvatarUrl(urlForPath(urlState.newUrl));
+  }, [urlState, urlForPath]);
+
   return (
     <div className='relative flex flex-row w-full justify-between gap-2 bg-secondary/30 shadow-lg shadow-secondary/40'>
       {/* Images - Currently not implemented so shows example image with disclaimer */}
       <div className='flex items-center justify-center p-4 flex-1'>
         <div className='flex flex-row justify-center relative w-full aspect-square'>
           <Avatar
-            src={(landlordBio.profile_picture
-              && supabase.storage
-                .from('landlord_profile_pictures')
-                .getPublicUrl(landlordBio.profile_picture)
-                .data.publicUrl) || undefined}
+            src={avatarUrl}
             showFallback
             fallback={(
               <div
@@ -149,23 +176,23 @@ const LandlordProfile: React.FC<{
           {isUserLandlord && (
             <form
               className='absolute -bottom-2 left-0 w-full flex justify-center'
-              action={uploadProfilePicture}
+              action={urlDispatch}
             >
-              <Button
+              <ChangeImageButton
                 type='button'
                 variant='light'
                 className='group'
                 onClick={() => { fileInputRef.current?.click(); }}
               >
                 <label className='text-accent hover:text-accent/80'>Change Picture</label>
-              </Button>
+              </ChangeImageButton>
               <input
                 name='newProfileFile'
                 hidden
                 ref={fileInputRef}
                 type='file'
                 accept='image/*'
-                onChange={(e) => { (e.target.form as HTMLFormElement).requestSubmit(); }}
+                onChange={(e) => { if (e.target.files && e.target.files.length >= 0) (e.target.form as HTMLFormElement).requestSubmit(); }}
               />
             </form>
           )}
@@ -190,7 +217,7 @@ const LandlordProfile: React.FC<{
           <span className='border border-b w-full border-accent' />
         </div>
         <StarRatingLayout rating={landlordBio.average_rating} />
-        <MaybeForm editMode={editMode} action={dispatch}>
+        <MaybeForm editMode={editMode} action={profileDispatch}>
           <div className='flex flex-col gap-2'>
             <h3 className='text-lg font-semibold text-accent'>Contact:</h3>
             {editMode ? (
@@ -198,8 +225,8 @@ const LandlordProfile: React.FC<{
                 defaultValue={landlordBio.display_email}
                 type='email'
                 name='email'
-                error={!!(state.errors?.email)}
-                errorMessage={state.errors?.email?.join(', ')}
+                error={!!(profileState.errors?.email)}
+                errorMessage={profileState.errors?.email?.join(', ')}
               />
             ) : (
               <a
@@ -217,8 +244,8 @@ const LandlordProfile: React.FC<{
               <Textarea
                 defaultValue={landlordBio.bio}
                 name='bio'
-                error={!!(state.errors?.bio)}
-                errorMessage={state.errors?.bio?.join(', ')}
+                error={!!(profileState.errors?.bio)}
+                errorMessage={profileState.errors?.bio?.join(', ')}
               />
             ) : (
               <p className='italic'>{landlordBio.bio}</p>

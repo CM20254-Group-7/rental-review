@@ -104,17 +104,26 @@ export const saveProfile = async (
   };
 };
 
+export type ProfilePictureState = ({
+  error: string;
+  newUrl: null;
+} | {
+  error: null;
+  newUrl: string;
+});
+
 export const uploadProfilePicture = async (
+  prevState: ProfilePictureState | undefined,
   formData: FormData,
-): Promise<string> => {
-  console.log('uploadProfilePicture');
+): Promise<ProfilePictureState> => {
   // get the file from the 'newProfileFile' input
   const file = formData.get('newProfileFile') ? formData.get('newProfileFile') as File : null;
 
-  console.log('file', file);
-
   if (!file) {
-    return '';
+    return {
+      error: 'No file provided.',
+      newUrl: null,
+    };
   }
 
   const cookieStore = cookies();
@@ -124,10 +133,11 @@ export const uploadProfilePicture = async (
     data: { user },
   } = await supabase.auth.getUser();
 
-  console.log('user', user);
-
   if (!user) {
-    return '';
+    return {
+      error: 'Must be logged in to edit profile.',
+      newUrl: null,
+    };
   }
 
   const landlordId = user.id;
@@ -138,18 +148,18 @@ export const uploadProfilePicture = async (
   );
 
   // check if there is an existing profile picture
-  const { data: data1, error: error1 } = await serviceSupabase
+  const { data: data1 } = await serviceSupabase
     .from('landlord_public_profiles_full')
     .select('profile_picture')
     .eq('user_id', landlordId)
     .single();
 
-  console.log('data1', data1);
-  console.log('error1', error1);
-
   // if the user is not a landlord, return
   if (!data1) {
-    return '';
+    return {
+      error: 'You must be a landlord to upload a profile picture.',
+      newUrl: null,
+    };
   }
 
   // remove the existing profile picture if it exists
@@ -159,16 +169,26 @@ export const uploadProfilePicture = async (
       .remove([data1.profile_picture]);
   }
 
-  const { data: data2, error: error2 } = await serviceSupabase.storage
-    .from('landlord_profile_pictures')
-    .upload(`${landlordId}/profile_picture`, file);
+  // get the current timestamp in yyyymmddhhss format
+  const timestamp = new Date().toISOString().replace(/[^0-9]/g, '');
 
-  console.log('data2', data2);
-  console.log('error2', error2);
+  const { data: data2 } = await serviceSupabase.storage
+    .from('landlord_profile_pictures')
+    .upload(`${landlordId}/profile_picture-${timestamp}`, file, {
+      upsert: true,
+    });
 
   if (!data2) {
-    return '';
+    return {
+      error: 'Failed to upload profile picture. Please try again.',
+      newUrl: null,
+    };
   }
 
-  return data2.path;
+  revalidatePath(`/profile/${landlordId}`);
+
+  return {
+    error: null,
+    newUrl: data2.path,
+  };
 };
