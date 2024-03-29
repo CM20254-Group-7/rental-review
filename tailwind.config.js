@@ -10,11 +10,11 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        foreground: 'hsl(var(--foreground))',
-        background: 'hsl(var(--background))',
-        primary: 'hsl(var(--primary))',
-        secondary: 'hsl(var(--secondary))',
-        accent: 'hsl(var(--accent))',
+        foreground: 'hsl(var(--foreground) / <alpha-value>)',
+        background: 'hsl(var(--background) / <alpha-value>)',
+        primary: 'hsl(var(--primary) / <alpha-value>)',
+        secondary: 'hsl(var(--secondary) / <alpha-value>)',
+        accent: 'hsl(var(--accent) / <alpha-value>)',
 
         // Tremor colors
         tremor: {
