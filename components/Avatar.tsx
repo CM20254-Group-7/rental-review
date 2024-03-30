@@ -60,6 +60,7 @@ const MyAvatar = forwardRef<HTMLSpanElement, AvatarProps>((props, ref) => {
     </div>
   );
 });
+MyAvatar.displayName = 'MyAvatar';
 
 // Avatar.displayName = 'MyAvatar';
 

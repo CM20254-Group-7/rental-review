@@ -1,16 +1,18 @@
 'use client';
 
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, {
+  useCallback, useEffect, useRef, useState,
+} from 'react';
 import StarRatingLayout from '@/components/StarRating';
 import createClient from '@/utils/supabase/client';
 import { User } from '@supabase/supabase-js';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import { Button, TextInput, Textarea } from '@/components/ClientTremor';
 import { useFormState, useFormStatus } from 'react-dom';
 import Avatar from '@/components/Avatar';
 import { UserCircleIcon } from '@heroicons/react/24/solid';
-import { ProfilePictureState, saveProfile, uploadProfilePicture } from './actions';
 import { ButtonProps } from '@tremor/react';
+import { ProfilePictureState, saveProfile, uploadProfilePicture } from './actions';
 
 const MaybeForm: React.FC<{
   editMode: boolean,
