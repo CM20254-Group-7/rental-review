@@ -52,9 +52,8 @@ const Help: React.FC = () => {
               They are located on the home page of the website.
             </p>
             <p className='mb-2'>
-              If there is still something you don&apos;t understand, you can always ask for help by
-              going to the Q&A page
-              <Link href='/QandA' className='font-bold text-blue-500'> here</Link>
+              If you are still unsure about something, feel free to visit the FAQ page for assistance
+              <Link href='/FAQ' className='font-bold text-blue-500'> here</Link>
               .
             </p>
           </div>

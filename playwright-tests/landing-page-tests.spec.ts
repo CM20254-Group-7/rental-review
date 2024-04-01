@@ -37,18 +37,18 @@ test('search properties link', async ({ page }) => {
   await expect(page).toHaveURL('./properties');
 });
 
-test('help button & QandA link', async ({ page }) => {
+test('help button & FAQ link', async ({ page }) => {
   await page.goto('./');
 
   // Click help button
   await page.getByRole('button', { name: 'Help' }).click();
 
   // Check contents of dropdown help page
-  await expect(page.getByRole('navigation')).toContainText('Q&A page');
+  await expect(page.getByRole('navigation')).toContainText('FAQ');
 
   // Click on QandA link
   await page.getByRole('link', { name: 'here' }).click();
 
   // Expects content of QandA page
-  await expect(page.getByRole('main')).toContainText('Hello! Unfortunately, no one\'s asked us any questions, so...');
+  await expect(page.getByRole('main')).toContainText('Frequently Asked Questions');
 });
