@@ -142,17 +142,56 @@ const signUpSchema = loginDetailsSchema
       });
     }
   })
+  // length >= 8
   .superRefine(({ password }, ctx) => {
-    if (password.length < 6) {
+    if (password.length < 8) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        message: 'Password must be at least 6 characters long',
+        message: 'Password must be at least 8 characters long',
+        path: ['password'],
+      });
+    }
+  })
+  // contains >= 1 lowercase letter
+  .superRefine(({ password }, ctx) => {
+    if (!/[a-z]/.test(password)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'Password must contain at least one lowercase letter',
+        path: ['password'],
+      });
+    }
+  })
+  // contains >= 1 uppercase letter
+  .superRefine(({ password }, ctx) => {
+    if (!/[A-Z]/.test(password)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'Password must contain at least one uppercase letter',
+        path: ['password'],
+      });
+    }
+  })
+  // contains >= 1 number
+  .superRefine(({ password }, ctx) => {
+    if (!/[0-9]/.test(password)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'Password must contain at least one number',
+        path: ['password'],
+      });
+    }
+  })
+  // contains >= 1 special character
+  .superRefine(({ password }, ctx) => {
+    if (!/[^a-zA-Z0-9]/.test(password)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'Password must contain at least one special character',
         path: ['password'],
       });
     }
   });
-// TODO: add other password complexity checks
-// TODO: add email uniqueness check here or in function body
 
 export const signUp = async (
   redirectTo: string | undefined,
