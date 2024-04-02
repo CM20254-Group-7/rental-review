@@ -14,7 +14,7 @@ const LoginPage: NextPage<{
     <div className='relative flex-1 flex justify-center place-items-center gap-8 pt-24 pb-8'>
       <RedirectMessage />
 
-      <div className='grid grid-cols-1 [@media(min-width:996px)]:grid-cols-2 gap-8 w-full'>
+      <div className='grid grid-cols-1 [@media(min-width:996px)]:grid-cols-2 gap-16 [@media(min-width:996px)]:gap-24 w-fit'>
         <SignInForm redirectTo={redirectTo} />
         <SignUpForm redirectTo={redirectTo} />
       </div>
