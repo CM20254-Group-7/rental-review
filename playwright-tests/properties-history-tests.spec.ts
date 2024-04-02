@@ -43,7 +43,7 @@ test.describe(`${firstPropertyHistory.propertyAddress} ownership history tests`,
   test('Contains correct landlord rating', async ({ page }) => {
     await page.goto(`http://localhost:3000/properties/${firstPropertyHistory.propertyId}/ownership-history`);
     // Select the specific section containing the stars
-    const section = await page.$('body > main > div > div > a > div.flex.flex-col.items-center.justify-center > div:nth-child(2)');
+    const section = await page.$('body > main > div > div > div > a > div.flex.flex-col.items-center.justify-center > div:nth-child(2)');
     if (!section) {
       throw new Error('Section not found');
     }
@@ -98,7 +98,7 @@ test.describe(`${secondPropertyHistory.propertyAddress} ownership history tests`
     test('Contains correct average rating', async ({ page }) => {
       await page.goto(`http://localhost:3000/properties/${secondPropertyHistory.propertyId}/ownership-history`);
       // Select the specific section containing the stars
-      const section = await page.$('body > main > div > div > a > div.flex.flex-col.items-center.justify-center > div:nth-child(2)');
+      const section = await page.$('body > main > div > div > div > a > div.flex.flex-col.items-center.justify-center > div:nth-child(2)');
       if (!section) {
         throw new Error('Section not found');
       }
@@ -152,7 +152,7 @@ test.describe(`${secondPropertyHistory.propertyAddress} ownership history tests`
     test('Contains correct average rating', async ({ page }) => {
       await page.goto(`http://localhost:3000/properties/${secondPropertyHistory.propertyId}/ownership-history`);
       // Select the specific section containing the stars
-      const section = await page.$('body > main > div > div > a:nth-child(4) > div.flex.flex-col.items-center.justify-center > div:nth-child(2)');
+      const section = await page.$('body > main > div > div > div > a:nth-child(4) > div.flex.flex-col.items-center.justify-center > div:nth-child(2)');
       if (!section) {
         throw new Error('Section not found');
       }
