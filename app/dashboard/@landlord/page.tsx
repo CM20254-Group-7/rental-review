@@ -2,7 +2,7 @@ import React, { Suspense } from 'react';
 import { NextPage } from 'next';
 import { cookies } from 'next/headers';
 import createClient from '@/utils/supabase/server';
-import { Button, Divider } from '@tremor/react';
+import { Button, Divider } from '@/components/ClientTremor';
 import Link from 'next/link';
 import StarRatingLayout from '@/components/StarRating';
 import RatingGraph from './RatingGraph';

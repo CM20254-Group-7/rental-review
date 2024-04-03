@@ -1,6 +1,6 @@
 'use client';
 
-import { AreaChart, CustomTooltipProps } from '@tremor/react';
+import { AreaChart, CustomTooltipProps } from '@/components/ClientTremor';
 import React from 'react';
 
 const customTooltip: React.FC<CustomTooltipProps> = ({ payload, active }) => {

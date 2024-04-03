@@ -5,15 +5,16 @@ module.exports = {
     './app/**/*.{js,ts,jsx,tsx,mdx}',
     './components/**/*.{js,ts,jsx,tsx,mdx}',
     './node_modules/@tremor/**/*.{js,ts,jsx,tsx}',
+    './node_modules/@nextui-org/theme/dist/components/(avatar).js',
   ],
   theme: {
     extend: {
       colors: {
-        foreground: 'hsl(var(--foreground))',
-        background: 'hsl(var(--background))',
-        primary: 'hsl(var(--primary))',
-        secondary: 'hsl(var(--secondary))',
-        accent: 'hsl(var(--accent))',
+        foreground: 'hsl(var(--foreground) / <alpha-value>)',
+        background: 'hsl(var(--background) / <alpha-value>)',
+        primary: 'hsl(var(--primary) / <alpha-value>)',
+        secondary: 'hsl(var(--secondary) / <alpha-value>)',
+        accent: 'hsl(var(--accent) / <alpha-value>)',
 
         // Tremor colors
         tremor: {
@@ -136,5 +137,6 @@ module.exports = {
   plugins: [
     require('@headlessui/tailwindcss'),
     require('@tailwindcss/forms'),
+    require('@nextui-org/theme'),
   ],
 };
