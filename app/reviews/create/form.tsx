@@ -4,7 +4,7 @@ import { FC } from 'react';
 import { useFormState } from 'react-dom';
 
 import CreateReviewForm from '@/components/CreateReviewForm';
-import { TextInput } from '@tremor/react';
+import { TextInput } from '@/components/ClientTremor';
 import { createReview } from './actions';
 
 const NewPropertyReviewForm: FC<{

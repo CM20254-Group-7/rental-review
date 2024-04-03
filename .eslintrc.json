@@ -12,12 +12,13 @@
     "plugin:@typescript-eslint/recommended"
   ],
   "rules": {
+    "react/jsx-props-no-spreading": "warn",
     "react/require-default-props": "off",
     "jsx-a11y/label-has-associated-control": "off",
     "jsx-a11y/control-has-associated-label": "off",
     //   "prettier/prettier": "error",
     "no-unused-vars": "off",
-    "@typescript-eslint/no-unused-vars": ["warn"],
+    "@typescript-eslint/no-unused-vars": "warn",
     "jsx-quotes": [
       "error",
       "prefer-single"

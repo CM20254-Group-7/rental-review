@@ -71,7 +71,15 @@ export interface Database {
           street?: string | null
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "public_landlord_private_profiles_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "user_profiles"
+            referencedColumns: ["user_id"]
+          }
+        ]
       }
       landlord_public_profiles: {
         Row: {
@@ -178,6 +186,13 @@ export interface Database {
             columns: ["landlord_id"]
             isOneToOne: false
             referencedRelation: "landlord_public_profiles"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "property_ownership_landlord_id_fkey"
+            columns: ["landlord_id"]
+            isOneToOne: false
+            referencedRelation: "landlord_public_profiles_full"
             referencedColumns: ["user_id"]
           },
           {
@@ -427,6 +442,44 @@ export interface Database {
           tags: string[] | null
         }
         Relationships: []
+      }
+      landlord_profile_pictures: {
+        Row: {
+          profile_picture: string | null
+          user_id: string | null
+        }
+        Insert: {
+          profile_picture?: string | null
+          user_id?: never
+        }
+        Update: {
+          profile_picture?: string | null
+          user_id?: never
+        }
+        Relationships: []
+      }
+      landlord_public_profiles_full: {
+        Row: {
+          average_rating: number | null
+          bio: string | null
+          display_email: string | null
+          display_name: string | null
+          profile_image_id: string | null
+          profile_picture: string | null
+          type: string | null
+          user_id: string | null
+          verified: boolean | null
+          website: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "landlord_public_profiles_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "landlord_private_profiles"
+            referencedColumns: ["user_id"]
+          }
+        ]
       }
     }
     Functions: {
