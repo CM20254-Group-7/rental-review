@@ -59,7 +59,7 @@ test.describe('Property details page test', () => {
       test('Average property rating', async ({ page }) => {
         await page.goto(`http://localhost:3000/properties/${firstProperty.id}`);
         // Select the specific section containing the stars
-        const section = await page.$('body > main > div > div > div > div.flex.flex-row.w-full.justify-between.gap-2.bg-secondary\\/30.shadow-lg.shadow-secondary\\/40 > div.flex-1.flex.flex-col.w-full.px-8.sm\\:max-w-md.justify-top.gap-2.py-4 > div:nth-child(2)');
+        const section = await page.$('body > main > div > div > div.flex.flex-row.w-full.justify-between.gap-2.bg-secondary\\/30.shadow-lg.shadow-secondary\\/40 > div.flex-1.flex.flex-col.w-full.px-8.sm\\:max-w-md.justify-top.gap-2.py-4 > div:nth-child(2)');
         if (!section) {
           throw new Error('Section not found');
         }
@@ -107,7 +107,7 @@ test.describe('Property details page test', () => {
     test('Average property rating', async ({ page }) => {
       await page.goto(`http://localhost:3000/properties/${secondProperty.id}`);
       // Select the specific section containing the stars
-      const section = await page.$('body > main > div > div > div > div.flex.flex-row.w-full.justify-between.gap-2.bg-secondary\\/30.shadow-lg.shadow-secondary\\/40 > div.flex-1.flex.flex-col.w-full.px-8.sm\\:max-w-md.justify-top.gap-2.py-4 > div:nth-child(2)');
+      const section = await page.$('body > main > div > div > div.flex.flex-row.w-full.justify-between.gap-2.bg-secondary\\/30.shadow-lg.shadow-secondary\\/40 > div.flex-1.flex.flex-col.w-full.px-8.sm\\:max-w-md.justify-top.gap-2.py-4 > div:nth-child(2)');
       if (!section) {
         throw new Error('Section not found');
       }

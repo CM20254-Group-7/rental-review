@@ -3,7 +3,7 @@ import { NextPage } from 'next';
 import { cookies } from 'next/headers';
 import { FC, cache } from 'react';
 import StarRatingLayout from '@/components/StarRating';
-import { Divider } from '@/components/ClientTremor';
+import { Divider } from '@tremor/react';
 import { BackButton, ForwardButton } from './Pagination';
 import RatingList from './RatingList';
 

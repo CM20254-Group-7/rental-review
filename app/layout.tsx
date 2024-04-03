@@ -7,7 +7,6 @@ import React, { Suspense } from 'react';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import Toolbar from '@/components/vercel-toolbar';
-import Providers from '@/components/Providers';
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -27,11 +26,9 @@ const Layout: NextPage<{
   <html lang='en' className={GeistSans.className}>
     <body className='bg-background text-foreground'>
       <main className='min-h-screen flex flex-col items-center'>
-        <Providers>
-          <NavBar />
-          {children}
-          <Footer />
-        </Providers>
+        <NavBar />
+        {children}
+        <Footer />
       </main>
 
       <SpeedInsights />

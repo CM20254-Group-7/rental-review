@@ -18,7 +18,7 @@ test.describe('Landlord leaderboard tests', () => {
 
       test(`${firstUser.label} has correct number of stars`, async ({ page }) => {
         await page.goto('http://localhost:3000/profiles');
-        const section = await page.$('body > main > div > div > div > div > div:nth-child(1) > div > div.w-full.pl-4 > a > div > div.flex.flex-col.w-full.gap-2.items-center');
+        const section = await page.$('body > main > div > div > div > div:nth-child(1) > div > div.w-full.pl-4 > a > div > div.flex.flex-col.w-full.gap-2');
         if (!section) {
           throw new Error('Section not found');
         }
@@ -65,7 +65,7 @@ test.describe('Landlord leaderboard tests', () => {
 
       test(`${fourthUser.label} has correct number of stars`, async ({ page }) => {
         await page.goto('http://localhost:3000/profiles');
-        const section = await page.$('body > main > div > div > div > div > div:nth-child(2) > div > div.w-full.pl-4 > a > div > div.flex.flex-col.w-full.gap-2.items-center');
+        const section = await page.$('body > main > div > div > div > div:nth-child(2) > div > div.w-full.pl-4 > a > div > div.flex.flex-col.w-full.gap-2');
         if (!section) {
           throw new Error('Section not found');
         }
@@ -186,7 +186,7 @@ test.describe('2. Landlord profile details page tests', () => {
         test(`${firstUser.label} has correct rating`, async ({ page }) => {
           await page.goto(`http://localhost:3000/profiles/${firstUser.id}`);
           // Select the specific section containing the stars
-          const section = await page.$('body > main > div > div > div > div.relative.flex.flex-row.w-full.justify-between.gap-2.bg-secondary\\/30.shadow-lg.shadow-secondary\\/40 > div.flex-1.flex.flex-col.w-full.px-8.sm\\:max-w-md.justify-top.gap-2.py-4 > div:nth-child(2)');
+          const section = await page.$('body > main > div > div > div.flex.flex-row.w-full.justify-between.gap-2.bg-secondary\\/30.shadow-lg.shadow-secondary\\/40 > div.flex-1.flex.flex-col.w-full.px-8.sm\\:max-w-md.justify-top.gap-2.py-4 > div:nth-child(2)');
           if (!section) {
             throw new Error('Section not found');
           }
@@ -227,7 +227,7 @@ test.describe('2. Landlord profile details page tests', () => {
         test(`${secondUser.label} has correct rating`, async ({ page }) => {
           await page.goto(`http://localhost:3000/profiles/${secondUser.id}`);
           // Select the specific section containing the stars
-          const section = await page.$('body > main > div > div > div > div.relative.flex.flex-row.w-full.justify-between.gap-2.bg-secondary\\/30.shadow-lg.shadow-secondary\\/40 > div.flex-1.flex.flex-col.w-full.px-8.sm\\:max-w-md.justify-top.gap-2.py-4 > div:nth-child(2)');
+          const section = await page.$('body > main > div > div > div.flex.flex-row.w-full.justify-between.gap-2.bg-secondary\\/30.shadow-lg.shadow-secondary\\/40 > div.flex-1.flex.flex-col.w-full.px-8.sm\\:max-w-md.justify-top.gap-2.py-4 > div:nth-child(2)');
           if (!section) {
             throw new Error('Section not found');
           }
