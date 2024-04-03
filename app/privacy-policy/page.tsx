@@ -1,4 +1,5 @@
 import { NextPage } from 'next';
+import React from 'react';
 
 const PrivacyPolicyPage: NextPage = () => (
   <div className='flex-1 w-screen flex flex-col justify-center items-center py-20'>
