@@ -12,11 +12,11 @@
   "dependencies": {
     "@headlessui/react": "^1.7.18",
     "@headlessui/tailwindcss": "^0.2.0",
-    "@heroicons/react": "^2.1.1",
+    "@heroicons/react": "^2.1.3",
     "@microsoft/eslint-formatter-sarif": "^2.1.7",
     "@supabase/ssr": "latest",
     "@supabase/supabase-js": "latest",
-    "@tremor/react": "^3.14.1",
+    "@tremor/react": "^3.15.0",
     "@vercel/analytics": "^1.2.2",
     "@vercel/edge-config": "^1.1.0",
     "@vercel/flags": "^2.3.0",
@@ -24,8 +24,8 @@
     "@vercel/toolbar": "^0.1.13",
     "autoprefixer": "10.4.15",
     "dotenv": "^16.4.5",
-    "geist": "^1.2.2",
-    "next": "v14.2.0-canary.37",
+    "geist": "^1.3.0",
+    "next": "14.2.0-canary.37",
     "postcss": "8.4.31",
     "react": "18.2.0",
     "react-dom": "18.2.0",
@@ -33,7 +33,7 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
-    "@playwright/test": "^1.41.2",
+    "@playwright/test": "^1.42.1",
     "@tailwindcss/forms": "^0.5.7",
     "@types/node": "20.3.1",
     "@types/react": "18.2.8",
@@ -43,14 +43,14 @@
     "encoding": "^0.1.13",
     "eslint": "^8.57.0",
     "eslint-config-airbnb": "^19.0.4",
-    "eslint-config-next": "^14.1.0",
+    "eslint-config-next": "^14.1.4",
     "eslint-config-node": "^4.1.0",
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-jsx-a11y": "^6.8.0",
     "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-react": "^7.34.1",
     "eslint-plugin-react-hooks": "^4.6.0",
     "supabase": "1.142.2",
-    "typescript": "^5.3.3"
+    "typescript": "^5.4.3"
   }
 }
