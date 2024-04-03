@@ -32,117 +32,94 @@ const PrivacyPolicyPage: NextPage = () => (
 
       <br />
       <h2 className='text-2xl font-semibold mb-1 w-fit text-accent'>
-        2. How We Use Your Information
-      </h2>
-      <li className='ml-10 w-fit'>
-        <span className='text-accent'>
-          Provide Services
-        </span>
-        <p>
-          We use your information to deliver the services offered on the Platform, including
-          facilitating property reviews, managing user accounts, and improving user experience.
-        </p>
-      </li>
-      <li className='ml-10 w-fit'>
-        <span className='text-accent'>
-          Communication
-        </span>
-        <p>
-          We may send you notifications, updates, and promotional emails related to your use
-          of the Platform. You can opt out of marketing communications at any time.
-        </p>
-      </li>
-      <li className='ml-10 w-fit'>
-        <span className='text-accent'>
-          Analytics
-        </span>
-        <p>
-          We analyze usage patterns and trends to understand how users interact with the
-          Platform, optimize performance, and develop new features.
-        </p>
-      </li>
-
-      <br />
-      <h2 className='text-2xl font-semibold mb-1 w-fit text-accent'>
-        3. Information Sharing
-      </h2>
-      <li className='ml-10 w-fit'>
-        <span className='text-accent'>
-          Landlord Information
-        </span>
-        <p>
-          Landlords may have access to information related to reviews and ratings of their
-          properties but do not have access to your personal contact information.
-        </p>
-      </li>
-      <li className='ml-10 w-fit'>
-        <span className='text-accent'>
-          Service Providers
-        </span>
-        <p>
-          We may share your information with third-party service providers who assist us in
-          operating the Platform, such as hosting providers, analytics services, and customer
-          support.
-        </p>
-      </li>
-      <li className='ml-10 w-fit'>
-        <span className='text-accent'>
-          Legal Compliance
-        </span>
-        <p>
-          We may disclose your information as required by law, court order, or legal process,
-          or to protect our rights, property, or safety.
-        </p>
-      </li>
-
-      <br />
-      <h2 className='text-2xl font-semibold mb-1 w-fit text-accent'>
-        4. Data Security
+        2. Account Registration
       </h2>
       <p className='ml-10'>
-        We implement security measures to protect your information against unauthorized access,
-        alteration, disclosure, or destruction. However, no method of transmission over the
-        internet or electronic storage is 100% secure.
+        You may need to create an account to access certain features of the Platform. When
+        registering for an account, you agree to provide accurate, current, and complete
+        information about yourself.
       </p>
 
       <br />
       <h2 className='text-2xl font-semibold mb-1 w-fit text-accent'>
-        5. Your Choices
+        3. User Conduct
       </h2>
       <li className='ml-10 w-fit'>
-        <span className='text-accent'>
-          Account Information
-        </span>
-        <p>
-          You can update or delete your account information at any time by accessing your
-          account settings.
-        </p>
+        You agree to use the Platform for lawful purposes only and to comply with all
+        applicable laws and regulations.
       </li>
-
       <li className='ml-10 w-fit'>
-        <span className='text-accent'>
-          Cookies
-        </span>
-        <p>
-          You may adjust your browser settings to refuse cookies or notify you when cookies
-          are being sent. However, some features of the Platform may not function properly
-          without cookies.
-        </p>
+        You may not engage in any conduct that violates the rights of others, including but
+        not limited to infringing intellectual property rights, harassing or defaming others,
+        or distributing spam or malware.
       </li>
 
       <br />
       <h2 className='text-2xl font-semibold mb-1 w-fit text-accent'>
-        6. Children&apos;s Privacy
+        4. Reviews and Ratings
+      </h2>
+      <li className='ml-10 w-fit'>
+        When submitting reviews and ratings on the Platform, you agree to provide honest and
+        accurate feedback based on your personal experiences.
+      </li>
+      <li className='ml-10 w-fit'>
+        You may not submit false or misleading reviews, manipulate ratings, or engage in any
+        fraudulent activity related to reviews.
+      </li>
+
+      <br />
+      <h2 className='text-2xl font-semibold mb-1 w-fit text-accent'>
+        5. Intellectual Property
       </h2>
       <p className='ml-10'>
-        The Platform is not intended for children under the age of 18. We do not knowingly
-        collect personal information from children under 18. If you believe we have inadvertently
-        collected information from a child under 18, please contact us immediately.
+        The Platform and its content, including but not limited to text, graphics, logos, and
+        software, are protected by copyright, trademark, and other intellectual property laws.
+        You may not copy, modify, distribute, or reproduce any part of the Platform without our
+        prior written consent.
       </p>
 
       <br />
       <h2 className='text-2xl font-semibold mb-1 w-fit text-accent'>
-        7. Changes to This Policy
+        6. Third-Party Links
+      </h2>
+      <p className='ml-10'>
+        The Platform may contain links to third-party websites or services that are not owned
+        or controlled by us. We are not responsible for the content or practices of any third-party
+        sites and encourage you to review their terms of service and privacy policies.
+      </p>
+
+      <br />
+      <h2 className='text-2xl font-semibold mb-1 w-fit text-accent'>
+        7. Disclaimer of Warranties
+      </h2>
+      <p className='ml-10'>
+        The Platform is provided &quot;as is&quot; and &quot;as available&quot; without any
+        warranties of any kind. We do not guarantee that the Platform will always be secure,
+        error-free, or uninterrupted.
+      </p>
+
+      <br />
+      <h2 className='text-2xl font-semibold mb-1 w-fit text-accent'>
+        8. Limitation of Liability
+      </h2>
+      <p className='ml-10'>
+        In no event shall we be liable for any indirect, incidental, special, consequential, or
+        punitive damages, including but not limited to loss of profits, data, or goodwill, arising
+        out of or in connection with your use of the Platform.
+      </p>
+
+      <br />
+      <h2 className='text-2xl font-semibold mb-1 w-fit text-accent'>
+        9. Governing Law
+      </h2>
+      <p className='ml-10'>
+        These Terms are governed by and construed in accordance with the laws of the State of
+        the United Kingdom, without regard to its conflict of law principles.
+      </p>
+
+      <br />
+      <h2 className='text-2xl font-semibold mb-1 w-fit text-accent'>
+        10. Changes to This Policy
       </h2>
       <p className='ml-10'>
         We reserve the right to update or modify this Privacy Policy at any time. We will notify
@@ -152,7 +129,7 @@ const PrivacyPolicyPage: NextPage = () => (
 
       <br />
       <h2 className='text-2xl font-semibold mb-1 w-fit text-accent'>
-        8. Contact Us
+        11. Contact Us
       </h2>
       <p className='ml-10'>
         If you have any questions, concerns, or feedback regarding this Privacy Policy or our
