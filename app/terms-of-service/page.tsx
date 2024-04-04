@@ -59,12 +59,16 @@ const PrivacyPolicyPage: NextPage = () => (
         4. Reviews and Ratings
       </h2>
       <li className='ml-10 w-fit'>
-        When submitting reviews and ratings on the Platform, you agree to provide honest and
-        accurate feedback based on your personal experiences.
+        When submitting reviews, ratings and images on the Platform, you agree to provide relevant,
+        appropriate, honest and accurate feedback or images based on your personal experiences.
       </li>
       <li className='ml-10 w-fit'>
         You may not submit false or misleading reviews, manipulate ratings, or engage in any
         fraudulent activity related to reviews.
+      </li>
+      <li className='ml-10 w-fit'>
+        We reserve the right to remove reviews that violate these Terms or our review guidelines
+        with our moderation system.
       </li>
 
       <br />
@@ -138,9 +142,9 @@ const PrivacyPolicyPage: NextPage = () => (
         <a
           className='underline text-blue-500 transition-colors duration-300 ease-in-out
           hover:text-blue-600'
-          href='mailto:help@rentalreview.com'
+          href='mailto:help.rentalreview@gmail.com'
         >
-          help@rentalreview.com
+          help.rentalreview@gmail.com
         </a>
         .
       </p>
