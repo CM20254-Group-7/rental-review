@@ -1,9 +1,6 @@
 'use server';
 
-import { Database } from '@/supabase.types';
-import createServerClient from '@/utils/supabase/server';
-import { createClient as createServiceClient } from '@supabase/supabase-js';
-import { cookies } from 'next/headers';
+import { createServerSupabaseClient, createServiceSupabaseClient } from '@repo/supabase-client-helpers/server-only';
 import { z } from 'zod';
 
 const colisionState = (
@@ -68,10 +65,7 @@ const setPropertyOwnership = async (
   startedAt: Date,
   endedAt: Date | null,
 ): Promise<State> => {
-  const supabase = createServiceClient<Database>(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_KEY!,
-  );
+  const supabase = createServiceSupabaseClient();
 
   const { error } = await supabase
     .from('property_ownership')
@@ -103,10 +97,7 @@ const setPropertyOwnershipWithClose = async (
   if (!openClaimToClose) return setPropertyOwnership(selectedPropertyId, landlordId, startedAt, endedAt);
 
   // close the open claim with the day before the new claim starts
-  const supabase = createServiceClient<Database>(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_KEY!,
-  );
+  const supabase = createServiceSupabaseClient();
 
   const { error } = await supabase
     .from('property_ownership')
@@ -205,8 +196,7 @@ export const claimProperty = async (
   }
   // Need to check more things here before we can claim a property
 
-  const cookieStore = cookies();
-  const supabase = createServerClient(cookieStore);
+  const supabase = createServerSupabaseClient();
 
   // check if the user is logged in
   const { data: { user }, error: userError } = await supabase.auth.getUser();

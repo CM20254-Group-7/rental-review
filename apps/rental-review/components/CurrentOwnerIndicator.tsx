@@ -1,6 +1,5 @@
 import React, { cache } from 'react';
-import useClient from '@/utils/supabase/server';
-import { cookies } from 'next/headers';
+import { createServerSupabaseClient } from '@repo/supabase-client-helpers/server-only';
 import Link from 'next/link';
 import { StarIcon } from '@heroicons/react/24/solid';
 
@@ -19,8 +18,7 @@ type LandlordProfile = {
 const getCurrentOwner = cache(async (propertyId: string): Promise<LandlordProfile | null> => {
   'use server';
 
-  const cookieStore = cookies();
-  const supabase = useClient(cookieStore);
+  const supabase = createServerSupabaseClient();
 
   const { data: currentOwnerId } = await supabase
     .from('property_ownership')
@@ -54,10 +52,10 @@ const CurrentOwnerIndicator: React.FC<{ propertyId: string }> = async ({ propert
           >
             <p>{currentOwner.display_name}</p>
             {currentOwner.average_rating && (
-            <div className='flex w-fit flex-row items-center gap-1'>
-              <p className='pt-1'>{currentOwner.average_rating.toFixed(1)}</p>
-              <StarIcon className='h-5 w-5 text-yellow-300' />
-            </div>
+              <div className='flex w-fit flex-row items-center gap-1'>
+                <p className='pt-1'>{currentOwner.average_rating.toFixed(1)}</p>
+                <StarIcon className='h-5 w-5 text-yellow-300' />
+              </div>
             )}
           </Link>
         ) : 'Unknown'}

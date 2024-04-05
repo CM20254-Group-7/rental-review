@@ -1,7 +1,6 @@
 'use Server';
 
-import createClient from '@/utils/supabase/server';
-import { cookies } from 'next/headers';
+import { createServerSupabaseClient } from '@repo/supabase-client-helpers/server-only';
 import Link from 'next/link';
 import React from 'react';
 import StarRatingLayout from './StarRating';
@@ -113,8 +112,7 @@ export const ReviewDetails: React.FC<ReviewDetailsProps> = async ({
   reviewId,
   link = false,
 }) => {
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
+  const supabase = createServerSupabaseClient();
 
   const { data, error } = await supabase
     .from('reviews')

@@ -1,6 +1,5 @@
-import createClient from '@/utils/supabase/server';
+import { createServerSupabaseClient } from '@repo/supabase-client-helpers/server-only';
 import { NextPage } from 'next';
-import { cookies } from 'next/headers';
 import { FC, cache } from 'react';
 import StarRatingLayout from '@/components/StarRating';
 import { Divider } from '@/components/ClientTremor';
@@ -10,8 +9,7 @@ import RatingList from './RatingList';
 const pageSize = 5;
 
 const getTotalPages = cache(async (): Promise<number> => {
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
+  const supabase = createServerSupabaseClient();
 
   const { data: { user } } = await supabase.auth.getUser();
 
@@ -35,8 +33,7 @@ const getTotalPages = cache(async (): Promise<number> => {
 });
 
 const getReviewPage = cache(async (page: number, size: number) => {
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
+  const supabase = createServerSupabaseClient();
 
   const { data: { user } } = await supabase.auth.getUser();
 
@@ -112,8 +109,7 @@ const LandlordReviewsDashboardPage: NextPage<{
 
   const totalPages = await getTotalPages();
 
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
+  const supabase = createServerSupabaseClient();
 
   // unauthenticated users should be handled by middleware
   // return null to assert types

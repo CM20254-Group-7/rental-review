@@ -1,7 +1,6 @@
 'use server';
 
-import createClient from '@/utils/supabase/server';
-import { cookies } from 'next/headers';
+import { createServerSupabaseClient } from '@repo/supabase-client-helpers/server-only';
 import { redirect } from 'next/navigation';
 import { z } from 'zod';
 
@@ -45,8 +44,7 @@ export const updateInfo = async (prevState: State, formData: FormData): Promise<
     new_email: newEmail,
   } = validatedFields.data;
 
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
+  const supabase = createServerSupabaseClient();
 
   const { error } = await supabase.auth.updateUser({
     email: newEmail,

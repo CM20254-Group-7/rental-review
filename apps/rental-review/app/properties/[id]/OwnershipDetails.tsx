@@ -1,5 +1,4 @@
-import createClient from '@/utils/supabase/server';
-import { cookies } from 'next/headers';
+import { createServerSupabaseClient } from '@repo/supabase-client-helpers/server-only';
 import React, { cache } from 'react';
 
 interface landlordPublicProfile {
@@ -13,7 +12,7 @@ interface landlordPublicProfile {
   website: string | null;
 }
 const getCurrentOwner = cache(async (propertyId: string): Promise<landlordPublicProfile | null> => {
-  const supabase = createClient(cookies());
+  const supabase = createServerSupabaseClient();
 
   const { data, error } = await supabase
     .from('property_ownership')

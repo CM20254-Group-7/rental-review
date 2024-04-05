@@ -1,7 +1,6 @@
 import React from 'react';
 import { VercelToolbar } from '@vercel/toolbar/next';
-import { cookies } from 'next/headers';
-import createClient from '@/utils/supabase/server';
+import { createServerSupabaseClient } from '@repo/supabase-client-helpers/server-only';
 
 const Toolbar: React.FC = async () => {
   const environment = process.env.VERCEL_ENV || 'development';
@@ -9,8 +8,7 @@ const Toolbar: React.FC = async () => {
 
   if (!isProduction) return <VercelToolbar />;
 
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
+  const supabase = createServerSupabaseClient();
 
   const { data: { user } } = await supabase.auth.getUser();
 

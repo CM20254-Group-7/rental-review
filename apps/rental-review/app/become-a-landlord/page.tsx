@@ -1,5 +1,4 @@
-import createClient from '@/utils/supabase/server';
-import { cookies } from 'next/headers';
+import { createServerSupabaseClient } from '@repo/supabase-client-helpers/server-only';
 import { NextPage } from 'next';
 import Link from 'next/link';
 import React from 'react';
@@ -23,8 +22,7 @@ const AlreadyLandlordMessage: React.FC = () => (
 
 const LandlordRegistrationPage: NextPage = async () => {
   // Set up the supabase client
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
+  const supabase = createServerSupabaseClient();
 
   // Middleware should redirect if user is not logged in, return null for TypeScript
   const { data: { user }, error: userError } = await supabase.auth.getUser();

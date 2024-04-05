@@ -1,9 +1,6 @@
 'use server';
 
-import { Database } from '@/supabase.types';
-import createClient from '@/utils/supabase/server';
-import { createClient as createServiceClient } from '@supabase/supabase-js';
-import { cookies } from 'next/headers';
+import { createServerSupabaseClient, createServiceSupabaseClient } from '@repo/supabase-client-helpers/server-only';
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 
@@ -52,8 +49,7 @@ export const saveProfile = async (
   } = validatedFields.data;
 
   // save the details
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
+  const supabase = createServerSupabaseClient();
 
   const {
     data: { user },
@@ -72,10 +68,7 @@ export const saveProfile = async (
   }
 
   // create a service client
-  const serviceSupabase = createServiceClient<Database>(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_KEY!,
-  );
+  const serviceSupabase = createServiceSupabaseClient();
 
   const { data, error } = await serviceSupabase
     .from('landlord_public_profiles')
@@ -126,8 +119,7 @@ export const uploadProfilePicture = async (
     };
   }
 
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
+  const supabase = createServerSupabaseClient();
 
   const {
     data: { user },
@@ -142,10 +134,7 @@ export const uploadProfilePicture = async (
 
   const landlordId = user.id;
 
-  const serviceSupabase = createServiceClient<Database>(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_KEY!,
-  );
+  const serviceSupabase = createServiceSupabaseClient();
 
   // check if there is an existing profile picture
   const { data: data1 } = await serviceSupabase

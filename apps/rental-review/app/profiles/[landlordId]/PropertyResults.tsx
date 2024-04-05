@@ -1,11 +1,9 @@
-import createClient from '@/utils/supabase/server';
-import { cookies } from 'next/headers';
+import { createServerSupabaseClient } from '@repo/supabase-client-helpers/server-only';
 import Link from 'next/link';
 import React from 'react';
 
 const getCurrentlyOwnedProperties = async (landlordId: string) => {
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
+  const supabase = createServerSupabaseClient();
 
   const { data: landlordCurrentProperties } = await supabase
     .from('property_ownership')
@@ -22,8 +20,7 @@ const getCurrentlyOwnedProperties = async (landlordId: string) => {
 };
 
 const getPreviouslyOwnedProperties = async (landlordId: string) => {
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
+  const supabase = createServerSupabaseClient();
 
   const { data: landlordPreviousProperties } = await supabase
     .from('property_ownership')

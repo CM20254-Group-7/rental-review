@@ -1,5 +1,4 @@
-import createClient from '@/utils/supabase/server';
-import { cookies } from 'next/headers';
+import { createServerSupabaseClient } from '@repo/supabase-client-helpers/server-only';
 import { ReviewDetailsLayout } from '@/components/ReviewDetails';
 import React, { cache } from 'react';
 
@@ -14,7 +13,7 @@ interface ReviewDetails {
   review_tags: string[];
 }
 const getReviewResults = cache(async (propertyId: string): Promise<ReviewDetails[]> => {
-  const supabase = createClient(cookies());
+  const supabase = createServerSupabaseClient();
 
   const { data, error } = await supabase
     .from('reviews')

@@ -1,7 +1,6 @@
 import CurrentOwnerIndicator from '@/components/CurrentOwnerIndicator';
 import StarRatingLayout from '@/components/StarRating';
-import createClient from '@/utils/supabase/server';
-import { cookies } from 'next/headers';
+import { createServerSupabaseClient } from '@repo/supabase-client-helpers/server-only';
 import Link from 'next/link';
 import React, { cache } from 'react';
 
@@ -18,8 +17,7 @@ const getPropertyResults = cache(async (searchQuery?: {
   country?: string
   tags?: string[]
 }) => {
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
+  const supabase = createServerSupabaseClient();
 
   const sortBy = searchQuery?.sortBy || defaultSortBy;
   const sortOrder = searchQuery?.sortOrder || defaultSortOrder;

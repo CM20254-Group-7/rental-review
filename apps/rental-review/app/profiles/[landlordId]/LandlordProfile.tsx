@@ -4,8 +4,7 @@ import React, {
   useCallback, useEffect, useRef, useState,
 } from 'react';
 import StarRatingLayout from '@/components/StarRating';
-import createClient from '@/utils/supabase/client';
-import { User } from '@supabase/supabase-js';
+import { createClientSupabaseClient } from '@repo/supabase-client-helpers';
 import { useParams } from 'next/navigation';
 import { Button, TextInput, Textarea } from '@/components/ClientTremor';
 import { useFormState, useFormStatus } from 'react-dom';
@@ -13,6 +12,9 @@ import Avatar from '@/components/Avatar';
 import { UserCircleIcon } from '@heroicons/react/24/solid';
 import { ButtonProps } from '@tremor/react';
 import { ProfilePictureState, saveProfile, uploadProfilePicture } from './actions';
+
+// infer the type of a supabase user
+type User = Exclude<Awaited<ReturnType<ReturnType<typeof createClientSupabaseClient>['auth']['getUser']>>['data']['user'], null>;
 
 const MaybeForm: React.FC<{
   editMode: boolean,
@@ -68,9 +70,11 @@ const LandlordProfile: React.FC<{
 }> = ({ landlordBio: initialLandlordBio }) => {
   const params = useParams();
   const landlordId = params.landlordId as string;
-  const supabase = createClient();
+  const supabase = createClientSupabaseClient();
 
   const [landlordBio, setLandlordBio] = useState(initialLandlordBio);
+
+  // get the return type of the getUser function
 
   const [user, setUser] = useState<User | null>();
   const [isUserLandlord, setIsUserLandlord] = useState<boolean>();

@@ -1,8 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 
-import createClient from '@/utils/supabase/server';
-import { cookies } from 'next/headers';
+import { createServerSupabaseClient } from '@repo/supabase-client-helpers/server-only';
 import { notFound } from 'next/navigation';
 import { NextPage } from 'next';
 import { Suspense, cache } from 'react';
@@ -14,8 +13,7 @@ import ReviewResults from './ReviewResults';
 export const revalidate = 60 * 60; // revalidate every hour
 
 const getPropertyDetails = cache(async (propertyId: string) => {
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
+  const supabase = createServerSupabaseClient();
 
   const { data, error } = await supabase
     .rpc('properties_full')

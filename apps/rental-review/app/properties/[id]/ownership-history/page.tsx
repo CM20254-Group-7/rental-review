@@ -1,7 +1,5 @@
-import { cookies } from 'next/headers';
 import { cache } from 'react';
-
-import useClient from '@/utils/supabase/server';
+import { createServerSupabaseClient } from '@repo/supabase-client-helpers/server-only';
 import { NextPage } from 'next';
 import Link from 'next/link';
 import StarRatingLayout from '@/components/StarRating';
@@ -27,8 +25,7 @@ const getAllOwners = cache(async (
 }[]> => {
   'use server';
 
-  const cookieStore = cookies();
-  const supabase = useClient(cookieStore);
+  const supabase = createServerSupabaseClient();
 
   // get the ownership history
   const { data } = await supabase

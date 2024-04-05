@@ -1,5 +1,4 @@
-import createClient from '@/utils/supabase/server';
-import { cookies } from 'next/headers';
+import { createServerSupabaseClient } from '@repo/supabase-client-helpers/server-only';
 import { NextPage } from 'next';
 import React from 'react';
 
@@ -37,8 +36,7 @@ const NotALandlordMessage: React.FC = () => (
 
 const ClaimPropertyPage: NextPage<{ params: { id: string } }> = async ({ params: { id: propertyId } }) => {
   // Set up the supabase client
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
+  const supabase = createServerSupabaseClient();
 
   // Check a property with the provided id exists
   const { data: propertyData, error: propertyError } = await supabase

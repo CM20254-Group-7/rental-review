@@ -1,7 +1,6 @@
 'use server';
 
-import createClient from '@/utils/supabase/server';
-import { cookies } from 'next/headers';
+import { createServerSupabaseClient } from '@repo/supabase-client-helpers/server-only';
 import { redirect } from 'next/navigation';
 import { z } from 'zod';
 
@@ -110,8 +109,7 @@ export const signIn = async (
   } = validatedFields.data;
 
   // login the user
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
+  const supabase = createServerSupabaseClient();
 
   const { error } = await supabase.auth.signInWithPassword({
     email,
@@ -217,8 +215,7 @@ export const signUp = async (
   } = validatedFields.data;
 
   // sign up the user
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
+  const supabase = createServerSupabaseClient();
 
   const { error } = await supabase.auth.signUp({
     email,

@@ -1,7 +1,6 @@
 'use server';
 
-import createClient from '@/utils/supabase/server';
-import { cookies } from 'next/headers';
+import { createServerSupabaseClient } from '@repo/supabase-client-helpers/server-only';
 import { redirect } from 'next/navigation';
 import { z } from 'zod';
 
@@ -24,7 +23,6 @@ const passwordDetails = z.object({
 });
 
 const newPasswordSchema = passwordDetails
-
   .superRefine(({ new_password: newPassword, confirmPassword }, ctx) => {
     if (newPassword !== confirmPassword) {
       ctx.addIssue({
@@ -60,8 +58,7 @@ export const updatePassword = async (prevState: State, formData: FormData): Prom
     new_password: newPassword,
   } = validatedFields.data;
 
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
+  const supabase = createServerSupabaseClient();
 
   const { error } = await supabase.auth.updateUser({
     password: newPassword,

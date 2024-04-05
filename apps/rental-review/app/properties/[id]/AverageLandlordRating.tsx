@@ -1,10 +1,9 @@
-import createClient from '@/utils/supabase/server';
-import { cookies } from 'next/headers';
+import { createServerSupabaseClient } from '@repo/supabase-client-helpers/server-only';
 import StarRatingLayout from '@/components/StarRating';
 import React, { cache } from 'react';
 
 const getAverageLandlordRating = cache(async (landlordId: string): Promise<number | null> => {
-  const supabase = createClient(cookies());
+  const supabase = createServerSupabaseClient();
 
   const { data, error } = await supabase
     .rpc('average_landlord_rating', { id: landlordId });

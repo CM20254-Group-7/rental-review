@@ -63,18 +63,6 @@ module.exports = {
         "mjs": "never"
       }
     ],
-    "import/no-extraneous-dependencies": [
-      "error",
-      {
-        "devDependencies": [
-          "playwright-tests/**",
-          "**/*.test.ts",
-          "**/*.spec.ts",
-          "**/*.config.ts",
-          "**/*.config.js"
-        ]
-      }
-    ]
   },
   "overrides": [
     // Do not require default exports in API Routes

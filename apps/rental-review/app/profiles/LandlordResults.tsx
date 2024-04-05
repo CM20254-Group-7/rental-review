@@ -1,12 +1,10 @@
-import createClient from '@/utils/supabase/server';
-import { cookies } from 'next/headers';
+import { createServerSupabaseClient } from '@repo/supabase-client-helpers/server-only';
 import Link from 'next/link';
 import React, { cache } from 'react';
 import StarRatingLayout from '@/components/StarRating';
 
 const getLandlordResults = cache(async () => {
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
+  const supabase = createServerSupabaseClient();
 
   const { data: landlords, error: landlordsError } = await supabase
     .rpc('landlord_public_profiles_with_ratings')

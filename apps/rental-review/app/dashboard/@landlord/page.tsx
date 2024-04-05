@@ -1,15 +1,13 @@
 import React, { Suspense } from 'react';
 import { NextPage } from 'next';
-import { cookies } from 'next/headers';
-import createClient from '@/utils/supabase/server';
+import { createServerSupabaseClient } from '@repo/supabase-client-helpers/server-only';
 import { Button, Divider } from '@/components/ClientTremor';
 import Link from 'next/link';
 import StarRatingLayout from '@/components/StarRating';
 import RatingGraph from './RatingGraph';
 
 const getAverageRatingOverTime = async (landlordId: string) => {
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
+  const supabase = createServerSupabaseClient();
 
   const { data } = await supabase
     .rpc('reviews_for_landlord', { id: landlordId })
@@ -18,7 +16,7 @@ const getAverageRatingOverTime = async (landlordId: string) => {
 
   if (!data || data.length === 0) return null;
 
-  const firstDate = new Date(data[0].review_posted);
+  const firstDate = new Date(data[0]!.review_posted);
 
   // calculate the date difference between the first review and today
   const dateDifference = Math.abs(new Date().getTime() - firstDate.getTime());
@@ -153,8 +151,7 @@ const AverageRatingGraph: React.FC<{landlordId: string}> = async ({ landlordId }
 };
 
 const getAverageRating = async (landlordId: string) => {
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
+  const supabase = createServerSupabaseClient();
 
   const { data } = await supabase
     .rpc('landlord_public_profiles_with_ratings')
@@ -175,8 +172,7 @@ const AverageRatingStars: React.FC<{landlordId: string}> = async ({ landlordId }
 };
 
 const LandlordDashboard: NextPage = async () => {
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
+  const supabase = createServerSupabaseClient();
 
   const { data: { user } } = await supabase.auth.getUser();
 

@@ -1,11 +1,8 @@
 'use server';
 
 import { redirect } from 'next/navigation';
-import { cookies } from 'next/headers';
-import createServerClient from '@/utils/supabase/server';
+import { createServerSupabaseClient, createServiceSupabaseClient } from '@repo/supabase-client-helpers/server-only';
 import { z } from 'zod';
-import { createClient } from '@supabase/supabase-js';
-import { Database } from '@/supabase.types';
 
 const LandlordRegistrationSchema = z
   .object({
@@ -55,8 +52,7 @@ export const addToLandlordDB = async (
   //   etc
 ): Promise<State> => {
   // set up the supabase client
-  const cookieStore = cookies();
-  const supabase = createServerClient(cookieStore);
+  const supabase = createServerSupabaseClient();
 
   const { data: { user }, error: userError } = await supabase.auth.getUser();
 
@@ -130,10 +126,7 @@ export const addToLandlordDB = async (
   };
 
   // create service client to add landlord to db
-  const serviceSupabase = createClient<Database>(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_KEY!,
-  );
+  const serviceSupabase = createServiceSupabaseClient();
 
   const { error: privateError } = await serviceSupabase
     .from('landlord_private_profiles')

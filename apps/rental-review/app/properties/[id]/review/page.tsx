@@ -1,12 +1,10 @@
 import { NextPage } from 'next';
 import { cache } from 'react';
-import { cookies } from 'next/headers';
-import createClient from '@/utils/supabase/server';
+import { createServerSupabaseClient } from '@repo/supabase-client-helpers/server-only';
 import CreateReviewForm from './form';
 
 const getTags = cache(async () => {
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
+  const supabase = createServerSupabaseClient();
 
   const { data } = await supabase.from('tags').select('tag');
 

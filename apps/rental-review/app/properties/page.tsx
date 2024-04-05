@@ -1,16 +1,14 @@
 import { NextPage } from 'next';
 import Link from 'next/link';
 import React, { Suspense, cache } from 'react';
-import { cookies } from 'next/headers';
-import createClient from '@/utils/supabase/server';
+import { createServerSupabaseClient } from '@repo/supabase-client-helpers/server-only';
 import PropertyResults, { PropertyResultsSkeleton } from './PropertyResults';
 import AddressSearch from './AddressSearch';
 import TagSearch from './TagSearch';
 import SortBy from './SortBy';
 
 const getTags = cache(async () => {
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
+  const supabase = createServerSupabaseClient();
 
   const { data, error } = await supabase
     .from('tags')
@@ -54,17 +52,15 @@ const PropertiesPage: NextPage<{
             <div className='flex flex-col items-center gap-2'>
               <p>Can&apos;t see your property?</p>
               <Link
-                href={`/reviews/create${
-                  (searchParams?.street || searchParams?.city || searchParams?.postalCode || searchParams?.country)
-                    ? `?${
-                      [
-                        searchParams?.street ? `street=${searchParams.street}` : [],
-                        searchParams?.city ? `city=${searchParams.city}` : [],
-                        searchParams?.postalCode ? `postalCode=${searchParams.postalCode}` : [],
-                        searchParams?.country ? `country=${searchParams.country}` : [],
-                      ].flat().join('&')
-                    }`
-                    : ''
+                href={`/reviews/create${(searchParams?.street || searchParams?.city || searchParams?.postalCode || searchParams?.country)
+                  ? `?${[
+                    searchParams?.street ? `street=${searchParams.street}` : [],
+                    searchParams?.city ? `city=${searchParams.city}` : [],
+                    searchParams?.postalCode ? `postalCode=${searchParams.postalCode}` : [],
+                    searchParams?.country ? `country=${searchParams.country}` : [],
+                  ].flat().join('&')
+                  }`
+                  : ''
                 }`}
                 className='border border-accent rounded-md px-4 py-2 text-accent mb-5 hover:bg-secondary/10 dark:hover:bg-accent/10 hover:shadow-lg hover:shadow-accent/20'
               >

@@ -1,6 +1,5 @@
-import createClient from '@/utils/supabase/server';
+import { createServerSupabaseClient } from '@repo/supabase-client-helpers/server-only';
 import { NextPage } from 'next';
-import { cookies } from 'next/headers';
 import { notFound } from 'next/navigation';
 import { Suspense, cache } from 'react';
 import { CurrentPropertyResults, PreviousPropertyResults, PropertyResultsLoading } from './PropertyResults';
@@ -9,8 +8,7 @@ import LandlordProfile from './LandlordProfile';
 
 const getLandlordBio = cache(async (landlordId: string) => {
   // set up the supabase client
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
+  const supabase = createServerSupabaseClient();
 
   // check if a landlord with the provided id exists and get their info
   const { data, error } = await supabase

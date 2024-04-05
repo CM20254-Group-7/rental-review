@@ -1,9 +1,6 @@
 'use server';
 
-import { Database } from '@/supabase.types';
-import createServerClient from '@/utils/supabase/server';
-import { createClient } from '@supabase/supabase-js';
-import { cookies } from 'next/headers';
+import { createServerSupabaseClient, createServiceSupabaseClient } from '@repo/supabase-client-helpers/server-only';
 import { z } from 'zod';
 
 const newReviewSchema = z.object({
@@ -82,14 +79,10 @@ export const createReview = async (
   } = validatedFields.data;
 
   // create service client
-  const serviceSupabase = createClient<Database>(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_KEY!,
-  );
+  const serviceSupabase = createServiceSupabaseClient();
 
   // get user
-  const cookieStore = cookies();
-  const supabase = createServerClient(cookieStore);
+  const supabase = createServerSupabaseClient();
 
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) {

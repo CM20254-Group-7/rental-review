@@ -1,5 +1,4 @@
-import createClient from '@/utils/supabase/server';
-import { cookies } from 'next/headers';
+import { createServerSupabaseClient } from '@repo/supabase-client-helpers/server-only';
 import NavLink from '@/components/Header/NavLink';
 import React from 'react';
 import AuthButton from './AuthButton';
@@ -7,8 +6,7 @@ import HomeButton from './HomeButton';
 import Help from './Help';
 
 const NavBar: React.FC = async () => {
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
+  const supabase = createServerSupabaseClient();
   const { data: { user }, error: userError } = await supabase.auth.getUser();
   let loggedIn = true;
   if (userError || !user) {

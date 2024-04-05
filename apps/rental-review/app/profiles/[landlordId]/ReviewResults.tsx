@@ -1,11 +1,9 @@
 import { ReviewDetailsLayout } from '@/components/ReviewDetails';
-import createClient from '@/utils/supabase/server';
-import { cookies } from 'next/headers';
+import { createServerSupabaseClient } from '@repo/supabase-client-helpers/server-only';
 import React, { cache } from 'react';
 
 const getReviews = cache(async (landlordId: string) => {
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
+  const supabase = createServerSupabaseClient();
 
   const { data: reviews } = await supabase
     .rpc('reviews_for_landlord', { id: landlordId })

@@ -36,3 +36,11 @@ yarn-error.log*
 # Misc
 .DS_Store
 *.pem
+
+# Allow platform dependent git attributes to handle file encoding
+.gitattributes
+
+# eslint results
+eslint-results.sarif
+
+.vscode/

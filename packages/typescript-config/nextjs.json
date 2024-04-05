@@ -9,6 +9,8 @@
       "dom.iterable",
       "esnext"
     ],
+    "declarationMap": true,
+    "declaration": true,
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,

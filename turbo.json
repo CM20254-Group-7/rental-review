@@ -1,19 +1,63 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "globalDotEnv": [".env"],
-  "globalPassThroughEnv": ["CI"],
+  "globalDotEnv": [
+    ".env"
+  ],
+  "globalPassThroughEnv": [
+    "CI"
+  ],
   "pipeline": {
     "build": {
-      "dependsOn": ["^build"],
-      "outputs": [".next/**", "!.next/cache/**"],
-      "env": ["VERCEL_URL"]
+      "dependsOn": [
+        "^build"
+      ],
+      "outputs": [
+        ".next/**",
+        "!.next/cache/**"
+      ],
+      "env": [
+        "VERCEL_URL"
+      ]
     },
     "lint": {
-      "dependsOn": ["^lint"]
+      "dependsOn": [
+        "^lint"
+      ]
     },
     "dev": {
       "cache": false,
-      "persistent": true
+      "persistent": true,
+      "dotEnv": [
+        ".env"
+      ],
+      "env": [
+        "NEXT_PUBLIC_SUPABASE_URL",
+        "NEXT_PUBLIC_SUPABASE_ANON_KEY"
+      ]
+    },
+    "supabase#start": {
+      "dependsOn": [
+        "^start"
+      ],
+      "cache": false
+    },
+    "supabase#stop": {
+      "dependsOn": [
+        "^stop"
+      ],
+      "cache": false
+    },
+    "supabase#generate-types": {
+      "dependsOn": [
+        "^generate-types"
+      ],
+      "cache": false
+    },
+    "supabase#build": {
+      "dependsOn": [
+        "supabase#generate-types"
+      ],
+      "cache": false
     }
   }
 }

@@ -66,7 +66,7 @@ export const ownershipHistories = [
   {
     startDate: ['2024-02-20'],
     endDate: ['2024-02-21'],
-    landlord: [users[0].landlordProfile?.displayName],
+    landlord: [users[0]!.landlordProfile?.displayName],
     propertyAddress: propertyAddresses[0],
     propertyId: propertyIds[0],
     landlordRating: [2],
@@ -76,7 +76,7 @@ export const ownershipHistories = [
     // allow the dates in either format
     startDate: ['2024-01-20', '2021-01-01'],
     endDate: ['Present', '2021-12-31'],
-    landlord: [users[0].landlordProfile?.displayName, users[8].landlordProfile?.displayName],
+    landlord: [users[0]!.landlordProfile?.displayName, users[8]!.landlordProfile?.displayName],
     propertyAddress: propertyAddresses[1],
     propertyId: propertyIds[1],
     landlordRating: [2, 5],
@@ -146,7 +146,7 @@ const loginUserWithAPI = async (
 
 // API mode disabled as it does not work as intended
 export const loginAsUser = async (page: Page, userNo: number, method: 'UI' /* | 'API' */ = 'UI') => {
-  const user = users[userNo - 1];
+  const user = users[userNo - 1]!;
   if (method === 'UI') {
     await loginUserWithUI(page, user.email, user.password);
   } else {
