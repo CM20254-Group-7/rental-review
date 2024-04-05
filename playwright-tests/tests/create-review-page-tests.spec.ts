@@ -57,8 +57,8 @@ test.beforeEach(async ({ page }, testInfo) => {
           Prefer: 'return=representation',
         },
         data: {
-          user_id: users[3].id,
-          property_id: properties[testInfo.workerIndex].id,
+          user_id: users[3]?.id,
+          property_id: properties[testInfo.workerIndex]?.id,
         },
       });
 
@@ -73,7 +73,7 @@ test.beforeEach(async ({ page }, testInfo) => {
           Prefer: 'return=representation',
         },
         data: {
-          property_id: properties[testInfo.workerIndex].id,
+          property_id: properties[testInfo.workerIndex]?.id,
           reviewer_id: reviewerId,
           review_date: '2021-01-01',
           review_body: 'test review',
@@ -91,7 +91,7 @@ test.afterEach(async ({ page }, testInfo) => {
   // if property was created, delete it
   // beforeEach creation
   if (properties[testInfo.workerIndex]) {
-    const property = properties[testInfo.workerIndex];
+    const property = properties[testInfo.workerIndex]!;
 
     const res = await page.request.delete(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/properties?id=eq.${property.id}`, {
       headers: {
@@ -138,7 +138,7 @@ test.describe('Anon User Cannot Review', () => {
 });
 
 test.describe('User 1 tests', () => {
-  test.use({ storageState: users[0].file });
+  test.use({ storageState: users[0]!.file });
   const dateTime = new Date();
   const formattedDate = dateTime.toISOString().split('T')[0];
 
@@ -172,7 +172,7 @@ test.describe('User 1 tests', () => {
 
   // test existing property review form, using 1 Test Road
   test('reviewing an existing property <Existing Property> <Existing Review>', async ({ page }, testInfo) => {
-    const property = properties[testInfo.workerIndex];
+    const property = properties[testInfo.workerIndex]!;
     // do full workflow to get to existing property review page
     // goes to the create review page
     await page.goto(`/properties/${property.id}/review`);
@@ -222,7 +222,7 @@ test.describe('User 1 tests', () => {
 });
 
 test.describe('User 4 tests', () => {
-  test.use({ storageState: users[3].file });
+  test.use({ storageState: users[3]!.file });
   const dateTime = new Date();
   const formattedDate = dateTime.toISOString().split('T')[0];
 

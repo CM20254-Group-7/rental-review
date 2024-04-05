@@ -5,11 +5,14 @@
     "build": "dotenv -- turbo build",
     "dev": "dotenv -- turbo dev",
     "lint": "turbo lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "start": "dotenv -- turbo start",
+    "start:rental-review": "dotenv -- turbo start --filter rental-review",
     "start:supabase": "turbo start --filter supabase",
     "stop:supabase": "supabase stop --filter supabase",
     "generate-types:supabase": "turbo generate-types --filter supabase",
-    "generate-types": "turbo generate-types"
+    "generate-types": "turbo generate-types",
+    "test": "dotenv -- turbo test",
+    "test:ui": "dotenv -- turbo test:ui"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",

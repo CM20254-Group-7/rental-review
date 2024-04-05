@@ -6,14 +6,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint --dir .",
-    "lint-save": "eslint . --config .eslintrc.json --ext .js,.jsx,.ts,.tsx --format @microsoft/eslint-formatter-sarif --output-file eslint-results.sarif",
-    "gen-types": "supabase gen types typescript --local > supabase.types.ts",
-    "supabase-start": "supabase start",
-    "supabase-stop": "supabase stop",
-    "supabase-reset": "supabase stop --no-backup && pnpx supabase start",
-    "supabase-types": "supabase gen types typescript --local > supabase.types.ts",
-    "test": "playwright test",
-    "test-ui": "playwright test --ui"
+    "lint-save": "eslint . --config .eslintrc.json --ext .js,.jsx,.ts,.tsx --format @microsoft/eslint-formatter-sarif --output-file eslint-results.sarif"
   },
   "dependencies": {
     "@repo/supabase-client-helpers": "workspace:*",
@@ -31,7 +24,6 @@
     "@vercel/speed-insights": "^1.0.10",
     "@vercel/toolbar": "^0.1.13",
     "autoprefixer": "10.4.15",
-    "dotenv": "^16.4.5",
     "framer-motion": "^11.0.24",
     "geist": "^1.3.0",
     "postcss": "8.4.31",
@@ -42,7 +34,6 @@
     "next": "canary"
   },
   "devDependencies": {
-    "@playwright/test": "^1.42.1",
     "@tailwindcss/forms": "^0.5.7",
     "@types/node": "20.3.1",
     "@types/react": "^18.2.73",
@@ -53,7 +44,6 @@
     "@repo/typescript-config": "workspace:*",
     "@types/eslint": "^8.56.5",
     "eslint": "^8.57.0",
-    "playwright": "^1.42.1",
     "typescript": "~5.4.2"
   }
 }

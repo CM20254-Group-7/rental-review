@@ -1,11 +1,10 @@
-import 'dotenv/config';
 import { defineConfig, devices } from '@playwright/test';
 
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
 export default defineConfig({
-  testDir: './playwright-tests',
+  testDir: './tests',
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
@@ -75,7 +74,7 @@ export default defineConfig({
   /* Run your local dev server before starting the tests */
   webServer:
   {
-    command: 'pnpm run build && pnpm run start',
+    command: 'pnpm run -w start:rental-review',
     url: process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000',
     timeout: 120 * 1000,
     reuseExistingServer: !process.env.CI,

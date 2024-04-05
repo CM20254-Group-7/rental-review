@@ -32,7 +32,11 @@
       ],
       "env": [
         "NEXT_PUBLIC_SUPABASE_URL",
-        "NEXT_PUBLIC_SUPABASE_ANON_KEY"
+        "NEXT_PUBLIC_SUPABASE_ANON_KEY",
+        "SUPABASE_SERVICE_KEY",
+        "EDGE_CONFIG",
+        "VERCEL_ENV",
+        "FLAGS_SECRET"
       ]
     },
     "supabase#start": {
@@ -58,6 +62,45 @@
         "supabase#generate-types"
       ],
       "cache": false
+    },
+    "test": {
+      "dependsOn": [
+        "^test"
+      ],
+      "cache": false,
+      "env": [
+        "NEXT_PUBLIC_SUPABASE_URL",
+        "NEXT_PUBLIC_SUPABASE_ANON_KEY",
+        "SUPABASE_SERVICE_KEY",
+        "NEXT_PUBLIC_BASE_URL"
+      ]
+    },
+    "test:ui": {
+      "dependsOn": [
+        "^test:ui"
+      ],
+      "cache":false,
+      "env": [
+        "NEXT_PUBLIC_SUPABASE_URL",
+        "NEXT_PUBLIC_SUPABASE_ANON_KEY",
+        "SUPABASE_SERVICE_KEY",
+        "NEXT_PUBLIC_BASE_URL"
+      ]
+    },
+    "rental-review#start": {
+      "dependsOn": [
+        "rental-review#build"
+      ],
+      "env": [
+        "NEXT_PUBLIC_SUPABASE_URL",
+        "NEXT_PUBLIC_SUPABASE_ANON_KEY",
+        "SUPABASE_SERVICE_KEY",
+        "EDGE_CONFIG",
+        "VERCEL_ENV",
+        "FLAGS_SECRET"
+      ],
+      "cache": false,
+      "persistent": true
     }
   }
 }
