@@ -3,7 +3,7 @@ import { cookies } from 'next/headers';
 import Link from 'next/link';
 import React from 'react';
 
-const LandlordRegistrationPropmt = () => (
+const LandlordRegistrationPrompt = () => (
   <div className='flex flex-col gap-1 items-center'>
     <h3 className='font-bold text-2xl text-accent'>Are you a landlord?</h3>
     <p className='mb-6 text-lg'>
@@ -81,8 +81,8 @@ const DashboardLayout = async ({
         {genericDashboard}
         {userIsLandlord && landlordDashboard}
         {userHasLeftReview && tenantDashboard}
-        <div className='flex flex-col md:flex-row gap-4'>
-          {!userIsLandlord && <LandlordRegistrationPropmt />}
+        <div className='flex flex-col gap-4'>
+          {!userIsLandlord && <LandlordRegistrationPrompt />}
           {!userHasLeftReview && <StartReviewingPrompt />}
         </div>
       </main>
