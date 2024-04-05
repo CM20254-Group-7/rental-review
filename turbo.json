@@ -9,6 +9,7 @@
   "pipeline": {
     "build": {
       "dependsOn": [
+        "^generate-types",
         "^build"
       ],
       "outputs": [
@@ -39,27 +40,27 @@
         "FLAGS_SECRET"
       ]
     },
-    "supabase#start": {
+    "@repo/supabase#start": {
       "dependsOn": [
         "^start"
       ],
       "cache": false
     },
-    "supabase#stop": {
+    "@repo/supabase#stop": {
       "dependsOn": [
         "^stop"
       ],
       "cache": false
     },
-    "supabase#generate-types": {
+    "generate-types": {
       "dependsOn": [
         "^generate-types"
       ],
       "cache": false
     },
-    "supabase#build": {
+    "@repo/supabase#generate-types": {
       "dependsOn": [
-        "supabase#generate-types"
+        "@repo/supabase#start"
       ],
       "cache": false
     },
@@ -101,6 +102,12 @@
       ],
       "cache": false,
       "persistent": true
+    },
+    "lint:sarif": { },
+    "rental-review#lint:sarif":{
+      "outputs": [
+        "../../eslint-results/rental-review.sarif"
+      ]
     }
   }
 }

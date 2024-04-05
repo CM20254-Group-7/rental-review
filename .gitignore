@@ -41,6 +41,6 @@ yarn-error.log*
 .gitattributes
 
 # eslint results
-eslint-results.sarif
+eslint-results/
 
 .vscode/

@@ -1,25 +1,28 @@
 {
-  "name": "rental-review-mono",
+  "name": "rental-review",
   "private": true,
   "scripts": {
     "build": "dotenv -- turbo build",
     "dev": "dotenv -- turbo dev",
     "lint": "turbo lint",
+    "lint:sarif": "turbo lint:sarif",
     "start": "dotenv -- turbo start",
     "start:rental-review": "dotenv -- turbo start --filter rental-review",
     "start:supabase": "turbo start --filter supabase",
-    "stop:supabase": "supabase stop --filter supabase",
+    "stop:supabase": "turbo stop --filter supabase",
     "generate-types:supabase": "turbo generate-types --filter supabase",
     "generate-types": "turbo generate-types",
     "test": "dotenv -- turbo test",
     "test:ui": "dotenv -- turbo test:ui"
   },
   "devDependencies": {
+    "eslint": "8.57.0",
+    "@microsoft/eslint-formatter-sarif": "2.1.7",
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
+    "dotenv-cli": "latest",
     "prettier": "^3.2.5",
-    "turbo": "latest",
-    "dotenv-cli": "latest"
+    "turbo": "latest"
   },
   "packageManager": "pnpm@8.15.5+sha256.4b4efa12490e5055d59b9b9fc9438b7d581a6b7af3b5675eb5c5f447cee1a589",
   "engines": {

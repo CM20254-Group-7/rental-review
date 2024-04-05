@@ -7,9 +7,17 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
       - uses: supabase/setup-cli@v1
         with:
-          version: 1.142.2
-      - run: supabase db start
-      - run: supabase test db
+          version: latest
+
+      - name: Check out code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+        
+      - name: run tests
+        run: |
+          cd packages/supabase
+          supabase db start
+          supabase test db

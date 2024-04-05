@@ -6,7 +6,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint --dir .",
-    "lint-save": "eslint . --config .eslintrc.json --ext .js,.jsx,.ts,.tsx --format @microsoft/eslint-formatter-sarif --output-file eslint-results.sarif"
+    "lint:sarif": "eslint . --config .eslintrc.js --ext .js,.jsx,.ts,.tsx --format @microsoft/eslint-formatter-sarif --output-file ../../eslint-results/rental-review.sarif"
   },
   "dependencies": {
     "@repo/supabase-client-helpers": "workspace:*",
@@ -43,7 +43,6 @@
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@types/eslint": "^8.56.5",
-    "eslint": "^8.57.0",
     "typescript": "~5.4.2"
   }
 }

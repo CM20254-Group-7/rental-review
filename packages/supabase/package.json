@@ -12,6 +12,6 @@
         "generate-types": "supabase gen types typescript --local > supabase.types.ts"
     },
     "devDependencies": {
-        "supabase": "1.142.2"
+        "supabase": "latest"
     }
 }
