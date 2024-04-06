@@ -25,7 +25,10 @@ const LandlordRegistrationPage: NextPage = async () => {
   const supabase = createServerSupabaseClient();
 
   // Middleware should redirect if user is not logged in, return null for TypeScript
-  const { data: { user }, error: userError } = await supabase.auth.getUser();
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
   if (userError || !user) return null;
 
   // Check a user with the provided id exists

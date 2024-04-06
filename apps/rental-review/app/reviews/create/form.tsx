@@ -10,15 +10,12 @@ import { createReview } from './actions';
 const NewPropertyReviewForm: FC<{
   tags: string[];
   initialPropertyDetails?: {
-    street?: string
-    city?: string
-    postalCode?: string
-    country?: string
-  },
-}> = ({
-  tags,
-  initialPropertyDetails,
-}) => {
+    street?: string;
+    city?: string;
+    postalCode?: string;
+    country?: string;
+  };
+}> = ({ tags, initialPropertyDetails }) => {
   const [state, dispatch] = useFormState(createReview, {});
 
   return (
@@ -89,10 +86,7 @@ const NewPropertyReviewForm: FC<{
       </div>
 
       <h3 className='text-xl font-bold mt-6'>Review Details</h3>
-      <CreateReviewForm
-        tags={tags}
-        errors={state.errors}
-      />
+      <CreateReviewForm tags={tags} errors={state.errors} />
 
       <button
         className='rounded-md p-2 hover:bg-gray-600/20 border'

@@ -6,10 +6,10 @@ import React from 'react';
 import StarRatingLayout from './StarRating';
 
 interface MaybeLinkProps {
-  conditionMet: boolean
-  link: string
-  children: React.ReactNode
-  className?: string
+  conditionMet: boolean;
+  link: string;
+  children: React.ReactNode;
+  className?: string;
 }
 const MaybeLink: React.FC<MaybeLinkProps> = ({
   conditionMet,
@@ -19,19 +19,12 @@ const MaybeLink: React.FC<MaybeLinkProps> = ({
 }) => {
   if (conditionMet) {
     return (
-      <Link
-        href={link}
-        className={className}
-      >
+      <Link href={link} className={className}>
         {children}
       </Link>
     );
   }
-  return (
-    <div className={className}>
-      {children}
-    </div>
-  );
+  return <div className={className}>{children}</div>;
 };
 
 MaybeLink.defaultProps = {
@@ -39,17 +32,17 @@ MaybeLink.defaultProps = {
 };
 
 type Review = {
-  reviewId: string
+  reviewId: string;
   // reviewerId: string
-  reviewDate: Date
-  landlordRating: number
-  propertyRating: number
-  reviewMessage: string
-  reviewTags: string[]
-}
+  reviewDate: Date;
+  landlordRating: number;
+  propertyRating: number;
+  reviewMessage: string;
+  reviewTags: string[];
+};
 
 interface ReviewDetailsLayoutProps extends Review {
-  link?: boolean
+  link?: boolean;
 }
 // export seperately to allow pages that already have the data to use the standardised layout
 export const ReviewDetailsLayout: React.FC<ReviewDetailsLayoutProps> = ({
@@ -71,7 +64,6 @@ export const ReviewDetailsLayout: React.FC<ReviewDetailsLayoutProps> = ({
     {/* <p>Review ID: {reviewId}</p> */}
     {/* <p>Reviewer ID: {reviewerId}</p> */}
     <div className='flex flex-col w-full sm:w-4/5 gap-4'>
-
       <div className='flex flex-col sm:flex-row justify-around place-items-center'>
         <div className='flex flex-col'>
           <p className='text-lg font-semibold'>Property:</p>
@@ -86,17 +78,23 @@ export const ReviewDetailsLayout: React.FC<ReviewDetailsLayoutProps> = ({
 
       <div className='flex flex-col w-full gap-2'>
         <p className='text-lg font-semibold'>Review:</p>
-        <p className='border rounded-md h-fit min-h-[5rem] bg-gray-100/10 py-1 px-2'>{reviewMessage}</p>
+        <p className='border rounded-md h-fit min-h-[5rem] bg-gray-100/10 py-1 px-2'>
+          {reviewMessage}
+        </p>
       </div>
 
       <div className='flex flex-wrap gap-2'>
         {reviewTags.map((tag) => (
-          <span key={tag} className='border rounded-md px-2 py-1 bg-secondary/20'>{tag}</span>
+          <span
+            key={tag}
+            className='border rounded-md px-2 py-1 bg-secondary/20'
+          >
+            {tag}
+          </span>
         ))}
       </div>
 
       <p className='ml-auto text-gray-300'>{reviewDate.toLocaleDateString()}</p>
-
     </div>
   </MaybeLink>
 );
@@ -105,8 +103,8 @@ ReviewDetailsLayout.defaultProps = {
 };
 
 interface ReviewDetailsProps {
-  reviewId: string
-  link?: boolean
+  reviewId: string;
+  link?: boolean;
 }
 export const ReviewDetails: React.FC<ReviewDetailsProps> = async ({
   reviewId,

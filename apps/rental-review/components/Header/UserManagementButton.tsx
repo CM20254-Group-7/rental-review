@@ -32,7 +32,8 @@ const useComponentVisible = () => {
 };
 
 const UserManagementButton: React.FC<{ email: string }> = ({ email }) => {
-  const { ref, isComponentVisible, setIsComponentVisible } = useComponentVisible();
+  const { ref, isComponentVisible, setIsComponentVisible } =
+    useComponentVisible();
 
   return (
     <div className='relative'>
@@ -57,10 +58,7 @@ const UserManagementButton: React.FC<{ email: string }> = ({ email }) => {
             Manage Account
           </Link>
 
-          <form
-            action={signOut}
-            className='contents'
-          >
+          <form action={signOut} className='contents'>
             <button
               type='submit'
               className='py-2 px-4 w-full text-right rounded-b-md no-underline hover:bg-secondary/10'

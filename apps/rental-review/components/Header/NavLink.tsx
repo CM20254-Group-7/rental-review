@@ -5,8 +5,8 @@ import { usePathname } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 
 const NavLink: React.FC<{
-    text: string;
-    href: string;
+  text: string;
+  href: string;
 }> = ({ text, href }) => {
   const pathName = usePathname();
   const [active, setActive] = useState(pathName === href);

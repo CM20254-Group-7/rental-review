@@ -1,22 +1,24 @@
-import {
-  test, expect, TestInfo as TestInfoType,
-} from '@playwright/test';
+import { test, expect, TestInfo as TestInfoType } from '@playwright/test';
 import { users } from './helpers';
 
 const apiBaseURL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 
 // Make sure you update/add at least the worker index & id if you change them in the test to ensure users are cleaned up
 const testUsers: {
-  [workerIndex: number]: {
-    id: string,
-    email: string,
-    password: string,
-  } | undefined,
+  [workerIndex: number]:
+    | {
+        id: string;
+        email: string;
+        password: string;
+      }
+    | undefined;
 } = {};
 
 // Helper Functions
-const generateTestUserEmail = (TestInfo: TestInfoType) => `user.${TestInfo.workerIndex}@supabase.user.tests.com`;
-const generateTestUserPassword = (TestInfo: TestInfoType) => `User.${TestInfo.workerIndex}.Password`;
+const generateTestUserEmail = (TestInfo: TestInfoType) =>
+  `user.${TestInfo.workerIndex}@supabase.user.tests.com`;
+const generateTestUserPassword = (TestInfo: TestInfoType) =>
+  `User.${TestInfo.workerIndex}.Password`;
 
 test.beforeEach(async ({ browser }, TestInfo: TestInfoType) => {
   const email = generateTestUserEmail(TestInfo);
@@ -24,18 +26,21 @@ test.beforeEach(async ({ browser }, TestInfo: TestInfoType) => {
 
   // Create a new user using a fresh context
   const context = await browser.newContext();
-  const res = await context.request.post(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/auth/v1/signup`, {
-    headers: {
-      apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-      Authorization: `Bearer ${process.env.SUPABASE_SERVICE_KEY!}`,
-      'Content-Type': 'application/json',
-      Prefer: 'return=representation',
+  const res = await context.request.post(
+    `${process.env.NEXT_PUBLIC_SUPABASE_URL}/auth/v1/signup`,
+    {
+      headers: {
+        apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+        Authorization: `Bearer ${process.env.SUPABASE_SERVICE_KEY!}`,
+        'Content-Type': 'application/json',
+        Prefer: 'return=representation',
+      },
+      data: {
+        email,
+        password,
+      },
     },
-    data: {
-      email,
-      password,
-    },
-  });
+  );
 
   // assert the response is OK
   await expect(res).toBeOK();
@@ -60,12 +65,15 @@ test.afterEach(async ({ browser }, TestInfo) => {
   if (!testUser) return;
 
   const context = await browser.newContext();
-  const res = await context.request.delete(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/auth/v1/admin/users/${testUser.id}`, {
-    headers: {
-      apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-      Authorization: `Bearer ${process.env.SUPABASE_SERVICE_KEY!}`,
+  const res = await context.request.delete(
+    `${process.env.NEXT_PUBLIC_SUPABASE_URL}/auth/v1/admin/users/${testUser.id}`,
+    {
+      headers: {
+        apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+        Authorization: `Bearer ${process.env.SUPABASE_SERVICE_KEY!}`,
+      },
     },
-  });
+  );
 
   // assert the response is OK
   await expect(res).toBeOK();
@@ -216,14 +224,17 @@ test.describe('User Profile Tests', () => {
   const secondUser = users[1];
 
   // Verify the data we are looking for exists with the service key before checking which users can access it
-  test.describe('User\'s have profiles', () => {
+  test.describe("User's have profiles", () => {
     test(`${firstUser.label} has a profile`, async ({ page }) => {
-      const res = await page.request.get(`${apiBaseURL}/rest/v1/user_profiles?email=eq.${firstUser.email}&select=email`, {
-        headers: {
-          apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-          Authorization: `Bearer ${process.env.SUPABASE_SERVICE_KEY!}`,
+      const res = await page.request.get(
+        `${apiBaseURL}/rest/v1/user_profiles?email=eq.${firstUser.email}&select=email`,
+        {
+          headers: {
+            apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+            Authorization: `Bearer ${process.env.SUPABASE_SERVICE_KEY!}`,
+          },
         },
-      });
+      );
 
       // Should return 200 with the user's profile
       await expect(res.status()).toBe(200);
@@ -231,12 +242,15 @@ test.describe('User Profile Tests', () => {
     });
 
     test(`${secondUser.label} has a profile`, async ({ page }) => {
-      const res = await page.request.get(`${apiBaseURL}/rest/v1/user_profiles?email=eq.${secondUser.email}&select=email`, {
-        headers: {
-          apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-          Authorization: `Bearer ${process.env.SUPABASE_SERVICE_KEY!}`,
+      const res = await page.request.get(
+        `${apiBaseURL}/rest/v1/user_profiles?email=eq.${secondUser.email}&select=email`,
+        {
+          headers: {
+            apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+            Authorization: `Bearer ${process.env.SUPABASE_SERVICE_KEY!}`,
+          },
         },
-      });
+      );
 
       // Should return 200 with the user's profile
       await expect(res.status()).toBe(200);
@@ -253,26 +267,36 @@ test.describe('User Profile Tests', () => {
         await expect(page.getByRole('navigation')).toContainText('Login');
       });
 
-      test(`Anon user cannot access ${firstUser.label}'s profile`, async ({ page }) => {
-        const res = await page.request.get(`${apiBaseURL}/rest/v1/user_profiles?email=eq.${firstUser.email}&select=*`, {
-          headers: {
-            apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-            Authorization: `Bearer ${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!}`,
+      test(`Anon user cannot access ${firstUser.label}'s profile`, async ({
+        page,
+      }) => {
+        const res = await page.request.get(
+          `${apiBaseURL}/rest/v1/user_profiles?email=eq.${firstUser.email}&select=*`,
+          {
+            headers: {
+              apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+              Authorization: `Bearer ${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!}`,
+            },
           },
-        });
+        );
 
         // Should return 200 but with an empty array
         await expect(res.status()).toBe(200);
         await expect(await res.json()).toEqual([]);
       });
 
-      test(`Anon user cannot access ${secondUser.label}'s profile`, async ({ page }) => {
-        const res = await page.request.get(`${apiBaseURL}/rest/v1/user_profiles?email=eq.${secondUser.email}&select=email`, {
-          headers: {
-            apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-            Authorization: `Bearer ${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!}`,
+      test(`Anon user cannot access ${secondUser.label}'s profile`, async ({
+        page,
+      }) => {
+        const res = await page.request.get(
+          `${apiBaseURL}/rest/v1/user_profiles?email=eq.${secondUser.email}&select=email`,
+          {
+            headers: {
+              apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+              Authorization: `Bearer ${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!}`,
+            },
           },
-        });
+        );
 
         // Should return 200 but with an empty array
         await expect(res.status()).toBe(200);
@@ -287,57 +311,77 @@ test.describe('User Profile Tests', () => {
         await page.goto('./');
 
         // Expect the navbar to contain the user's email
-        await expect(page.getByRole('navigation')).toContainText(firstUser.email);
+        await expect(page.getByRole('navigation')).toContainText(
+          firstUser.email,
+        );
       });
 
-      test(`${firstUser.label} can access ${firstUser.label}'s profile`, async ({ page }) => {
+      test(`${firstUser.label} can access ${firstUser.label}'s profile`, async ({
+        page,
+      }) => {
         // get an access token for user 1
-        const userRes = await page.request.post(`${apiBaseURL}/auth/v1/token?grant_type=password`, {
-          data: {
-            email: firstUser.email,
-            password: firstUser.password,
+        const userRes = await page.request.post(
+          `${apiBaseURL}/auth/v1/token?grant_type=password`,
+          {
+            data: {
+              email: firstUser.email,
+              password: firstUser.password,
+            },
+            headers: {
+              apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+              'Content-Type': 'application/json',
+            },
           },
-          headers: {
-            apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-            'Content-Type': 'application/json',
-          },
-        });
+        );
         const { access_token: accessToken } = await userRes.json();
 
         // use the access token to get user 1's profile
-        const testRes = await page.request.get(`${apiBaseURL}/rest/v1/user_profiles?email=eq.${firstUser.email}&select=email`, {
-          headers: {
-            apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-            Authorization: `Bearer ${accessToken}`,
+        const testRes = await page.request.get(
+          `${apiBaseURL}/rest/v1/user_profiles?email=eq.${firstUser.email}&select=email`,
+          {
+            headers: {
+              apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+              Authorization: `Bearer ${accessToken}`,
+            },
           },
-        });
+        );
 
         // Should return 200 with the user's profile
         await expect(testRes.status()).toBe(200);
-        await expect(await testRes.json()).toEqual([{ email: firstUser.email }]);
+        await expect(await testRes.json()).toEqual([
+          { email: firstUser.email },
+        ]);
       });
 
-      test(`${firstUser.label} cannot access ${secondUser.label}'s profile`, async ({ page }) => {
+      test(`${firstUser.label} cannot access ${secondUser.label}'s profile`, async ({
+        page,
+      }) => {
         // get an access token for user 1
-        const userRes = await page.request.post(`${apiBaseURL}/auth/v1/token?grant_type=password`, {
-          data: {
-            email: firstUser.email,
-            password: firstUser.password,
+        const userRes = await page.request.post(
+          `${apiBaseURL}/auth/v1/token?grant_type=password`,
+          {
+            data: {
+              email: firstUser.email,
+              password: firstUser.password,
+            },
+            headers: {
+              apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+              'Content-Type': 'application/json',
+            },
           },
-          headers: {
-            apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-            'Content-Type': 'application/json',
-          },
-        });
+        );
         const { access_token: accessToken } = await userRes.json();
 
         // use the access token to get user 2's profile
-        const testRes = await page.request.get(`${apiBaseURL}/rest/v1/user_profiles?email=eq.${secondUser.email}&select=email`, {
-          headers: {
-            apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-            Authorization: `Bearer ${accessToken}`,
+        const testRes = await page.request.get(
+          `${apiBaseURL}/rest/v1/user_profiles?email=eq.${secondUser.email}&select=email`,
+          {
+            headers: {
+              apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+              Authorization: `Bearer ${accessToken}`,
+            },
           },
-        });
+        );
 
         // Should return 200 but with an empty array
         await expect(testRes.status()).toBe(200);
@@ -352,61 +396,81 @@ test.describe('User Profile Tests', () => {
         await page.goto('./');
 
         // Expect the navbar to contain the user's email
-        await expect(page.getByRole('navigation')).toContainText(secondUser.email);
+        await expect(page.getByRole('navigation')).toContainText(
+          secondUser.email,
+        );
       });
 
-      test(`${secondUser.label} cannot access ${firstUser.label}'s profile`, async ({ page }) => {
+      test(`${secondUser.label} cannot access ${firstUser.label}'s profile`, async ({
+        page,
+      }) => {
         // get an access token for user 2
-        const userRes = await page.request.post(`${apiBaseURL}/auth/v1/token?grant_type=password`, {
-          data: {
-            email: secondUser.email,
-            password: secondUser.password,
+        const userRes = await page.request.post(
+          `${apiBaseURL}/auth/v1/token?grant_type=password`,
+          {
+            data: {
+              email: secondUser.email,
+              password: secondUser.password,
+            },
+            headers: {
+              apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+              'Content-Type': 'application/json',
+            },
           },
-          headers: {
-            apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-            'Content-Type': 'application/json',
-          },
-        });
+        );
         const { access_token: accessToken } = await userRes.json();
 
         // use the access token to get user 1's profile
-        const testRes = await page.request.get(`${apiBaseURL}/rest/v1/user_profiles?email=eq.${firstUser.email}&select=email`, {
-          headers: {
-            apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-            Authorization: `Bearer ${accessToken}`,
+        const testRes = await page.request.get(
+          `${apiBaseURL}/rest/v1/user_profiles?email=eq.${firstUser.email}&select=email`,
+          {
+            headers: {
+              apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+              Authorization: `Bearer ${accessToken}`,
+            },
           },
-        });
+        );
 
         // Should return 200 but with an empty array
         await expect(testRes.status()).toBe(200);
         await expect(await testRes.json()).toEqual([]);
       });
 
-      test(`${secondUser.label} can access ${secondUser.label}'s profile`, async ({ page }) => {
+      test(`${secondUser.label} can access ${secondUser.label}'s profile`, async ({
+        page,
+      }) => {
         // get an access token for user 2
-        const userRes = await page.request.post(`${apiBaseURL}/auth/v1/token?grant_type=password`, {
-          data: {
-            email: secondUser.email,
-            password: secondUser.password,
+        const userRes = await page.request.post(
+          `${apiBaseURL}/auth/v1/token?grant_type=password`,
+          {
+            data: {
+              email: secondUser.email,
+              password: secondUser.password,
+            },
+            headers: {
+              apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+              'Content-Type': 'application/json',
+            },
           },
-          headers: {
-            apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-            'Content-Type': 'application/json',
-          },
-        });
+        );
         const { access_token: accessToken } = await userRes.json();
 
         // use the access token to get user 2's profile
-        const testRes = await page.request.get(`${apiBaseURL}/rest/v1/user_profiles?email=eq.${secondUser.email}&select=email`, {
-          headers: {
-            apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-            Authorization: `Bearer ${accessToken}`,
+        const testRes = await page.request.get(
+          `${apiBaseURL}/rest/v1/user_profiles?email=eq.${secondUser.email}&select=email`,
+          {
+            headers: {
+              apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+              Authorization: `Bearer ${accessToken}`,
+            },
           },
-        });
+        );
 
         // Should return 200 with the user's profile
         await expect(testRes.status()).toBe(200);
-        await expect(await testRes.json()).toEqual([{ email: secondUser.email }]);
+        await expect(await testRes.json()).toEqual([
+          { email: secondUser.email },
+        ]);
       });
     });
   });

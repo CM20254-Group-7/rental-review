@@ -1,6 +1,9 @@
 import { NextPage } from 'next';
 import Link from 'next/link';
-import { CurrentPropertyResults, PreviousPropertyResults } from './PropertyResults';
+import {
+  CurrentPropertyResults,
+  PreviousPropertyResults,
+} from './PropertyResults';
 
 const OwnedPropertiesPage: NextPage = () => (
   <div className='flex flex-col gap-4'>

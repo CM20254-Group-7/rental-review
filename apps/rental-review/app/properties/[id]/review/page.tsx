@@ -20,13 +20,12 @@ const CreateReviewPage: NextPage<{
 
   return (
     <div>
-      <h1 className='text-2xl font-bold mt-6'>Create Review for existing property</h1>
+      <h1 className='text-2xl font-bold mt-6'>
+        Create Review for existing property
+      </h1>
       <p className='mb-6'>Write your review for this property</p>
 
-      <CreateReviewForm
-        propertyId={propertyId}
-        tags={tags}
-      />
+      <CreateReviewForm propertyId={propertyId} tags={tags} />
     </div>
   );
 };

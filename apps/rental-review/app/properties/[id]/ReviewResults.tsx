@@ -12,30 +12,32 @@ interface ReviewDetails {
   reviewer_id: string;
   review_tags: string[];
 }
-const getReviewResults = cache(async (propertyId: string): Promise<ReviewDetails[]> => {
-  const supabase = createServerSupabaseClient();
+const getReviewResults = cache(
+  async (propertyId: string): Promise<ReviewDetails[]> => {
+    const supabase = createServerSupabaseClient();
 
-  const { data, error } = await supabase
-    .from('reviews')
-    .select('*, review_tags(tag)')
-    .eq('property_id', propertyId);
+    const { data, error } = await supabase
+      .from('reviews')
+      .select('*, review_tags(tag)')
+      .eq('property_id', propertyId);
 
-  if (error) return [];
+    if (error) return [];
 
-  return data.map((review) => ({
-    ...review,
-    review_date: new Date(review.review_date),
-    review_tags: review.review_tags.map((reviewTag) => reviewTag.tag),
-  }));
-});
+    return data.map((review) => ({
+      ...review,
+      review_date: new Date(review.review_date),
+      review_tags: review.review_tags.map((reviewTag) => reviewTag.tag),
+    }));
+  },
+);
 
-const ReviewResults: React.FC<{ propertyId: string; }> = async ({ propertyId }) => {
+const ReviewResults: React.FC<{ propertyId: string }> = async ({
+  propertyId,
+}) => {
   const reviewResults = await getReviewResults(propertyId);
 
   if (reviewResults.length === 0) {
-    return (
-      <p>No Reviews yet</p>
-    );
+    return <p>No Reviews yet</p>;
   }
 
   return reviewResults.map((reviewDetails) => (

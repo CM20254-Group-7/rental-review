@@ -18,10 +18,7 @@ const ReviewExistingPropertyForm: FC<{
       className='flex flex-col gap-2 pleace-items-center max-w-prose w-full border p-4 rounded-md mb-8'
       action={dispatch}
     >
-      <CreateReviewForm
-        tags={tags}
-        errors={state.errors}
-      />
+      <CreateReviewForm tags={tags} errors={state.errors} />
 
       <button
         className='rounded-md p-2 hover:bg-gray-600/20 border'

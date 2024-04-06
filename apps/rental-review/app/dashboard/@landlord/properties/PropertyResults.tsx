@@ -5,7 +5,9 @@ import { FC, cache } from 'react';
 const getCurrentProperties = cache(async () => {
   const supabase = createServerSupabaseClient();
 
-  const { data: { user } } = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
   if (!user) return [];
 
@@ -19,7 +21,10 @@ const getCurrentProperties = cache(async () => {
 
   const { data: propertyDetails } = await supabase
     .rpc('properties_full')
-    .in('id', currentProperties.map(({ id }) => id))
+    .in(
+      'id',
+      currentProperties.map(({ id }) => id),
+    )
     .select('id, address, average_rating');
 
   if (!propertyDetails) return [];
@@ -34,7 +39,9 @@ const getCurrentProperties = cache(async () => {
 const getPreviousProperties = cache(async () => {
   const supabase = createServerSupabaseClient();
 
-  const { data: { user } } = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
   if (!user) return [];
 
@@ -48,7 +55,10 @@ const getPreviousProperties = cache(async () => {
 
   const { data: propertyDetails } = await supabase
     .rpc('properties_full')
-    .in('id', previousProperties.map(({ id }) => id))
+    .in(
+      'id',
+      previousProperties.map(({ id }) => id),
+    )
     .select('id, address, average_rating');
 
   if (!propertyDetails) return [];
@@ -66,15 +76,10 @@ const PropertyResult: FC<{
   averageRating: number;
   ownershipStartedAt: string;
   ownershipEndedAt: string | null;
-}> = ({
-  id,
-  address,
-  averageRating,
-  ownershipStartedAt,
-  ownershipEndedAt,
-}) => {
+}> = ({ id, address, averageRating, ownershipStartedAt, ownershipEndedAt }) => {
   const startDate = new Date(ownershipStartedAt).toLocaleDateString();
-  const endDate = ownershipEndedAt && new Date(ownershipEndedAt).toLocaleDateString();
+  const endDate =
+    ownershipEndedAt && new Date(ownershipEndedAt).toLocaleDateString();
 
   return (
     <Link
@@ -87,11 +92,9 @@ const PropertyResult: FC<{
         {averageRating}
       </p>
       <p>
-        {
-          ownershipEndedAt
-            ? `Owned: ${startDate} - ${endDate}`
-            : `Owned since ${startDate}`
-        }
+        {ownershipEndedAt
+          ? `Owned: ${startDate} - ${endDate}`
+          : `Owned since ${startDate}`}
       </p>
     </Link>
   );

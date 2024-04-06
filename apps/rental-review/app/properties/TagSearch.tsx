@@ -4,19 +4,23 @@ import React, { useEffect, useState } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 const TagSearch: React.FC<{
-  tags: string[]
+  tags: string[];
 }> = ({ tags }) => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();
 
-  const [selectedTags, setSelectedTags] = useState(searchParams.getAll('tags') || []);
+  const [selectedTags, setSelectedTags] = useState(
+    searchParams.getAll('tags') || [],
+  );
 
   useEffect(() => {
     setSelectedTags(searchParams.getAll('tags') || '');
   }, [searchParams]);
 
-  const [unselectedTags, setUnselectedTags] = useState(tags.filter((tag) => !selectedTags.includes(tag)));
+  const [unselectedTags, setUnselectedTags] = useState(
+    tags.filter((tag) => !selectedTags.includes(tag)),
+  );
 
   useEffect(() => {
     setUnselectedTags(tags.filter((tag) => !selectedTags.includes(tag)));
@@ -29,7 +33,9 @@ const TagSearch: React.FC<{
 
     // If the tag is already selected, remove it
     if (newSelectedTags.includes(tag)) {
-      newSelectedTags = newSelectedTags.filter((selectedTag) => selectedTag !== tag);
+      newSelectedTags = newSelectedTags.filter(
+        (selectedTag) => selectedTag !== tag,
+      );
     } else {
       newSelectedTags.push(tag);
     }

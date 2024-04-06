@@ -44,48 +44,74 @@ const getAverageRatingOverTime = async (landlordId: string) => {
       };
     });
   } else if (daysDifference < 20 * 7) {
-    intervals = Array.from({ length: Math.ceil(daysDifference / 7) }, (_, i) => {
-      const startDate = new Date(firstDate.getTime() + i * 7 * 1000 * 3600 * 24);
-      const endDate = new Date(firstDate.getTime() + (i + 1) * 7 * 1000 * 3600 * 24);
-      return {
-        start: i * 7 * 1000 * 3600 * 24,
-        end: (i + 1) * 7 * 1000 * 3600 * 24,
-        label: `${endDate.getDate()} ${endDate.toLocaleDateString('default', { month: 'short' })} ${startDate.getFullYear()}`,
-        longLabel: `${startDate.getDate()} ${startDate.toLocaleDateString('default', { month: 'short' })} ${startDate.getFullYear()} - ${endDate.getDate()} ${endDate.toLocaleDateString('default', { month: 'short' })} ${endDate.getFullYear()}`,
-      };
-    });
+    intervals = Array.from(
+      { length: Math.ceil(daysDifference / 7) },
+      (_, i) => {
+        const startDate = new Date(
+          firstDate.getTime() + i * 7 * 1000 * 3600 * 24,
+        );
+        const endDate = new Date(
+          firstDate.getTime() + (i + 1) * 7 * 1000 * 3600 * 24,
+        );
+        return {
+          start: i * 7 * 1000 * 3600 * 24,
+          end: (i + 1) * 7 * 1000 * 3600 * 24,
+          label: `${endDate.getDate()} ${endDate.toLocaleDateString('default', { month: 'short' })} ${startDate.getFullYear()}`,
+          longLabel: `${startDate.getDate()} ${startDate.toLocaleDateString('default', { month: 'short' })} ${startDate.getFullYear()} - ${endDate.getDate()} ${endDate.toLocaleDateString('default', { month: 'short' })} ${endDate.getFullYear()}`,
+        };
+      },
+    );
   } else if (daysDifference < 20 * 30) {
-    intervals = Array.from({ length: Math.ceil(daysDifference / 30) }, (_, i) => {
-      const date = new Date(firstDate.getTime() + i * 30 * 1000 * 3600 * 24);
-      return {
-        start: i * 30 * 1000 * 3600 * 24,
-        end: (i + 1) * 30 * 1000 * 3600 * 24,
-        label: date.toLocaleDateString('default', { month: 'long', year: 'numeric' }),
-        longLabel: date.toLocaleDateString('default', { month: 'long', year: 'numeric' }),
-      };
-    });
+    intervals = Array.from(
+      { length: Math.ceil(daysDifference / 30) },
+      (_, i) => {
+        const date = new Date(firstDate.getTime() + i * 30 * 1000 * 3600 * 24);
+        return {
+          start: i * 30 * 1000 * 3600 * 24,
+          end: (i + 1) * 30 * 1000 * 3600 * 24,
+          label: date.toLocaleDateString('default', {
+            month: 'long',
+            year: 'numeric',
+          }),
+          longLabel: date.toLocaleDateString('default', {
+            month: 'long',
+            year: 'numeric',
+          }),
+        };
+      },
+    );
   } else if (daysDifference < 20 * 30 * 6) {
-    intervals = Array.from({ length: Math.ceil(daysDifference / (30 * 6)) }, (_, i) => {
-      const startDate = new Date(firstDate.getTime() + i * 30 * 6 * 1000 * 3600 * 24);
-      const endDate = new Date(firstDate.getTime() + (i + 1) * 30 * 6 * 1000 * 3600 * 24);
+    intervals = Array.from(
+      { length: Math.ceil(daysDifference / (30 * 6)) },
+      (_, i) => {
+        const startDate = new Date(
+          firstDate.getTime() + i * 30 * 6 * 1000 * 3600 * 24,
+        );
+        const endDate = new Date(
+          firstDate.getTime() + (i + 1) * 30 * 6 * 1000 * 3600 * 24,
+        );
 
-      return {
-        start: i * 30 * 6 * 1000 * 3600 * 24,
-        end: (i + 1) * 30 * 6 * 1000 * 3600 * 24,
-        label: `${endDate.toLocaleDateString('default', { month: 'short' })} ${endDate.getFullYear()}`,
-        longLabel: `${startDate.toLocaleDateString('default', { month: 'short' })} ${startDate.getFullYear()} - ${endDate.toLocaleDateString('default', { month: 'short' })} ${endDate.getFullYear()}`,
-      };
-    });
+        return {
+          start: i * 30 * 6 * 1000 * 3600 * 24,
+          end: (i + 1) * 30 * 6 * 1000 * 3600 * 24,
+          label: `${endDate.toLocaleDateString('default', { month: 'short' })} ${endDate.getFullYear()}`,
+          longLabel: `${startDate.toLocaleDateString('default', { month: 'short' })} ${startDate.getFullYear()} - ${endDate.toLocaleDateString('default', { month: 'short' })} ${endDate.getFullYear()}`,
+        };
+      },
+    );
   } else {
-    intervals = Array.from({ length: Math.ceil(daysDifference / 365) }, (_, i) => {
-      const date = new Date(firstDate.getTime() + i * 365 * 1000 * 3600 * 24);
-      return {
-        start: i * 365 * 1000 * 3600 * 24,
-        end: (i + 1) * 365 * 1000 * 3600 * 24,
-        label: date.getFullYear().toString(),
-        longLabel: date.getFullYear().toString(),
-      };
-    });
+    intervals = Array.from(
+      { length: Math.ceil(daysDifference / 365) },
+      (_, i) => {
+        const date = new Date(firstDate.getTime() + i * 365 * 1000 * 3600 * 24);
+        return {
+          start: i * 365 * 1000 * 3600 * 24,
+          end: (i + 1) * 365 * 1000 * 3600 * 24,
+          label: date.getFullYear().toString(),
+          longLabel: date.getFullYear().toString(),
+        };
+      },
+    );
   }
 
   // group reviews by interval
@@ -98,7 +124,10 @@ const getAverageRatingOverTime = async (landlordId: string) => {
   }[] = intervals.map((interval) => {
     const reviews = data.filter((review) => {
       const reviewDate = new Date(review.review_posted).getTime();
-      return reviewDate >= firstDate.getTime() + interval.start && reviewDate < firstDate.getTime() + interval.end;
+      return (
+        reviewDate >= firstDate.getTime() + interval.start &&
+        reviewDate < firstDate.getTime() + interval.end
+      );
     });
 
     return {
@@ -116,38 +145,46 @@ const getAverageRatingOverTime = async (landlordId: string) => {
     newReviews: number;
   }[] = [];
 
-  groupedData.reduce((acc, group) => {
-    const cumulativeRating = acc.cumulativeRating + group.reviews.reduce((cumulative, review) => cumulative + review.landlord_rating, 0);
-    const count = acc.count + group.reviews.length;
+  groupedData.reduce(
+    (acc, group) => {
+      const cumulativeRating =
+        acc.cumulativeRating +
+        group.reviews.reduce(
+          (cumulative, review) => cumulative + review.landlord_rating,
+          0,
+        );
+      const count = acc.count + group.reviews.length;
 
-    const averageRating = cumulativeRating / count;
+      const averageRating = cumulativeRating / count;
 
-    averageRatings.push({
-      date: group.date,
-      longLabel: group.longLabel,
-      rating: averageRating,
-      newReviews: group.reviews.length,
-    });
+      averageRatings.push({
+        date: group.date,
+        longLabel: group.longLabel,
+        rating: averageRating,
+        newReviews: group.reviews.length,
+      });
 
-    return {
-      cumulativeRating,
-      count,
-    };
-  }, { cumulativeRating: 0, count: 0 });
+      return {
+        cumulativeRating,
+        count,
+      };
+    },
+    { cumulativeRating: 0, count: 0 },
+  );
 
   if (averageRatings.length < 2) return null;
 
   return averageRatings;
 };
 
-const AverageRatingGraph: React.FC<{landlordId: string}> = async ({ landlordId }) => {
+const AverageRatingGraph: React.FC<{ landlordId: string }> = async ({
+  landlordId,
+}) => {
   const ratings = await getAverageRatingOverTime(landlordId);
 
   if (!ratings) return null;
 
-  return (
-    <RatingGraph ratings={ratings} />
-  );
+  return <RatingGraph ratings={ratings} />;
 };
 
 const getAverageRating = async (landlordId: string) => {
@@ -162,7 +199,11 @@ const getAverageRating = async (landlordId: string) => {
   return data?.average_rating;
 };
 
-const AverageRatingStars: React.FC<{landlordId: string}> = async ({ landlordId }: { landlordId: string }) => {
+const AverageRatingStars: React.FC<{ landlordId: string }> = async ({
+  landlordId,
+}: {
+  landlordId: string;
+}) => {
   const averageRating = await getAverageRating(landlordId);
 
   // Show error message if no rating
@@ -174,7 +215,9 @@ const AverageRatingStars: React.FC<{landlordId: string}> = async ({ landlordId }
 const LandlordDashboard: NextPage = async () => {
   const supabase = createServerSupabaseClient();
 
-  const { data: { user } } = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
   // unauthenticated users should be handled by middleware
   // return null to assert types
@@ -185,7 +228,9 @@ const LandlordDashboard: NextPage = async () => {
   return (
     <div className='flex flex-col'>
       <div className='flex flex-col gap-1 items-center'>
-        <Link className='contents' href={`/profiles/${user.id}`}><Button>View Your Public Profile</Button></Link>
+        <Link className='contents' href={`/profiles/${user.id}`}>
+          <Button>View Your Public Profile</Button>
+        </Link>
         <Divider />
         <h3 className='font-bold text-2xl text-accent'>Your Rating</h3>
         <Suspense fallback={<p>Loading...</p>}>

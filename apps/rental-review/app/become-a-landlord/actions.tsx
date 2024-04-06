@@ -1,44 +1,46 @@
 'use server';
 
 import { redirect } from 'next/navigation';
-import { createServerSupabaseClient, createServiceSupabaseClient } from '@repo/supabase-client-helpers/server-only';
+import {
+  createServerSupabaseClient,
+  createServiceSupabaseClient,
+} from '@repo/supabase-client-helpers/server-only';
 import { z } from 'zod';
 
-const LandlordRegistrationSchema = z
-  .object({
-    user_id: z.string().uuid(),
+const LandlordRegistrationSchema = z.object({
+  user_id: z.string().uuid(),
 
-    user_first_name: z.string(),
-    user_last_name: z.string(),
-    display_name: z.string(),
+  user_first_name: z.string(),
+  user_last_name: z.string(),
+  display_name: z.string(),
 
-    display_email: z.string().email(),
-    user_phoneNb: z.string(),
+  display_email: z.string().email(),
+  user_phoneNb: z.string(),
 
-    user_house: z.string(),
-    user_street: z.string(),
-    user_county: z.string(),
-    user_postcode: z.string().min(5).max(7),
-    user_country: z.string(),
+  user_house: z.string(),
+  user_street: z.string(),
+  user_county: z.string(),
+  user_postcode: z.string().min(5).max(7),
+  user_country: z.string(),
 
-    user_bio: z.string().optional(),
-  });
+  user_bio: z.string().optional(),
+});
 
 export type State = {
   errors?: {
-    user_id?: string[],
-    display_name?: string[],
-    display_email?: string[],
-    user_bio?: string[],
-    user_phoneNb?: string[],
-    user_postcode?: string[],
-    user_country?: string[],
-    user_county?: string[],
-    user_city?: string[],
-    user_street?: string[],
-    user_house?: string[],
-    user_first_name?: string[],
-    user_last_name?: string[]
+    user_id?: string[];
+    display_name?: string[];
+    display_email?: string[];
+    user_bio?: string[];
+    user_phoneNb?: string[];
+    user_postcode?: string[];
+    user_country?: string[];
+    user_county?: string[];
+    user_city?: string[];
+    user_street?: string[];
+    user_house?: string[];
+    user_first_name?: string[];
+    user_last_name?: string[];
   };
   message?: string | null;
 };
@@ -54,7 +56,10 @@ export const addToLandlordDB = async (
   // set up the supabase client
   const supabase = createServerSupabaseClient();
 
-  const { data: { user }, error: userError } = await supabase.auth.getUser();
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
 
   if (userError || !user) {
     return {
@@ -65,16 +70,40 @@ export const addToLandlordDB = async (
   const validatedFields = LandlordRegistrationSchema.safeParse({
     user_id: user.id,
 
-    user_first_name: formData.get('user_first_name') !== '' ? formData.get('user_first_name') : undefined,
-    user_last_name: formData.get('user_last_name') !== '' ? formData.get('user_last_name') : undefined,
-    display_name: formData.get('display_name') !== '' ? formData.get('display_name') : undefined,
+    user_first_name:
+      formData.get('user_first_name') !== ''
+        ? formData.get('user_first_name')
+        : undefined,
+    user_last_name:
+      formData.get('user_last_name') !== ''
+        ? formData.get('user_last_name')
+        : undefined,
+    display_name:
+      formData.get('display_name') !== ''
+        ? formData.get('display_name')
+        : undefined,
 
-    display_email: formData.get('display_email') !== '' ? formData.get('display_email') : undefined,
-    user_phoneNb: formData.get('user_phoneNb') !== '' ? formData.get('user_phoneNb') : undefined,
+    display_email:
+      formData.get('display_email') !== ''
+        ? formData.get('display_email')
+        : undefined,
+    user_phoneNb:
+      formData.get('user_phoneNb') !== ''
+        ? formData.get('user_phoneNb')
+        : undefined,
 
-    user_house: formData.get('user_house') !== '' ? formData.get('user_house') : undefined,
-    user_street: formData.get('user_street') !== '' ? formData.get('user_street') : undefined,
-    user_county: formData.get('user_county') !== '' ? formData.get('user_county') : undefined,
+    user_house:
+      formData.get('user_house') !== ''
+        ? formData.get('user_house')
+        : undefined,
+    user_street:
+      formData.get('user_street') !== ''
+        ? formData.get('user_street')
+        : undefined,
+    user_county:
+      formData.get('user_county') !== ''
+        ? formData.get('user_county')
+        : undefined,
 
     // strip spaces from postcode
     user_postcode: (() => {
@@ -85,9 +114,13 @@ export const addToLandlordDB = async (
 
       return postcode.replace(/\s/g, '');
     })(),
-    user_country: formData.get('user_country') !== '' ? formData.get('user_country') : undefined,
+    user_country:
+      formData.get('user_country') !== ''
+        ? formData.get('user_country')
+        : undefined,
 
-    user_bio: formData.get('user_bio') !== '' ? formData.get('user_bio') : undefined,
+    user_bio:
+      formData.get('user_bio') !== '' ? formData.get('user_bio') : undefined,
   });
 
   if (!validatedFields.success) {
@@ -130,19 +163,17 @@ export const addToLandlordDB = async (
 
   const { error: privateError } = await serviceSupabase
     .from('landlord_private_profiles')
-    .insert(
-      {
-        user_id: landlordId,
-        first_name: userFirstName,
-        last_name: userLastName,
-        phone_number: userPhoneNb,
-        house: userHouse,
-        street: userStreet,
-        county: userCounty,
-        postcode: userPostcode,
-        country: userCountry,
-      },
-    );
+    .insert({
+      user_id: landlordId,
+      first_name: userFirstName,
+      last_name: userLastName,
+      phone_number: userPhoneNb,
+      house: userHouse,
+      street: userStreet,
+      county: userCounty,
+      postcode: userPostcode,
+      country: userCountry,
+    });
 
   if (privateError) {
     return {
@@ -153,18 +184,16 @@ export const addToLandlordDB = async (
   // Adds information into landlord_public_profiles db
   const { error: publicError } = await serviceSupabase
     .from('landlord_public_profiles')
-    .insert(
-      {
-        user_id: landlordId,
-        website: null,
-        display_name: displayName,
-        display_email: displayEmail,
-        bio: userBio,
-        profile_image_id: null,
-        verified: true,
-        type: '1',
-      },
-    );
+    .insert({
+      user_id: landlordId,
+      website: null,
+      display_name: displayName,
+      display_email: displayEmail,
+      bio: userBio,
+      profile_image_id: null,
+      verified: true,
+      type: '1',
+    });
 
   if (publicError) {
     //  delete the private profile if the public profile fails
@@ -178,5 +207,5 @@ export const addToLandlordDB = async (
     };
   }
 
-  return (redirect(`/profiles/${user.id}`));
+  return redirect(`/profiles/${user.id}`);
 };

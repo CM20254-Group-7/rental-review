@@ -6,7 +6,9 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import ClaimPropertyForm from './form';
 
-const NotLoggedInMessage: React.FC<{ propertyId: string }> = ({ propertyId }) => (
+const NotLoggedInMessage: React.FC<{ propertyId: string }> = ({
+  propertyId,
+}) => (
   <div className='flex flex-col flex-1 place-items-center justify-center gap-4'>
     <p className='text-lg font-semibold'>
       You must be logged in to access this page
@@ -34,7 +36,9 @@ const NotALandlordMessage: React.FC = () => (
   </div>
 );
 
-const ClaimPropertyPage: NextPage<{ params: { id: string } }> = async ({ params: { id: propertyId } }) => {
+const ClaimPropertyPage: NextPage<{ params: { id: string } }> = async ({
+  params: { id: propertyId },
+}) => {
   // Set up the supabase client
   const supabase = createServerSupabaseClient();
 
@@ -48,7 +52,10 @@ const ClaimPropertyPage: NextPage<{ params: { id: string } }> = async ({ params:
   if (propertyError || !propertyData) notFound();
 
   // Check the user is logged in
-  const { data: { user }, error: userError } = await supabase.auth.getUser();
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
   if (userError || !user) return <NotLoggedInMessage propertyId={propertyId} />;
 
   // Check that the user has a landlord profile
@@ -69,18 +76,11 @@ const ClaimPropertyPage: NextPage<{ params: { id: string } }> = async ({ params:
       <div className='flex flex-col w-full max-w-prose'>
         <div className='flex flex-col  gap-2 justify-center bg-primary/50 border rounded-t-lg p-4'>
           <div className='flex flex-row gap-2 items-baseline'>
-            <h1
-              className='text-lg font-bold'
-            >
-              Claiming Property:
-            </h1>
+            <h1 className='text-lg font-bold'>Claiming Property:</h1>
             <p className='text-md'>{propertyData.address}</p>
           </div>
         </div>
-        <ClaimPropertyForm
-          property_id={propertyId}
-          landlord_id={landlordId}
-        />
+        <ClaimPropertyForm property_id={propertyId} landlord_id={landlordId} />
       </div>
     </div>
   );

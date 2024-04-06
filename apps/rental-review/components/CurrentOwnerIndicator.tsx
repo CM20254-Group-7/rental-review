@@ -13,32 +13,36 @@ type LandlordProfile = {
   verified: boolean;
   website: string | null;
   average_rating: number | null;
-}
+};
 
-const getCurrentOwner = cache(async (propertyId: string): Promise<LandlordProfile | null> => {
-  'use server';
+const getCurrentOwner = cache(
+  async (propertyId: string): Promise<LandlordProfile | null> => {
+    'use server';
 
-  const supabase = createServerSupabaseClient();
+    const supabase = createServerSupabaseClient();
 
-  const { data: currentOwnerId } = await supabase
-    .from('property_ownership')
-    .select('landlord_id')
-    .eq('property_id', propertyId)
-    .is('ended_at', null)
-    .maybeSingle();
+    const { data: currentOwnerId } = await supabase
+      .from('property_ownership')
+      .select('landlord_id')
+      .eq('property_id', propertyId)
+      .is('ended_at', null)
+      .maybeSingle();
 
-  if (!currentOwnerId) return null;
+    if (!currentOwnerId) return null;
 
-  const { data } = await supabase
-    .rpc('landlord_public_profiles_with_ratings')
-    .eq('user_id', currentOwnerId.landlord_id)
-    .select('*')
-    .single();
+    const { data } = await supabase
+      .rpc('landlord_public_profiles_with_ratings')
+      .eq('user_id', currentOwnerId.landlord_id)
+      .select('*')
+      .single();
 
-  return data;
-});
+    return data;
+  },
+);
 
-const CurrentOwnerIndicator: React.FC<{ propertyId: string }> = async ({ propertyId }) => {
+const CurrentOwnerIndicator: React.FC<{ propertyId: string }> = async ({
+  propertyId,
+}) => {
   const currentOwner = await getCurrentOwner(propertyId);
 
   return (
@@ -58,12 +62,19 @@ const CurrentOwnerIndicator: React.FC<{ propertyId: string }> = async ({ propert
               </div>
             )}
           </Link>
-        ) : 'Unknown'}
+        ) : (
+          'Unknown'
+        )}
       </div>
 
       <div className='flex flex-col text-center'>
         <div className='flex px-2 py-1 border-t w-full flex-1 justify-center'>
-          <Link className='text-sm hover:underline' href={`/properties/${propertyId}/ownership-history`}>View ownership history/claim property</Link>
+          <Link
+            className='text-sm hover:underline'
+            href={`/properties/${propertyId}/ownership-history`}
+          >
+            View ownership history/claim property
+          </Link>
         </div>
       </div>
     </>

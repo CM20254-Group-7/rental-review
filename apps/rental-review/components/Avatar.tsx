@@ -3,9 +3,13 @@
 import { forwardRef, useMemo } from 'react';
 import Image from 'next/image';
 
-import { AvatarIcon, useAvatar, AvatarProps as BaseAvatarProps } from '@nextui-org/avatar';
+import {
+  AvatarIcon,
+  useAvatar,
+  AvatarProps as BaseAvatarProps,
+} from '@nextui-org/avatar';
 
-export interface AvatarProps extends BaseAvatarProps { }
+export interface AvatarProps extends BaseAvatarProps {}
 
 const MyAvatar = forwardRef<HTMLSpanElement, AvatarProps>((props, ref) => {
   const {
@@ -30,24 +34,33 @@ const MyAvatar = forwardRef<HTMLSpanElement, AvatarProps>((props, ref) => {
     const ariaLabel = alt || name || 'avatar';
 
     if (fallbackComponent) {
-      return (
-        fallbackComponent
-      );
+      return fallbackComponent;
     }
 
     return name ? (
-      <span aria-label={ariaLabel} className={slots.name({ class: classNames?.name })} role='img'>
+      <span
+        aria-label={ariaLabel}
+        className={slots.name({ class: classNames?.name })}
+        role='img'
+      >
         {getInitials(name)}
       </span>
     ) : (
-      <span aria-label={ariaLabel} className={slots.icon({ class: classNames?.icon })} role='img'>
+      <span
+        aria-label={ariaLabel}
+        className={slots.icon({ class: classNames?.icon })}
+        role='img'
+      >
         {icon}
       </span>
     );
   }, [showFallback, src, fallbackComponent, name, classNames]);
 
   return (
-    <div {...getAvatarProps()} className='rounded-full overflow-clip relative w-full h-full'>
+    <div
+      {...getAvatarProps()}
+      className='rounded-full overflow-clip relative w-full h-full'
+    >
       {src ? (
         <Image
           // className='absolute w-full max-w-md rounded-lg'
@@ -56,7 +69,9 @@ const MyAvatar = forwardRef<HTMLSpanElement, AvatarProps>((props, ref) => {
           fill
           style={{ objectFit: 'cover' }}
         />
-      ) : fallback}
+      ) : (
+        fallback
+      )}
     </div>
   );
 });

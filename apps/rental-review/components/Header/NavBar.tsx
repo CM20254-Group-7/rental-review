@@ -7,7 +7,10 @@ import Help from './Help';
 
 const NavBar: React.FC = async () => {
   const supabase = createServerSupabaseClient();
-  const { data: { user }, error: userError } = await supabase.auth.getUser();
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
   let loggedIn = true;
   if (userError || !user) {
     loggedIn = false;
@@ -19,16 +22,8 @@ const NavBar: React.FC = async () => {
         <HomeButton />
         <div className='flex-1 flex flex-row px-8 gap-4'>
           <NavLink text='Properties' href='/properties' />
-          <NavLink
-            text='Landlords'
-            href='/profiles'
-          />
-          {loggedIn && (
-            <NavLink
-              text='Dashboard'
-              href='/dashboard'
-            />
-          )}
+          <NavLink text='Landlords' href='/profiles' />
+          {loggedIn && <NavLink text='Dashboard' href='/dashboard' />}
           {/* Space for other links here */}
         </div>
         <AuthButton />

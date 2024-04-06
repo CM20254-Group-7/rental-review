@@ -11,21 +11,22 @@ const pageSize = 5;
 const getTotalPages = cache(async (): Promise<number> => {
   const supabase = createServerSupabaseClient();
 
-  const { data: { user } } = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
   if (!user) return 0;
 
-  const { count, error } = await supabase
-    .rpc(
-      'reviews_for_landlord',
-      {
-        id: user.id,
-      },
-      {
-        count: 'exact',
-        head: false,
-      },
-    );
+  const { count, error } = await supabase.rpc(
+    'reviews_for_landlord',
+    {
+      id: user.id,
+    },
+    {
+      count: 'exact',
+      head: false,
+    },
+  );
 
   if (error || !count) return 0;
 
@@ -35,7 +36,9 @@ const getTotalPages = cache(async (): Promise<number> => {
 const getReviewPage = cache(async (page: number, size: number) => {
   const supabase = createServerSupabaseClient();
 
-  const { data: { user } } = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
   if (!user) return [];
 
@@ -47,18 +50,24 @@ const getReviewPage = cache(async (page: number, size: number) => {
   if (!reviews) return [];
 
   // get the address for each property
-  const extendedReviews = (await Promise.all(reviews?.map(async (review) => {
-    const { data: property } = await supabase.rpc('plain_text_address', { property_id: review.property_id });
+  const extendedReviews = (
+    await Promise.all(
+      reviews?.map(async (review) => {
+        const { data: property } = await supabase.rpc('plain_text_address', {
+          property_id: review.property_id,
+        });
 
-    if (!property) return [];
+        if (!property) return [];
 
-    return {
-      ...review,
-      review_date: new Date(review.review_posted).toLocaleDateString(),
-      review_posted: new Date(review.review_posted).toLocaleDateString(),
-      address: property,
-    };
-  }))).flat();
+        return {
+          ...review,
+          review_date: new Date(review.review_posted).toLocaleDateString(),
+          review_posted: new Date(review.review_posted).toLocaleDateString(),
+          address: property,
+        };
+      }),
+    )
+  ).flat();
 
   return extendedReviews;
 });
@@ -93,7 +102,9 @@ const ReviewResults: FC<{
           <p className='border flex-1 rounded-md h-fit min-h-[5rem] bg-gray-100/10 py-1 px-2'>
             {review.review_body}
           </p>
-          <p className='ml-auto mt-auto text-gray-300'>{review.review_posted}</p>
+          <p className='ml-auto mt-auto text-gray-300'>
+            {review.review_posted}
+          </p>
         </div>
       ))}
     </div>
@@ -103,7 +114,7 @@ const ReviewResults: FC<{
 const LandlordReviewsDashboardPage: NextPage<{
   searchParams?: {
     landlordReviewsPage: string;
-  }
+  };
 }> = async ({ searchParams }) => {
   const currentPage = Number(searchParams?.landlordReviewsPage) || 1;
 
@@ -113,7 +124,9 @@ const LandlordReviewsDashboardPage: NextPage<{
 
   // unauthenticated users should be handled by middleware
   // return null to assert types
-  const { data: { user } } = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
   if (!user) return null;
 
   const { data: reviewData } = await supabase
@@ -129,10 +142,12 @@ const LandlordReviewsDashboardPage: NextPage<{
     return acc;
   }, []);
 
-  const ratingData = [1, 2, 3, 4, 5].map((stars) => ({
-    stars,
-    count: ratingCounts[stars] || 0,
-  })).sort((a, b) => b.stars - a.stars);
+  const ratingData = [1, 2, 3, 4, 5]
+    .map((stars) => ({
+      stars,
+      count: ratingCounts[stars] || 0,
+    }))
+    .sort((a, b) => b.stars - a.stars);
 
   return (
     <div className='flex flex-col gap-4'>

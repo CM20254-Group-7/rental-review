@@ -1,8 +1,6 @@
 'use client';
 
-import React, {
-  useCallback, useEffect, useRef, useState,
-} from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import StarRatingLayout from '@/components/StarRating';
 import { createClientSupabaseClient } from '@repo/supabase-client-helpers';
 import { useParams } from 'next/navigation';
@@ -11,37 +9,41 @@ import { useFormState, useFormStatus } from 'react-dom';
 import Avatar from '@/components/Avatar';
 import { UserCircleIcon } from '@heroicons/react/24/solid';
 import { ButtonProps } from '@tremor/react';
-import { ProfilePictureState, saveProfile, uploadProfilePicture } from './actions';
+import {
+  ProfilePictureState,
+  saveProfile,
+  uploadProfilePicture,
+} from './actions';
 
 // infer the type of a supabase user
-type User = Exclude<Awaited<ReturnType<ReturnType<typeof createClientSupabaseClient>['auth']['getUser']>>['data']['user'], null>;
+type User = Exclude<
+  Awaited<
+    ReturnType<ReturnType<typeof createClientSupabaseClient>['auth']['getUser']>
+  >['data']['user'],
+  null
+>;
 
 const MaybeForm: React.FC<{
-  editMode: boolean,
-  action: (formData: FormData) => void,
-  children: React.ReactNode
+  editMode: boolean;
+  action: (formData: FormData) => void;
+  children: React.ReactNode;
 }> = ({ editMode, action, children }) => {
   if (!editMode) return children;
 
   return (
-    <form
-      className='contents'
-      action={action}
-    >
+    <form className='contents' action={action}>
       {children}
     </form>
   );
 };
 
-const SubmitButton: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+const SubmitButton: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
   const { pending } = useFormStatus();
 
   return (
-    <Button
-      type='submit'
-      variant='primary'
-      disabled={pending}
-    >
+    <Button type='submit' variant='primary' disabled={pending}>
       {children}
     </Button>
   );
@@ -66,7 +68,7 @@ const LandlordProfile: React.FC<{
     display_email: string;
     bio: string;
     profile_picture: string | null;
-  }
+  };
 }> = ({ landlordBio: initialLandlordBio }) => {
   const params = useParams();
   const landlordId = params.landlordId as string;
@@ -82,7 +84,9 @@ const LandlordProfile: React.FC<{
 
   useEffect(() => {
     const fetchUser = async () => {
-      const { data: { user: supabaseUser } } = await supabase.auth.getUser();
+      const {
+        data: { user: supabaseUser },
+      } = await supabase.auth.getUser();
 
       setUser(supabaseUser);
     };
@@ -102,7 +106,10 @@ const LandlordProfile: React.FC<{
     }
   }, [isUserLandlord]);
 
-  const [profileState, profileDispatch] = useFormState(saveProfile.bind(null, landlordId), {});
+  const [profileState, profileDispatch] = useFormState(
+    saveProfile.bind(null, landlordId),
+    {},
+  );
   const [message, setMessage] = useState(profileState.message);
 
   useEffect(() => {
@@ -138,10 +145,12 @@ const LandlordProfile: React.FC<{
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const urlForPath = useCallback((path: string) => supabase.storage
-    .from('landlord_profile_pictures')
-    .getPublicUrl(path)
-    .data.publicUrl, [supabase.storage]);
+  const urlForPath = useCallback(
+    (path: string) =>
+      supabase.storage.from('landlord_profile_pictures').getPublicUrl(path).data
+        .publicUrl,
+    [supabase.storage],
+  );
 
   const [avatarUrl, setAvatarUrl] = useState<string | undefined>(
     landlordBio.profile_picture
@@ -150,7 +159,10 @@ const LandlordProfile: React.FC<{
   );
 
   const initialUrlState: ProfilePictureState | undefined = undefined;
-  const [urlState, urlDispatch] = useFormState(uploadProfilePicture, initialUrlState);
+  const [urlState, urlDispatch] = useFormState(
+    uploadProfilePicture,
+    initialUrlState,
+  );
 
   useEffect(() => {
     if (urlState?.newUrl) setAvatarUrl(urlForPath(urlState.newUrl));
@@ -164,18 +176,14 @@ const LandlordProfile: React.FC<{
           <Avatar
             src={avatarUrl}
             showFallback
-            fallback={(
-              <div
-                className='relative w-full h-full aspect-square'
-              >
+            fallback={
+              <div className='relative w-full h-full aspect-square'>
                 <UserCircleIcon className='text-accent blur-sm w-full h-full opacity-60' />
-                <div
-                  className='absolute top-0 left-0 w-full h-full flex items-center justify-center text-foreground text-lg font-semibold'
-                >
+                <div className='absolute top-0 left-0 w-full h-full flex items-center justify-center text-foreground text-lg font-semibold'>
                   No Profile Picture
                 </div>
               </div>
-            )}
+            }
             // name={landlordBio.display_name}
             className='w-full h-full aspect-square'
           />
@@ -188,9 +196,13 @@ const LandlordProfile: React.FC<{
                 type='button'
                 variant='light'
                 className='group'
-                onClick={() => { fileInputRef.current?.click(); }}
+                onClick={() => {
+                  fileInputRef.current?.click();
+                }}
               >
-                <label className='text-accent hover:text-accent/80'>Change Picture</label>
+                <label className='text-accent hover:text-accent/80'>
+                  Change Picture
+                </label>
               </ChangeImageButton>
               <input
                 name='newProfileFile'
@@ -198,7 +210,11 @@ const LandlordProfile: React.FC<{
                 ref={fileInputRef}
                 type='file'
                 accept='image/*'
-                onChange={(e) => { if (e.target.files && e.target.files.length >= 0) (e.target.form as HTMLFormElement).requestSubmit(); }}
+                onChange={(e) => {
+                  if (e.target.files && e.target.files.length >= 0) {
+                    (e.target.form as HTMLFormElement).requestSubmit();
+                  }
+                }}
               />
             </form>
           )}
@@ -210,12 +226,11 @@ const LandlordProfile: React.FC<{
         {/* Title - Uses Name */}
         <div className='flex flex-col w-full'>
           <div className='flex flex-row justify-between'>
-            <h2 className='text-2xl font-semibold mb-1 w-fit text-accent'>{landlordBio.display_name}</h2>
-            {(isUserLandlord && !editMode) && (
-              <Button
-                variant='light'
-                onClick={() => setEditMode(true)}
-              >
+            <h2 className='text-2xl font-semibold mb-1 w-fit text-accent'>
+              {landlordBio.display_name}
+            </h2>
+            {isUserLandlord && !editMode && (
+              <Button variant='light' onClick={() => setEditMode(true)}>
                 Edit
               </Button>
             )}
@@ -231,7 +246,7 @@ const LandlordProfile: React.FC<{
                 defaultValue={landlordBio.display_email}
                 type='email'
                 name='email'
-                error={!!(profileState.errors?.email)}
+                error={!!profileState.errors?.email}
                 errorMessage={profileState.errors?.email?.join(', ')}
               />
             ) : (
@@ -239,7 +254,6 @@ const LandlordProfile: React.FC<{
                 href={`mailto:${landlordBio.display_email}`}
                 className='underline text-blue-500 transition-colors duration-300 ease-in-out hover:text-blue-600'
               >
-
                 {landlordBio.display_email}
               </a>
             )}
@@ -250,7 +264,7 @@ const LandlordProfile: React.FC<{
               <Textarea
                 defaultValue={landlordBio.bio}
                 name='bio'
-                error={!!(profileState.errors?.bio)}
+                error={!!profileState.errors?.bio}
                 errorMessage={profileState.errors?.bio?.join(', ')}
               />
             ) : (
@@ -267,14 +281,10 @@ const LandlordProfile: React.FC<{
                 >
                   Cancel
                 </Button>
-                <SubmitButton>
-                  Save
-                </SubmitButton>
+                <SubmitButton>Save</SubmitButton>
               </>
             )}
-            {message && (
-              <p className='text-accent'>{message}</p>
-            )}
+            {message && <p className='text-accent'>{message}</p>}
           </div>
         </MaybeForm>
       </div>

@@ -1,6 +1,9 @@
 'use server';
 
-import { createServerSupabaseClient, createServiceSupabaseClient } from '@repo/supabase-client-helpers/server-only';
+import {
+  createServerSupabaseClient,
+  createServiceSupabaseClient,
+} from '@repo/supabase-client-helpers/server-only';
 import { z } from 'zod';
 
 const newReviewSchema = z.object({
@@ -21,16 +24,16 @@ const newReviewSchema = z.object({
 
 export type State = {
   errors?: {
-    property_house?: string[],
-    property_street?: string[],
-    property_county?: string[],
-    property_postcode?: string[],
-    property_country?: string[],
+    property_house?: string[];
+    property_street?: string[];
+    property_county?: string[];
+    property_postcode?: string[];
+    property_country?: string[];
 
-    review_date?: string[],
-    review_body?: string[],
-    property_rating?: string[],
-    landlord_rating?: string[]
+    review_date?: string[];
+    review_body?: string[];
+    property_rating?: string[];
+    landlord_rating?: string[];
   };
   message?: string | null;
 };
@@ -42,14 +45,32 @@ export const createReview = async (
 ): Promise<State> => {
   // Validate input
   const validatedFields = newReviewSchema.safeParse({
-    property_house: formData.get('property_house') !== '' ? formData.get('property_house') : undefined,
-    property_street: formData.get('property_street') !== '' ? formData.get('property_street') : undefined,
-    property_county: formData.get('property_county') !== '' ? formData.get('property_county') : undefined,
-    property_postcode: formData.get('property_postcode') !== '' ? formData.get('property_postcode') : undefined,
-    property_country: formData.get('property_country') !== '' ? formData.get('property_country') : undefined,
+    property_house:
+      formData.get('property_house') !== ''
+        ? formData.get('property_house')
+        : undefined,
+    property_street:
+      formData.get('property_street') !== ''
+        ? formData.get('property_street')
+        : undefined,
+    property_county:
+      formData.get('property_county') !== ''
+        ? formData.get('property_county')
+        : undefined,
+    property_postcode:
+      formData.get('property_postcode') !== ''
+        ? formData.get('property_postcode')
+        : undefined,
+    property_country:
+      formData.get('property_country') !== ''
+        ? formData.get('property_country')
+        : undefined,
 
     review_date: formData.get('review_date'),
-    review_body: formData.get('review_body') !== '' ? formData.get('review_body') : undefined,
+    review_body:
+      formData.get('review_body') !== ''
+        ? formData.get('review_body')
+        : undefined,
     property_rating: formData.get('property_rating'),
     landlord_rating: formData.get('landlord_rating'),
 
@@ -84,7 +105,9 @@ export const createReview = async (
   // get user
   const supabase = createServerSupabaseClient();
 
-  const { data: { user } } = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
   if (!user) {
     return {
       message: 'User Not Logged In',
@@ -131,21 +154,19 @@ export const createReview = async (
   // all good, create review
 
   // create reviewer profile
-  const { data: reviewerProfile, error: reviewerProfileError } = await serviceSupabase
-    .from('reviewer_private_profiles')
-    .insert({
-      user_id: user.id,
-      property_id: newProperty.id,
-    })
-    .select()
-    .single();
+  const { data: reviewerProfile, error: reviewerProfileError } =
+    await serviceSupabase
+      .from('reviewer_private_profiles')
+      .insert({
+        user_id: user.id,
+        property_id: newProperty.id,
+      })
+      .select()
+      .single();
 
   if (reviewerProfileError) {
     // remove the created property
-    await serviceSupabase
-      .from('properties')
-      .delete()
-      .eq('id', newProperty.id);
+    await serviceSupabase.from('properties').delete().eq('id', newProperty.id);
 
     return {
       message: 'Error Creating Reviewer Profile',
@@ -175,10 +196,7 @@ export const createReview = async (
       .delete()
       .eq('reviewer_id', reviewer_id);
 
-    await serviceSupabase
-      .from('properties')
-      .delete()
-      .eq('id', newProperty.id);
+    await serviceSupabase.from('properties').delete().eq('id', newProperty.id);
 
     return {
       message: 'Error Creating Review',
@@ -186,12 +204,12 @@ export const createReview = async (
   }
 
   // create tags
-  const { error: tagError } = await serviceSupabase
-    .from('review_tags')
-    .insert(tags.map((tag) => ({
+  const { error: tagError } = await serviceSupabase.from('review_tags').insert(
+    tags.map((tag) => ({
       review_id: data.review_id,
       tag,
-    })));
+    })),
+  );
 
   if (tagError) {
     // remove the created reviewer profile, property and review
@@ -205,10 +223,7 @@ export const createReview = async (
       .delete()
       .eq('reviewer_id', reviewer_id);
 
-    await serviceSupabase
-      .from('properties')
-      .delete()
-      .eq('id', newProperty.id);
+    await serviceSupabase.from('properties').delete().eq('id', newProperty.id);
 
     return {
       message: 'Error Creating Tags',

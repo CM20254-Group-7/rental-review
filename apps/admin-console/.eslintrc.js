@@ -4,7 +4,6 @@ module.exports = {
   extends: ["@repo/eslint-config/next.js"],
   parser: "@typescript-eslint/parser",
   rules: {
-    
     "import/no-extraneous-dependencies": [
       "error",
       {
@@ -18,5 +17,20 @@ module.exports = {
         ]
       }
     ]
-  }
+  },
+  overrides: [
+    // remove some requirements from imported shadcn components
+    {
+      files: [
+        'lib/utils.ts',
+        'components/ui/*.tsx',
+      ],
+      rules: {
+        'react/jsx-props-no-spreading': 'off',
+        'import/prefer-default-export': 'off',
+        'object-curly-newline': 'off',
+        'jsx-a11y/heading-has-content': 'off',
+      }
+    }
+  ]
 };

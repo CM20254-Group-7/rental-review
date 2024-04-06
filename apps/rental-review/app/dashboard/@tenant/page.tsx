@@ -30,7 +30,9 @@ const ReviewCard: React.FC = () => (
 const TenantDashboard: NextPage = () => (
   <div>
     <h2>Tenant Dashboard</h2>
-    <p>Show content that is only relevant to users who have left reviews here</p>
+    <p>
+      Show content that is only relevant to users who have left reviews here
+    </p>
 
     <div className='flex flex-col gap-1 items-center'>
       <h3 className='font-bold text-2xl text-accent'>Your reviews</h3>

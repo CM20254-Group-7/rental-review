@@ -2,18 +2,25 @@
 
 import { FC, useState } from 'react';
 import {
-  DatePicker, DatePickerValue, MultiSelect, MultiSelectItem, NumberInput, Textarea,
+  DatePicker,
+  DatePickerValue,
+  MultiSelect,
+  MultiSelectItem,
+  NumberInput,
+  Textarea,
 } from '@/components/ClientTremor';
 
 const CreateReviewForm: FC<{
-  tags: string[],
-  errors: {
-    review_date?: string[],
-    review_body?: string[],
-    property_rating?: string[],
-    landlord_rating?: string[],
-    tags?: string[]
-  } | undefined,
+  tags: string[];
+  errors:
+    | {
+        review_date?: string[];
+        review_body?: string[];
+        property_rating?: string[];
+        landlord_rating?: string[];
+        tags?: string[];
+      }
+    | undefined;
 }> = ({ errors, tags }) => {
   const [reviewDate, setReviewDate] = useState<DatePickerValue>();
 
@@ -80,16 +87,9 @@ const CreateReviewForm: FC<{
 
       <label htmlFor='tags'>
         Tags
-        <MultiSelect
-          aria-label='Tags'
-          name='tags'
-        >
+        <MultiSelect aria-label='Tags' name='tags'>
           {tags.map((tag) => (
-            <MultiSelectItem
-              aria-label={tag}
-              key={tag}
-              value={tag}
-            >
+            <MultiSelectItem aria-label={tag} key={tag} value={tag}>
               {tag}
             </MultiSelectItem>
           ))}

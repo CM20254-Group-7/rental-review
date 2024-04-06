@@ -13,7 +13,8 @@
     "generate-types:supabase": "turbo generate-types --filter supabase",
     "generate-types": "turbo generate-types",
     "test": "dotenv -- turbo test",
-    "test:ui": "dotenv -- turbo test:ui"
+    "test:ui": "dotenv -- turbo test:ui",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "devDependencies": {
     "eslint": "8.57.0",

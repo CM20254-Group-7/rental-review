@@ -1,20 +1,23 @@
 'use server';
 
-import { createServerSupabaseClient, createServiceSupabaseClient } from '@repo/supabase-client-helpers/server-only';
+import {
+  createServerSupabaseClient,
+  createServiceSupabaseClient,
+} from '@repo/supabase-client-helpers/server-only';
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 
 // Define the state to be updated by the forms
 export type State = {
   errors?: {
-    landlordId?: string[]
-    email?: string[]
-    bio?: string[],
+    landlordId?: string[];
+    email?: string[];
+    bio?: string[];
   };
   newLandlordBio?: {
     email: string;
     bio: string;
-  }
+  };
   message?: string | null;
 };
 
@@ -43,10 +46,7 @@ export const saveProfile = async (
     };
   }
 
-  const {
-    email,
-    bio,
-  } = validatedFields.data;
+  const { email, bio } = validatedFields.data;
 
   // save the details
   const supabase = createServerSupabaseClient();
@@ -97,20 +97,24 @@ export const saveProfile = async (
   };
 };
 
-export type ProfilePictureState = ({
-  error: string;
-  newUrl: null;
-} | {
-  error: null;
-  newUrl: string;
-});
+export type ProfilePictureState =
+  | {
+      error: string;
+      newUrl: null;
+    }
+  | {
+      error: null;
+      newUrl: string;
+    };
 
 export const uploadProfilePicture = async (
   prevState: ProfilePictureState | undefined,
   formData: FormData,
 ): Promise<ProfilePictureState> => {
   // get the file from the 'newProfileFile' input
-  const file = formData.get('newProfileFile') ? formData.get('newProfileFile') as File : null;
+  const file = formData.get('newProfileFile')
+    ? (formData.get('newProfileFile') as File)
+    : null;
 
   if (!file) {
     return {

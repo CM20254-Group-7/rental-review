@@ -6,8 +6,8 @@ import { z } from 'zod';
 
 export type State = {
   errors?: {
-    new_email?: string[]
-    auth?: string[],
+    new_email?: string[];
+    auth?: string[];
   };
   message?: string | null;
 };
@@ -16,9 +16,8 @@ const accountDetails = z.object({
   new_email: z.string(),
 });
 
-const newAccountSchema = accountDetails
-
-  .superRefine(({ new_email: newEmail }, ctx) => {
+const newAccountSchema = accountDetails.superRefine(
+  ({ new_email: newEmail }, ctx) => {
     if (!newEmail.includes('@')) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
@@ -26,12 +25,15 @@ const newAccountSchema = accountDetails
         path: ['new_email'],
       });
     }
-  });
+  },
+);
 
-export const updateInfo = async (prevState: State, formData: FormData): Promise<State> => {
+export const updateInfo = async (
+  prevState: State,
+  formData: FormData,
+): Promise<State> => {
   const validatedFields = newAccountSchema.safeParse({
     new_email: formData.get('email'),
-
   });
 
   if (!validatedFields.success) {
@@ -40,9 +42,7 @@ export const updateInfo = async (prevState: State, formData: FormData): Promise<
       message: 'Invalid Fields. Failed to update infomation.',
     };
   }
-  const {
-    new_email: newEmail,
-  } = validatedFields.data;
+  const { new_email: newEmail } = validatedFields.data;
 
   const supabase = createServerSupabaseClient();
 
@@ -57,8 +57,5 @@ export const updateInfo = async (prevState: State, formData: FormData): Promise<
       },
     };
   }
-  return (
-
-    redirect('/')
-  );
+  return redirect('/');
 };

@@ -11,13 +11,9 @@ const fuzzyMatchDate = (date: Date) => {
   // allow day and month to be in either order
   // allow year to be in either format
   const fuzzyDateFormat = new RegExp(
-    `(?:${
-      day.length === 1 ? `0?${day}` : day
-    }\\/${
+    `(?:${day.length === 1 ? `0?${day}` : day}\\/${
       month.length === 1 ? `0?${month}` : month
-    }|${
-      month.length === 1 ? `0?${month}` : month
-    }\\/${
+    }|${month.length === 1 ? `0?${month}` : month}\\/${
       day.length === 1 ? `0?${day}` : day
     })\\/(?:${year}|${shortYear})`,
   );
@@ -30,20 +26,34 @@ const secondPropertyHistory = ownershipHistories[1]; // 2 Test Road
 
 test.describe(`${firstPropertyHistory.propertyAddress} ownership history tests`, () => {
   test('Contains correct start and end dates', async ({ page }) => {
-    await page.goto(`http://localhost:3000/properties/${firstPropertyHistory.propertyId}/ownership-history`);
-    await expect(page.getByRole('main')).toContainText(fuzzyMatchDate(new Date(firstPropertyHistory.startDate[0])));
-    await expect(page.getByRole('main')).toContainText(fuzzyMatchDate(new Date(firstPropertyHistory.endDate[0])));
+    await page.goto(
+      `http://localhost:3000/properties/${firstPropertyHistory.propertyId}/ownership-history`,
+    );
+    await expect(page.getByRole('main')).toContainText(
+      fuzzyMatchDate(new Date(firstPropertyHistory.startDate[0])),
+    );
+    await expect(page.getByRole('main')).toContainText(
+      fuzzyMatchDate(new Date(firstPropertyHistory.endDate[0])),
+    );
   });
 
   test('Contains correct landlord', async ({ page }) => {
-    await page.goto(`http://localhost:3000/properties/${firstPropertyHistory.propertyId}/ownership-history`);
-    await expect(page.getByRole('main')).toContainText(`${firstPropertyHistory.landlord[0]}`);
+    await page.goto(
+      `http://localhost:3000/properties/${firstPropertyHistory.propertyId}/ownership-history`,
+    );
+    await expect(page.getByRole('main')).toContainText(
+      `${firstPropertyHistory.landlord[0]}`,
+    );
   });
 
   test('Contains correct landlord rating', async ({ page }) => {
-    await page.goto(`http://localhost:3000/properties/${firstPropertyHistory.propertyId}/ownership-history`);
+    await page.goto(
+      `http://localhost:3000/properties/${firstPropertyHistory.propertyId}/ownership-history`,
+    );
     // Select the specific section containing the stars
-    const section = await page.$('body > main > div > div > div > a > div.flex.flex-col.items-center.justify-center > div:nth-child(2)');
+    const section = await page.$(
+      'body > main > div > div > div > a > div.flex.flex-col.items-center.justify-center > div:nth-child(2)',
+    );
     if (!section) {
       throw new Error('Section not found');
     }
@@ -85,20 +95,34 @@ test.describe(`${firstPropertyHistory.propertyAddress} ownership history tests`,
 test.describe(`${secondPropertyHistory.propertyAddress} ownership history tests`, () => {
   test.describe('Current ownership test', () => {
     test('Contains correct start and end dates', async ({ page }) => {
-      await page.goto(`http://localhost:3000/properties/${secondPropertyHistory.propertyId}/ownership-history`);
-      await expect(page.getByRole('main')).toContainText(fuzzyMatchDate(new Date(secondPropertyHistory.startDate[0])));
-      await expect(page.getByRole('main')).toContainText(secondPropertyHistory.endDate[0]);
+      await page.goto(
+        `http://localhost:3000/properties/${secondPropertyHistory.propertyId}/ownership-history`,
+      );
+      await expect(page.getByRole('main')).toContainText(
+        fuzzyMatchDate(new Date(secondPropertyHistory.startDate[0])),
+      );
+      await expect(page.getByRole('main')).toContainText(
+        secondPropertyHistory.endDate[0],
+      );
     });
 
     test('Contains correct landlord', async ({ page }) => {
-      await page.goto(`http://localhost:3000/properties/${secondPropertyHistory.propertyId}/ownership-history`);
-      await expect(page.getByRole('main')).toContainText(`${secondPropertyHistory.landlord?.[0]}`);
+      await page.goto(
+        `http://localhost:3000/properties/${secondPropertyHistory.propertyId}/ownership-history`,
+      );
+      await expect(page.getByRole('main')).toContainText(
+        `${secondPropertyHistory.landlord?.[0]}`,
+      );
     });
 
     test('Contains correct average rating', async ({ page }) => {
-      await page.goto(`http://localhost:3000/properties/${secondPropertyHistory.propertyId}/ownership-history`);
+      await page.goto(
+        `http://localhost:3000/properties/${secondPropertyHistory.propertyId}/ownership-history`,
+      );
       // Select the specific section containing the stars
-      const section = await page.$('body > main > div > div > div > a > div.flex.flex-col.items-center.justify-center > div:nth-child(2)');
+      const section = await page.$(
+        'body > main > div > div > div > a > div.flex.flex-col.items-center.justify-center > div:nth-child(2)',
+      );
       if (!section) {
         throw new Error('Section not found');
       }
@@ -139,20 +163,34 @@ test.describe(`${secondPropertyHistory.propertyAddress} ownership history tests`
 
   test.describe('Past ownership test', () => {
     test('Contains correct start and end dates', async ({ page }) => {
-      await page.goto(`http://localhost:3000/properties/${secondPropertyHistory.propertyId}/ownership-history`);
-      await expect(page.getByRole('main')).toContainText(fuzzyMatchDate(new Date(secondPropertyHistory.startDate[1])));
-      await expect(page.getByRole('main')).toContainText(fuzzyMatchDate(new Date(secondPropertyHistory.endDate[1])));
+      await page.goto(
+        `http://localhost:3000/properties/${secondPropertyHistory.propertyId}/ownership-history`,
+      );
+      await expect(page.getByRole('main')).toContainText(
+        fuzzyMatchDate(new Date(secondPropertyHistory.startDate[1])),
+      );
+      await expect(page.getByRole('main')).toContainText(
+        fuzzyMatchDate(new Date(secondPropertyHistory.endDate[1])),
+      );
     });
 
     test('Contains correct landlord', async ({ page }) => {
-      await page.goto(`http://localhost:3000/properties/${secondPropertyHistory.propertyId}/ownership-history`);
-      await expect(page.getByRole('main')).toContainText(`${secondPropertyHistory.landlord?.[1]}`);
+      await page.goto(
+        `http://localhost:3000/properties/${secondPropertyHistory.propertyId}/ownership-history`,
+      );
+      await expect(page.getByRole('main')).toContainText(
+        `${secondPropertyHistory.landlord?.[1]}`,
+      );
     });
 
     test('Contains correct average rating', async ({ page }) => {
-      await page.goto(`http://localhost:3000/properties/${secondPropertyHistory.propertyId}/ownership-history`);
+      await page.goto(
+        `http://localhost:3000/properties/${secondPropertyHistory.propertyId}/ownership-history`,
+      );
       // Select the specific section containing the stars
-      const section = await page.$('body > main > div > div > div > a:nth-child(4) > div.flex.flex-col.items-center.justify-center > div:nth-child(2)');
+      const section = await page.$(
+        'body > main > div > div > div > a:nth-child(4) > div.flex.flex-col.items-center.justify-center > div:nth-child(2)',
+      );
       if (!section) {
         throw new Error('Section not found');
       }
@@ -192,10 +230,18 @@ test.describe(`${secondPropertyHistory.propertyAddress} ownership history tests`
   });
 
   test.describe('History ordered by newest first', () => {
-    test(`${secondPropertyHistory.landlord?.[0]} comes before ${secondPropertyHistory.landlord?.[1]}`, async ({ page }) => {
-      await page.goto(`http://localhost:3000/properties/${secondPropertyHistory.propertyId}/ownership-history`);
-      const currentOwnership = await page.getByRole('link', { name: `${secondPropertyHistory.landlord?.[0]}` });
-      const pastOwnership = await page.getByRole('link', { name: `${secondPropertyHistory.landlord?.[1]}` });
+    test(`${secondPropertyHistory.landlord?.[0]} comes before ${secondPropertyHistory.landlord?.[1]}`, async ({
+      page,
+    }) => {
+      await page.goto(
+        `http://localhost:3000/properties/${secondPropertyHistory.propertyId}/ownership-history`,
+      );
+      const currentOwnership = await page.getByRole('link', {
+        name: `${secondPropertyHistory.landlord?.[0]}`,
+      });
+      const pastOwnership = await page.getByRole('link', {
+        name: `${secondPropertyHistory.landlord?.[1]}`,
+      });
 
       // Get the positions of the elements
       const currentOwnershipPosition = await currentOwnership.boundingBox();
@@ -207,7 +253,9 @@ test.describe(`${secondPropertyHistory.propertyAddress} ownership history tests`
       }
 
       // Check if the current ownership comes before the past ownership
-      await expect(currentOwnershipPosition.y).toBeLessThan(pastOwnershipPosition.y);
+      await expect(currentOwnershipPosition.y).toBeLessThan(
+        pastOwnershipPosition.y,
+      );
     });
   });
 });

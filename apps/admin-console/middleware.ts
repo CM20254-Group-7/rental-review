@@ -1,11 +1,10 @@
-import { createHash } from 'crypto';
 import { cookies } from 'next/headers';
 import { NextResponse, type NextRequest } from 'next/server';
 
 // match all routes other than the always allowed pages
 export const config = {
   matcher: [
-      '/((?!api|_next/static|_next/image|favicon.ico|placeholder.png).*)',
+    '/((?!api|_next/static|_next/image|favicon.ico|placeholder.png).*)',
   ],
 };
 
@@ -20,7 +19,10 @@ export async function middleware(request: NextRequest) {
   // if user is on login page, & is already logged in, redirect to home (or the redirict param if it exists)
   if (request.nextUrl.pathname === '/login') {
     if (loggedIn) {
-      const redirectTo = new URL(request.nextUrl.searchParams.get('redirect') || '/', request.url);
+      const redirectTo = new URL(
+        request.nextUrl.searchParams.get('redirect') || '/',
+        request.url,
+      );
 
       return NextResponse.redirect(redirectTo);
     }
@@ -28,7 +30,10 @@ export async function middleware(request: NextRequest) {
   }
 
   if (!loggedIn) {
-    const redirectTo = new URL(`/login?redirect=${request.nextUrl.pathname}`, request.url);
+    const redirectTo = new URL(
+      `/login?redirect=${request.nextUrl.pathname}`,
+      request.url,
+    );
 
     return NextResponse.redirect(redirectTo);
   }

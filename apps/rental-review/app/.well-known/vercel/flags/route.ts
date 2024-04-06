@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { type ApiData } from '@vercel/flags';
- 
+
 export async function GET() {
   const apiData: ApiData = {
     definitions: {

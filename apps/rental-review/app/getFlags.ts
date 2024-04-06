@@ -12,7 +12,7 @@ async function getFlags() {
     : {};
 
   const flags = {
-    newFeature: overrides?.newFeature ?? await get('newFeature') ?? true,
+    newFeature: overrides?.newFeature ?? (await get('newFeature')) ?? true,
   };
 
   return flags;

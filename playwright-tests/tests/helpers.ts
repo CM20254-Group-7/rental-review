@@ -76,7 +76,10 @@ export const ownershipHistories = [
     // allow the dates in either format
     startDate: ['2024-01-20', '2021-01-01'],
     endDate: ['Present', '2021-12-31'],
-    landlord: [users[0]!.landlordProfile?.displayName, users[8]!.landlordProfile?.displayName],
+    landlord: [
+      users[0]!.landlordProfile?.displayName,
+      users[8]!.landlordProfile?.displayName,
+    ],
     propertyAddress: propertyAddresses[1],
     propertyId: propertyIds[1],
     landlordRating: [2, 5],
@@ -111,9 +114,7 @@ export const loginUserWithUI = async (
     .getByPlaceholder('••••••••')
     .fill(password);
 
-  await page
-    .getByRole('button', { name: 'Sign In' })
-    .click();
+  await page.getByRole('button', { name: 'Sign In' }).click();
 
   // Wait for the page to redirect
   await page.waitForURL('./');
@@ -129,23 +130,30 @@ const loginUserWithAPI = async (
   email: string,
   password: string,
 ) => {
-  const res = await page.request.post(`${apiBaseURL}/auth/v1/token?grant_type=password`, {
-    data: {
-      email,
-      password,
+  const res = await page.request.post(
+    `${apiBaseURL}/auth/v1/token?grant_type=password`,
+    {
+      data: {
+        email,
+        password,
+      },
+      headers: {
+        apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+        'Content-Type': 'application/json',
+      },
     },
-    headers: {
-      apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-      'Content-Type': 'application/json',
-    },
-  });
+  );
 
   // check that the response is 200
   await expect(res.status()).toBe(200);
 };
 
 // API mode disabled as it does not work as intended
-export const loginAsUser = async (page: Page, userNo: number, method: 'UI' /* | 'API' */ = 'UI') => {
+export const loginAsUser = async (
+  page: Page,
+  userNo: number,
+  method: 'UI' /* | 'API' */ = 'UI',
+) => {
   const user = users[userNo - 1]!;
   if (method === 'UI') {
     await loginUserWithUI(page, user.email, user.password);

@@ -40,11 +40,7 @@ const Footer: React.FC = () => (
     </div>
     <div className='flex-auto p-8 flex flex-col justify-center text-center text-xs gap-2'>
       {links.map((link) => (
-        <Link
-          key={link.label}
-          href={link.href}
-          className='hover:underline'
-        >
+        <Link key={link.label} href={link.href} className='hover:underline'>
           {link.label}
         </Link>
       ))}

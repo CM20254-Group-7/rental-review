@@ -5,12 +5,12 @@ import React from 'react';
 import { State, updatePassword } from './actions';
 
 interface FieldProps {
-  name: string
-  label: string
-  type?: 'password' | 'email' | 'text'
-  placeholder?: string
-  required?: boolean
-  errors?: string[]
+  name: string;
+  label: string;
+  type?: 'password' | 'email' | 'text';
+  placeholder?: string;
+  required?: boolean;
+  errors?: string[];
 }
 const Field = ({
   name,
@@ -44,7 +44,7 @@ Field.defaultProps = {
 // taken from the login form
 
 interface PasswordFieldProps {
-  errors?: string[]
+  errors?: string[];
 }
 const PasswordField: React.FC<PasswordFieldProps> = ({ errors }) => (
   <Field
@@ -61,9 +61,11 @@ PasswordField.defaultProps = {
 };
 
 interface ConfirmPasswordFieldProps {
-  errors?: string[]
+  errors?: string[];
 }
-const ConfirmPasswordField: React.FC<ConfirmPasswordFieldProps> = ({ errors }) => (
+const ConfirmPasswordField: React.FC<ConfirmPasswordFieldProps> = ({
+  errors,
+}) => (
   <Field
     name='confirmPassword'
     label='Confirm Password'
@@ -78,11 +80,11 @@ ConfirmPasswordField.defaultProps = {
 };
 
 interface FormProps {
-  children: React.ReactNode
+  children: React.ReactNode;
   // eslint-disable-next-line no-unused-vars
-  dispatch: (formData: FormData) => void
-  title: string,
-  submitText: string,
+  dispatch: (formData: FormData) => void;
+  title: string;
+  submitText: string;
 }
 
 const Form: React.FC<FormProps> = ({
@@ -100,9 +102,7 @@ const Form: React.FC<FormProps> = ({
 
     {/* <span className=''></span> */}
 
-    <div className='flex flex-col flex-1 justify-center gap-4'>
-      {children}
-    </div>
+    <div className='flex flex-col flex-1 justify-center gap-4'>{children}</div>
 
     <button
       type='submit'
@@ -110,13 +110,15 @@ const Form: React.FC<FormProps> = ({
     >
       {submitText}
     </button>
-
   </form>
 );
 
 const NewPasswordForm = () => {
   const initialState: State = { message: null, errors: {} };
-  const [signupState, signupDispatch] = useFormState(updatePassword, initialState);
+  const [signupState, signupDispatch] = useFormState(
+    updatePassword,
+    initialState,
+  );
 
   return (
     <Form
@@ -124,7 +126,6 @@ const NewPasswordForm = () => {
       title='Change Password'
       submitText='Confirm Password'
     >
-
       <PasswordField errors={signupState.errors?.new_password} />
 
       <ConfirmPasswordField errors={signupState.errors?.confirmPassword} />

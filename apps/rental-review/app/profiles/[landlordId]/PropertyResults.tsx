@@ -13,7 +13,10 @@ const getCurrentlyOwnedProperties = async (landlordId: string) => {
 
   const { data: currentPropertyDetails } = await supabase
     .rpc('properties_full')
-    .in('id', (landlordCurrentProperties || []).map((property) => property.property_id))
+    .in(
+      'id',
+      (landlordCurrentProperties || []).map((property) => property.property_id),
+    )
     .select('*');
 
   return currentPropertyDetails || [];
@@ -30,7 +33,12 @@ const getPreviouslyOwnedProperties = async (landlordId: string) => {
 
   const { data: PreviousPropertyDetails } = await supabase
     .rpc('properties_full')
-    .in('id', (landlordPreviousProperties || []).map((property) => property.property_id))
+    .in(
+      'id',
+      (landlordPreviousProperties || []).map(
+        (property) => property.property_id,
+      ),
+    )
     .select('*');
 
   return PreviousPropertyDetails || [];
@@ -53,10 +61,14 @@ const PropertyResult: React.FC<{
   </Link>
 );
 
-export const CurrentPropertyResults: React.FC<{ landlordId: string }> = async ({ landlordId }) => {
+export const CurrentPropertyResults: React.FC<{ landlordId: string }> = async ({
+  landlordId,
+}) => {
   const currentProperties = await getCurrentlyOwnedProperties(landlordId);
 
-  if (currentProperties.length === 0) return <p>No properties are currently owned by this landlord</p>;
+  if (currentProperties.length === 0) {
+    return <p>No properties are currently owned by this landlord</p>;
+  }
 
   return currentProperties.map((property) => (
     <PropertyResult
@@ -67,10 +79,14 @@ export const CurrentPropertyResults: React.FC<{ landlordId: string }> = async ({
   ));
 };
 
-export const PreviousPropertyResults: React.FC<{ landlordId: string }> = async ({ landlordId }) => {
+export const PreviousPropertyResults: React.FC<{
+  landlordId: string;
+}> = async ({ landlordId }) => {
   const previousProperties = await getPreviouslyOwnedProperties(landlordId);
 
-  if (previousProperties.length === 0) return <p>No properties have previously been owned by this landlord</p>;
+  if (previousProperties.length === 0) {
+    return <p>No properties have previously been owned by this landlord</p>;
+  }
 
   return previousProperties.map((property) => (
     <PropertyResult

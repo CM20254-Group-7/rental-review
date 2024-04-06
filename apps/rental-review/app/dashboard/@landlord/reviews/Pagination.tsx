@@ -19,7 +19,9 @@ export const BackButton: FC = () => {
 
     if (currentPage === 2) {
       newSearchParams.delete('landlordReviewsPage');
-    } else { newSearchParams.set('landlordReviewsPage', String(currentPage - 1)); }
+    } else {
+      newSearchParams.set('landlordReviewsPage', String(currentPage - 1));
+    }
 
     replace(`${pathname}?${newSearchParams.toString()}`);
   };
@@ -27,17 +29,14 @@ export const BackButton: FC = () => {
   if (currentPage <= 1) return null;
 
   return (
-    <button
-      type='button'
-      onClick={prevPage}
-    >
+    <button type='button' onClick={prevPage}>
       Prev
     </button>
   );
 };
 
 export const ForwardButton: FC<{
-  totalPages: number,
+  totalPages: number;
 }> = ({ totalPages }) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -55,10 +54,7 @@ export const ForwardButton: FC<{
   if (currentPage >= totalPages) return null;
 
   return (
-    <button
-      type='button'
-      onClick={nextPage}
-    >
+    <button type='button' onClick={nextPage}>
       Next
     </button>
   );

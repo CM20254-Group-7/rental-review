@@ -9,7 +9,9 @@ const AddressSearch: React.FC = () => {
   const pathname = usePathname();
   const { replace } = useRouter();
 
-  const [advanced, setAdvanced] = useState(searchParams.get('showAdvancedPropertySearch') === 'true');
+  const [advanced, setAdvanced] = useState(
+    searchParams.get('showAdvancedPropertySearch') === 'true',
+  );
   const toggleAdvanced = () => {
     const params = new URLSearchParams(searchParams?.toString());
 
@@ -62,7 +64,9 @@ const AddressSearch: React.FC = () => {
           className='flex flex-row border rounded-md'
           onSubmit={(e) => {
             e.preventDefault();
-            const addressSearchQuery = (e.target as HTMLFormElement).querySelector('input')?.value;
+            const addressSearchQuery = (
+              e.target as HTMLFormElement
+            ).querySelector('input')?.value;
             handleSearch(addressSearchQuery);
           }}
         >
@@ -101,8 +105,11 @@ const AddressSearch: React.FC = () => {
           type='button'
           onClick={toggleAdvanced}
         >
-          {advanced ? <ChevronDownIcon className='w-4 h-4' /> : <ChevronRightIcon className='w-4 h-4' />}
-          {' '}
+          {advanced ? (
+            <ChevronDownIcon className='w-4 h-4' />
+          ) : (
+            <ChevronRightIcon className='w-4 h-4' />
+          )}{' '}
           Advanced
         </button>
 
@@ -122,7 +129,12 @@ const AddressSearch: React.FC = () => {
               if (countryQuery === '') countryQuery = undefined;
 
               // update the search params
-              handleAdvancedSearch(streetQuery, cityQuery, postalCodeQuery, countryQuery);
+              handleAdvancedSearch(
+                streetQuery,
+                cityQuery,
+                postalCodeQuery,
+                countryQuery,
+              );
             }}
           >
             {/* street */}

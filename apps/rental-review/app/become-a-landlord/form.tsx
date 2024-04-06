@@ -6,7 +6,9 @@ import { TextInput, Textarea } from '@/components/ClientTremor';
 import { State, addToLandlordDB } from './actions';
 
 // Only handles general errors
-const ErrorMessage: React.FC<{ state: State }> = ({ state }) => <p>{state.message}</p>;
+const ErrorMessage: React.FC<{ state: State }> = ({ state }) => (
+  <p>{state.message}</p>
+);
 
 const LandlordRegistrationForm: React.FC = () => {
   const initialState = { errors: {}, message: null };
@@ -25,7 +27,10 @@ const LandlordRegistrationForm: React.FC = () => {
         className='flex flex-col gap-4 justify-center bg-primary/30 border-x px-4 py-8'
         action={dispatch}
       >
-        <label className='flex flex-col gap-1 justify-center max-w-xs' htmlFor='user_first_name'>
+        <label
+          className='flex flex-col gap-1 justify-center max-w-xs'
+          htmlFor='user_first_name'
+        >
           <p className='text-lg font-bold'>First Name:</p>
           <TextInput
             name='user_first_name'
@@ -35,7 +40,10 @@ const LandlordRegistrationForm: React.FC = () => {
           />
         </label>
 
-        <label className='flex flex-col gap-1 justify-center max-w-xs' htmlFor='user_last_name'>
+        <label
+          className='flex flex-col gap-1 justify-center max-w-xs'
+          htmlFor='user_last_name'
+        >
           <p className='text-lg font-bold'>Last Name:</p>
           <TextInput
             name='user_last_name'
@@ -45,7 +53,10 @@ const LandlordRegistrationForm: React.FC = () => {
           />
         </label>
 
-        <label className='flex flex-col gap-1 justify-center max-w-xs' htmlFor='display_name'>
+        <label
+          className='flex flex-col gap-1 justify-center max-w-xs'
+          htmlFor='display_name'
+        >
           <p className='text-lg font-bold'>Display name:</p>
           <TextInput
             name='display_name'
@@ -55,7 +66,10 @@ const LandlordRegistrationForm: React.FC = () => {
           />
         </label>
 
-        <label className='flex flex-col gap-1 justify-center max-w-xs' htmlFor='display_email'>
+        <label
+          className='flex flex-col gap-1 justify-center max-w-xs'
+          htmlFor='display_email'
+        >
           <p className='text-lg font-bold'>Email:</p>
           <TextInput
             name='display_email'
@@ -65,7 +79,10 @@ const LandlordRegistrationForm: React.FC = () => {
           />
         </label>
 
-        <label className='flex flex-col gap-1 justify-center max-w-xs' htmlFor='user_phoneNb'>
+        <label
+          className='flex flex-col gap-1 justify-center max-w-xs'
+          htmlFor='user_phoneNb'
+        >
           <p className='text-lg font-bold'>Phone Number:</p>
           <TextInput
             name='user_phoneNb'
@@ -75,7 +92,10 @@ const LandlordRegistrationForm: React.FC = () => {
           />
         </label>
 
-        <label className='flex flex-col gap-1 justify-center max-w-xs' htmlFor='address'>
+        <label
+          className='flex flex-col gap-1 justify-center max-w-xs'
+          htmlFor='address'
+        >
           <p className='text-lg font-bold'>Address:</p>
           <TextInput
             name='user_house'
@@ -109,7 +129,10 @@ const LandlordRegistrationForm: React.FC = () => {
           />
         </label>
 
-        <label className='flex flex-col gap-1 justify-center' htmlFor='user_bio'>
+        <label
+          className='flex flex-col gap-1 justify-center'
+          htmlFor='user_bio'
+        >
           <p className='text-lg font-bold'>Bio (optional):</p>
           <Textarea
             name='user_bio'

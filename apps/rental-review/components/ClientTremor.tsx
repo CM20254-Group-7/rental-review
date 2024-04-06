@@ -20,13 +20,12 @@ export {
   Divider,
   TextInput,
   Textarea,
-  AreaChart, BarList,
-  DatePicker, MultiSelect,
+  AreaChart,
+  BarList,
+  DatePicker,
+  MultiSelect,
   MultiSelectItem,
   NumberInput,
 };
 
-export type {
-  CustomTooltipProps,
-  DatePickerValue,
-};
+export type { CustomTooltipProps, DatePickerValue };

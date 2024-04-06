@@ -1,13 +1,13 @@
-import AdminConsolePageLayout from "@/components/ui/page-layout";
-import { NextPage } from "next";
+import AdminConsolePageLayout from '@/components/ui/page-layout';
+import { NextPage } from 'next';
 
 const UsersPage: NextPage = () => (
-  <AdminConsolePageLayout title="Users">
-    <div className="flex flex-col gap-2 items-center">
-      <p className="text-md font-semibold">Nothing Here Yet</p>
+  <AdminConsolePageLayout title='Users'>
+    <div className='flex flex-col gap-2 items-center'>
+      <p className='text-md font-semibold'>Nothing Here Yet</p>
       <div>
         <p>Should Contain:</p>
-        <ul className="list-disc pl-6">
+        <ul className='list-disc pl-6'>
           <li>List of users</li>
           <li>User details/status</li>
           <li>Actions to take on users (e.g. ban)</li>

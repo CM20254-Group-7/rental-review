@@ -50,5 +50,7 @@ test('help button & FAQ link', async ({ page }) => {
   await page.getByRole('link', { name: 'here' }).click();
 
   // Expects content of QandA page
-  await expect(page.getByRole('main')).toContainText('Frequently Asked Questions');
+  await expect(page.getByRole('main')).toContainText(
+    'Frequently Asked Questions',
+  );
 });

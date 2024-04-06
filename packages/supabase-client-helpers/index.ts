@@ -9,6 +9,6 @@ export {
   createAnonSupabaseClient,
   createClientSupabaseClient,
   createMiddlewareSupabaseClient,
-}
+};
 
 export type { Database };

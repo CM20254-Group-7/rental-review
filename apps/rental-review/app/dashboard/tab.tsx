@@ -11,30 +11,22 @@ type Item = {
   segment?: string;
 };
 
-const Tab = ({
-  path,
-  item,
-}: {
-  path: string;
-  item: Item;
-}) => {
+const Tab = ({ path, item }: { path: string; item: Item }) => {
   const segment = useSelectedLayoutSegment();
 
   const href = item.slug ? `${path}/${item.slug}` : path;
-  const isActive = (!item.slug && segment === null)
-    || segment === item.segment
+  const isActive =
+    (!item.slug && segment === null) ||
+    segment === item.segment ||
     // Nested pages e.g. `/layouts/electronics`
-    || segment === item.slug;
+    segment === item.slug;
 
   return (
     <Link
       href={href}
-      className={
-        `rounded-lg px-3 py-1 text-sm font-medium border border-foreground/40 ${isActive
-          ? 'bg-primary'
-          : 'bg-primary/30 hover:bg-primary/50'
-        }`
-      }
+      className={`rounded-lg px-3 py-1 text-sm font-medium border border-foreground/40 ${
+        isActive ? 'bg-primary' : 'bg-primary/30 hover:bg-primary/50'
+      }`}
     >
       {item.text}
     </Link>

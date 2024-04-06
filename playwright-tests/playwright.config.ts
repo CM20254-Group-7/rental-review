@@ -72,8 +72,7 @@ export default defineConfig({
   ],
 
   /* Run your local dev server before starting the tests */
-  webServer:
-  {
+  webServer: {
     command: 'pnpm run -w start:rental-review',
     url: process.env.NEXT_PUBLIC_PUBLIC_SITE_URL || 'http://localhost:3000',
     timeout: 120 * 1000,

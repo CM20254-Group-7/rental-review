@@ -13,19 +13,12 @@ const customTooltip: React.FC<CustomTooltipProps> = ({ payload, active }) => {
             className={`flex w-1 flex-col bg-${category.color}-500 rounded`}
           />
           <div className='space-y-1'>
-            <p className='text-tremor-content'>
-              {category.payload.longLabel}
-            </p>
+            <p className='text-tremor-content'>{category.payload.longLabel}</p>
             <p className='font-medium text-tremor-content-emphasis'>
-              {category.dataKey}
-              :
-              {' '}
-              {category.payload.rating}
+              {category.dataKey}:{category.payload.rating}
             </p>
             <p className='text-tremor-content-emphasis'>
-              New Reviews:
-              {' '}
-              {category.payload.newReviews}
+              New Reviews: {category.payload.newReviews}
             </p>
           </div>
         </div>
@@ -36,11 +29,11 @@ const customTooltip: React.FC<CustomTooltipProps> = ({ payload, active }) => {
 };
 
 const RatingGraph: React.FC<{
-    ratings: {
-        date: string;
-        rating: number;
-        newReviews: number;
-    }[]
+  ratings: {
+    date: string;
+    rating: number;
+    newReviews: number;
+  }[];
 }> = ({ ratings }) => (
   <AreaChart
     className='mt-4 h-72'

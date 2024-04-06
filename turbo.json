@@ -110,6 +110,11 @@
         "../../eslint-results/rental-review.sarif"
       ]
     },
+    "admin-console#lint:sarif":{
+      "outputs": [
+        "../../eslint-results/admin-console.sarif"
+      ]
+    },
     "admin-console#start": {
       "dependsOn": [
         "admin-console#build"

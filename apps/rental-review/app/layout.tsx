@@ -16,14 +16,13 @@ const defaultUrl = process.env.VERCEL_URL
 export const metadata = {
   metadataBase: new URL(defaultUrl),
   title: 'Rental Review',
-  description: 'A place for tenants and landlords to work towards better living.',
+  description:
+    'A place for tenants and landlords to work towards better living.',
 };
 
 const Layout: NextPage<{
   children: React.ReactNode;
-}> = ({
-  children,
-}) => (
+}> = ({ children }) => (
   <html lang='en' className={GeistSans.className}>
     <body className='bg-background text-foreground'>
       <main className='min-h-screen flex flex-col items-center'>

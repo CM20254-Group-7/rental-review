@@ -30,8 +30,8 @@ const getPropertyDetails = cache(async (propertyId: string) => {
 
 const PropertyDetailPage: NextPage<{
   params: {
-    id: string
-  }
+    id: string;
+  };
 }> = async ({ params }) => {
   const propertyDetails = await getPropertyDetails(params.id);
 
@@ -53,7 +53,9 @@ const PropertyDetailPage: NextPage<{
               alt='Image of a house'
             />
             <div className='w-full h-full bg-background/40 backdrop-blur flex flex-col place-items-center justify-center'>
-              <p className='text-lg font-semibold text-foreground'>Property Images Coming Soon</p>
+              <p className='text-lg font-semibold text-foreground'>
+                Property Images Coming Soon
+              </p>
             </div>
           </div>
 
@@ -61,7 +63,9 @@ const PropertyDetailPage: NextPage<{
           <div className='flex-1 flex flex-col w-full px-8 sm:max-w-md justify-top gap-2 py-4'>
             {/* Title - Uses address */}
             <div className='flex flex-col w-full'>
-              <h2 className='text-2xl font-semibold mb-1 w-fit text-accent'>{propertyDetails.address}</h2>
+              <h2 className='text-2xl font-semibold mb-1 w-fit text-accent'>
+                {propertyDetails.address}
+              </h2>
               <span className='border border-b w-full border-accent' />
             </div>
 
@@ -72,14 +76,20 @@ const PropertyDetailPage: NextPage<{
             {/* Might want to add more things like no. baths etc */}
             {propertyDetails.description && (
               <div className='flex flex-col gap-2'>
-                <h3 className='text-lg font-semibold text-accent'>Description:</h3>
+                <h3 className='text-lg font-semibold text-accent'>
+                  Description:
+                </h3>
                 <p>{propertyDetails.description}</p>
               </div>
             )}
 
             {/* Ownership */}
-            <h3 className='text-lg font-semibold text-accent'>Current Owner:</h3>
-            <Suspense fallback={<ArrowPathIcon className='w-5 h-5 animate-spin' />}>
+            <h3 className='text-lg font-semibold text-accent'>
+              Current Owner:
+            </h3>
+            <Suspense
+              fallback={<ArrowPathIcon className='w-5 h-5 animate-spin' />}
+            >
               <CurrentOwnerIndicator propertyId={propertyDetails.id} />
             </Suspense>
           </div>
@@ -88,7 +98,10 @@ const PropertyDetailPage: NextPage<{
         {/* Review Button */}
         <div className='flex flex-col gap-4 justify-center items-center'>
           <br />
-          <Link href='/properties/[id]/review' as={`/properties/${propertyDetails.id}/review`}>
+          <Link
+            href='/properties/[id]/review'
+            as={`/properties/${propertyDetails.id}/review`}
+          >
             <button
               type='submit'
               className='border border-accent rounded-md px-4 py-2 text-accent mb-5 hover:bg-secondary/10 dark:hover:bg-accent/10 hover:shadow-lg hover:shadow-accent/20'
@@ -101,7 +114,9 @@ const PropertyDetailPage: NextPage<{
         {/* Review List */}
         <div className='flex flex-col gap-6 px-8 py-6'>
           <div className='flex flex-col w-full'>
-            <h2 className='text-2xl font-semibold mb-1 w-fit text-accent'>Reviews</h2>
+            <h2 className='text-2xl font-semibold mb-1 w-fit text-accent'>
+              Reviews
+            </h2>
             <span className='border border-b w-full border-accent' />
           </div>
           <div className='flex flex-col gap-4 justify-center items-center'>

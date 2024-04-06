@@ -7,10 +7,10 @@ import { z } from 'zod';
 // Define the state to be updated by the forms
 export type State = {
   errors?: {
-    email?: string[]
-    password?: string[],
-    confirmPassword?: string[],
-    auth?: string[],
+    email?: string[];
+    password?: string[];
+    confirmPassword?: string[];
+    auth?: string[];
   };
   message?: string | null;
 };
@@ -75,11 +75,9 @@ const errorMessages: Record<string, string> = {
   'Database error querying schema':
     'Unable to connect to server. Please try again later.',
 
-  'Email not confirmed':
-    'Sign in failed, Confirm your email before logging in',
+  'Email not confirmed': 'Sign in failed, Confirm your email before logging in',
 
-  'Failed to set JWT cookie':
-    'Sign in failed, unable to set cookie.',
+  'Failed to set JWT cookie': 'Sign in failed, unable to set cookie.',
 
   'Invalid login credentials':
     'Sign in failed, please check your credentials and try again.',
@@ -103,10 +101,7 @@ export const signIn = async (
     };
   }
 
-  const {
-    email,
-    password,
-  } = validatedFields.data;
+  const { email, password } = validatedFields.data;
 
   // login the user
   const supabase = createServerSupabaseClient();
@@ -121,7 +116,9 @@ export const signIn = async (
       errors: {
         auth: [error.message],
       },
-      message: Object.keys(errorMessages).includes(error.message) ? errorMessages[error.message] : 'Sign in failed, please check your credentials and try again.',
+      message: Object.keys(errorMessages).includes(error.message)
+        ? errorMessages[error.message]
+        : 'Sign in failed, please check your credentials and try again.',
     };
   }
 
@@ -209,10 +206,7 @@ export const signUp = async (
       message: 'Invalid Fields. Failed to Sign Up User.',
     };
   }
-  const {
-    email,
-    password,
-  } = validatedFields.data;
+  const { email, password } = validatedFields.data;
 
   // sign up the user
   const supabase = createServerSupabaseClient();
@@ -244,6 +238,7 @@ export const signUp = async (
   }
 
   return {
-    message: 'Sign up successful. Please check your email for a verification link.',
+    message:
+      'Sign up successful. Please check your email for a verification link.',
   };
 };

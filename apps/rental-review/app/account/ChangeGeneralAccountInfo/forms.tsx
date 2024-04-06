@@ -5,11 +5,11 @@ import React from 'react';
 import { State, updateInfo } from './actions';
 
 interface FieldProps {
-  name: string
-  label: string
-  type?: 'email' | 'text'
-  required?: boolean
-  errors?: string[]
+  name: string;
+  label: string;
+  type?: 'email' | 'text';
+  required?: boolean;
+  errors?: string[];
 }
 
 const Field = ({
@@ -20,7 +20,6 @@ const Field = ({
   required = false,
   errors,
 }: FieldProps) => (
-
   <div className='flex flex-col gap-1'>
     <label className='text-md' htmlFor={name}>
       {label}
@@ -42,28 +41,21 @@ Field.defaultProps = {
 };
 
 interface EmailFieldProps {
-  errors?: string[]
-
+  errors?: string[];
 }
 const EmailField: React.FC<EmailFieldProps> = ({ errors }) => (
-  <Field
-    name='email'
-    label='Email'
-    type='email'
-    required
-    errors={errors}
-  />
+  <Field name='email' label='Email' type='email' required errors={errors} />
 );
 EmailField.defaultProps = {
   errors: [],
 };
 
 interface FormProps {
-  children: React.ReactNode
+  children: React.ReactNode;
   // eslint-disable-next-line no-unused-vars
-  dispatch: (formData: FormData) => void
-  title: string,
-  submitText: string,
+  dispatch: (formData: FormData) => void;
+  title: string;
+  submitText: string;
 }
 
 const Form: React.FC<FormProps> = ({
@@ -81,9 +73,7 @@ const Form: React.FC<FormProps> = ({
 
     {/* <span className=''></span> */}
 
-    <div className='flex flex-col flex-1 justify-center gap-4'>
-      {children}
-    </div>
+    <div className='flex flex-col flex-1 justify-center gap-4'>{children}</div>
 
     <button
       type='submit'
@@ -91,7 +81,6 @@ const Form: React.FC<FormProps> = ({
     >
       {submitText}
     </button>
-
   </form>
 );
 
@@ -120,7 +109,6 @@ const UpdateProfileForm = () => {
       title='Account Info'
       submitText='Save Changes'
     >
-
       <EmailField errors={displayState.errors?.new_email} />
     </Form>
   );

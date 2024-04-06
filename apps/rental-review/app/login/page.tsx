@@ -4,9 +4,9 @@ import RedirectMessage from './redirectMessage';
 
 const LoginPage: NextPage<{
   searchParams?: {
-    redirect?: string,
-    message?: string,
-  }
+    redirect?: string;
+    message?: string;
+  };
 }> = ({ searchParams }) => {
   const redirectTo = searchParams?.redirect;
 

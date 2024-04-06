@@ -13,14 +13,12 @@ const getTags = cache(async () => {
 
 const CreateReviewPage: NextPage<{
   searchParams?: {
-    street?: string
-    city?: string
-    postalCode?: string
-    country?: string
-  }
-}> = async ({
-  searchParams,
-}) => {
+    street?: string;
+    city?: string;
+    postalCode?: string;
+    country?: string;
+  };
+}> = async ({ searchParams }) => {
   const tags = await getTags();
 
   return (
@@ -28,10 +26,7 @@ const CreateReviewPage: NextPage<{
       <h1 className='text-2xl font-bold mt-6'>Create Review</h1>
       <p className='mb-6'>Fill in the fields below to complete your review</p>
 
-      <CreateReviewForm
-        tags={tags}
-        initialPropertyDetails={searchParams}
-      />
+      <CreateReviewForm tags={tags} initialPropertyDetails={searchParams} />
     </div>
   );
 };

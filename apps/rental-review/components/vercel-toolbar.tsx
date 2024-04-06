@@ -10,7 +10,9 @@ const Toolbar: React.FC = async () => {
 
   const supabase = createServerSupabaseClient();
 
-  const { data: { user } } = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
   if (!user) return null;
 

@@ -5,9 +5,7 @@ import React from 'react';
 const LandlordRegistrationPropmt = () => (
   <div className='flex flex-col gap-1 items-center'>
     <h3 className='font-bold text-2xl text-accent'>Are you a landlord?</h3>
-    <p className='mb-6 text-lg'>
-      Click below to register
-    </p>
+    <p className='mb-6 text-lg'>Click below to register</p>
     <Link
       href='/become-a-landlord'
       className='bg-accent text-gray-900 font-bold py-2 px-4 rounded-md mb-6'
@@ -19,7 +17,9 @@ const LandlordRegistrationPropmt = () => (
 
 const StartReviewingPrompt = () => (
   <div className='flex flex-col gap-1 items-center'>
-    <h3 className='font-bold text-2xl text-accent'>Are you or have you been a renter?</h3>
+    <h3 className='font-bold text-2xl text-accent'>
+      Are you or have you been a renter?
+    </h3>
     <p className='mb-6 text-lg'>
       Get started reviewing by finding the places you&apos;ve lived below
     </p>
@@ -37,13 +37,15 @@ const DashboardLayout = async ({
   landlord: landlordDashboard,
   tenant: tenantDashboard,
 }: {
-  children: React.ReactNode,
-  landlord: React.ReactNode,
-  tenant: React.ReactNode,
+  children: React.ReactNode;
+  landlord: React.ReactNode;
+  tenant: React.ReactNode;
 }) => {
   const supabase = createServerSupabaseClient();
 
-  const { data: { user } } = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
   // route be blocked by middleware if no user, explicitly reject here for type safety
   if (!user) return null;
@@ -55,7 +57,7 @@ const DashboardLayout = async ({
     .eq('user_id', user.id)
     .maybeSingle();
 
-  const userIsLandlord = !!((!landlordProfileError && landlordProfile));
+  const userIsLandlord = !!(!landlordProfileError && landlordProfile);
 
   // determine if the user has left a review
   const { data: tenantProfiles, error: tenantProfileError } = await supabase
@@ -63,7 +65,9 @@ const DashboardLayout = async ({
     .select('user_id')
     .eq('user_id', user.id);
 
-  const userHasLeftReview = !!(!tenantProfileError && tenantProfiles.length > 0);
+  const userHasLeftReview = !!(
+    !tenantProfileError && tenantProfiles.length > 0
+  );
 
   return (
     <div className='flex-grow flex-1 w-full flex flex-col gap-10 items-center py-10'>

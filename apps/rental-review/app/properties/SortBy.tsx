@@ -42,7 +42,9 @@ const SortBy: React.FC = () => {
       <p>Sort By</p>
       <div className='flex flex-col px-2 py-4 border-y border-foreground/30 gap-2'>
         {['rating', 'recent', 'address'].map((sortBy) => {
-          const selected = searchParams.get('sortBy') === sortBy || (!searchParams.get('sortBy') && sortBy === defaultSortBy);
+          const selected =
+            searchParams.get('sortBy') === sortBy ||
+            (!searchParams.get('sortBy') && sortBy === defaultSortBy);
 
           return (
             <div

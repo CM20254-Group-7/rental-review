@@ -13,65 +13,76 @@ type LandlordProfile = {
   user_id: string;
   verified: boolean;
   website: string | null;
-}
+};
 
-const getAllOwners = cache(async (
-  propertyId: string,
-): Promise<{
-  start_date: Date,
-  end_date: Date | null,
-  landlord: LandlordProfile,
-  average_rating: number
-}[]> => {
-  'use server';
+const getAllOwners = cache(
+  async (
+    propertyId: string,
+  ): Promise<
+    {
+      start_date: Date;
+      end_date: Date | null;
+      landlord: LandlordProfile;
+      average_rating: number;
+    }[]
+  > => {
+    'use server';
 
-  const supabase = createServerSupabaseClient();
+    const supabase = createServerSupabaseClient();
 
-  // get the ownership history
-  const { data } = await supabase
-    .from('property_ownership')
-    .select('landlord_id, started_at, ended_at')
-    .eq('property_id', propertyId);
+    // get the ownership history
+    const { data } = await supabase
+      .from('property_ownership')
+      .select('landlord_id, started_at, ended_at')
+      .eq('property_id', propertyId);
 
-  if (!data || data.length === 0) return [];
+    if (!data || data.length === 0) return [];
 
-  // get the landlord profiles for each ownership
-  const profiles = await Promise.all(data.map(async (ownership) => {
-    const { data: landlordProfile } = await supabase
-      .from('landlord_public_profiles')
-      .select('*')
-      .eq('user_id', ownership.landlord_id)
-      .single();
+    // get the landlord profiles for each ownership
+    const profiles = await Promise.all(
+      data.map(async (ownership) => {
+        const { data: landlordProfile } = await supabase
+          .from('landlord_public_profiles')
+          .select('*')
+          .eq('user_id', ownership.landlord_id)
+          .single();
 
-    if (!landlordProfile) return null;
+        if (!landlordProfile) return null;
 
-    const { data: rating } = await supabase
-      .rpc('average_landlord_rating', { id: ownership.landlord_id });
+        const { data: rating } = await supabase.rpc('average_landlord_rating', {
+          id: ownership.landlord_id,
+        });
 
-    let averageRating = 0;
-    if (rating) {
-      averageRating = rating;
-    }
+        let averageRating = 0;
+        if (rating) {
+          averageRating = rating;
+        }
 
-    return {
-      start_date: new Date(ownership.started_at),
-      end_date: ownership.ended_at ? new Date(ownership.ended_at) : null,
-      landlord: landlordProfile,
-      average_rating: averageRating,
-    };
-  }));
+        return {
+          start_date: new Date(ownership.started_at),
+          end_date: ownership.ended_at ? new Date(ownership.ended_at) : null,
+          landlord: landlordProfile,
+          average_rating: averageRating,
+        };
+      }),
+    );
 
-  // remove any nulls & return
-  return profiles.flatMap((profile) => profile || []);
-});
+    // remove any nulls & return
+    return profiles.flatMap((profile) => profile || []);
+  },
+);
 
-const OwnershipHistoryPage: NextPage<{ params: { id: string } }> = async ({ params: { id: propertyId } }) => {
+const OwnershipHistoryPage: NextPage<{ params: { id: string } }> = async ({
+  params: { id: propertyId },
+}) => {
   const ownershipHistory = await getAllOwners(propertyId);
 
   return (
     <div className='flex-1 w-screen flex flex-row justify-center items-center py-20'>
       <div className='flex flex-col w-full max-w-prose gap-8 items-center'>
-        <h2 className='text-2xl font-semibold mb-1 w-fit text-accent'>Ownership History</h2>
+        <h2 className='text-2xl font-semibold mb-1 w-fit text-accent'>
+          Ownership History
+        </h2>
         <span className='border border-b w-full border-accent' />
         {ownershipHistory.map((ownership) => (
           <Link
@@ -82,11 +93,10 @@ const OwnershipHistoryPage: NextPage<{ params: { id: string } }> = async ({ para
             {/* Timeline */}
             <div className='flex flex-col w-fit'>
               <h2 className='text-2xl font-semibold mb-1 w-fit'>
-                {ownership.start_date.toLocaleDateString()}
-                {' '}
-                to
-                {' '}
-                {ownership.end_date ? ` ${ownership.end_date.toLocaleDateString()}` : ' Present'}
+                {ownership.start_date.toLocaleDateString()} to{' '}
+                {ownership.end_date
+                  ? ` ${ownership.end_date.toLocaleDateString()}`
+                  : ' Present'}
               </h2>
             </div>
 
@@ -107,7 +117,6 @@ const OwnershipHistoryPage: NextPage<{ params: { id: string } }> = async ({ para
                 <StarRatingLayout rating={ownership.average_rating} />
               </div>
             </div>
-
           </Link>
         ))}
 

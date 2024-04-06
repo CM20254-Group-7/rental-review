@@ -5,13 +5,13 @@ import React from 'react';
 import { signIn, signUp, State } from './actions';
 
 type FieldProps = {
-  name: string
-  label: string
-  type?: 'password' | 'email' | 'text'
-  placeholder?: string
-  required?: boolean
-  errors?: string[]
-}
+  name: string;
+  label: string;
+  type?: 'password' | 'email' | 'text';
+  placeholder?: string;
+  required?: boolean;
+  errors?: string[];
+};
 const Field: React.FC<FieldProps> = ({
   name,
   label,
@@ -43,8 +43,8 @@ Field.defaultProps = {
 };
 
 type EmailFieldProps = {
-  errors: string[] | undefined
-}
+  errors: string[] | undefined;
+};
 const EmailField: React.FC<EmailFieldProps> = ({ errors }) => (
   <Field
     name='email'
@@ -57,8 +57,8 @@ const EmailField: React.FC<EmailFieldProps> = ({ errors }) => (
 );
 
 type PasswordFieldProps = {
-  errors: string[] | undefined
-}
+  errors: string[] | undefined;
+};
 const PasswordField: React.FC<PasswordFieldProps> = ({ errors }) => (
   <Field
     name='password'
@@ -71,9 +71,11 @@ const PasswordField: React.FC<PasswordFieldProps> = ({ errors }) => (
 );
 
 type ConfirmPasswordFieldProps = {
-  errors: string[] | undefined
-}
-const ConfirmPasswordField: React.FC<ConfirmPasswordFieldProps> = ({ errors }) => (
+  errors: string[] | undefined;
+};
+const ConfirmPasswordField: React.FC<ConfirmPasswordFieldProps> = ({
+  errors,
+}) => (
   <Field
     name='confirmPassword'
     label='Confirm Password'
@@ -85,12 +87,12 @@ const ConfirmPasswordField: React.FC<ConfirmPasswordFieldProps> = ({ errors }) =
 );
 
 interface FormProps {
-  children: React.ReactNode
+  children: React.ReactNode;
   // eslint-disable-next-line no-unused-vars
-  dispatch: ((formData: FormData) => void)
-  state: State
-  title: string,
-  submitText: string,
+  dispatch: (formData: FormData) => void;
+  state: State;
+  title: string;
+  submitText: string;
 }
 
 const Form: React.FC<FormProps> = ({
@@ -108,9 +110,7 @@ const Form: React.FC<FormProps> = ({
 
     {/* <span className=''></span> */}
 
-    <div className='flex flex-col flex-1 justify-center gap-4'>
-      {children}
-    </div>
+    <div className='flex flex-col flex-1 justify-center gap-4'>{children}</div>
 
     <button
       className=' bg-primary rounded-md px-4 py-2 text-background mb-2'
@@ -127,11 +127,14 @@ const Form: React.FC<FormProps> = ({
 );
 
 export const SignInForm: React.FC<{
-  redirectTo?: string
+  redirectTo?: string;
 }> = ({ redirectTo }) => {
   const initialState: State = { message: null, errors: {} };
   const signInWithRedirect = signIn.bind(null, redirectTo);
-  const [loginState, loginDispatch] = useFormState(signInWithRedirect, initialState);
+  const [loginState, loginDispatch] = useFormState(
+    signInWithRedirect,
+    initialState,
+  );
 
   return (
     <Form
@@ -152,11 +155,14 @@ SignInForm.defaultProps = {
 };
 
 export const SignUpForm: React.FC<{
-  redirectTo: string | undefined
+  redirectTo: string | undefined;
 }> = ({ redirectTo }) => {
   const initialState: State = { message: null, errors: {} };
   const signUpWithRedirect = signUp.bind(null, redirectTo);
-  const [signupState, signupDispatch] = useFormState(signUpWithRedirect, initialState);
+  const [signupState, signupDispatch] = useFormState(
+    signUpWithRedirect,
+    initialState,
+  );
 
   return (
     <Form

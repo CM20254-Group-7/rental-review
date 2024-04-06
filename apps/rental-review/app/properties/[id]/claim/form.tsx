@@ -8,39 +8,35 @@ const ErrorMessage: React.FC<{ state: State }> = ({ state }) => {
   // Handle specific errors
 
   if (state.errors?.started_at?.includes('Start date must be in the past')) {
-    return (
-      <p>Start date must be in the past</p>
-    );
+    return <p>Start date must be in the past</p>;
   }
 
   if (state.errors?.ended_at?.includes('End date must be in the past')) {
-    return (
-      <p>End date must be in the past</p>
-    );
+    return <p>End date must be in the past</p>;
   }
 
   if (state.errors?.ended_at?.includes('End date must be after start date')) {
-    return (
-      <p>End date must be after start date</p>
-    );
+    return <p>End date must be after start date</p>;
   }
 
   // Handle generic errors/messages
-  return (
-    <p>{state.message}</p>
-  );
+  return <p>{state.message}</p>;
 };
 
 interface ClaimPropertyFormProps {
-  property_id: string
-  landlord_id: string
+  property_id: string;
+  landlord_id: string;
 }
 
 const ClaimPropertyForm: React.FC<ClaimPropertyFormProps> = ({
   property_id,
   landlord_id,
 }) => {
-  const claimPropertyWithIds = claimProperty.bind(null, property_id, landlord_id);
+  const claimPropertyWithIds = claimProperty.bind(
+    null,
+    property_id,
+    landlord_id,
+  );
   const initialState = { errors: {}, message: null };
   const [state, dispatch] = useFormState(claimPropertyWithIds, initialState);
 
@@ -57,7 +53,6 @@ const ClaimPropertyForm: React.FC<ClaimPropertyFormProps> = ({
   }, [endDate]);
 
   return (
-
     <div className='Contents'>
       <form
         className='flex flex-col gap-4 justify-center bg-primary/30 border-x px-4 py-8'
@@ -67,7 +62,9 @@ const ClaimPropertyForm: React.FC<ClaimPropertyFormProps> = ({
           className='flex flex-col gap-1 justify-center'
           htmlFor='started_at'
         >
-          <p className='text-lg font-bold'>When did you purchase this property?</p>
+          <p className='text-lg font-bold'>
+            When did you purchase this property?
+          </p>
           <input
             className={`${startDate ? 'bg-accent/20 hover:bg-accent/30 border-accent/50' : 'bg-transparent hover:bg-foreground/5 border-foreground/50'} border w-[45%]  rounded-md px-2 py-1`}
             type='date'
@@ -104,11 +101,20 @@ const ClaimPropertyForm: React.FC<ClaimPropertyFormProps> = ({
               <p className='text-lg'>I still own this property</p>
               <div className='w-5 h-5 relative rounded-md border-4'>
                 {stillOwned && (
-                  <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' strokeWidth={2.5} className='w-6 h-6 absolute -left-1 -top-2 stroke-accent'>
-                    <path strokeLinecap='round' strokeLinejoin='round' d='m4.5 12.75 6 6 9-13.5' />
+                  <svg
+                    xmlns='http://www.w3.org/2000/svg'
+                    fill='none'
+                    viewBox='0 0 24 24'
+                    strokeWidth={2.5}
+                    className='w-6 h-6 absolute -left-1 -top-2 stroke-accent'
+                  >
+                    <path
+                      strokeLinecap='round'
+                      strokeLinejoin='round'
+                      d='m4.5 12.75 6 6 9-13.5'
+                    />
                   </svg>
                 )}
-
               </div>
             </button>
           </div>
@@ -128,7 +134,6 @@ const ClaimPropertyForm: React.FC<ClaimPropertyFormProps> = ({
         {/* <pre>{JSON.stringify(state, null, 2)}</pre> */}
         <ErrorMessage state={state} />
       </div>
-
     </div>
   );
 };

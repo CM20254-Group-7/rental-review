@@ -7,10 +7,10 @@ import { z } from 'zod';
 // Define the state to be updated by the forms
 export type State = {
   errors?: {
-    email?: string[]
-    new_password?: string[],
-    confirmPassword?: string[],
-    auth?: string[],
+    email?: string[];
+    new_password?: string[];
+    confirmPassword?: string[];
+    auth?: string[];
   };
   message?: string | null;
 };
@@ -19,7 +19,6 @@ export type State = {
 const passwordDetails = z.object({
   new_password: z.string(),
   confirmPassword: z.string(),
-
 });
 
 const newPasswordSchema = passwordDetails
@@ -42,7 +41,10 @@ const newPasswordSchema = passwordDetails
     }
   });
 
-export const updatePassword = async (prevState: State, formData: FormData): Promise<State> => {
+export const updatePassword = async (
+  prevState: State,
+  formData: FormData,
+): Promise<State> => {
   const validatedFields = newPasswordSchema.safeParse({
     new_password: formData.get('new_password'),
     confirmPassword: formData.get('confirmPassword'),
@@ -54,9 +56,7 @@ export const updatePassword = async (prevState: State, formData: FormData): Prom
       message: 'Invalid Fields.',
     };
   }
-  const {
-    new_password: newPassword,
-  } = validatedFields.data;
+  const { new_password: newPassword } = validatedFields.data;
 
   const supabase = createServerSupabaseClient();
 
@@ -71,8 +71,5 @@ export const updatePassword = async (prevState: State, formData: FormData): Prom
       },
     };
   }
-  return (
-
-    redirect('/account')
-  );
+  return redirect('/account');
 };

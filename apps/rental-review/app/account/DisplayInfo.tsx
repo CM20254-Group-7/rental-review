@@ -14,7 +14,6 @@ const GetInfo: FC = async () => {
   return user ? (
     <div className='flex items-center gap-4'>
       Email:
-      {' '}
       {user.email}
     </div>
   ) : (

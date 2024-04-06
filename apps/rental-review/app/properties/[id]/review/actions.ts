@@ -2,7 +2,10 @@
 
 'use server';
 
-import { createServerSupabaseClient, createServiceSupabaseClient } from '@repo/supabase-client-helpers/server-only';
+import {
+  createServerSupabaseClient,
+  createServiceSupabaseClient,
+} from '@repo/supabase-client-helpers/server-only';
 import { z } from 'zod';
 
 const newReviewSchema = z.object({
@@ -18,12 +21,12 @@ const newReviewSchema = z.object({
 
 export type State = {
   errors?: {
-    property_id?: string[]
+    property_id?: string[];
 
-    review_date?: string[],
-    review_body?: string[],
-    property_rating?: string[],
-    landlord_rating?: string[]
+    review_date?: string[];
+    review_body?: string[];
+    property_rating?: string[];
+    landlord_rating?: string[];
   };
   message?: string;
 };
@@ -69,7 +72,9 @@ export const createReview = async (
   // get user
   const supabase = createServerSupabaseClient();
 
-  const { data: { user } } = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
   if (!user) {
     return {
       message: 'User Not Logged In',
@@ -95,14 +100,15 @@ export const createReview = async (
   // all good, create review
 
   // create reviewer profile
-  const { data: reviewerProfile, error: reviewerProfileError } = await serviceSupabase
-    .from('reviewer_private_profiles')
-    .insert({
-      user_id,
-      property_id,
-    })
-    .select()
-    .single();
+  const { data: reviewerProfile, error: reviewerProfileError } =
+    await serviceSupabase
+      .from('reviewer_private_profiles')
+      .insert({
+        user_id,
+        property_id,
+      })
+      .select()
+      .single();
 
   if (reviewerProfileError) {
     return {
@@ -133,12 +139,12 @@ export const createReview = async (
   }
 
   // create tags
-  await serviceSupabase
-    .from('review_tags')
-    .insert(tags.map((tag) => ({
+  await serviceSupabase.from('review_tags').insert(
+    tags.map((tag) => ({
       review_id: data.review_id,
       tag,
-    })));
+    })),
+  );
 
   return {
     message: 'Review Created',

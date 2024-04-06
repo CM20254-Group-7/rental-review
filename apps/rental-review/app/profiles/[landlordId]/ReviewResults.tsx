@@ -11,20 +11,24 @@ const getReviews = cache(async (landlordId: string) => {
 
   if (!reviews) return [];
 
-  const extendedReviews = (await Promise.all(reviews.map(async (review) => {
-    const { data: reviewTags, error: tagError } = await supabase
-      .from('review_tags')
-      .select('tag')
-      .eq('review_id', review.review_id);
+  const extendedReviews = (
+    await Promise.all(
+      reviews.map(async (review) => {
+        const { data: reviewTags, error: tagError } = await supabase
+          .from('review_tags')
+          .select('tag')
+          .eq('review_id', review.review_id);
 
-    if (tagError) return [];
+        if (tagError) return [];
 
-    return {
-      ...review,
-      review_date: new Date(review.review_date),
-      review_tags: reviewTags.map((tag) => tag.tag),
-    };
-  }))).flat();
+        return {
+          ...review,
+          review_date: new Date(review.review_date),
+          review_tags: reviewTags.map((tag) => tag.tag),
+        };
+      }),
+    )
+  ).flat();
 
   return extendedReviews;
 });
@@ -52,6 +56,4 @@ const ReviewResults: React.FC<{
 
 export default ReviewResults;
 
-export const ReviewResultsLoading: React.FC = () => (
-  <p>Loading...</p>
-);
+export const ReviewResultsLoading: React.FC = () => <p>Loading...</p>;

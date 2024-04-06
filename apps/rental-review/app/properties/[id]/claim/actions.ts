@@ -1,6 +1,9 @@
 'use server';
 
-import { createServerSupabaseClient, createServiceSupabaseClient } from '@repo/supabase-client-helpers/server-only';
+import {
+  createServerSupabaseClient,
+  createServiceSupabaseClient,
+} from '@repo/supabase-client-helpers/server-only';
 import { z } from 'zod';
 
 const colisionState = (
@@ -26,7 +29,10 @@ const colisionState = (
     }
     // if the claim is being made by the same landlord, require the new claim to end at least one day before the existing claim
     // convert to strings because the dates are not the same object and JS is weird about equality
-    if (isSameLandlord && existingStartDate.toISOString() === newEndDate.toISOString()) {
+    if (
+      isSameLandlord &&
+      existingStartDate.toISOString() === newEndDate.toISOString()
+    ) {
       return 'bad';
     }
 
@@ -51,10 +57,10 @@ const colisionState = (
 
 export type State = {
   errors?: {
-    property_id?: string[],
-    landlord_id?: string[],
-    started_at?: string[],
-    ended_at?: string[]
+    property_id?: string[];
+    landlord_id?: string[];
+    started_at?: string[];
+    ended_at?: string[];
   };
   message?: string | null;
 };
@@ -67,14 +73,12 @@ const setPropertyOwnership = async (
 ): Promise<State> => {
   const supabase = createServiceSupabaseClient();
 
-  const { error } = await supabase
-    .from('property_ownership')
-    .insert({
-      property_id: selectedPropertyId,
-      landlord_id: landlordId,
-      started_at: startedAt.toISOString(),
-      ended_at: endedAt?.toISOString(),
-    });
+  const { error } = await supabase.from('property_ownership').insert({
+    property_id: selectedPropertyId,
+    landlord_id: landlordId,
+    started_at: startedAt.toISOString(),
+    ended_at: endedAt?.toISOString(),
+  });
 
   if (error) {
     return {
@@ -94,7 +98,14 @@ const setPropertyOwnershipWithClose = async (
   endedAt: Date | null,
   openClaimToClose: false | Date,
 ): Promise<State> => {
-  if (!openClaimToClose) return setPropertyOwnership(selectedPropertyId, landlordId, startedAt, endedAt);
+  if (!openClaimToClose) {
+    return setPropertyOwnership(
+      selectedPropertyId,
+      landlordId,
+      startedAt,
+      endedAt,
+    );
+  }
 
   // close the open claim with the day before the new claim starts
   const supabase = createServiceSupabaseClient();
@@ -114,7 +125,12 @@ const setPropertyOwnershipWithClose = async (
   }
 
   // continue to create the new claim
-  return setPropertyOwnership(selectedPropertyId, landlordId, startedAt, endedAt);
+  return setPropertyOwnership(
+    selectedPropertyId,
+    landlordId,
+    startedAt,
+    endedAt,
+  );
 };
 
 const ClaimPropertySchema = z
@@ -199,7 +215,10 @@ export const claimProperty = async (
   const supabase = createServerSupabaseClient();
 
   // check if the user is logged in
-  const { data: { user }, error: userError } = await supabase.auth.getUser();
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
   if (userError || !user) {
     return {
       message: 'User Not Logged In',
@@ -214,7 +233,10 @@ export const claimProperty = async (
   }
 
   //  check if the user is already the landlord of the property for this time period
-  const { data: existingPropertyOwnerships, error: existingPropertyOwnershipErrors } = await supabase
+  const {
+    data: existingPropertyOwnerships,
+    error: existingPropertyOwnershipErrors,
+  } = await supabase
     .from('property_ownership')
     .select('landlord_id, started_at, ended_at')
     .eq('property_id', selectedPropertyId);
@@ -235,21 +257,28 @@ export const claimProperty = async (
     );
   }
 
-  const collisionStates = existingPropertyOwnerships.map((existingPropertyOwnership) => {
-    const isSameLandlord = existingPropertyOwnership.landlord_id === activeUserLandlordId;
-    const existingClaimStartDate = new Date(existingPropertyOwnership.started_at);
-    const existingClaimEndDate = existingPropertyOwnership.ended_at ? new Date(existingPropertyOwnership.ended_at) : null;
-    return {
-      claimStartDate: existingClaimStartDate,
-      state: colisionState(
-        existingClaimStartDate,
-        existingClaimEndDate,
-        newClaimStartDate,
-        newClaimEndDate,
-        isSameLandlord,
-      ),
-    };
-  });
+  const collisionStates = existingPropertyOwnerships.map(
+    (existingPropertyOwnership) => {
+      const isSameLandlord =
+        existingPropertyOwnership.landlord_id === activeUserLandlordId;
+      const existingClaimStartDate = new Date(
+        existingPropertyOwnership.started_at,
+      );
+      const existingClaimEndDate = existingPropertyOwnership.ended_at
+        ? new Date(existingPropertyOwnership.ended_at)
+        : null;
+      return {
+        claimStartDate: existingClaimStartDate,
+        state: colisionState(
+          existingClaimStartDate,
+          existingClaimEndDate,
+          newClaimStartDate,
+          newClaimEndDate,
+          isSameLandlord,
+        ),
+      };
+    },
+  );
 
   // if any collision state is 'bad', fail
   if (collisionStates.some(({ state }) => state === 'bad')) {
@@ -259,8 +288,16 @@ export const claimProperty = async (
   }
 
   // if a collison state is 'close existing' set the open claim to close
-  const openClaimToClose = collisionStates.find(({ state }) => state === 'close existing')?.claimStartDate || false;
+  const openClaimToClose =
+    collisionStates.find(({ state }) => state === 'close existing')
+      ?.claimStartDate || false;
 
   // if no unresolveable conflicts where found, continue, closing an open claim if necessary
-  return setPropertyOwnershipWithClose(selectedPropertyId, activeUserLandlordId, newClaimStartDate, newClaimEndDate, openClaimToClose);
+  return setPropertyOwnershipWithClose(
+    selectedPropertyId,
+    activeUserLandlordId,
+    newClaimStartDate,
+    newClaimEndDate,
+    openClaimToClose,
+  );
 };

@@ -2,11 +2,9 @@ import { StarIcon } from '@heroicons/react/24/solid';
 import React from 'react';
 
 interface StarRatingProps {
-  rating: number
+  rating: number;
 }
-const StarRatingLayout: React.FC<StarRatingProps> = ({
-  rating,
-}) => (
+const StarRatingLayout: React.FC<StarRatingProps> = ({ rating }) => (
   <div className='flex'>
     {Array.from({ length: 5 }).map((_, i) => {
       const starNumber = i + 1;
