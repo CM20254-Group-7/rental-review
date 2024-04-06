@@ -37,7 +37,8 @@
         "SUPABASE_SERVICE_KEY",
         "EDGE_CONFIG",
         "VERCEL_ENV",
-        "FLAGS_SECRET"
+        "FLAGS_SECRET",
+        "ADMIN_PASSWORD_HASH"
       ]
     },
     "@repo/supabase#start": {
@@ -73,7 +74,7 @@
         "NEXT_PUBLIC_SUPABASE_URL",
         "NEXT_PUBLIC_SUPABASE_ANON_KEY",
         "SUPABASE_SERVICE_KEY",
-        "NEXT_PUBLIC_BASE_URL"
+        "NEXT_PUBLIC_PUBLIC_SITE_URL"
       ]
     },
     "test:ui": {
@@ -85,7 +86,7 @@
         "NEXT_PUBLIC_SUPABASE_URL",
         "NEXT_PUBLIC_SUPABASE_ANON_KEY",
         "SUPABASE_SERVICE_KEY",
-        "NEXT_PUBLIC_BASE_URL"
+        "NEXT_PUBLIC_PUBLIC_SITE_URL"
       ]
     },
     "rental-review#start": {
@@ -108,6 +109,22 @@
       "outputs": [
         "../../eslint-results/rental-review.sarif"
       ]
+    },
+    "admin-console#start": {
+      "dependsOn": [
+        "admin-console#build"
+      ],
+      "env": [
+        "NEXT_PUBLIC_SUPABASE_URL",
+        "NEXT_PUBLIC_SUPABASE_ANON_KEY",
+        "SUPABASE_SERVICE_KEY",
+        "EDGE_CONFIG",
+        "VERCEL_ENV",
+        "FLAGS_SECRET",
+        "ADMIN_PASSWORD_HASH"
+      ],
+      "cache": false,
+      "persistent": true
     }
   }
 }
