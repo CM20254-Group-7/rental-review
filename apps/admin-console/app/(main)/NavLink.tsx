@@ -28,7 +28,7 @@ const NavLink: React.FC<
     href: string;
     mode?: 'large' | 'small-popover';
   }>
-> = ({ children, href = false, mode = 'large' }) => {
+> = ({ children, href, mode = 'large' }) => {
   const pathname = usePathname();
   // if pathname is exactly the same as href, or starts with href and is not the root, then it's selected
   const selected =
