@@ -1,5 +1,5 @@
-import { cookies } from 'next/headers';
 import { NextResponse, type NextRequest } from 'next/server';
+import { isLoggedIn } from './lib/auth';
 
 // match all routes other than the always allowed pages
 export const config = {
@@ -11,10 +11,7 @@ export const config = {
 export async function middleware(request: NextRequest) {
   const response = NextResponse.next();
 
-  // get the password hash from the cookie
-  const cookieStore = cookies();
-  const passwordHash = cookieStore.get('rental-review-admin')?.value;
-  const loggedIn = passwordHash === process.env.ADMIN_PASSWORD_HASH;
+  const loggedIn = await isLoggedIn();
 
   // if user is on login page, & is already logged in, redirect to home (or the redirict param if it exists)
   if (request.nextUrl.pathname === '/login') {

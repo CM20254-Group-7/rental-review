@@ -38,7 +38,8 @@
         "EDGE_CONFIG",
         "VERCEL_ENV",
         "FLAGS_SECRET",
-        "ADMIN_PASSWORD_HASH"
+        "ADMIN_PASSWORD_HASH",
+        "ADMIN_ENCRYPTION_KEY"
       ]
     },
     "@repo/supabase#start": {
@@ -126,7 +127,8 @@
         "EDGE_CONFIG",
         "VERCEL_ENV",
         "FLAGS_SECRET",
-        "ADMIN_PASSWORD_HASH"
+        "ADMIN_PASSWORD_HASH",
+        "ADMIN_ENCRYPTION_KEY"
       ],
       "cache": false,
       "persistent": true

@@ -1,14 +1,12 @@
 import Image from 'next/image';
-
 import { NextPage } from 'next';
-import { cookies } from 'next/headers';
-import { createHash } from 'crypto';
 import { redirect } from 'next/navigation';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { tryLogin } from '@/lib/auth';
 
-const setPwdCookie = async (formData: FormData) => {
+const login = async (formData: FormData) => {
   'use server';
 
   const inputPassword = formData.get('password');
@@ -16,13 +14,7 @@ const setPwdCookie = async (formData: FormData) => {
     return;
   }
 
-  const inputPasswordHash = createHash('sha256')
-    .update(`saltyPwd${inputPassword}`)
-    .digest('hex');
-
-  const cookieStore = cookies();
-  cookieStore.set('rental-review-admin', inputPasswordHash);
-
+  await tryLogin(inputPassword);
   redirect('/');
 };
 
@@ -36,7 +28,7 @@ const LoginPage: NextPage = () => (
             Please enter the admin password below to continue
           </p>
         </div>
-        <form className='grid gap-4' action={setPwdCookie}>
+        <form className='grid gap-4' action={login}>
           <div className='grid gap-2'>
             <div className='flex items-center'>
               <Label htmlFor='password' className='sr-only'>
