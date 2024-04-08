@@ -26,28 +26,35 @@ jobs:
       contents: read
       security-events: write
       actions: read # only required for a private repository by github/codeql-action/upload-sarif to get the Action run status
+    env:
+      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+      TURBO_TEAM: ${{ vars.TURBO_TEAM }}
+
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - name: Check out code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+ 
       - uses: pnpm/action-setup@v3
         with:
           version: 8
-
-      - name: Install ESLint
-        run: |
-          pnpm install eslint@8.10.0
-          pnpm install @microsoft/eslint-formatter-sarif@2.1.7
+ 
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+ 
+      - name: Install dependencies
+        run: pnpm install
 
       - name: Run ESLint
-        run: pnpx eslint .
-          --config .eslintrc.json
-          --ext .js,.jsx,.ts,.tsx
-          --format @microsoft/eslint-formatter-sarif
-          --output-file eslint-results.sarif
+        run: pnpm lint:sarif
         continue-on-error: true
 
       - name: Upload analysis results to GitHub
         uses: github/codeql-action/upload-sarif@v2
         with:
-          sarif_file: eslint-results.sarif
+          sarif_file: ./eslint-results
           wait-for-processing: true

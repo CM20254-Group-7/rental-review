@@ -1,0 +1,17 @@
+{
+    "name": "@repo/supabase-client-helpers",
+    "version": "1.0.0",
+    "exports": {
+        ".": "./index.ts",
+        "./server-only": "./server-only.ts"
+    },
+    "dependencies": {
+        "@supabase/ssr": "latest",
+        "@supabase/supabase-js": "latest",
+        "@repo/supabase": "workspace:*",
+        "next": "canary"
+    },
+    "devDependencies": {
+        "supabase": "1.142.2"
+    }
+}
