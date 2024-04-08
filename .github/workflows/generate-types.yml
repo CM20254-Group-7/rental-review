@@ -10,19 +10,38 @@ on:
 jobs:
   build: 
     runs-on: ubuntu-latest
+    
+    env:
+      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+      TURBO_TEAM: ${{ vars.TURBO_TEAM }}
+
     steps:
-        - uses: actions/checkout@v3
-        - uses: supabase/setup-cli@v1
-          with:
-            version: 1.142.2
-        - name: Start Supabase local development setup
-          run: supabase db start
-        - name: Verify generated types match Postgres schema
-          run: |
-            supabase --version
-            supabase gen types typescript --local > supabase.types.ts
-            if ! git diff --ignore-space-at-eol --exit-code --quiet supabase.types.ts; then
-              echo "Detected uncommitted changes after build. See status below:"
-              git diff
-              exit 1
-            fi
+      - name: Check out code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+ 
+      - uses: pnpm/action-setup@v3
+        with:
+          version: 8
+ 
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+ 
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Start Supabase local development setup
+        run: pnpm start:supabase
+
+      - name: Verify generated types match Postgres schema
+        run: |
+          pnpm generate-types
+          if ! git diff --ignore-space-at-eol --exit-code --quiet packages/supabase/supabase.types.ts; then
+            echo "Detected uncommitted changes after build. See status below:"
+            git diff
+            exit 1
+          fi
