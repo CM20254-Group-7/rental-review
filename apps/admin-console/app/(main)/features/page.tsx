@@ -3,7 +3,7 @@ import { NextPage } from 'next';
 
 const FeaturesPage: NextPage = () => (
   <AdminConsolePageLayout title='Features'>
-    <div className='flex flex-col gap-2 items-center'>
+    <div className='flex flex-col items-center gap-2'>
       <p className='text-md font-semibold'>Nothing Here Yet</p>
       <div>
         <p>Should Contain:</p>

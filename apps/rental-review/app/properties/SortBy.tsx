@@ -40,7 +40,7 @@ const SortBy: React.FC = () => {
   return (
     <div className='flex flex-col gap-2'>
       <p>Sort By</p>
-      <div className='flex flex-col px-2 py-4 border-y border-foreground/30 gap-2'>
+      <div className='border-foreground/30 flex flex-col gap-2 border-y px-2 py-4'>
         {['rating', 'recent', 'address'].map((sortBy) => {
           const selected =
             searchParams.get('sortBy') === sortBy ||
@@ -49,7 +49,7 @@ const SortBy: React.FC = () => {
           return (
             <div
               key={sortBy}
-              className={`${selected ? 'bg-secondary/10' : ''} flex flex-1 rounded-md border flex-row min-w-[15rem] justify-between p-2`}
+              className={`${selected ? 'bg-secondary/10' : ''} flex min-w-[15rem] flex-1 flex-row justify-between rounded-md border p-2`}
             >
               <button
                 onClick={() => setSortBy(sortBy)}
@@ -70,9 +70,9 @@ const SortBy: React.FC = () => {
                       type='button'
                       id={`sort${sortBy}Ascending`}
                       onClick={() => setSortOrder('asc')}
-                      className={`px-2 py-1 border rounded-md ${searchParams.get('sortOrder') === 'asc' ? 'bg-accent/20' : ''}`}
+                      className={`rounded-md border px-2 py-1 ${searchParams.get('sortOrder') === 'asc' ? 'bg-accent/20' : ''}`}
                     >
-                      <ArrowUpIcon className='w-5 h-5' />
+                      <ArrowUpIcon className='h-5 w-5' />
                     </button>
                   </label>
 
@@ -85,9 +85,9 @@ const SortBy: React.FC = () => {
                       type='button'
                       id={`sort${sortBy}Descending`}
                       onClick={() => setSortOrder('desc')}
-                      className={`px-2 py-1 border rounded-md ${searchParams.get('sortOrder') === null ? 'bg-accent/20' : ''}`}
+                      className={`rounded-md border px-2 py-1 ${searchParams.get('sortOrder') === null ? 'bg-accent/20' : ''}`}
                     >
-                      <ArrowDownIcon className='w-5 h-5' />
+                      <ArrowDownIcon className='h-5 w-5' />
                     </button>
                   </label>
                 </div>

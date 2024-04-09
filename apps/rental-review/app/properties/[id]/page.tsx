@@ -38,13 +38,13 @@ const PropertyDetailPage: NextPage<{
   if (!propertyDetails) notFound();
 
   return (
-    <div className='flex-1 flex flex-col w-full px-16 justify-top items-center gap-2 py-20'>
+    <main className='flex w-full flex-1 flex-col place-items-center justify-center py-10 md:py-16'>
       {/* Content Boundary */}
-      <div className='flex flex-col w-full max-w-4xl bg-secondary/10 shadow-md shadow-secondary/40 rounded-lg overflow-clip border'>
+      <div className='bg-secondary/10 shadow-secondary/40 flex w-full max-w-4xl flex-col overflow-clip rounded-lg border shadow-md'>
         {/* Details Header */}
-        <div className='flex flex-row w-full justify-between gap-2 bg-secondary/30 shadow-lg shadow-secondary/40'>
+        <div className='bg-secondary/30 shadow-secondary/40 flex w-full flex-row justify-between gap-2 shadow-lg'>
           {/* Images - Currently not implemented so shows example image with disclaimer */}
-          <div className='relative w-full max-w-md aspect-[1000/682]'>
+          <div className='relative aspect-[1000/682] w-full max-w-md'>
             <Image
               className='absolute w-full max-w-md rounded-lg'
               src='/house.jpeg'
@@ -52,21 +52,21 @@ const PropertyDetailPage: NextPage<{
               height={682}
               alt='Image of a house'
             />
-            <div className='w-full h-full bg-background/40 backdrop-blur flex flex-col place-items-center justify-center'>
-              <p className='text-lg font-semibold text-foreground'>
+            <div className='bg-background/40 flex h-full w-full flex-col place-items-center justify-center backdrop-blur'>
+              <p className='text-foreground text-lg font-semibold'>
                 Property Images Coming Soon
               </p>
             </div>
           </div>
 
           {/* General Property Details */}
-          <div className='flex-1 flex flex-col w-full px-8 sm:max-w-md justify-top gap-2 py-4'>
+          <div className='justify-top flex w-full flex-1 flex-col gap-2 px-8 py-4 sm:max-w-md'>
             {/* Title - Uses address */}
-            <div className='flex flex-col w-full'>
-              <h2 className='text-2xl font-semibold mb-1 w-fit text-accent'>
+            <div className='flex w-full flex-col'>
+              <h2 className='text-accent mb-1 w-fit text-2xl font-semibold'>
                 {propertyDetails.address}
               </h2>
-              <span className='border border-b w-full border-accent' />
+              <span className='border-accent w-full border border-b' />
             </div>
 
             {/* Average Ratings */}
@@ -76,7 +76,7 @@ const PropertyDetailPage: NextPage<{
             {/* Might want to add more things like no. baths etc */}
             {propertyDetails.description && (
               <div className='flex flex-col gap-2'>
-                <h3 className='text-lg font-semibold text-accent'>
+                <h3 className='text-accent text-lg font-semibold'>
                   Description:
                 </h3>
                 <p>{propertyDetails.description}</p>
@@ -84,11 +84,11 @@ const PropertyDetailPage: NextPage<{
             )}
 
             {/* Ownership */}
-            <h3 className='text-lg font-semibold text-accent'>
+            <h3 className='text-accent text-lg font-semibold'>
               Current Owner:
             </h3>
             <Suspense
-              fallback={<ArrowPathIcon className='w-5 h-5 animate-spin' />}
+              fallback={<ArrowPathIcon className='h-5 w-5 animate-spin' />}
             >
               <CurrentOwnerIndicator propertyId={propertyDetails.id} />
             </Suspense>
@@ -96,7 +96,7 @@ const PropertyDetailPage: NextPage<{
         </div>
 
         {/* Review Button */}
-        <div className='flex flex-col gap-4 justify-center items-center'>
+        <div className='flex flex-col items-center justify-center gap-4'>
           <br />
           <Link
             href='/properties/[id]/review'
@@ -104,7 +104,7 @@ const PropertyDetailPage: NextPage<{
           >
             <button
               type='submit'
-              className='border border-accent rounded-md px-4 py-2 text-accent mb-5 hover:bg-secondary/10 dark:hover:bg-accent/10 hover:shadow-lg hover:shadow-accent/20'
+              className='border-accent text-accent hover:bg-secondary/10 dark:hover:bg-accent/10 hover:shadow-accent/20 mb-5 rounded-md border px-4 py-2 hover:shadow-lg'
             >
               Review this Property
             </button>
@@ -113,18 +113,18 @@ const PropertyDetailPage: NextPage<{
 
         {/* Review List */}
         <div className='flex flex-col gap-6 px-8 py-6'>
-          <div className='flex flex-col w-full'>
-            <h2 className='text-2xl font-semibold mb-1 w-fit text-accent'>
+          <div className='flex w-full flex-col'>
+            <h2 className='text-accent mb-1 w-fit text-2xl font-semibold'>
               Reviews
             </h2>
-            <span className='border border-b w-full border-accent' />
+            <span className='border-accent w-full border border-b' />
           </div>
-          <div className='flex flex-col gap-4 justify-center items-center'>
+          <div className='flex flex-col items-center justify-center gap-4'>
             <ReviewResults propertyId={propertyDetails.id} />
           </div>
         </div>
       </div>
-    </div>
+    </main>
   );
 };
 

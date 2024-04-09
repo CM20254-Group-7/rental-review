@@ -22,12 +22,12 @@ const CreateReviewPage: NextPage<{
   const tags = await getTags();
 
   return (
-    <div className='flex flex-col flex-1 justify-center'>
-      <h1 className='text-2xl font-bold mt-6'>Create Review</h1>
+    <main className='flex flex-1 flex-col place-items-center justify-center py-10 md:py-16'>
+      <h1 className='mt-6 text-2xl font-bold'>Create Review</h1>
       <p className='mb-6'>Fill in the fields below to complete your review</p>
 
       <CreateReviewForm tags={tags} initialPropertyDetails={searchParams} />
-    </div>
+    </main>
   );
 };
 

@@ -1,11 +1,9 @@
 import UpdateProfileForm from './forms';
 
 const ChangeGeneralAccountInfo = () => (
-  <div className='relative flex-1 flex px-8 justify-center place-items-center'>
-    <div className='grid grid-cols-1 [@media(min-width:996px)]:grid-cols-2 gap-8 w-full'>
-      <UpdateProfileForm />
-    </div>
-  </div>
+  <main className='flex flex-1 place-items-center justify-center py-10 md:py-16'>
+    <UpdateProfileForm />
+  </main>
 );
 
 export default ChangeGeneralAccountInfo;

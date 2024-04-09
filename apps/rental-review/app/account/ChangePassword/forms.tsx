@@ -25,13 +25,13 @@ const Field = ({
       {label}
     </label>
     <input
-      className='rounded-md px-4 py-2 bg-inherit border'
+      className='rounded-md border bg-inherit px-4 py-2'
       type={type}
       name={name}
       placeholder={placeholder}
       required={required}
     />
-    <p className='text-red-500 h-6'>{errors}</p>
+    <p className='h-6 text-red-500'>{errors}</p>
   </div>
 );
 Field.defaultProps = {
@@ -95,18 +95,18 @@ const Form: React.FC<FormProps> = ({
   submitText,
 }) => (
   <form
-    className='animate-in h-full flex-1 flex flex-col w-[90vw] sm:max-w-md gap-4 text-foreground border rounded-md shadow-md p-4 bg-background'
+    className='animate-in text-foreground bg-background flex h-full w-[90vw] flex-1 flex-col gap-4 rounded-md border p-4 shadow-md sm:max-w-md'
     action={dispatch}
   >
-    <h2 className='text-2xl pb-1 border-b-2 border-foreground/10'>{title}</h2>
+    <h2 className='border-foreground/10 border-b-2 pb-1 text-2xl'>{title}</h2>
 
     {/* <span className=''></span> */}
 
-    <div className='flex flex-col flex-1 justify-center gap-4'>{children}</div>
+    <div className='flex flex-1 flex-col justify-center gap-4'>{children}</div>
 
     <button
       type='submit'
-      className='bg-green-700 rounded-md px-4 py-2 text-foreground mb-2'
+      className='text-foreground mb-2 rounded-md bg-green-700 px-4 py-2'
     >
       {submitText}
     </button>

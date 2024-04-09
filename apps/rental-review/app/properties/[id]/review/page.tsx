@@ -19,14 +19,14 @@ const CreateReviewPage: NextPage<{
   const tags = await getTags();
 
   return (
-    <div>
-      <h1 className='text-2xl font-bold mt-6'>
+    <main className='flex flex-1 flex-col place-items-center justify-center py-10 md:py-16'>
+      <h1 className='mt-6 text-2xl font-bold'>
         Create Review for existing property
       </h1>
       <p className='mb-6'>Write your review for this property</p>
 
       <CreateReviewForm propertyId={propertyId} tags={tags} />
-    </div>
+    </main>
   );
 };
 

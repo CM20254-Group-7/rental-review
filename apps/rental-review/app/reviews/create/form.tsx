@@ -20,7 +20,7 @@ const NewPropertyReviewForm: FC<{
 
   return (
     <form
-      className='flex flex-col gap-2 max-w-prose w-full border p-4 rounded-md'
+      className='flex w-full max-w-prose flex-col gap-2 rounded-md border p-4'
       action={dispatch}
     >
       <div className='max-w-sm'>
@@ -85,11 +85,11 @@ const NewPropertyReviewForm: FC<{
         </label>
       </div>
 
-      <h3 className='text-xl font-bold mt-6'>Review Details</h3>
+      <h3 className='mt-6 text-xl font-bold'>Review Details</h3>
       <CreateReviewForm tags={tags} errors={state.errors} />
 
       <button
-        className='rounded-md p-2 hover:bg-gray-600/20 border'
+        className='rounded-md border p-2 hover:bg-gray-600/20'
         type='submit'
       >
         Create Review

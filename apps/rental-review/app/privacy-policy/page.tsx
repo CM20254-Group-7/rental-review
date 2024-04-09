@@ -2,16 +2,16 @@ import { NextPage } from 'next';
 import React from 'react';
 
 const PrivacyPolicyPage: NextPage = () => (
-  <div className='flex-1 w-screen flex flex-col justify-center items-center py-20'>
-    <div className='flex flex-col w-3/4 items-center'>
-      <h2 className='text-2xl font-semibold mb-1 w-fit text-accent'>
+  <main className='flex flex-1 flex-col place-items-center justify-center py-10 md:py-16'>
+    <div className='flex w-3/4 flex-col items-center'>
+      <h2 className='text-accent mb-1 w-fit text-2xl font-semibold'>
         Privacy Policy
       </h2>
-      <span className='border border-b w-full border-accent' />
+      <span className='border-accent w-full border border-b' />
     </div>
     <br />
     <div className='w-3/4'>
-      <h2 className='text-xl font-semibold mb-1'>Last Updated: 01/04/2024</h2>
+      <h2 className='mb-1 text-xl font-semibold'>Last Updated: 01/04/2024</h2>
 
       <br />
       <p>
@@ -23,7 +23,7 @@ const PrivacyPolicyPage: NextPage = () => (
       </p>
 
       <br />
-      <h2 className='text-2xl font-semibold mb-1 w-fit text-accent'>
+      <h2 className='text-accent mb-1 w-fit text-2xl font-semibold'>
         1. Information We Collect
       </h2>
       <li className='ml-10 w-fit'>
@@ -51,7 +51,7 @@ const PrivacyPolicyPage: NextPage = () => (
       </li>
 
       <br />
-      <h2 className='text-2xl font-semibold mb-1 w-fit text-accent'>
+      <h2 className='text-accent mb-1 w-fit text-2xl font-semibold'>
         2. How We Use Your Information
       </h2>
       <li className='ml-10 w-fit'>
@@ -79,7 +79,7 @@ const PrivacyPolicyPage: NextPage = () => (
       </li>
 
       <br />
-      <h2 className='text-2xl font-semibold mb-1 w-fit text-accent'>
+      <h2 className='text-accent mb-1 w-fit text-2xl font-semibold'>
         3. Information Sharing
       </h2>
       <li className='ml-10 w-fit'>
@@ -107,7 +107,7 @@ const PrivacyPolicyPage: NextPage = () => (
       </li>
 
       <br />
-      <h2 className='text-2xl font-semibold mb-1 w-fit text-accent'>
+      <h2 className='text-accent mb-1 w-fit text-2xl font-semibold'>
         4. Data Security
       </h2>
       <p className='ml-10'>
@@ -118,7 +118,7 @@ const PrivacyPolicyPage: NextPage = () => (
       </p>
 
       <br />
-      <h2 className='text-2xl font-semibold mb-1 w-fit text-accent'>
+      <h2 className='text-accent mb-1 w-fit text-2xl font-semibold'>
         5. Your Choices
       </h2>
       <li className='ml-10 w-fit'>
@@ -127,7 +127,7 @@ const PrivacyPolicyPage: NextPage = () => (
           You can update account information at any time by accessing your
           account settings. To delete your account, please contact us at{' '}
           <a
-            className='underline text-blue-500 transition-colors duration-300 ease-in-out
+            className='text-blue-500 underline transition-colors duration-300 ease-in-out
           hover:text-blue-600'
             href='mailto:help.rentalreview@gmail.com'
           >
@@ -138,7 +138,7 @@ const PrivacyPolicyPage: NextPage = () => (
       </li>
 
       <br />
-      <h2 className='text-2xl font-semibold mb-1 w-fit text-accent'>
+      <h2 className='text-accent mb-1 w-fit text-2xl font-semibold'>
         6. Children&apos;s Privacy
       </h2>
       <p className='ml-10'>
@@ -149,7 +149,7 @@ const PrivacyPolicyPage: NextPage = () => (
       </p>
 
       <br />
-      <h2 className='text-2xl font-semibold mb-1 w-fit text-accent'>
+      <h2 className='text-accent mb-1 w-fit text-2xl font-semibold'>
         7. Changes to This Policy
       </h2>
       <p className='ml-10'>
@@ -159,14 +159,14 @@ const PrivacyPolicyPage: NextPage = () => (
       </p>
 
       <br />
-      <h2 className='text-2xl font-semibold mb-1 w-fit text-accent'>
+      <h2 className='text-accent mb-1 w-fit text-2xl font-semibold'>
         8. Contact Us
       </h2>
       <p className='ml-10'>
         If you have any questions, concerns, or feedback regarding this Privacy
         Policy or our privacy practices, please contact us at{' '}
         <a
-          className='underline text-blue-500 transition-colors duration-300 ease-in-out
+          className='text-blue-500 underline transition-colors duration-300 ease-in-out
           hover:text-blue-600'
           href='mailto:help.rentalreview@gmail.com'
         >
@@ -175,7 +175,7 @@ const PrivacyPolicyPage: NextPage = () => (
         .
       </p>
     </div>
-  </div>
+  </main>
 );
 
 export default PrivacyPolicyPage;

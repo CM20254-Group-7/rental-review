@@ -7,17 +7,17 @@ import { notFound } from 'next/navigation';
 import LandlordRegistrationForm from './form';
 
 const AlreadyLandlordMessage: React.FC = () => (
-  <div className='flex flex-col flex-1 place-items-center justify-center gap-4'>
+  <main className='flex flex-1 place-items-center justify-center py-10 md:py-16'>
     <p id='already_landlord' className='text-lg font-semibold'>
       You&apos;re already a landlord.
     </p>
     <Link
       href='./'
-      className='text-primary font-semibold underline cursor-pointer'
+      className='text-primary cursor-pointer font-semibold underline'
     >
       Go to Home Page
     </Link>
-  </div>
+  </main>
 );
 
 const LandlordRegistrationPage: NextPage = async () => {
@@ -51,9 +51,9 @@ const LandlordRegistrationPage: NextPage = async () => {
   if (landlord) return <AlreadyLandlordMessage />;
 
   return (
-    <div className='w-[70%] p-4'>
+    <main className='flex w-full flex-1 place-items-center justify-center px-6 py-10 md:py-16'>
       <LandlordRegistrationForm />
-    </div>
+    </main>
   );
 };
 

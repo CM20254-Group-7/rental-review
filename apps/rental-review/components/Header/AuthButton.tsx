@@ -15,7 +15,7 @@ const AuthButton: FC = async () => {
   return (
     <Link
       href='/login'
-      className='py-2 px-3 text-lg flex rounded-md no-underline hover:bg-primary/20 border hover:shadow-sm hover:shadow-primary/20 transition-all text-accent'
+      className='hover:bg-primary/20 hover:shadow-primary/20 text-accent flex rounded-md border px-3 py-2 text-lg no-underline transition-all hover:shadow-sm'
     >
       Login / Signup
     </Link>

@@ -3,12 +3,12 @@ import Link from 'next/link';
 import React from 'react';
 
 const LandlordRegistrationPropmt = () => (
-  <div className='flex flex-col gap-1 items-center'>
-    <h3 className='font-bold text-2xl text-accent'>Are you a landlord?</h3>
+  <div className='flex flex-col items-center gap-1'>
+    <h3 className='text-accent text-2xl font-bold'>Are you a landlord?</h3>
     <p className='mb-6 text-lg'>Click below to register</p>
     <Link
       href='/become-a-landlord'
-      className='bg-accent text-gray-900 font-bold py-2 px-4 rounded-md mb-6'
+      className='bg-accent mb-6 rounded-md px-4 py-2 font-bold text-gray-900'
     >
       Landlord Registration
     </Link>
@@ -16,8 +16,8 @@ const LandlordRegistrationPropmt = () => (
 );
 
 const StartReviewingPrompt = () => (
-  <div className='flex flex-col gap-1 items-center'>
-    <h3 className='font-bold text-2xl text-accent'>
+  <div className='flex flex-col items-center gap-1'>
+    <h3 className='text-accent text-2xl font-bold'>
       Are you or have you been a renter?
     </h3>
     <p className='mb-6 text-lg'>
@@ -25,7 +25,7 @@ const StartReviewingPrompt = () => (
     </p>
     <Link
       href='/properties'
-      className='bg-accent text-gray-900 font-bold py-2 px-4 rounded-md mb-6'
+      className='bg-accent mb-6 rounded-md px-4 py-2 font-bold text-gray-900'
     >
       Property Catalogue
     </Link>
@@ -70,25 +70,25 @@ const DashboardLayout = async ({
   );
 
   return (
-    <div className='flex-grow flex-1 w-full flex flex-col gap-10 items-center py-10'>
-      <div className='flex flex-col gap-1 items-center'>
-        <h1 className='font-semibold text-6xl mb-4 mt-3 text-primary'>
+    <main className='flex flex-1 flex-col place-items-center justify-center py-10 md:py-16'>
+      <div className='flex flex-col items-center gap-1'>
+        <h1 className='text-primary mb-4 mt-3 text-6xl font-semibold'>
           Welcome to your Dashboard
         </h1>
-        <h2 className='font-bold text-xl mb-4'>
+        <h2 className='mb-4 text-xl font-bold'>
           Your go-to place for all your content
         </h2>
       </div>
-      <main className='flex-1 flex flex-col gap-4'>
+      <div className='flex flex-1 flex-col items-center gap-4'>
         {genericDashboard}
         {userIsLandlord && landlordDashboard}
         {userHasLeftReview && tenantDashboard}
-        <div className='flex flex-col md:flex-row gap-4'>
+        <div className='flex flex-col gap-4 md:flex-row'>
           {!userIsLandlord && <LandlordRegistrationPropmt />}
           {!userHasLeftReview && <StartReviewingPrompt />}
         </div>
-      </main>
-    </div>
+      </div>
+    </main>
   );
 };
 

@@ -34,15 +34,15 @@ const PropertiesPage: NextPage<{
   const tags = await getTags();
 
   return (
-    <div className='flex-1 w-screen flex flex-row'>
+    <main className='flex w-screen flex-1 flex-row'>
       {/* Side Bar */}
-      <div className='flex flex-col gap-4 text-foreground border-r px-2 py-4 w-1/4 max-w-sm'>
+      <div className='text-foreground flex w-1/4 max-w-sm flex-col gap-4 border-r px-2 py-4'>
         <AddressSearch />
         <TagSearch tags={tags} />
         <SortBy />
       </div>
-      <div className='flex w-full justify-center flex-1 py-20 px-4'>
-        <div className='flex flex-col w-full max-w-prose gap-8 items-center'>
+      <div className='flex w-full flex-1 justify-center px-4 py-20'>
+        <div className='flex max-w-prose flex-1 flex-col place-items-center justify-center gap-8 py-10 md:py-16'>
           <Suspense fallback={<PropertyResultsSkeleton />}>
             <PropertyResults searchParams={searchParams} />
             <div className='flex flex-col items-center gap-2'>
@@ -69,7 +69,7 @@ const PropertiesPage: NextPage<{
                         .join('&')}`
                     : ''
                 }`}
-                className='border border-accent rounded-md px-4 py-2 text-accent mb-5 hover:bg-secondary/10 dark:hover:bg-accent/10 hover:shadow-lg hover:shadow-accent/20'
+                className='border-accent text-accent hover:bg-secondary/10 dark:hover:bg-accent/10 hover:shadow-accent/20 mb-5 rounded-md border px-4 py-2 hover:shadow-lg'
               >
                 Review a New Property
               </Link>
@@ -77,7 +77,7 @@ const PropertiesPage: NextPage<{
           </Suspense>
         </div>
       </div>
-    </div>
+    </main>
   );
 };
 

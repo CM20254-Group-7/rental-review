@@ -84,7 +84,7 @@ const PropertyResult: FC<{
   return (
     <Link
       href={`/properties/${id}`}
-      className='flex flex-col gap-1 border border-foreground/30 rounded-md w-60 bg-foreground/20 hover:bg-foreground/30 transition-all hover:shadow-sm hover:shadow-foreground/30'
+      className='border-foreground/30 bg-foreground/20 hover:bg-foreground/30 hover:shadow-foreground/30 flex w-60 flex-col gap-1 rounded-md border transition-all hover:shadow-sm'
     >
       <h2>{address}</h2>
       <p>

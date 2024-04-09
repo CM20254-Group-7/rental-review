@@ -19,7 +19,7 @@ const NavLink: React.FC<{
     <div>
       <Link
         href={href}
-        className={`py-1 px-2 flex rounded-b-md no-underline ${active ? 'border-b border-accent' : 'hover:border-b hover:border-accent/70'}`}
+        className={`flex rounded-b-md px-2 py-1 no-underline ${active ? 'border-accent border-b' : 'hover:border-accent/70 hover:border-b'}`}
       >
         {text}
       </Link>

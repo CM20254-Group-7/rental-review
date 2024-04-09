@@ -35,9 +35,9 @@ const LandlordResults: React.FC = async () => {
       {landlords.map((landlord, index) => (
         <div
           key={landlord.user_id}
-          className='flex items-center justify-between mb-4'
+          className='mb-4 flex items-center justify-between'
         >
-          <div className='w-full flex items-center'>
+          <div className='flex w-full items-center'>
             {/* Rank Number Column */}
             <div className='w-12 text-center'>
               {/* Ranking with Crown */}
@@ -50,14 +50,14 @@ const LandlordResults: React.FC = async () => {
 
             <div className='w-full pl-4'>
               <Link href={`/profiles/${landlord.user_id}`}>
-                <div className='flex flex-col w-full items-center rounded-xl bg-secondary/10 hover:bg-secondary/20 p-6 pb-8 gap-4 border shadow-md shadow-secondary/40 hover:shadow-lg hover:shadow-secondary/40 relative'>
+                <div className='bg-secondary/10 hover:bg-secondary/20 shadow-secondary/40 hover:shadow-secondary/40 relative flex w-full flex-col items-center gap-4 rounded-xl border p-6 pb-8 shadow-md hover:shadow-lg'>
                   <div className='flex items-center'>
-                    <h2 className='text-2xl font-semibold mb-1 w-fit text-accent'>
+                    <h2 className='text-accent mb-1 w-fit text-2xl font-semibold'>
                       {landlord.display_name}
                     </h2>
                   </div>
                   {/* Card Body */}
-                  <div className='flex flex-col w-full gap-2 items-center'>
+                  <div className='flex w-full flex-col items-center gap-2'>
                     <StarRatingLayout rating={landlord.average_rating} />
                   </div>
                 </div>

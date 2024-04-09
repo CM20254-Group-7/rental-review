@@ -49,7 +49,7 @@ const LoginPage: NextPage = () => (
         </form>
       </div>
     </div>
-    <div className='hidden bg-muted lg:block'>
+    <div className='bg-muted hidden lg:block'>
       <Image
         src='/placeholder.svg'
         alt='Image'

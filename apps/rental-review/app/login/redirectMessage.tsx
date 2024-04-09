@@ -23,7 +23,7 @@ const RedirectMessage: FC = () => {
   if (!message) return null;
 
   return (
-    <div className='absolute top-14 bg-primary/40 rounded-lg p-4 flex flex-row gap-2 items-center justify-between'>
+    <div className='bg-primary/40 absolute top-14 flex flex-row items-center justify-between gap-2 rounded-lg p-4'>
       <p>{message}</p>
       <button
         type='button'
@@ -31,7 +31,7 @@ const RedirectMessage: FC = () => {
         className=''
         id='close-message'
       >
-        <XMarkIcon className='w-5 h-5' />
+        <XMarkIcon className='h-5 w-5' />
       </button>
     </div>
   );

@@ -2,7 +2,7 @@ import Link from 'next/link';
 import GetInfo from './DisplayInfo';
 
 const AccountForm = () => (
-  <div className='form-widget'>
+  <main className='form-widget flex flex-1 place-items-center justify-center py-10 md:py-16'>
     <form>
       <div>
         <GetInfo />
@@ -21,7 +21,7 @@ const AccountForm = () => (
         </Link>
       </div>
     </form>
-  </div>
+  </main>
 );
 
 export default AccountForm;

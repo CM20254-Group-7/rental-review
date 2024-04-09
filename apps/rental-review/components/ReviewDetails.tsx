@@ -58,13 +58,13 @@ export const ReviewDetailsLayout: React.FC<ReviewDetailsLayoutProps> = ({
   <MaybeLink
     conditionMet={link}
     link={`/review/${reviewId}`}
-    className='flex flex-1 flex-col px-8 py-2 sm:px-4 border rounded-lg h-fit w-full max-w-prose justify-center place-items-center'
+    className='flex h-fit w-full max-w-prose flex-1 flex-col place-items-center justify-center rounded-lg border px-8 py-2 sm:px-4'
   >
     {/* <h1>Review Details</h1> */}
     {/* <p>Review ID: {reviewId}</p> */}
     {/* <p>Reviewer ID: {reviewerId}</p> */}
-    <div className='flex flex-col w-full sm:w-4/5 gap-4'>
-      <div className='flex flex-col sm:flex-row justify-around place-items-center'>
+    <div className='flex w-full flex-col gap-4 sm:w-4/5'>
+      <div className='flex flex-col place-items-center justify-around sm:flex-row'>
         <div className='flex flex-col'>
           <p className='text-lg font-semibold'>Property:</p>
           <StarRatingLayout rating={propertyRating} />
@@ -76,9 +76,9 @@ export const ReviewDetailsLayout: React.FC<ReviewDetailsLayoutProps> = ({
         </div>
       </div>
 
-      <div className='flex flex-col w-full gap-2'>
+      <div className='flex w-full flex-col gap-2'>
         <p className='text-lg font-semibold'>Review:</p>
-        <p className='border rounded-md h-fit min-h-[5rem] bg-gray-100/10 py-1 px-2'>
+        <p className='h-fit min-h-[5rem] rounded-md border bg-gray-100/10 px-2 py-1'>
           {reviewMessage}
         </p>
       </div>
@@ -87,7 +87,7 @@ export const ReviewDetailsLayout: React.FC<ReviewDetailsLayoutProps> = ({
         {reviewTags.map((tag) => (
           <span
             key={tag}
-            className='border rounded-md px-2 py-1 bg-secondary/20'
+            className='bg-secondary/20 rounded-md border px-2 py-1'
           >
             {tag}
           </span>

@@ -4,17 +4,17 @@ import React, { Suspense } from 'react';
 import LandlordResults from './LandlordResults'; // Import the 'LandlordResults' component as a named export
 
 const profilePage: NextPage = () => (
-  <div className='flex-1 w-screen flex flex-row justify-center items-center py-20'>
-    <div className='flex flex-col w-full max-w-prose gap-8 items-center'>
-      <h2 className='text-2xl font-semibold mb-1 w-fit text-accent'>
+  <main className='flex w-full flex-1 flex-col place-items-center justify-center py-10 md:py-16'>
+    <div className='flex w-full max-w-prose flex-col items-center gap-8'>
+      <h2 className='text-accent mb-1 w-fit text-2xl font-semibold'>
         Top 10 landlords
       </h2>
-      <span className='border border-b w-full border-accent' />
+      <span className='border-accent w-full border border-b' />
       <Suspense fallback={<div>Loading...</div>}>
         <LandlordResults />
       </Suspense>
     </div>
-  </div>
+  </main>
 );
 
 export default profilePage;

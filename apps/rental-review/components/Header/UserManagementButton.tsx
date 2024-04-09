@@ -39,7 +39,7 @@ const UserManagementButton: React.FC<{ email: string }> = ({ email }) => {
     <div className='relative'>
       <button
         type='button'
-        className={`py-2 px-3 text-sm flex flex-row bg-background hover:bg-secondary/10 border hover:shadow-sm hover:shadow-primary/20 transition-all text-accent justify-center items-center gap-2 ${isComponentVisible ? 'rounded-t-md' : 'rounded-md'}`}
+        className={`bg-background hover:bg-secondary/10 hover:shadow-primary/20 text-accent flex flex-row items-center justify-center gap-2 border px-3 py-2 text-sm transition-all hover:shadow-sm ${isComponentVisible ? 'rounded-t-md' : 'rounded-md'}`}
         onClick={() => setIsComponentVisible(true)}
       >
         <p>{email}</p>
@@ -49,11 +49,11 @@ const UserManagementButton: React.FC<{ email: string }> = ({ email }) => {
       {isComponentVisible && (
         <div
           ref={ref}
-          className='absolute top-[100%] w-full text-sm flex flex-col bg-background border-x border-b hover:shadow-sm hover:shadow-primary/20 transition-all text-foreground justify-center items-center rounded-b-md'
+          className='bg-background hover:shadow-primary/20 text-foreground absolute top-[100%] flex w-full flex-col items-center justify-center rounded-b-md border-x border-b text-sm transition-all hover:shadow-sm'
         >
           <Link
             href='/account'
-            className='py-2 px-4 border-b w-full text-right no-underline hover:bg-secondary/10'
+            className='hover:bg-secondary/10 w-full border-b px-4 py-2 text-right no-underline'
           >
             Manage Account
           </Link>
@@ -61,7 +61,7 @@ const UserManagementButton: React.FC<{ email: string }> = ({ email }) => {
           <form action={signOut} className='contents'>
             <button
               type='submit'
-              className='py-2 px-4 w-full text-right rounded-b-md no-underline hover:bg-secondary/10'
+              className='hover:bg-secondary/10 w-full rounded-b-md px-4 py-2 text-right no-underline'
             >
               Logout
             </button>

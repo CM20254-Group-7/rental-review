@@ -9,13 +9,13 @@ import ClaimPropertyForm from './form';
 const NotLoggedInMessage: React.FC<{ propertyId: string }> = ({
   propertyId,
 }) => (
-  <div className='flex flex-col flex-1 place-items-center justify-center gap-4'>
+  <div className='flex flex-1 flex-col place-items-center justify-center gap-4'>
     <p className='text-lg font-semibold'>
       You must be logged in to access this page
     </p>
     <Link
       href={`/login?redirect=/properties/${propertyId}/claim`}
-      className='text-primary font-semibold underline cursor-pointer'
+      className='text-primary cursor-pointer font-semibold underline'
     >
       Go to Login
     </Link>
@@ -23,13 +23,13 @@ const NotLoggedInMessage: React.FC<{ propertyId: string }> = ({
 );
 
 const NotALandlordMessage: React.FC = () => (
-  <div className='flex flex-col flex-1 place-items-center justify-center gap-4'>
+  <div className='flex flex-1 flex-col place-items-center justify-center gap-4'>
     <p className='text-lg font-semibold'>
       You must be registered as a landlord to access this page
     </p>
     <Link
       href='/become-a-landlord'
-      className='text-primary font-semibold underline cursor-pointer'
+      className='text-primary cursor-pointer font-semibold underline'
     >
       Become a Landlord
     </Link>
@@ -72,17 +72,17 @@ const ClaimPropertyPage: NextPage<{ params: { id: string } }> = async ({
 
   // State is valid, render the form
   return (
-    <div className='flex flex-1 flex-col gap-2 place-items-center justify-center w-full'>
-      <div className='flex flex-col w-full max-w-prose'>
-        <div className='flex flex-col  gap-2 justify-center bg-primary/50 border rounded-t-lg p-4'>
-          <div className='flex flex-row gap-2 items-baseline'>
+    <main className='flex w-full flex-1 flex-col place-items-center justify-center py-10 md:py-16'>
+      <div className='flex w-full max-w-prose flex-col'>
+        <div className='bg-primary/50 flex  flex-col justify-center gap-2 rounded-t-lg border p-4'>
+          <div className='flex flex-row items-baseline gap-2'>
             <h1 className='text-lg font-bold'>Claiming Property:</h1>
             <p className='text-md'>{propertyData.address}</p>
           </div>
         </div>
         <ClaimPropertyForm property_id={propertyId} landlord_id={landlordId} />
       </div>
-    </div>
+    </main>
   );
 };
 

@@ -24,20 +24,22 @@ const Layout: NextPage<{
   children: React.ReactNode;
 }> = ({ children }) => (
   <html lang='en' className={GeistSans.className}>
-    <body className='bg-background text-foreground'>
+    <body className='bg-background text-foreground '>
       <Providers>
-        <main className='min-h-screen flex flex-col items-center'>
+        <div className='flex min-h-screen flex-col items-center'>
           <NavBar />
-          {children}
+          <div className='flex w-full flex-1 flex-col items-center'>
+            {children}
+          </div>
           <Footer />
-        </main>
-      </Providers>
+        </div>
 
-      <SpeedInsights />
-      <Analytics />
-      <Suspense>
-        <Toolbar />
-      </Suspense>
+        <SpeedInsights />
+        <Analytics />
+        <Suspense>
+          <Toolbar />
+        </Suspense>
+      </Providers>
     </body>
   </html>
 );
