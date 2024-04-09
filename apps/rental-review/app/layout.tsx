@@ -25,13 +25,13 @@ const Layout: NextPage<{
 }> = ({ children }) => (
   <html lang='en' className={GeistSans.className}>
     <body className='bg-background text-foreground'>
-      <main className='min-h-screen flex flex-col items-center'>
-        <Providers>
+      <Providers>
+        <main className='min-h-screen flex flex-col items-center'>
           <NavBar />
           {children}
           <Footer />
-        </Providers>
-      </main>
+        </main>
+      </Providers>
 
       <SpeedInsights />
       <Analytics />
