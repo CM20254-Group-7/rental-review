@@ -51,6 +51,7 @@ const PropertyDetailPage: NextPage<{
               width={1000}
               height={682}
               alt='Image of a house'
+              priority
             />
             <div className='bg-background/40 flex h-full w-full flex-col place-items-center justify-center backdrop-blur'>
               <p className='text-foreground text-lg font-semibold'>

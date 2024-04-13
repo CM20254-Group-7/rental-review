@@ -9,7 +9,7 @@ import ClaimPropertyForm from './form';
 const NotLoggedInMessage: React.FC<{ propertyId: string }> = ({
   propertyId,
 }) => (
-  <div className='flex flex-1 flex-col place-items-center justify-center gap-4'>
+  <main className='flex flex-1 flex-col place-items-center justify-center gap-4'>
     <p className='text-lg font-semibold'>
       You must be logged in to access this page
     </p>
@@ -19,11 +19,11 @@ const NotLoggedInMessage: React.FC<{ propertyId: string }> = ({
     >
       Go to Login
     </Link>
-  </div>
+  </main>
 );
 
 const NotALandlordMessage: React.FC = () => (
-  <div className='flex flex-1 flex-col place-items-center justify-center gap-4'>
+  <main className='flex flex-1 flex-col place-items-center justify-center gap-4'>
     <p className='text-lg font-semibold'>
       You must be registered as a landlord to access this page
     </p>
@@ -33,7 +33,7 @@ const NotALandlordMessage: React.FC = () => (
     >
       Become a Landlord
     </Link>
-  </div>
+  </main>
 );
 
 const ClaimPropertyPage: NextPage<{ params: { id: string } }> = async ({

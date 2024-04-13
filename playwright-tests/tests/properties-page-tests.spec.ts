@@ -1,10 +1,10 @@
 import { test, expect } from '@playwright/test';
 
-import { properties } from './helpers';
+import { checkStarRatingMatchesExpected, properties } from './helpers';
 
 // This test uses 2 properties
-const firstProperty = properties[0]; // 1 Test Road
-const secondProperty = properties[1]; // 2 Test Road
+const firstProperty = properties[0]!; // 1 Test Road
+const secondProperty = properties[1]!; // 2 Test Road
 
 test.describe('Property landing page test', () => {
   test('Contains address of first and second properties', async ({ page }) => {
@@ -64,45 +64,12 @@ test.describe('Property details page test', () => {
     test.describe('First property tests', () => {
       test('Average property rating', async ({ page }) => {
         await page.goto(`http://localhost:3000/properties/${firstProperty.id}`);
-        // Select the specific section containing the stars
-        const section = await page.$(
-          'body > main > div > div > div > div.flex.flex-row.w-full.justify-between.gap-2.bg-secondary\\/30.shadow-lg.shadow-secondary\\/40 > div.flex-1.flex.flex-col.w-full.px-8.sm\\:max-w-md.justify-top.gap-2.py-4 > div:nth-child(2)',
+
+        const section = await page.getByText(
+          `${firstProperty.address}Current Owner:`,
         );
-        if (!section) {
-          throw new Error('Section not found');
-        }
 
-        // Get all the svg of the stars
-        const stars = await section.$$('svg[data-slot="icon"]');
-        if (!stars) {
-          throw new Error('Stars not found');
-        }
-
-        // Collect promises for all star classes
-        const starClassPromises = stars.map(async (star) => {
-          const starClass = await star.getAttribute('class');
-          if (!starClass) {
-            throw new Error('Star class not found');
-          }
-          return starClass;
-        });
-
-        // Wait for all promises to resolve
-        const starClasses = await Promise.all(starClassPromises);
-        // Count the number of yellow and grey stars
-        let yellowStars = 0;
-        let greyStars = 0;
-        for (const starClass of starClasses) {
-          if (starClass.includes('text-yellow-300')) {
-            yellowStars += 1;
-          } else if (starClass.includes('text-gray-400')) {
-            greyStars += 1;
-          }
-        }
-
-        // Check if the number of stars is correct
-        await expect(yellowStars).toBe(1);
-        await expect(greyStars).toBe(5 - yellowStars);
+        await checkStarRatingMatchesExpected(section, 1);
       });
 
       test('Average landlord rating test', async ({ page }) => {
@@ -111,48 +78,16 @@ test.describe('Property details page test', () => {
       });
     });
   });
+
   test.describe('Second property tests', () => {
     test('Average property rating', async ({ page }) => {
       await page.goto(`http://localhost:3000/properties/${secondProperty.id}`);
-      // Select the specific section containing the stars
-      const section = await page.$(
-        'body > main > div > div > div > div.flex.flex-row.w-full.justify-between.gap-2.bg-secondary\\/30.shadow-lg.shadow-secondary\\/40 > div.flex-1.flex.flex-col.w-full.px-8.sm\\:max-w-md.justify-top.gap-2.py-4 > div:nth-child(2)',
+
+      const section = await page.getByText(
+        `${secondProperty.address}Current Owner:`,
       );
-      if (!section) {
-        throw new Error('Section not found');
-      }
 
-      // Get all the svg of the stars
-      const stars = await section.$$('svg[data-slot="icon"]');
-      if (!stars) {
-        throw new Error('Stars not found');
-      }
-
-      // Collect promises for all star classes
-      const starClassPromises = stars.map(async (star) => {
-        const starClass = await star.getAttribute('class');
-        if (!starClass) {
-          throw new Error('Star class not found');
-        }
-        return starClass;
-      });
-
-      // Wait for all promises to resolve
-      const starClasses = await Promise.all(starClassPromises);
-      // Count the number of yellow and grey stars
-      let yellowStars = 0;
-      let greyStars = 0;
-      for (const starClass of starClasses) {
-        if (starClass.includes('text-yellow-300')) {
-          yellowStars += 1;
-        } else if (starClass.includes('text-gray-400')) {
-          greyStars += 1;
-        }
-      }
-
-      // Check if the number of stars is correct
-      await expect(yellowStars).toBe(3);
-      await expect(greyStars).toBe(5 - yellowStars);
+      await checkStarRatingMatchesExpected(section, 3);
     });
 
     test('Average landlord rating test', async ({ page }) => {

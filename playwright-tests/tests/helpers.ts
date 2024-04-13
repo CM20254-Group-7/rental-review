@@ -1,4 +1,4 @@
-import { Page, expect } from '@playwright/test';
+import { Page, expect, Locator } from '@playwright/test';
 
 const apiBaseURL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 
@@ -48,8 +48,8 @@ export const users = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) => ({
   email: `user.${i}@example.com`,
   password: `User.${i}.Password`,
   label: `User ${i}`,
-  id: userIds[i - 1],
-  landlordProfile: userLandlordProfiles[i - 1],
+  id: userIds[i - 1]!,
+  landlordProfile: userLandlordProfiles[i - 1]!,
 }));
 
 const propertyIds = [
@@ -58,18 +58,18 @@ const propertyIds = [
 ];
 
 const propertyAddresses = [
-  '1, Test Road, London, AB1 234',
-  '2, Test Road, London, AB1 234',
+  '1, Test Road, London, AB1 234, United Kingdom',
+  '2, Test Road, London, AB1 234, United Kingdom',
 ];
 
 export const ownershipHistories = [
   {
     startDate: ['2024-02-20'],
     endDate: ['2024-02-21'],
-    landlord: [users[0]!.landlordProfile?.displayName],
-    propertyAddress: propertyAddresses[0],
-    propertyId: propertyIds[0],
-    landlordRating: [2],
+    landlord: [users[0]!.landlordProfile?.displayName]!,
+    propertyAddress: propertyAddresses[0]!,
+    propertyId: propertyIds[0]!,
+    landlordRating: [2]!,
   },
 
   {
@@ -80,15 +80,15 @@ export const ownershipHistories = [
       users[0]!.landlordProfile?.displayName,
       users[8]!.landlordProfile?.displayName,
     ],
-    propertyAddress: propertyAddresses[1],
-    propertyId: propertyIds[1],
-    landlordRating: [2, 5],
+    propertyAddress: propertyAddresses[1]!,
+    propertyId: propertyIds[1]!,
+    landlordRating: [2, 5]!,
   },
 ];
 
 export const properties = [1, 2].map((i) => ({
-  id: propertyIds[i - 1],
-  address: propertyAddresses[i - 1],
+  id: propertyIds[i - 1]!,
+  address: propertyAddresses[i - 1]!,
   // They are all owned by the same user according to the mock data
   owner: 'Test Name 1',
 }));
@@ -162,4 +162,48 @@ export const loginAsUser = async (
   }
 
   await page.context().storageState({ path: user.file });
+};
+
+const activeStarClass = 'text-yellow-300';
+export const countStars = async (parentLocator: Locator) => {
+  // get the div containing the stars for the rating within the provided parent
+  const ratingDiv = await parentLocator.getByTestId('starRating');
+
+  // console.log('div:', await ratingDiv.innerHTML());
+
+  // get the contained stars, and use their classes to determine which are active
+  const stars = await ratingDiv.getByRole('img').all();
+  const starClasses = await Promise.all(
+    stars.map(async (star) => await star.getAttribute('class')),
+  );
+  const starsActive = starClasses.map(
+    (starClass) => starClass?.includes(activeStarClass) ?? false,
+  );
+
+  // console.log('starsActive:', starsActive);
+
+  // count up which stars are active, then once an inactive star is found, ensure all following stars are inactive
+  let activeStars = 0;
+  let inactiveFound = false;
+  for (const starActive of starsActive) {
+    if (starActive) {
+      activeStars++;
+    } else {
+      inactiveFound = true;
+    }
+
+    if (inactiveFound && starActive) {
+      throw new Error('Inactive star found after an active star');
+    }
+  }
+
+  return activeStars;
+};
+
+export const checkStarRatingMatchesExpected = async (
+  parentLocator: Locator,
+  expectedRating: number,
+) => {
+  const actualRating = await countStars(parentLocator);
+  await expect(actualRating).toBe(expectedRating);
 };

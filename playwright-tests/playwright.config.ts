@@ -1,4 +1,11 @@
 import { defineConfig, devices } from '@playwright/test';
+import path from 'path';
+import dotenv from 'dotenv';
+
+// use the parent folder's dotenv (remove the last folder from the path)
+dotenv.config({
+  path: path.join(process.cwd().split('/').slice(0, -1).join('/'), '.env'),
+});
 
 /**
  * See https://playwright.dev/docs/test-configuration.
