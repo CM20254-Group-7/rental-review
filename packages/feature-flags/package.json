@@ -1,0 +1,13 @@
+{
+    "name": "@repo/feature-flags",
+    "version": "1.0.0",
+    "exports": "./flags.ts",
+    "dependencies": {
+        "@vercel/edge-config": "^1.1.0",
+        "@vercel/flags": "^2.3.0",
+        "next": "canary"
+    },
+    "devDependencies": {
+
+    }
+}

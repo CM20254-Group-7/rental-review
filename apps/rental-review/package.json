@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@repo/supabase-client-helpers": "workspace:*",
+    "@repo/feature-flags": "workspace:*",
     "@headlessui/react": "^1.7.18",
     "@headlessui/tailwindcss": "^0.2.0",
     "@heroicons/react": "^2.1.3",
