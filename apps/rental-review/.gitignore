@@ -42,3 +42,4 @@ next-env.d.ts
 
 # eslint results
 eslint-results.sarif
+.vercel
