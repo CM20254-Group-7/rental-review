@@ -1,13 +1,12 @@
 import { NextPage } from 'next';
 import React from 'react';
-import { parseConnectionString } from '@vercel/edge-config';
 
 import {
   FlagDetails,
   flagValueLabel,
-  flags,
   getFeatureFlagDetails,
 } from '@repo/feature-flags';
+import { createServiceSupabaseClient } from '@repo/supabase-client-helpers/server-only';
 
 import AdminConsolePageLayout from '@/components/ui/page-layout';
 import { Badge } from '@/components/ui/badge';
@@ -34,8 +33,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Form, SubmitButton } from './form';
-
+import { Form as TrackedForm, SubmitButton } from './_components/form-wrapper';
+import ToolbarSettingsForm from './_components/toolbar-form';
 const FlagRow: React.FC<{
   flagDetails: FlagDetails;
 }> = ({ flagDetails }) => (
@@ -79,7 +78,7 @@ const FlagTable: React.FC = async () => {
 
   return (
     <Card>
-      <Form>
+      <TrackedForm>
         <CardHeader>
           <CardTitle>Flags</CardTitle>
           <CardDescription>
@@ -106,7 +105,35 @@ const FlagTable: React.FC = async () => {
         <CardFooter className='justify-end'>
           <SubmitButton />
         </CardFooter>
-      </Form>
+      </TrackedForm>
+    </Card>
+  );
+};
+
+const ToolbarSettings: React.FC = async () => {
+  const supabase = createServiceSupabaseClient();
+  const userList = await supabase.auth.admin.listUsers();
+
+  const userEmails = userList.data.users.flatMap((user) => user.email ?? []);
+  const toolbarUsers = userEmails.filter((email) =>
+    ['user.1@example.com'].includes(email),
+  );
+
+  return (
+    <Card className='w-full'>
+      <CardHeader>
+        <CardTitle>Toolbar</CardTitle>
+        <CardDescription className=' whitespace-pre-wrap'>
+          Manage the visibility of the vercel toolbar on production deployments
+          here.
+          {'\n'}
+          The toolbar allows local overrides for feature flags to be set.
+        </CardDescription>
+      </CardHeader>
+      <ToolbarSettingsForm
+        userEmails={userEmails}
+        toolbarUsers={toolbarUsers}
+      />
     </Card>
   );
 };
@@ -115,6 +142,7 @@ const FeaturesPage: NextPage = () => (
   <AdminConsolePageLayout title='Features'>
     <div className='flex flex-col gap-2 items-center'>
       <FlagTable />
+      <ToolbarSettings />
     </div>
   </AdminConsolePageLayout>
 );

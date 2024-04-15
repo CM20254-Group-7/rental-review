@@ -1,10 +1,10 @@
 'use client';
 
 import { useFormState, useFormStatus } from 'react-dom';
-import { updateFlags } from './actions';
 import React, { PropsWithChildren, useEffect } from 'react';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
+import { updateFlags } from '../actions';
 
 export const Form: React.FC<PropsWithChildren> = ({ children }) => {
   const [state, dispatch] = useFormState(updateFlags, undefined);
@@ -23,7 +23,7 @@ export const Form: React.FC<PropsWithChildren> = ({ children }) => {
 };
 
 export const SubmitButton: React.FC = () => {
-    const { pending } = useFormStatus();
+  const { pending } = useFormStatus();
   return (
     <Button size='sm' variant='default' disabled={pending} type='submit'>
       Save Changes
