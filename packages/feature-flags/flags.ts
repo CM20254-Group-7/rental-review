@@ -8,9 +8,9 @@ import {
 import { cookies } from 'next/headers';
 // defines the list of
 type Features = {
-  newFeature: () => void;
+  propertySearchView: () => void;
   // ...
-  // otherFeatureName: () => void;
+  // newFeature: () => void;
 };
 type FeatureFlagDefinitions = {
   [Property in keyof Features]: FlagDefinitionType & {
@@ -18,12 +18,21 @@ type FeatureFlagDefinitions = {
   };
 };
 const flags: FeatureFlagDefinitions = {
-  newFeature: {
-    description: 'Controls whether the new feature is visible',
-    origin: 'https://example.com/#new-feature',
+  // newFeature: {
+  //   description: 'Controls whether the new feature is visible',
+  //   origin: 'https://example.com/#new-feature',
+  //   options: [
+  //     { value: false, label: 'Off' },
+  //     { value: true, label: 'On' },
+  //   ],
+  //   defaultValue: false,
+  // },
+  propertySearchView: {
+    description:
+      'Used for A/B test on the property search page. Allows a reduced version of the page to be shown to allow results to be quicklly skimmed',
     options: [
-      { value: false, label: 'Off' },
-      { value: true, label: 'On' },
+      { value: false, label: 'Normal' },
+      { value: true, label: 'Condenced' },
     ],
     defaultValue: false,
   },
@@ -44,6 +53,7 @@ type FlagDetails = FlagDefinitionType & {
 const getFlagDetails = async (
   flagName: keyof Features,
 ): Promise<FlagDetails> => {
+  console.log('flagName', flagName);
   const override = (await getFlagOverides())?.[flagName];
   const config = (await getFlagsConfig())?.[flagName] as JsonValue | undefined;
   const defaultValue = flags[flagName].defaultValue;
@@ -63,6 +73,7 @@ const getFeatureFlagDetails = async (): Promise<FeatureFlagDetails> => {
   const flagNames = Object.keys(flags) as Array<keyof Features>;
   const overrideValues = await getFlagOverides();
   const configValues = await getFlagsConfig();
+  // console.log('configValues', await get('featureFlags'));
   const flagDetails = await Promise.all(
     flagNames.map((flagName) => {
       const flagConfig = configValues?.[flagName];
@@ -78,6 +89,7 @@ const getFeatureFlagDetails = async (): Promise<FeatureFlagDetails> => {
       };
     }),
   );
+
   return flagDetails.reduce((acc, flagDetail) => {
     return {
       ...acc,
@@ -86,12 +98,33 @@ const getFeatureFlagDetails = async (): Promise<FeatureFlagDetails> => {
   }, {} as FeatureFlagDetails);
 };
 
+const flagValueLabel = (
+  flagDefinition: FlagDetails,
+  value: JsonValue | undefined,
+) => {
+  return (
+    flagDefinition.options?.find((option) => option.value === value)?.label ??
+    value
+  );
+};
+const flagLabelValue = (
+  flagDefinition: FlagDetails,
+  label: string | undefined,
+) => {
+  return (
+    flagDefinition.options?.find((option) => option.label === label)?.value ??
+    label
+  );
+};
+
 export {
   flags,
   getFlagOverides,
   getFlagsConfig,
   getFlagDetails,
   getFeatureFlagDetails,
+  flagValueLabel,
+  flagLabelValue,
 };
 export type {
   Features,

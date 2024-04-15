@@ -1,6 +1,8 @@
 import React from 'react';
-import { VercelToolbar } from '@vercel/toolbar/next';
+// import { VercelToolbar } from '@vercel/toolbar/next';
 import { createServerSupabaseClient } from '@repo/supabase-client-helpers/server-only';
+
+const { VercelToolbar } = await import('@vercel/toolbar/next');
 
 const Toolbar: React.FC = async () => {
   const environment = process.env.VERCEL_ENV || 'development';
