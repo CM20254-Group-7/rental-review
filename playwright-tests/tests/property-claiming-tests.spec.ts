@@ -585,7 +585,7 @@ test.describe('3. Claim Property Form', () => {
           page,
         }, testInfo) => {
           console.log(
-            startDateTests.map((test) => test.date.toISODateString()),
+            startDateTests.map((thisTest) => thisTest.date.toISODateString()),
           );
           const property = properties[testInfo.workerIndex]!;
           // Use open claim to isolate issues

@@ -174,7 +174,7 @@ export const countStars = async (parentLocator: Locator) => {
   // get the contained stars, and use their classes to determine which are active
   const stars = await ratingDiv.getByRole('img').all();
   const starClasses = await Promise.all(
-    stars.map(async (star) => await star.getAttribute('class')),
+    stars.map(async (star) => star.getAttribute('class')),
   );
   const starsActive = starClasses.map(
     (starClass) => starClass?.includes(activeStarClass) ?? false,
@@ -187,7 +187,7 @@ export const countStars = async (parentLocator: Locator) => {
   let inactiveFound = false;
   for (const starActive of starsActive) {
     if (starActive) {
-      activeStars++;
+      activeStars += 1;
     } else {
       inactiveFound = true;
     }
