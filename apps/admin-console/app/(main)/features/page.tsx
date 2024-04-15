@@ -34,7 +34,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Button } from '@/components/ui/button';
+import { Form, SubmitButton } from './form';
 
 const FlagRow: React.FC<{
   flagDetails: FlagDetails;
@@ -69,77 +69,9 @@ const FlagRow: React.FC<{
           ))}
         </SelectContent>
       </Select>
-      {/* {typeof flagDetails.configValue !== 'undefined' ? (
-        <Badge variant='outline'>
-          {flagValueLabel(
-            flagDetails,
-            flagDetails.configValue,
-          )?.toLocaleString()}
-        </Badge>
-      ) : (
-        <Badge variant='secondary'>N/A</Badge>
-      )} */}
     </TableCell>
-
-    {/* <TableCell className='hidden md:table-cell'>25</TableCell>
-    <TableCell className='hidden md:table-cell'>2023-07-12 10:42 AM</TableCell>
-    <TableCell>
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button aria-haspopup='true' size='icon' variant='ghost'>
-            <MoreHorizontal className='h-4 w-4' />
-            <span className='sr-only'>Toggle menu</span>
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align='end'>
-          <DropdownMenuLabel>Actions</DropdownMenuLabel>
-          <DropdownMenuItem>Edit</DropdownMenuItem>
-          <DropdownMenuItem>Delete</DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
-    </TableCell> */}
   </TableRow>
 );
-
-const updateFlags = async (formData: FormData) => {
-  'use server';
-
-  const newFlagValues = Object.entries(flags).reduce((acc, [name, flag]) => {
-    const value = formData.get(name);
-    if (value === undefined || value === '') return acc;
-    return {
-      ...acc,
-      [name]:
-        flag.options?.find((option) => option.label === value)?.value ?? value,
-    };
-  }, {});
-
-  try {
-    const createEdgeConfig = await fetch(
-      `https://api.vercel.com/v1/edge-config/${parseConnectionString(process.env.EDGE_CONFIG!)?.id}/items?teamId=${process.env.VERCEL_TEAM_ID}`,
-      {
-        method: 'PATCH',
-        headers: {
-          Authorization: `Bearer ${process.env.VERCEL_API_KEY}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          items: [
-            {
-              operation: 'update',
-              key: 'featureFlags',
-              value: newFlagValues,
-            },
-          ],
-        }),
-      },
-    );
-    const result = await createEdgeConfig.json();
-    console.log(result);
-  } catch (error) {
-    console.log(error);
-  }
-};
 
 const FlagTable: React.FC = async () => {
   const flagDetails = await getFeatureFlagDetails();
@@ -147,7 +79,7 @@ const FlagTable: React.FC = async () => {
 
   return (
     <Card>
-      <form className='contents' action={updateFlags}>
+      <Form>
         <CardHeader>
           <CardTitle>Flags</CardTitle>
           <CardDescription>
@@ -162,10 +94,6 @@ const FlagTable: React.FC = async () => {
                 <TableHead>Description</TableHead>
                 <TableHead>Default Value</TableHead>
                 <TableHead>Edge Config</TableHead>
-                {/* <TableHead className='hidden md:table-cell'>Created at</TableHead>
-              <TableHead>
-                <span className='sr-only'>Actions</span>
-              </TableHead> */}
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -176,11 +104,9 @@ const FlagTable: React.FC = async () => {
           </Table>
         </CardContent>
         <CardFooter className='justify-end'>
-          <Button size='sm' variant='default' type='submit'>
-            Save Changes
-          </Button>
+          <SubmitButton />
         </CardFooter>
-      </form>
+      </Form>
     </Card>
   );
 };

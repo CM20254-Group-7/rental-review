@@ -31,6 +31,15 @@ module.exports = {
         'object-curly-newline': 'off',
         'jsx-a11y/heading-has-content': 'off',
       }
+    },
+    // allow named exports in actions.ts files
+    {
+      files: [
+        '**/actions.ts',
+      ],
+      rules: {
+        'import/prefer-default-export': 'off',
+      }
     }
   ]
 };
