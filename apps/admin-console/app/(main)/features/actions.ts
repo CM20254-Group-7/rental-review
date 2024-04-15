@@ -48,10 +48,10 @@ export const updateFlags = async (
       },
     );
     const result = await createEdgeConfig.json();
-    console.log(result);
+    // console.log(result);
     return { result, error: null };
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     return { result: null, error };
   }
 };
@@ -86,10 +86,10 @@ export const updateToolbarSettings = async (
       },
     );
     const result = await createEdgeConfig.json();
-    console.log(result);
+    // console.log(result);
     return { result, error: null };
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     return { result: null, error };
   }
 };

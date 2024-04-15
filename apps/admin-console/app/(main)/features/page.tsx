@@ -36,6 +36,7 @@ import {
 } from '@/components/ui/select';
 import { Form as TrackedForm, SubmitButton } from './_components/form-wrapper';
 import ToolbarSettingsForm from './_components/toolbar-form';
+
 const FlagRow: React.FC<{
   flagDetails: FlagDetails;
 }> = ({ flagDetails }) => (

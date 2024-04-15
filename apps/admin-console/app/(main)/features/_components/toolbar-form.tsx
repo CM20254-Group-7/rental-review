@@ -16,7 +16,6 @@ import {
 } from '@/components/ui/form';
 import { Switch } from '@/components/ui/switch';
 import { CardContent, CardFooter } from '@/components/ui/card';
-import { SubmitButton } from './form-wrapper';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { XIcon } from 'lucide-react';
@@ -34,6 +33,7 @@ import {
   CommandItem,
   CommandList,
 } from '@/components/ui/command';
+import { SubmitButton } from './form-wrapper';
 
 import { updateToolbarSettings } from '../actions';
 
@@ -76,16 +76,16 @@ const ToolbarSettingsForm: React.FC<{
   }
 
   const { watch } = form;
-  const watchShowForEveryone = watch('show_for_everyone');
+  // const watchShowForEveryone = watch('show_for_everyone');
   const watchShowForUsers = watch('show_for_users');
 
-  useEffect(() => {
-    console.log('Show for everyone:', watchShowForEveryone);
-  }, [watchShowForEveryone]);
+  // useEffect(() => {
+  //   console.log('Show for everyone:', watchShowForEveryone);
+  // }, [watchShowForEveryone]);
 
-  useEffect(() => {
-    console.log('Show for users:', watchShowForUsers);
-  }, [watchShowForUsers]);
+  // useEffect(() => {
+  //   console.log('Show for users:', watchShowForUsers);
+  // }, [watchShowForUsers]);
 
   const [nonToolbarUsers, setNonToolbarUsers] = useState(
     userEmails.filter((email) => !initialToolbarUsers.includes(email)),

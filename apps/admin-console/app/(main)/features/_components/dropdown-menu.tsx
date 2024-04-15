@@ -66,22 +66,22 @@ const ComboboxDropdownMenu: React.FC = () => {
                 <Command>
                   <CommandInput
                     placeholder='Filter label...'
-                    autoFocus={true}
+                    autoFocus
                     className='h-9'
                   />
                   <CommandList>
                     <CommandEmpty>No label found.</CommandEmpty>
                     <CommandGroup>
-                      {labels.map((label) => (
+                      {labels.map((commandlabel) => (
                         <CommandItem
-                          key={label}
-                          value={label}
+                          key={commandlabel}
+                          value={commandlabel}
                           onSelect={(value) => {
                             setLabel(value);
                             setOpen(false);
                           }}
                         >
-                          {label}
+                          {commandlabel}
                         </CommandItem>
                       ))}
                     </CommandGroup>

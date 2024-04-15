@@ -17,8 +17,8 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import NavLink from './NavLink';
 import ModeToggle from '@/components/ui/dark-mode-toggle';
+import NavLink from './NavLink';
 
 export type IconType = React.ForwardRefExoticComponent<
   Omit<React.SVGProps<SVGSVGElement>, 'ref'> & {
