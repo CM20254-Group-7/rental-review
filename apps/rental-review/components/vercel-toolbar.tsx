@@ -1,6 +1,6 @@
 import React from 'react';
-// import { VercelToolbar } from '@vercel/toolbar/next';
 import { createServerSupabaseClient } from '@repo/supabase-client-helpers/server-only';
+import { get } from '@vercel/edge-config';
 
 const { VercelToolbar } = await import('@vercel/toolbar/next');
 
@@ -8,21 +8,26 @@ const Toolbar: React.FC = async () => {
   const environment = process.env.VERCEL_ENV || 'development';
   const isProduction = environment === 'production';
 
+  // Always show the toolbar in development & preview environments
   if (!isProduction) return <VercelToolbar />;
 
-  const supabase = createServerSupabaseClient();
+  // Show the toolbar to everyone if the "ToolbarAlwaysVisible" is set to true in the edge config
+  const toolbarAlwaysVisible = await get('toolbarAlwaysVisible');
+  if (toolbarAlwaysVisible) return <VercelToolbar />;
 
+  // Finally, show the toolbar to logged in users who's email is listed in the "ToolbarUsers" edge config
+  const supabase = createServerSupabaseClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
   if (!user) return null;
 
-  // TODO: Check if user is admin & show the toolbar if they are
-  const userIsAdmin = false;
+  const toolbarUsers = await get('toolbarUsers');
+  if (!Array.isArray(toolbarUsers) || !toolbarUsers.includes(user.email))
+    return null;
 
-  if (userIsAdmin) return <VercelToolbar />;
-  return null;
+  return <VercelToolbar />;
 };
 
 export default Toolbar;
