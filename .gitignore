@@ -44,3 +44,5 @@ yarn-error.log*
 eslint-results/
 
 .vscode/
+
+.vercel
