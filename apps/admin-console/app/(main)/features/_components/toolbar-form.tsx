@@ -35,6 +35,8 @@ import {
   CommandList,
 } from '@/components/ui/command';
 
+import { updateToolbarSettings } from '../actions';
+
 const FormSchema = z.object({
   show_for_everyone: z.boolean(),
   show_for_users: z.array(z.string()),
@@ -58,6 +60,18 @@ const ToolbarSettingsForm: React.FC<{
     toast('You submitted the following values', {
       description: JSON.stringify(data, null, 2),
     });
+    updateToolbarSettings(data.show_for_everyone, data.show_for_users).then(
+      ({ result, error }) => {
+        toast(
+          error
+            ? 'Failed to update toolbar settings'
+            : 'Toolbar settings updated',
+          {
+            description: JSON.stringify(result ?? error, null, 2),
+          },
+        );
+      },
+    );
   }
 
   const { watch } = form;

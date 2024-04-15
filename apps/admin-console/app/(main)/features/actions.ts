@@ -55,3 +55,41 @@ export const updateFlags = async (
     return { result: null, error };
   }
 };
+
+export const updateToolbarSettings = async (
+  toolbarVisible: boolean,
+  toolbarUsers: string[],
+) => {
+  try {
+    const createEdgeConfig = await fetch(
+      `https://api.vercel.com/v1/edge-config/${parseConnectionString(process.env.EDGE_CONFIG!)?.id}/items?teamId=${process.env.VERCEL_TEAM_ID}`,
+      {
+        method: 'PATCH',
+        headers: {
+          Authorization: `Bearer ${process.env.VERCEL_API_KEY}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          items: [
+            {
+              operation: 'upsert',
+              key: 'toolbarAlwaysVisible',
+              value: toolbarVisible,
+            },
+            {
+              operation: 'upsert',
+              key: 'toolbarUsers',
+              value: toolbarUsers,
+            },
+          ],
+        }),
+      },
+    );
+    const result = await createEdgeConfig.json();
+    console.log(result);
+    return { result, error: null };
+  } catch (error) {
+    console.log(error);
+    return { result: null, error };
+  }
+};
