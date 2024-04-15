@@ -9,7 +9,7 @@
         "@supabase/ssr": "latest",
         "@supabase/supabase-js": "latest",
         "@repo/supabase": "workspace:*",
-        "next": "canary"
+        "next": "latest"
     },
     "devDependencies": {
         "supabase": "1.142.2"

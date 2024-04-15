@@ -26,12 +26,12 @@
     "autoprefixer": "10.4.15",
     "framer-motion": "^11.0.24",
     "geist": "^1.3.0",
-    "next": "canary",
     "postcss": "8.4.31",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "tailwindcss": "3.3.3",
-    "zod": "^3.22.4"
+    "zod": "^3.22.4",
+    "next": "latest"
   },
   "devDependencies": {
     "@next/eslint-plugin-next": "^14.1.1",
