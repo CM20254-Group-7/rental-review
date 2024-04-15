@@ -44,13 +44,14 @@ const FormSchema = z.object({
 });
 
 const ToolbarSettingsForm: React.FC<{
+  alwaysShowToolbar: boolean;
   userEmails: string[];
   toolbarUsers: string[];
-}> = ({ userEmails, toolbarUsers: initialToolbarUsers }) => {
+}> = ({ alwaysShowToolbar, userEmails, toolbarUsers: initialToolbarUsers }) => {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      show_for_everyone: false,
+      show_for_everyone: alwaysShowToolbar,
       show_for_users: initialToolbarUsers,
       // security_emails: true,
     },

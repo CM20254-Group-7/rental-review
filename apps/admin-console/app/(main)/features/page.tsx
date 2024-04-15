@@ -1,5 +1,6 @@
 import { NextPage } from 'next';
 import React from 'react';
+import { get } from '@vercel/edge-config';
 
 import {
   FlagDetails,
@@ -114,9 +115,16 @@ const ToolbarSettings: React.FC = async () => {
   const supabase = createServiceSupabaseClient();
   const userList = await supabase.auth.admin.listUsers();
 
+  const configAlwaysShowToolbar = (await get(
+    'toolbarAlwaysVisible',
+  )) as boolean;
+  const configToolbarUsers = await get('toolbarUsers').then((users) =>
+    Array.isArray(users) ? users.map((user) => user as string) : [],
+  );
+
   const userEmails = userList.data.users.flatMap((user) => user.email ?? []);
   const toolbarUsers = userEmails.filter((email) =>
-    ['user.1@example.com'].includes(email),
+    configToolbarUsers.includes(email),
   );
 
   return (
@@ -131,6 +139,7 @@ const ToolbarSettings: React.FC = async () => {
         </CardDescription>
       </CardHeader>
       <ToolbarSettingsForm
+        alwaysShowToolbar={configAlwaysShowToolbar}
         userEmails={userEmails}
         toolbarUsers={toolbarUsers}
       />
