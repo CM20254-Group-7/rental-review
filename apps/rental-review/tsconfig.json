@@ -14,7 +14,7 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    ".next/types/**/*.ts",
+    ".next/types/**/*.ts", "../admin-console/middleware copy.ts",
   ],
   "exclude": ["node_modules"]
 }
