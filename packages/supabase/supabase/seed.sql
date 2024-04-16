@@ -140,3 +140,12 @@ insert into "public"."review_tags" (               "review_id"              ,   
                                    ( '1cf1903b-5657-4301-9509-58d3e1c6a6a9' , 'fast responses' ),
                                    ( '0e067144-b72b-4872-b0d0-a604c2350936' , 'pet friendly'   ),
                                    ( 'f3e3e3e3-3e3e-3e3e-3e3e-3e3e3e3e3e3e' , 'pet friendly'   );
+
+                                
+-- Report Reasons
+insert into "public"."report_reasons" (           "reason"           , "owner_only" ) values
+                                      ( 'Spam'                       ,     FALSE    ),
+                                      ( 'Misleading or Untrue'       ,     FALSE    ),
+                                      ( 'Inapproapriate or Offensive',     FALSE    ),
+                                      ( 'Tennant never lived here'   ,     TRUE     ), 
+                                      ( 'Other'                      ,     FALSE    );

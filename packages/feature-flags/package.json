@@ -2,6 +2,11 @@
     "name": "@repo/feature-flags",
     "version": "1.0.0",
     "exports": "./flags.ts",
+    "scripts": {
+        "lint": "eslint . --config .eslintrc.js --ext .js,.jsx,.ts,.tsx",
+        "lint:sarif": "eslint . --config .eslintrc.js --ext .js,.jsx,.ts,.tsx --format @microsoft/eslint-formatter-sarif --output-file ../../eslint-results/rental-review.sarif",
+        "lint:fix": "eslint  . --config .eslintrc.js --ext .js,.jsx,.ts,.tsx --fix"
+    },
     "dependencies": {
         "@vercel/edge-config": "^1.1.0",
         "@vercel/flags": "^2.3.0",

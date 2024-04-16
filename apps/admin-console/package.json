@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start --port 3001",
     "lint": "next lint --dir .",
-    "lint:sarif": "eslint . --config .eslintrc.js --ext .js,.jsx,.ts,.tsx --format @microsoft/eslint-formatter-sarif --output-file ../../eslint-results/admin-console.sarif"
+    "lint:sarif": "eslint . --config .eslintrc.js --ext .js,.jsx,.ts,.tsx --format @microsoft/eslint-formatter-sarif --output-file ../../eslint-results/admin-console.sarif",
+    "lint:fix": "next lint --dir . --fix"
   },
   "dependencies": {
     "@heroicons/react": "^2.1.3",

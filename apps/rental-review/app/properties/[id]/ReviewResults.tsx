@@ -7,7 +7,7 @@ interface ReviewDetails {
   property_id: string;
   property_rating: number;
   review_body: string;
-  review_date: Date;
+  review_date: string;
   review_id: string;
   reviewer_id: string;
   review_tags: string[];
@@ -25,7 +25,6 @@ const getReviewResults = cache(
 
     return data.map((review) => ({
       ...review,
-      review_date: new Date(review.review_date),
       review_tags: review.review_tags.map((reviewTag) => reviewTag.tag),
     }));
   },
@@ -44,7 +43,7 @@ const ReviewResults: React.FC<{ propertyId: string }> = async ({
     <ReviewDetailsLayout
       key={reviewDetails.review_id}
       reviewId={reviewDetails.review_id}
-      // reviewerId={reviewDetails.reviewer_id}
+      propertyId={reviewDetails.property_id}
       reviewDate={reviewDetails.review_date}
       landlordRating={reviewDetails.landlord_rating}
       propertyRating={reviewDetails.property_rating}

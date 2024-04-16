@@ -5,7 +5,8 @@
   "scripts": {
     "test": "playwright test",
     "test:ui": "playwright test --ui",
-    "lint": "eslint . --ext .ts,.tsx"
+    "lint": "eslint . --ext .ts,.tsx",
+    "lint:fix": "eslint . --ext .ts,.tsx --fix"
   },
   "devDependencies": {
     "@next/eslint-plugin-next": "^14.1.1",
