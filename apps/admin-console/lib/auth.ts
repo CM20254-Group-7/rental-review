@@ -109,19 +109,28 @@ export const passwordCookieName = 'admin-password';
 export const passwordIvCookieName = 'admin-password-iv';
 
 export const setAuthCookies = async (password: string) => {
-  const cookieStore = cookies();
-
   const { data: encryptedPassword, iv } = await encryptWithEnvKey(password);
 
-  cookieStore.set(passwordIvCookieName, iv);
-  cookieStore.set(passwordCookieName, encryptedPassword);
+  cookies().set(
+    passwordCookieName,
+    JSON.stringify({
+      iv,
+      password: encryptedPassword,
+    }),
+  );
 };
 
 export const getAuthCookies = async () => {
   const cookieStore = cookies();
 
-  const passwordEncryptionIv = cookieStore.get(passwordIvCookieName)?.value;
-  const encryptedPassword = cookieStore.get(passwordCookieName)?.value;
+  const passwordCookie = cookieStore.get(passwordCookieName)?.value;
+  if (!passwordCookie) {
+    return null;
+  }
+
+  // console.log('Password cookie:', passwordCookie);
+  const { iv: passwordEncryptionIv, password: encryptedPassword } =
+    JSON.parse(passwordCookie);
 
   if (!encryptedPassword || !passwordEncryptionIv) {
     return null;
@@ -135,12 +144,7 @@ export const getAuthCookies = async () => {
   return decryptedPassword;
 };
 
-export const clearAuthCookies = () => {
-  const cookieStore = cookies();
-
-  cookieStore.delete(passwordIvCookieName);
-  cookieStore.delete(passwordCookieName);
-};
+export const clearAuthCookies = () => cookies().delete(passwordCookieName);
 
 export const passwordMatchesEnvHash = (password: string) =>
   bcrypt.compareSync(password, process.env.ADMIN_PASSWORD_HASH!);
