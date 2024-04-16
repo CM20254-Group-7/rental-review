@@ -59,9 +59,9 @@ const AddressSearch: React.FC = () => {
   return (
     <div className='flex flex-col gap-2'>
       <p>Search By Address</p>
-      <div className='flex flex-col px-2 py-4 border-y border-foreground/30 gap-2'>
+      <div className='border-foreground/30 flex flex-col gap-2 border-y px-2 py-4'>
         <form
-          className='flex flex-row border rounded-md'
+          className='flex flex-row rounded-md border'
           onSubmit={(e) => {
             e.preventDefault();
             const addressSearchQuery = (
@@ -75,7 +75,7 @@ const AddressSearch: React.FC = () => {
             <input
               id='basicAddressSearch'
               type='text'
-              className='flex-1 border-0 rounded-md p-2 bg-inherit focus:bg-secondary/10'
+              className='focus:bg-secondary/10 flex-1 rounded-md border-0 bg-inherit p-2'
               defaultValue={searchParams.get('address') || undefined}
               placeholder='Enter address'
             />
@@ -83,7 +83,7 @@ const AddressSearch: React.FC = () => {
 
           <button
             type='submit'
-            className='border-l border-foreground/30 px-4 text-accent hover:bg-secondary/10 dark:hover:bg-accent/10 hover:shadow-lg hover:shadow-accent/20'
+            className='border-foreground/30 text-accent hover:bg-secondary/10 dark:hover:bg-accent/10 hover:shadow-accent/20 border-l px-4 hover:shadow-lg'
           >
             Search
           </button>
@@ -101,14 +101,14 @@ const AddressSearch: React.FC = () => {
         */}
 
         <button
-          className='flex flex-row ml-auto text-sm hover:underline items-center px-2'
+          className='ml-auto flex flex-row items-center px-2 text-sm hover:underline'
           type='button'
           onClick={toggleAdvanced}
         >
           {advanced ? (
-            <ChevronDownIcon className='w-4 h-4' />
+            <ChevronDownIcon className='h-4 w-4' />
           ) : (
-            <ChevronRightIcon className='w-4 h-4' />
+            <ChevronRightIcon className='h-4 w-4' />
           )}{' '}
           Advanced
         </button>
@@ -144,7 +144,7 @@ const AddressSearch: React.FC = () => {
                 id='street'
                 name='street'
                 type='text'
-                className='border rounded-md p-2 bg-inherit focus:bg-secondary/10'
+                className='focus:bg-secondary/10 rounded-md border bg-inherit p-2'
                 placeholder='Street'
               />
             </label>
@@ -156,7 +156,7 @@ const AddressSearch: React.FC = () => {
                 id='city'
                 name='city'
                 type='text'
-                className='border rounded-md p-2 bg-inherit focus:bg-secondary/10'
+                className='focus:bg-secondary/10 rounded-md border bg-inherit p-2'
                 placeholder='City'
               />
             </label>
@@ -168,7 +168,7 @@ const AddressSearch: React.FC = () => {
                 id='postalCode'
                 name='postalCode'
                 type='text'
-                className='border rounded-md p-2 bg-inherit focus:bg-secondary/10'
+                className='focus:bg-secondary/10 rounded-md border bg-inherit p-2'
                 placeholder='Postal Code'
               />
             </label>
@@ -180,7 +180,7 @@ const AddressSearch: React.FC = () => {
                 id='country'
                 name='country'
                 type='text'
-                className='border rounded-md p-2 bg-inherit focus:bg-secondary/10'
+                className='focus:bg-secondary/10 rounded-md border bg-inherit p-2'
                 placeholder='Country'
               />
             </label>
@@ -188,7 +188,7 @@ const AddressSearch: React.FC = () => {
             {/* search */}
             <button
               type='submit'
-              className='border rounded-md p-2 text-accent hover:bg-secondary/10 dark:hover:bg-accent/10 hover:shadow-lg hover:shadow-accent/20'
+              className='text-accent hover:bg-secondary/10 dark:hover:bg-accent/10 hover:shadow-accent/20 rounded-md border p-2 hover:shadow-lg'
             >
               Search
             </button>

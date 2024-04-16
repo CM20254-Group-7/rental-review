@@ -79,14 +79,14 @@ const ReviewResults: FC<{
   const reviews = await getReviewPage(currentPage, perPage);
 
   return (
-    <div className='flex w-fit flex-row gap-2 h-fit'>
+    <div className='flex h-fit w-fit flex-row gap-2'>
       {reviews.map((review) => (
         <div
           key={review.review_id}
-          className='flex flex-1 flex-col w-[25rem] border gap-2 bg-primary/30 px-8 py-8 rounded-md mb-4'
+          className='bg-primary/30 mb-4 flex w-[25rem] flex-1 flex-col gap-2 rounded-md border px-8 py-8'
         >
-          <h1 className='text-xl text-accent font-bold'>{review.address}</h1>
-          <div className='flex flex-col sm:flex-row justify-around place-items-center'>
+          <h1 className='text-accent text-xl font-bold'>{review.address}</h1>
+          <div className='flex flex-col place-items-center justify-around sm:flex-row'>
             <div className='flex flex-col'>
               <p className='text-lg font-semibold'>Property:</p>
               <StarRatingLayout rating={review.property_rating} />
@@ -99,7 +99,7 @@ const ReviewResults: FC<{
           </div>
 
           <p className='text-lg font-semibold'>Review:</p>
-          <p className='border flex-1 rounded-md h-fit min-h-[5rem] bg-gray-100/10 py-1 px-2'>
+          <p className='h-fit min-h-[5rem] flex-1 rounded-md border bg-gray-100/10 px-2 py-1'>
             {review.review_body}
           </p>
           <p className='ml-auto mt-auto text-gray-300'>
@@ -159,7 +159,7 @@ const LandlordReviewsDashboardPage: NextPage<{
         <Divider />
         <h2 className='text-lg font-semibold'>Your Recent Reviews</h2>
         <div className='w-full overflow-x-scroll pb-2 shadow-inner'>
-          <div className='flex flex-row w-fit px-4 py-2 gap-4'>
+          <div className='flex w-fit flex-row gap-4 px-4 py-2'>
             <BackButton />
             <ReviewResults currentPage={currentPage} perPage={pageSize} />
             <ForwardButton totalPages={totalPages} />

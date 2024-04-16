@@ -24,7 +24,7 @@ const Tab = ({ path, item }: { path: string; item: Item }) => {
   return (
     <Link
       href={href}
-      className={`rounded-lg px-3 py-1 text-sm font-medium border border-foreground/40 ${
+      className={`border-foreground/40 rounded-lg border px-3 py-1 text-sm font-medium ${
         isActive ? 'bg-primary' : 'bg-primary/30 hover:bg-primary/50'
       }`}
     >

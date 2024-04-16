@@ -169,27 +169,27 @@ const LandlordProfile: React.FC<{
   }, [urlState, urlForPath]);
 
   return (
-    <div className='relative flex flex-row w-full justify-between gap-2 bg-secondary/30 shadow-lg shadow-secondary/40'>
+    <div className='bg-secondary/30 shadow-secondary/40 relative flex w-full flex-row justify-between gap-2 shadow-lg'>
       {/* Images - Currently not implemented so shows example image with disclaimer */}
-      <div className='flex items-center justify-center p-4 flex-1'>
-        <div className='flex flex-row justify-center relative w-full aspect-square'>
+      <div className='flex flex-1 items-center justify-center p-4'>
+        <div className='relative flex aspect-square w-full flex-row justify-center'>
           <Avatar
             src={avatarUrl}
             showFallback
             fallback={
-              <div className='relative w-full h-full aspect-square'>
-                <UserCircleIcon className='text-accent blur-sm w-full h-full opacity-60' />
-                <div className='absolute top-0 left-0 w-full h-full flex items-center justify-center text-foreground text-lg font-semibold'>
+              <div className='relative aspect-square h-full w-full'>
+                <UserCircleIcon className='text-accent h-full w-full opacity-60 blur-sm' />
+                <div className='text-foreground absolute left-0 top-0 flex h-full w-full items-center justify-center text-lg font-semibold'>
                   No Profile Picture
                 </div>
               </div>
             }
             // name={landlordBio.display_name}
-            className='w-full h-full aspect-square'
+            className='aspect-square h-full w-full'
           />
           {isUserLandlord && (
             <form
-              className='absolute -bottom-2 left-0 w-full flex justify-center'
+              className='absolute -bottom-2 left-0 flex w-full justify-center'
               action={urlDispatch}
             >
               <ChangeImageButton
@@ -222,11 +222,11 @@ const LandlordProfile: React.FC<{
       </div>
 
       {/* General Property Details */}
-      <div className='flex-1 flex flex-col w-full px-8 sm:max-w-md justify-top gap-2 py-4'>
+      <div className='justify-top flex w-full flex-1 flex-col gap-2 px-8 py-4 sm:max-w-md'>
         {/* Title - Uses Name */}
-        <div className='flex flex-col w-full'>
+        <div className='flex w-full flex-col'>
           <div className='flex flex-row justify-between'>
-            <h2 className='text-2xl font-semibold mb-1 w-fit text-accent'>
+            <h2 className='text-accent mb-1 w-fit text-2xl font-semibold'>
               {landlordBio.display_name}
             </h2>
             {isUserLandlord && !editMode && (
@@ -235,12 +235,12 @@ const LandlordProfile: React.FC<{
               </Button>
             )}
           </div>
-          <span className='border border-b w-full border-accent' />
+          <span className='border-accent w-full border border-b' />
         </div>
         <StarRatingLayout rating={landlordBio.average_rating} />
         <MaybeForm editMode={editMode} action={profileDispatch}>
           <div className='flex flex-col gap-2'>
-            <h3 className='text-lg font-semibold text-accent'>Contact:</h3>
+            <h3 className='text-accent text-lg font-semibold'>Contact:</h3>
             {editMode ? (
               <TextInput
                 defaultValue={landlordBio.display_email}
@@ -252,14 +252,14 @@ const LandlordProfile: React.FC<{
             ) : (
               <a
                 href={`mailto:${landlordBio.display_email}`}
-                className='underline text-blue-500 transition-colors duration-300 ease-in-out hover:text-blue-600'
+                className='text-blue-500 underline transition-colors duration-300 ease-in-out hover:text-blue-600'
               >
                 {landlordBio.display_email}
               </a>
             )}
           </div>
           <div className='flex flex-col gap-2'>
-            <h3 className='text-lg font-semibold text-accent'>About Me:</h3>
+            <h3 className='text-accent text-lg font-semibold'>About Me:</h3>
             {editMode ? (
               <Textarea
                 defaultValue={landlordBio.bio}
@@ -271,7 +271,7 @@ const LandlordProfile: React.FC<{
               <p className='italic'>{landlordBio.bio}</p>
             )}
           </div>
-          <div className='mt-auto flex flex-row gap-2 justify-end'>
+          <div className='mt-auto flex flex-row justify-end gap-2'>
             {editMode && (
               <>
                 <Button

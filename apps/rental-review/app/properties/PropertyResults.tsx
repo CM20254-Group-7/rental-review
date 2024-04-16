@@ -124,27 +124,27 @@ const PropertyResults: React.FC<{
 
   return properties.map((property) => (
     <Link
-      className='flex flex-col w-full items-center rounded-xl bg-secondary/10 hover:bg-secondary/20 p-6 pb-8 gap-4 border shadow-md shadow-secondary/40 hover:shadow-lg hover:shadow-secondary/40'
+      className='bg-secondary/10 hover:bg-secondary/20 shadow-secondary/40 hover:shadow-secondary/40 flex w-full flex-col items-center gap-4 rounded-xl border p-6 pb-8 shadow-md hover:shadow-lg'
       href={`/properties/${property.id}`}
       key={property.id}
     >
       {/* Card Header */}
-      <div className='flex flex-col w-full'>
+      <div className='flex w-full flex-col'>
         <div className='flex flex-row justify-between'>
-          <h2 className='text-2xl font-semibold mb-1 w-fit text-accent'>
+          <h2 className='text-accent mb-1 w-fit text-2xl font-semibold'>
             {property.address}
           </h2>
           <StarRatingLayout rating={property.average_rating!} />
         </div>
-        <span className='border border-b w-full border-accent' />
+        <span className='border-accent w-full border border-b' />
       </div>
 
-      <div className='grid grid-cols-1 md:grid-cols-2 w-full'>
-        <div className='flex flex-col gap-2 justify-center items-center'>
+      <div className='grid w-full grid-cols-1 md:grid-cols-2'>
+        <div className='flex flex-col items-center justify-center gap-2'>
           {property.description || property.beds || property.baths ? (
             <>
               {property.description && (
-                <p className='text-sm break-words'>{property.description}</p>
+                <p className='break-words text-sm'>{property.description}</p>
               )}
               <div className='flex flex-col gap-2'>
                 {property.beds && (
@@ -163,7 +163,7 @@ const PropertyResults: React.FC<{
             <p className='text-sm font-semibold'>No details available</p>
           )}
         </div>
-        <div className='flex flex-col gap-2 justify-center items-center md:items-end'>
+        <div className='flex flex-col items-center justify-center gap-2 md:items-end'>
           <div>
             <CurrentOwnerIndicator propertyId={property.id!} />
           </div>

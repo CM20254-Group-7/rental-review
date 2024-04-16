@@ -15,20 +15,20 @@ const LandlordRegistrationForm: React.FC = () => {
   const [state, dispatch] = useFormState(addToLandlordDB, initialState);
 
   return (
-    <div>
-      <div
-        className='flex flex-col bg-primary/50 border rounded-t-lg p-4 items-center justify-center min-h-[4rem] font-bold text-xl'
+    <div className='w-full max-w-prose'>
+      <h1
+        className='bg-primary/50 flex min-h-[4rem] flex-col items-center justify-center rounded-t-lg border p-4 text-xl font-bold'
         id='form_header'
       >
         Hello there! Let&apos;s make you a landlord!
-      </div>
+      </h1>
 
       <form
-        className='flex flex-col gap-4 justify-center bg-primary/30 border-x px-4 py-8'
+        className='bg-primary/30 flex flex-col justify-center gap-4 border-x px-4 py-8'
         action={dispatch}
       >
         <label
-          className='flex flex-col gap-1 justify-center max-w-xs'
+          className='flex max-w-xs flex-col justify-center gap-1'
           htmlFor='user_first_name'
         >
           <p className='text-lg font-bold'>First Name:</p>
@@ -41,7 +41,7 @@ const LandlordRegistrationForm: React.FC = () => {
         </label>
 
         <label
-          className='flex flex-col gap-1 justify-center max-w-xs'
+          className='flex max-w-xs flex-col justify-center gap-1'
           htmlFor='user_last_name'
         >
           <p className='text-lg font-bold'>Last Name:</p>
@@ -54,7 +54,7 @@ const LandlordRegistrationForm: React.FC = () => {
         </label>
 
         <label
-          className='flex flex-col gap-1 justify-center max-w-xs'
+          className='flex max-w-xs flex-col justify-center gap-1'
           htmlFor='display_name'
         >
           <p className='text-lg font-bold'>Display name:</p>
@@ -67,7 +67,7 @@ const LandlordRegistrationForm: React.FC = () => {
         </label>
 
         <label
-          className='flex flex-col gap-1 justify-center max-w-xs'
+          className='flex max-w-xs flex-col justify-center gap-1'
           htmlFor='display_email'
         >
           <p className='text-lg font-bold'>Email:</p>
@@ -80,7 +80,7 @@ const LandlordRegistrationForm: React.FC = () => {
         </label>
 
         <label
-          className='flex flex-col gap-1 justify-center max-w-xs'
+          className='flex max-w-xs flex-col justify-center gap-1'
           htmlFor='user_phoneNb'
         >
           <p className='text-lg font-bold'>Phone Number:</p>
@@ -93,7 +93,7 @@ const LandlordRegistrationForm: React.FC = () => {
         </label>
 
         <label
-          className='flex flex-col gap-1 justify-center max-w-xs'
+          className='flex max-w-xs flex-col justify-center gap-1'
           htmlFor='address'
         >
           <p className='text-lg font-bold'>Address:</p>
@@ -130,7 +130,7 @@ const LandlordRegistrationForm: React.FC = () => {
         </label>
 
         <label
-          className='flex flex-col gap-1 justify-center'
+          className='flex flex-col justify-center gap-1'
           htmlFor='user_bio'
         >
           <p className='text-lg font-bold'>Bio (optional):</p>
@@ -142,13 +142,13 @@ const LandlordRegistrationForm: React.FC = () => {
 
         <button
           type='submit'
-          className='border border-accent rounded-md px-4 py-2 text-accent mb-5 hover:bg-secondary/10 dark:hover:bg-accent/10 hover:shadow-lg hover:shadow-accent/20'
+          className='border-accent text-accent hover:bg-secondary/10 dark:hover:bg-accent/10 hover:shadow-accent/20 mb-5 rounded-md border px-4 py-2 hover:shadow-lg'
         >
           Landlordify!
         </button>
       </form>
 
-      <div className='flex flex-col gap-2 bg-primary/50 border rounded-b-lg p-4 items-center justify-center min-h-[4rem]'>
+      <div className='bg-primary/50 flex min-h-[4rem] flex-col items-center justify-center gap-2 rounded-b-lg border p-4'>
         {/* <pre>{JSON.stringify(state, null, 2)}</pre> */}
         <ErrorMessage state={state} />
       </div>

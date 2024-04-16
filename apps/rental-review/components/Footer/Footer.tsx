@@ -19,8 +19,8 @@ const links = [
 ];
 
 const Footer: React.FC = () => (
-  <footer className='w-screen flex flex-row border-t border-t-foreground/10'>
-    <div className='flex-1 w-5 flex items-center p-5'>
+  <footer className='border-t-foreground/10 flex w-screen flex-row border-t'>
+    <div className='flex w-5 flex-1 items-center p-5'>
       <Link href='https://github.com/CM20254-Group-7/rental-review'>
         <Image
           className='dark:hidden'
@@ -38,7 +38,7 @@ const Footer: React.FC = () => (
         />
       </Link>
     </div>
-    <div className='flex-auto p-8 flex flex-col justify-center text-center text-xs gap-2'>
+    <div className='flex flex-auto flex-col justify-center gap-2 p-8 text-center text-xs'>
       {links.map((link) => (
         <Link key={link.label} href={link.href} className='hover:underline'>
           {link.label}
@@ -46,7 +46,7 @@ const Footer: React.FC = () => (
       ))}
       <DarkModeToggle />
     </div>
-    <div className='flex-1 w-5' />
+    <div className='w-5 flex-1' />
   </footer>
 );
 

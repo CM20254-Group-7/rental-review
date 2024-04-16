@@ -43,29 +43,29 @@ const landlordProfilePage: NextPage<{
   if (!landlordBio) notFound();
 
   return (
-    <div className='flex-1 flex flex-col w-full px-16 justify-top items-center gap-2 py-16'>
+    <main className='flex w-full flex-1 flex-col place-items-center justify-center py-10 md:py-16'>
       {/* Content Boundary */}
-      <div className='flex flex-col w-full max-w-4xl bg-secondary/10 shadow-md shadow-secondary/40 rounded-lg overflow-clip border'>
+      <div className='bg-secondary/10 shadow-secondary/40 flex w-full max-w-4xl flex-col overflow-clip rounded-lg border shadow-md'>
         {/* Details Header */}
         <LandlordProfile landlordBio={landlordBio} />
 
         {/* Property List */}
-        <div className='flex flex-col gap-6 px-8 py-6 items-center'>
-          <div className='flex flex-col w-full'>
-            <h2 className='text-2xl font-semibold mb-1 w-fit text-accent'>
+        <div className='flex flex-col items-center gap-6 px-8 py-6'>
+          <div className='flex w-full flex-col'>
+            <h2 className='text-accent mb-1 w-fit text-2xl font-semibold'>
               Properties
             </h2>
-            <span className='border border-b w-full border-accent' />
+            <span className='border-accent w-full border border-b' />
           </div>
-          <div className='relative max-h-[25rem] pb-2 px-4 gap-4 justify-center items-center overflow-y-auto'>
-            <div className='w-full flex flex-col gap-4'>
-              <h3 className='sticky top-0 whitespace-nowrap shadow-md shadow-bg-secondary-40 bg-secondary/30 backdrop-blur-sm text-accent text-lg font-semibold px-2 py-1'>
+          <div className='relative max-h-[25rem] items-center justify-center gap-4 overflow-y-auto px-4 pb-2'>
+            <div className='flex w-full flex-col gap-4'>
+              <h3 className='shadow-bg-secondary-40 bg-secondary/30 text-accent sticky top-0 whitespace-nowrap px-2 py-1 text-lg font-semibold shadow-md backdrop-blur-sm'>
                 Current
               </h3>
               <Suspense fallback={<PropertyResultsLoading />}>
                 <CurrentPropertyResults landlordId={landlordId} />
               </Suspense>
-              <h3 className='sticky top-0 whitespace-nowrap w-full shadow-md shadow-bg-secondary-40 bg-secondary/30 backdrop-blur-sm text-accent text-lg font-semibold px-2 py-1'>
+              <h3 className='shadow-bg-secondary-40 bg-secondary/30 text-accent sticky top-0 w-full whitespace-nowrap px-2 py-1 text-lg font-semibold shadow-md backdrop-blur-sm'>
                 Previous
               </h3>
               <Suspense fallback={<PropertyResultsLoading />}>
@@ -77,20 +77,20 @@ const landlordProfilePage: NextPage<{
 
         {/* Review List */}
         <div className='flex flex-col gap-6 px-8 py-6'>
-          <div className='flex flex-col w-full'>
-            <h2 className='text-2xl font-semibold mb-1 w-fit text-accent'>
+          <div className='flex w-full flex-col'>
+            <h2 className='text-accent mb-1 w-fit text-2xl font-semibold'>
               Reviews
             </h2>
-            <span className='border border-b w-full border-accent' />
+            <span className='border-accent w-full border border-b' />
           </div>
-          <div className='flex flex-col gap-4 justify-center items-center'>
+          <div className='flex flex-col items-center justify-center gap-4'>
             <Suspense fallback={<ReviewResultsLoading />}>
               <ReviewResults landlordId={landlordId} />
             </Suspense>
           </div>
         </div>
       </div>
-    </div>
+    </main>
   );
 };
 

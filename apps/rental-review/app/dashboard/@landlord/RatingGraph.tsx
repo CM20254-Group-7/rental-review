@@ -6,7 +6,7 @@ import React from 'react';
 const customTooltip: React.FC<CustomTooltipProps> = ({ payload, active }) => {
   if (!active || !payload) return null;
   return (
-    <div className='w-56 rounded-tremor-default border border-tremor-border bg-tremor-background p-2 text-tremor-default shadow-tremor-dropdown'>
+    <div className='rounded-tremor-default border-tremor-border bg-tremor-background text-tremor-default shadow-tremor-dropdown w-56 border p-2'>
       {payload.map((category) => (
         <div key={category.payload.date} className='flex flex-1 space-x-2.5'>
           <div
@@ -14,7 +14,7 @@ const customTooltip: React.FC<CustomTooltipProps> = ({ payload, active }) => {
           />
           <div className='space-y-1'>
             <p className='text-tremor-content'>{category.payload.longLabel}</p>
-            <p className='font-medium text-tremor-content-emphasis'>
+            <p className='text-tremor-content-emphasis font-medium'>
               {category.dataKey}:{category.payload.rating}
             </p>
             <p className='text-tremor-content-emphasis'>

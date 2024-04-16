@@ -1,16 +1,16 @@
 import { NextPage } from 'next';
 
 const QandAPage: NextPage = () => (
-  <div className='flex-1 w-screen flex flex-row justify-center items-center py-20'>
-    <div className='flex flex-col w-full max-w-prose gap-8 items-center'>
-      <h2 className='text-2xl font-semibold mb-1 w-fit text-accent'>
+  <main className='flex flex-1 place-items-center justify-center py-10 md:py-16'>
+    <div className='flex w-full max-w-prose flex-col items-center gap-8'>
+      <h2 className='text-accent mb-1 w-fit text-2xl font-semibold'>
         Frequently Asked Questions
       </h2>
-      <span className='border border-b w-full border-accent' />
+      <span className='border-accent w-full border border-b' />
 
-      <div className='flex flex-col gap-2 w-full'>
+      <div className='flex w-full flex-col gap-2'>
         <div className='mx-5'>
-          <h3 className='text-lg font-semibold text-accent'>
+          <h3 className='text-accent text-lg font-semibold'>
             How does Rental Review ensure the authenticity of reviews?
           </h3>
           <p className='italic'>
@@ -26,9 +26,9 @@ const QandAPage: NextPage = () => (
         </div>
       </div>
 
-      <div className='flex flex-col gap-2 w-full'>
+      <div className='flex w-full flex-col gap-2'>
         <div className='mx-5'>
-          <h3 className='text-lg font-semibold text-accent'>
+          <h3 className='text-accent text-lg font-semibold'>
             What should I do if I suspect a review is fake or biased?
           </h3>
           <p className='italic'>
@@ -39,9 +39,9 @@ const QandAPage: NextPage = () => (
         </div>
       </div>
 
-      <div className='flex flex-col gap-2 w-full'>
+      <div className='flex w-full flex-col gap-2'>
         <div className='mx-5'>
-          <h3 className='text-lg font-semibold text-accent'>
+          <h3 className='text-accent text-lg font-semibold'>
             Can I edit or delete my review after posting it?
           </h3>
           <p className='italic'>
@@ -53,9 +53,9 @@ const QandAPage: NextPage = () => (
         </div>
       </div>
 
-      <div className='flex flex-col gap-2 w-full'>
+      <div className='flex w-full flex-col gap-2'>
         <div className='mx-5'>
-          <h3 className='text-lg font-semibold text-accent'>
+          <h3 className='text-accent text-lg font-semibold'>
             How can I search for properties on Rental Review?
           </h3>
           <p className='italic'>
@@ -67,9 +67,9 @@ const QandAPage: NextPage = () => (
         </div>
       </div>
 
-      <div className='flex flex-col gap-2 w-full'>
+      <div className='flex w-full flex-col gap-2'>
         <div className='mx-5'>
-          <h3 className='text-lg font-semibold text-accent'>
+          <h3 className='text-accent text-lg font-semibold'>
             Is there a way to contact landlords directly through Rental Review?
           </h3>
           <p className='italic'>
@@ -81,9 +81,9 @@ const QandAPage: NextPage = () => (
         </div>
       </div>
 
-      <div className='flex flex-col gap-2 w-full'>
+      <div className='flex w-full flex-col gap-2'>
         <div className='mx-5'>
-          <h3 className='text-lg font-semibold text-accent'>
+          <h3 className='text-accent text-lg font-semibold'>
             How can I claim ownership of a property on Rental Review?
           </h3>
           <p className='italic'>
@@ -94,9 +94,9 @@ const QandAPage: NextPage = () => (
         </div>
       </div>
 
-      <div className='flex flex-col gap-2 w-full'>
+      <div className='flex w-full flex-col gap-2'>
         <div className='mx-5'>
-          <h3 className='text-lg font-semibold text-accent'>
+          <h3 className='text-accent text-lg font-semibold'>
             Are there any guidelines for writing reviews on Rental Review?
           </h3>
           <p className='italic'>
@@ -109,7 +109,7 @@ const QandAPage: NextPage = () => (
         </div>
       </div>
     </div>
-  </div>
+  </main>
 );
 
 export default QandAPage;

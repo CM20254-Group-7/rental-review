@@ -59,7 +59,7 @@ const MyAvatar = forwardRef<HTMLSpanElement, AvatarProps>((props, ref) => {
   return (
     <div
       {...getAvatarProps()}
-      className='rounded-full overflow-clip relative w-full h-full'
+      className='relative h-full w-full overflow-clip rounded-full'
     >
       {src ? (
         <Image

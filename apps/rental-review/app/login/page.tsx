@@ -11,14 +11,14 @@ const LoginPage: NextPage<{
   const redirectTo = searchParams?.redirect;
 
   return (
-    <div className='relative flex-1 flex justify-center place-items-center gap-8 pt-24 pb-8'>
+    <main className='relative flex flex-1 place-items-center justify-center py-10 md:py-16'>
       <RedirectMessage />
 
-      <div className='grid grid-cols-1 [@media(min-width:996px)]:grid-cols-2 gap-16 [@media(min-width:996px)]:gap-24 w-fit'>
+      <div className='grid w-fit grid-cols-1 gap-16 [@media(min-width:996px)]:grid-cols-2 [@media(min-width:996px)]:gap-24'>
         <SignInForm redirectTo={redirectTo} />
         <SignUpForm redirectTo={redirectTo} />
       </div>
-    </div>
+    </main>
   );
 };
 

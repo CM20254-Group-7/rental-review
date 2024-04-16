@@ -5,7 +5,7 @@ const HomeButton: React.FC = () => (
   <div>
     <Link
       href='/'
-      className='py-2 px-3 text-lg flex rounded-md no-underline bg-secondary/20 border hover:bg-secondary/30 hover:shadow-md hover:shadow-primary/30 transition-all text-accent font-semibold'
+      className='bg-secondary/20 hover:bg-secondary/30 hover:shadow-primary/30 text-accent flex rounded-md border px-3 py-2 text-lg font-semibold no-underline transition-all hover:shadow-md'
     >
       Rental Review
     </Link>

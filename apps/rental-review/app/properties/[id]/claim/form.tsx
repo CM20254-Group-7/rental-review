@@ -55,18 +55,18 @@ const ClaimPropertyForm: React.FC<ClaimPropertyFormProps> = ({
   return (
     <div className='Contents'>
       <form
-        className='flex flex-col gap-4 justify-center bg-primary/30 border-x px-4 py-8'
+        className='bg-primary/30 flex flex-col justify-center gap-4 border-x px-4 py-8'
         action={dispatch}
       >
         <label
-          className='flex flex-col gap-1 justify-center'
+          className='flex flex-col justify-center gap-1'
           htmlFor='started_at'
         >
           <p className='text-lg font-bold'>
             When did you purchase this property?
           </p>
           <input
-            className={`${startDate ? 'bg-accent/20 hover:bg-accent/30 border-accent/50' : 'bg-transparent hover:bg-foreground/5 border-foreground/50'} border w-[45%]  rounded-md px-2 py-1`}
+            className={`${startDate ? 'bg-accent/20 hover:bg-accent/30 border-accent/50' : 'hover:bg-foreground/5 border-foreground/50 bg-transparent'} w-[45%] rounded-md  border px-2 py-1`}
             type='date'
             name='started_at'
             onChange={(e) => setStartDate(new Date(e.target.value))}
@@ -75,13 +75,13 @@ const ClaimPropertyForm: React.FC<ClaimPropertyFormProps> = ({
         </label>
 
         <label
-          className='flex flex-col gap-1 justify-center'
+          className='flex flex-col justify-center gap-1'
           htmlFor='started_at'
         >
           <p className='text-lg font-bold'>When did you sell this property?</p>
-          <div className='flex flex-row gap-2 items-center justify-between'>
+          <div className='flex flex-row items-center justify-between gap-2'>
             <input
-              className={`${endDate ? 'bg-accent/20 hover:bg-accent/30 border-accent/50' : 'bg-transparent hover:bg-foreground/5 border-foreground/50'} border w-[45%]  rounded-md px-2 py-1`}
+              className={`${endDate ? 'bg-accent/20 hover:bg-accent/30 border-accent/50' : 'hover:bg-foreground/5 border-foreground/50 bg-transparent'} w-[45%] rounded-md  border px-2 py-1`}
               type='date'
               name='ended_at'
               required={!(stillOwned === true)}
@@ -96,17 +96,17 @@ const ClaimPropertyForm: React.FC<ClaimPropertyFormProps> = ({
                 setStillOwned(!(stillOwned === true));
               }}
               type='button'
-              className={`${stillOwned ? 'bg-accent/20 hover:bg-accent/30 border-accent/50' : 'bg-transparent hover:bg-foreground/5 border-foreground/50'} flex flex-row w-[45%] justify-evenly px-2 py-1 border rounded-md align-middle items-center`}
+              className={`${stillOwned ? 'bg-accent/20 hover:bg-accent/30 border-accent/50' : 'hover:bg-foreground/5 border-foreground/50 bg-transparent'} flex w-[45%] flex-row items-center justify-evenly rounded-md border px-2 py-1 align-middle`}
             >
               <p className='text-lg'>I still own this property</p>
-              <div className='w-5 h-5 relative rounded-md border-4'>
+              <div className='relative h-5 w-5 rounded-md border-4'>
                 {stillOwned && (
                   <svg
                     xmlns='http://www.w3.org/2000/svg'
                     fill='none'
                     viewBox='0 0 24 24'
                     strokeWidth={2.5}
-                    className='w-6 h-6 absolute -left-1 -top-2 stroke-accent'
+                    className='stroke-accent absolute -left-1 -top-2 h-6 w-6'
                   >
                     <path
                       strokeLinecap='round'
@@ -123,14 +123,14 @@ const ClaimPropertyForm: React.FC<ClaimPropertyFormProps> = ({
         <div />
 
         <button
-          className='bg-foreground/20 active:bg-forground/10 hover:bg-foreground/10 border border-foreground/50 font-bold rounded-md p-2'
+          className='bg-foreground/20 active:bg-forground/10 hover:bg-foreground/10 border-foreground/50 rounded-md border p-2 font-bold'
           type='submit'
         >
           Claim Property
         </button>
       </form>
 
-      <div className='flex flex-col gap-2 bg-primary/50 border rounded-b-lg p-4 items-center justify-center min-h-[4rem]'>
+      <div className='bg-primary/50 flex min-h-[4rem] flex-col items-center justify-center gap-2 rounded-b-lg border p-4'>
         {/* <pre>{JSON.stringify(state, null, 2)}</pre> */}
         <ErrorMessage state={state} />
       </div>

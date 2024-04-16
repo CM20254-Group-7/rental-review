@@ -227,12 +227,12 @@ const LandlordDashboard: NextPage = async () => {
 
   return (
     <div className='flex flex-col'>
-      <div className='flex flex-col gap-1 items-center'>
+      <div className='flex flex-col items-center gap-1'>
         <Link className='contents' href={`/profiles/${user.id}`}>
           <Button>View Your Public Profile</Button>
         </Link>
         <Divider />
-        <h3 className='font-bold text-2xl text-accent'>Your Rating</h3>
+        <h3 className='text-accent text-2xl font-bold'>Your Rating</h3>
         <Suspense fallback={<p>Loading...</p>}>
           <AverageRatingStars landlordId={user.id} />
           <AverageRatingGraph landlordId={user.id} />

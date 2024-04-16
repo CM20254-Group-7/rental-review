@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { ownershipHistories } from './helpers';
+import { checkStarRatingMatchesExpected, ownershipHistories } from './helpers';
 
 const fuzzyMatchDate = (date: Date) => {
   const day = date.getDate().toString();
@@ -21,8 +21,8 @@ const fuzzyMatchDate = (date: Date) => {
   return fuzzyDateFormat;
 };
 
-const firstPropertyHistory = ownershipHistories[0]; // 1 Test Road
-const secondPropertyHistory = ownershipHistories[1]; // 2 Test Road
+const firstPropertyHistory = ownershipHistories[0]!; // 1 Test Road
+const secondPropertyHistory = ownershipHistories[1]!; // 2 Test Road
 
 test.describe(`${firstPropertyHistory.propertyAddress} ownership history tests`, () => {
   test('Contains correct start and end dates', async ({ page }) => {
@@ -30,10 +30,10 @@ test.describe(`${firstPropertyHistory.propertyAddress} ownership history tests`,
       `http://localhost:3000/properties/${firstPropertyHistory.propertyId}/ownership-history`,
     );
     await expect(page.getByRole('main')).toContainText(
-      fuzzyMatchDate(new Date(firstPropertyHistory.startDate[0])),
+      fuzzyMatchDate(new Date(firstPropertyHistory.startDate[0]!)),
     );
     await expect(page.getByRole('main')).toContainText(
-      fuzzyMatchDate(new Date(firstPropertyHistory.endDate[0])),
+      fuzzyMatchDate(new Date(firstPropertyHistory.endDate[0]!)),
     );
   });
 
@@ -51,44 +51,12 @@ test.describe(`${firstPropertyHistory.propertyAddress} ownership history tests`,
       `http://localhost:3000/properties/${firstPropertyHistory.propertyId}/ownership-history`,
     );
     // Select the specific section containing the stars
-    const section = await page.$(
-      'body > main > div > div > div > a > div.flex.flex-col.items-center.justify-center > div:nth-child(2)',
+    const section = await page.getByRole('main');
+
+    await checkStarRatingMatchesExpected(
+      section,
+      firstPropertyHistory.landlordRating[0]!,
     );
-    if (!section) {
-      throw new Error('Section not found');
-    }
-
-    // Get all the svg of the stars
-    const stars = await section.$$('svg[data-slot="icon"]');
-    if (!stars) {
-      throw new Error('Stars not found');
-    }
-
-    // Collect promises for all star classes
-    const starClassPromises = stars.map(async (star) => {
-      const starClass = await star.getAttribute('class');
-      if (!starClass) {
-        throw new Error('Star class not found');
-      }
-      return starClass;
-    });
-
-    // Wait for all promises to resolve
-    const starClasses = await Promise.all(starClassPromises);
-    // Count the number of yellow and grey stars
-    let yellowStars = 0;
-    let greyStars = 0;
-    for (const starClass of starClasses) {
-      if (starClass.includes('text-yellow-300')) {
-        yellowStars += 1;
-      } else if (starClass.includes('text-gray-400')) {
-        greyStars += 1;
-      }
-    }
-
-    // Check if the number of stars is correct
-    await expect(yellowStars).toBe(firstPropertyHistory.landlordRating[0]);
-    await expect(greyStars).toBe(5 - yellowStars);
   });
 });
 
@@ -99,10 +67,10 @@ test.describe(`${secondPropertyHistory.propertyAddress} ownership history tests`
         `http://localhost:3000/properties/${secondPropertyHistory.propertyId}/ownership-history`,
       );
       await expect(page.getByRole('main')).toContainText(
-        fuzzyMatchDate(new Date(secondPropertyHistory.startDate[0])),
+        fuzzyMatchDate(new Date(secondPropertyHistory.startDate[0]!)),
       );
       await expect(page.getByRole('main')).toContainText(
-        secondPropertyHistory.endDate[0],
+        secondPropertyHistory.endDate[0]!,
       );
     });
 
@@ -120,44 +88,14 @@ test.describe(`${secondPropertyHistory.propertyAddress} ownership history tests`
         `http://localhost:3000/properties/${secondPropertyHistory.propertyId}/ownership-history`,
       );
       // Select the specific section containing the stars
-      const section = await page.$(
-        'body > main > div > div > div > a > div.flex.flex-col.items-center.justify-center > div:nth-child(2)',
-      );
-      if (!section) {
-        throw new Error('Section not found');
-      }
-
-      // Get all the svg of the stars
-      const stars = await section.$$('svg[data-slot="icon"]');
-      if (!stars) {
-        throw new Error('Stars not found');
-      }
-
-      // Collect promises for all star classes
-      const starClassPromises = stars.map(async (star) => {
-        const starClass = await star.getAttribute('class');
-        if (!starClass) {
-          throw new Error('Star class not found');
-        }
-        return starClass;
+      const section = await page.getByRole('link', {
+        name: `${secondPropertyHistory.landlord?.[0]}`,
       });
 
-      // Wait for all promises to resolve
-      const starClasses = await Promise.all(starClassPromises);
-      // Count the number of yellow and grey stars
-      let yellowStars = 0;
-      let greyStars = 0;
-      for (const starClass of starClasses) {
-        if (starClass.includes('text-yellow-300')) {
-          yellowStars += 1;
-        } else if (starClass.includes('text-gray-400')) {
-          greyStars += 1;
-        }
-      }
-
-      // Check if the number of stars is correct
-      await expect(yellowStars).toBe(secondPropertyHistory.landlordRating[0]);
-      await expect(greyStars).toBe(5 - yellowStars);
+      await checkStarRatingMatchesExpected(
+        section,
+        secondPropertyHistory.landlordRating[0]!,
+      );
     });
   });
 
@@ -167,10 +105,10 @@ test.describe(`${secondPropertyHistory.propertyAddress} ownership history tests`
         `http://localhost:3000/properties/${secondPropertyHistory.propertyId}/ownership-history`,
       );
       await expect(page.getByRole('main')).toContainText(
-        fuzzyMatchDate(new Date(secondPropertyHistory.startDate[1])),
+        fuzzyMatchDate(new Date(secondPropertyHistory.startDate[1]!)),
       );
       await expect(page.getByRole('main')).toContainText(
-        fuzzyMatchDate(new Date(secondPropertyHistory.endDate[1])),
+        fuzzyMatchDate(new Date(secondPropertyHistory.endDate[1]!)),
       );
     });
 
@@ -187,45 +125,16 @@ test.describe(`${secondPropertyHistory.propertyAddress} ownership history tests`
       await page.goto(
         `http://localhost:3000/properties/${secondPropertyHistory.propertyId}/ownership-history`,
       );
+
       // Select the specific section containing the stars
-      const section = await page.$(
-        'body > main > div > div > div > a:nth-child(4) > div.flex.flex-col.items-center.justify-center > div:nth-child(2)',
-      );
-      if (!section) {
-        throw new Error('Section not found');
-      }
-
-      // Get all the svg of the stars
-      const stars = await section.$$('svg[data-slot="icon"]');
-      if (!stars) {
-        throw new Error('Stars not found');
-      }
-
-      // Collect promises for all star classes
-      const starClassPromises = stars.map(async (star) => {
-        const starClass = await star.getAttribute('class');
-        if (!starClass) {
-          throw new Error('Star class not found');
-        }
-        return starClass;
+      const section = await page.getByRole('link', {
+        name: `${secondPropertyHistory.landlord?.[1]}`,
       });
 
-      // Wait for all promises to resolve
-      const starClasses = await Promise.all(starClassPromises);
-      // Count the number of yellow and grey stars
-      let yellowStars = 0;
-      let greyStars = 0;
-      for (const starClass of starClasses) {
-        if (starClass.includes('text-yellow-300')) {
-          yellowStars += 1;
-        } else if (starClass.includes('text-gray-400')) {
-          greyStars += 1;
-        }
-      }
-
-      // Check if the number of stars is correct
-      await expect(yellowStars).toBe(secondPropertyHistory.landlordRating[1]);
-      await expect(greyStars).toBe(5 - yellowStars);
+      await checkStarRatingMatchesExpected(
+        section,
+        secondPropertyHistory.landlordRating[1]!,
+      );
     });
   });
 

@@ -19,9 +19,9 @@ const LandlordLayout: React.FC<{
   ];
 
   return (
-    <div className='flex w-screen max-w-prose flex-col gap-2 bg-accent/20 rounded-md'>
-      <div className='flex flex-row justify-between items-center p-4 gap-4 bg-foreground/20'>
-        <h1 className='text-xl font-semibold text-accent'>
+    <div className='bg-accent/20 flex w-screen max-w-prose flex-col gap-2 rounded-md'>
+      <div className='bg-foreground/20 flex flex-row items-center justify-between gap-4 p-4'>
+        <h1 className='text-accent text-xl font-semibold'>
           Landlord Dashboard
         </h1>
         <div className='flex flex-row gap-4'>

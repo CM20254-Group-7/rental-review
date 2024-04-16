@@ -78,21 +78,21 @@ const OwnershipHistoryPage: NextPage<{ params: { id: string } }> = async ({
   const ownershipHistory = await getAllOwners(propertyId);
 
   return (
-    <div className='flex-1 w-screen flex flex-row justify-center items-center py-20'>
-      <div className='flex flex-col w-full max-w-prose gap-8 items-center'>
-        <h2 className='text-2xl font-semibold mb-1 w-fit text-accent'>
+    <main className='flex w-full flex-1 flex-col place-items-center py-10 md:py-16'>
+      <div className='flex w-full max-w-prose flex-col items-center gap-8'>
+        <h2 className='text-accent mb-1 w-fit text-2xl font-semibold'>
           Ownership History
         </h2>
-        <span className='border border-b w-full border-accent' />
+        <span className='border-accent w-full border border-b' />
         {ownershipHistory.map((ownership) => (
           <Link
-            className='flex flex-col w-fit min-w-[25rem] items-center rounded-xl bg-secondary/10 hover:bg-secondary/20 p-6 pb-8 gap-4 border shadow-md shadow-secondary/40 hover:shadow-lg hover:shadow-secondary/40'
+            className='bg-secondary/10 hover:bg-secondary/20 shadow-secondary/40 hover:shadow-secondary/40 flex w-fit min-w-[25rem] flex-col items-center gap-4 rounded-xl border p-6 pb-8 shadow-md hover:shadow-lg'
             href={`/profiles/${ownership.landlord.user_id}`}
             key={ownership.start_date.toISOString()}
           >
             {/* Timeline */}
-            <div className='flex flex-col w-fit'>
-              <h2 className='text-2xl font-semibold mb-1 w-fit'>
+            <div className='flex w-fit flex-col'>
+              <h2 className='mb-1 w-fit text-2xl font-semibold'>
                 {ownership.start_date.toLocaleDateString()} to{' '}
                 {ownership.end_date
                   ? ` ${ownership.end_date.toLocaleDateString()}`
@@ -107,7 +107,7 @@ const OwnershipHistoryPage: NextPage<{ params: { id: string } }> = async ({
               <div className='text-center'>
                 {' '}
                 {/* Container for landlord's name */}
-                <h2 className='text-2xl font-semibold mb-1 w-fit text-accent'>
+                <h2 className='text-accent mb-1 w-fit text-2xl font-semibold'>
                   {ownership.landlord.display_name}
                 </h2>
               </div>
@@ -122,20 +122,20 @@ const OwnershipHistoryPage: NextPage<{ params: { id: string } }> = async ({
 
         <div className='flex justify-center'>
           <Link
-            className='underline hover:font-semibold transition-all mr-4'
+            className='mr-4 underline transition-all hover:font-semibold'
             href={`/properties/${propertyId}/claim`}
           >
             Claim This Property
           </Link>
           <Link
-            className='underline hover:font-semibold transition-all'
+            className='underline transition-all hover:font-semibold'
             href={`/properties/${propertyId}`}
           >
             Back to Property
           </Link>
         </div>
       </div>
-    </div>
+    </main>
   );
 };
 

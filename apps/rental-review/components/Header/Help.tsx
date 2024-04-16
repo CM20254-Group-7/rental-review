@@ -36,7 +36,7 @@ const Help: React.FC = () => {
     <div className='relative'>
       <button
         type='button'
-        className={`ml-5 py-2 px-3 text-sm flex flex-row bg-background hover:bg-secondary/10 border hover:shadow-sm hover:shadow-primary/20 transition-all text-accent items-center gap-2 ${isComponentVisible ? 'rounded-t-md' : 'rounded-md'}`}
+        className={`bg-background hover:bg-secondary/10 hover:shadow-primary/20 text-accent ml-5 flex flex-row items-center gap-2 border px-3 py-2 text-sm transition-all hover:shadow-sm ${isComponentVisible ? 'rounded-t-md' : 'rounded-md'}`}
         onClick={() => setIsComponentVisible(true)}
       >
         Help
@@ -45,7 +45,7 @@ const Help: React.FC = () => {
       {isComponentVisible && (
         <div
           ref={ref}
-          className='z-10 absolute right-0 top-[100%] w-[20vw] text-sm flex flex-col bg-background border border-primary hover:shadow-sm hover:shadow-primary/20 transition-all text-foreground rounded-md'
+          className='bg-background border-primary hover:shadow-primary/20 text-foreground absolute right-0 top-[100%] z-10 flex w-[20vw] flex-col rounded-md border text-sm transition-all hover:shadow-sm'
         >
           <div className='p-4 text-center'>
             <p className='mb-2'>

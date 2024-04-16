@@ -150,7 +150,7 @@ const ToolbarSettings: React.FC = async () => {
 
 const FeaturesPage: NextPage = () => (
   <AdminConsolePageLayout title='Features'>
-    <div className='flex flex-col gap-2 items-center'>
+    <div className='flex flex-col items-center gap-2'>
       <FlagTable />
       <ToolbarSettings />
     </div>

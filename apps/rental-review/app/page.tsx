@@ -6,13 +6,13 @@ const Card: React.FC<{ title: string; children: React.ReactNode }> = ({
   children,
 }) => (
   <div
-    className='flex flex-col items-center rounded-xl bg-primary/40 p-6 pb-8 gap-4 border shadow-2xl shadow-primary/40 dark:shadow-primary/20'
+    className='bg-primary/40 shadow-primary/40 dark:shadow-primary/20 flex flex-col items-center gap-4 rounded-xl border p-6 pb-8 shadow-2xl'
     title='General information.'
   >
     {/* Card Header */}
-    <div className='flex flex-col items-center w-full'>
-      <h2 className='text-2xl font-semibold mb-1 w-fit text-accent'>{title}</h2>
-      <span className='border border-b w-full border-accent' />
+    <div className='flex w-full flex-col items-center'>
+      <h2 className='text-accent mb-1 w-fit text-2xl font-semibold'>{title}</h2>
+      <span className='border-accent w-full border border-b' />
     </div>
 
     {/* Card Body */}
@@ -21,19 +21,19 @@ const Card: React.FC<{ title: string; children: React.ReactNode }> = ({
 );
 
 const HomePage: NextPage = () => (
-  <div className='flex-grow flex-1 w-full flex flex-col gap-20 items-center py-10'>
+  <main className='flex flex-col gap-20 py-10 md:py-16'>
     {/* Header */}
-    <div className='flex flex-col gap-1 items-center'>
-      <h1 className='font-semibold text-6xl mb-4 mt-3 text-primary'>
+    <div className='flex flex-col items-center gap-1'>
+      <h1 className='text-primary mb-4 mt-3 text-6xl font-semibold'>
         Rental Review
       </h1>
-      <h2 className='font-bold text-2xl mb-4'>
+      <h2 className='mb-4 text-2xl font-bold'>
         Helping to fix the UK&apos;s rental sector one review at a time
       </h2>
     </div>
 
     {/* Descriptions */}
-    <div className='flex flex-col w-full max-w-prose justify-center text-justify gap-16'>
+    <div className='flex w-full max-w-prose flex-col justify-center gap-16 text-justify'>
       <Card title='General Info'>
         <p className='ml-5 mr-5'>
           This web app is designed to help tenants view properties and get
@@ -62,24 +62,24 @@ const HomePage: NextPage = () => (
       </Card>
 
       <Card title='Getting Started'>
-        <h2 className='font-semibold mb-1 w-fit text-accent'>
+        <h2 className='text-accent mb-1 w-fit font-semibold'>
           Searching for Properties
         </h2>
-        <p className='ml-5 mr-5 mb-5'>
+        <p className='mb-5 ml-5 mr-5'>
           To search for properties, you can click on the properties button at
           the top of the page. You can then search for a property by entering
           the address or postcode and clicking the search button.
         </p>
-        <h2 className='font-semibold mb-1 w-fit text-accent'>
+        <h2 className='text-accent mb-1 w-fit font-semibold'>
           Leaving Reviews
         </h2>
-        <p className='ml-5 mr-5 mb-5'>
+        <p className='mb-5 ml-5 mr-5'>
           To leave a review, you will need to sign up and log in to the website.
           Once you have done this, you can leave a review by clicking on the
           property you want to leave a review for and click the &quot;Leave
           Review&quot; button.
         </p>
-        <h2 className='font-semibold mb-1 w-fit text-accent'>
+        <h2 className='text-accent mb-1 w-fit font-semibold'>
           Landlords tasks
         </h2>
         <p className='ml-5 mr-5'>
@@ -89,7 +89,7 @@ const HomePage: NextPage = () => (
         </p>
       </Card>
     </div>
-  </div>
+  </main>
 );
 
 export default HomePage;

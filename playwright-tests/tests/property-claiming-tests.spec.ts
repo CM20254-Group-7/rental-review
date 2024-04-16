@@ -1,10 +1,10 @@
 import { test, expect } from '@playwright/test';
 import { users } from './helpers';
 
-const notALandlordUser = users[2]; // user not registered as a landlord - test that cannot access the claim page
-const noPropertyLandlordUser = users[1]; // user registered as a landlord, with no claimed properties
-const propertyClaimerUser = users[3]; // user registered as a landlord, will attempt to claim properties
-const existingOwnerUser = users[4]; // user registered as a landlord, will attempt to claim properties
+const notALandlordUser = users[2]!; // user not registered as a landlord - test that cannot access the claim page
+const noPropertyLandlordUser = users[1]!; // user registered as a landlord, with no claimed properties
+const propertyClaimerUser = users[3]!; // user registered as a landlord, will attempt to claim properties
+const existingOwnerUser = users[4]!; // user registered as a landlord, will attempt to claim properties
 
 //       -- NOTE --
 //
@@ -23,7 +23,7 @@ const properties: {
 // Define a new date class that can be transformed to a string in the format 'YYYY-MM-DD'
 class TransformableDate extends Date {
   toISODateString() {
-    return this.toISOString().split('T')[0];
+    return this.toISOString().split('T')[0]!;
   }
 
   yearsBefore(years: number) {
@@ -90,7 +90,7 @@ class TransformableDate extends Date {
     return new TransformableDate(
       this.getFullYear(),
       this.getMonth(),
-      this.getDate() + days,
+      this.getDate() + days + 1,
     );
   }
 
@@ -149,7 +149,7 @@ test.beforeEach(
 test.afterEach(
   'Delete Unique Property for test',
   async ({ page }, testInfo) => {
-    const property = properties[testInfo.workerIndex];
+    const property = properties[testInfo.workerIndex]!;
 
     const res = await page.request.delete(
       `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/properties?id=eq.${property.id}`,
@@ -172,7 +172,7 @@ test.describe('1. Page Access', () => {
     test('1.1.1. Anon user cannot access claim property page', async ({
       page,
     }, testInfo) => {
-      const property = properties[testInfo.workerIndex];
+      const property = properties[testInfo.workerIndex]!;
 
       await page.goto(`/properties/${property.id}/claim`);
 
@@ -183,7 +183,7 @@ test.describe('1. Page Access', () => {
     });
 
     test('1.1.2. Anon user referred to login', async ({ page }, testInfo) => {
-      const property = properties[testInfo.workerIndex];
+      const property = properties[testInfo.workerIndex]!;
 
       await page.goto(`/properties/${property.id}/claim`);
 
@@ -195,7 +195,7 @@ test.describe('1. Page Access', () => {
     test('1.1.3. Redirected back to claim property page after login', async ({
       page,
     }, testInfo) => {
-      const property = properties[testInfo.workerIndex];
+      const property = properties[testInfo.workerIndex]!;
 
       await page.goto(`/properties/${property.id}/claim`);
       await expect(page.url()).toContain(
@@ -225,7 +225,7 @@ test.describe('1. Page Access', () => {
     test('1.2.1. User cannot access claim property page', async ({
       page,
     }, testInfo) => {
-      const property = properties[testInfo.workerIndex];
+      const property = properties[testInfo.workerIndex]!;
 
       await page.goto(`/properties/${property.id}/claim`);
 
@@ -238,7 +238,7 @@ test.describe('1. Page Access', () => {
     test('1.2.2. User referred to landlord registration', async ({
       page,
     }, testInfo) => {
-      const property = properties[testInfo.workerIndex];
+      const property = properties[testInfo.workerIndex]!;
 
       await page.goto(`/properties/${property.id}/claim`);
 
@@ -254,7 +254,7 @@ test.describe('1. Page Access', () => {
     test('1.3.1. User can access claim property page', async ({
       page,
     }, testInfo) => {
-      const property = properties[testInfo.workerIndex];
+      const property = properties[testInfo.workerIndex]!;
 
       await page.goto(`/properties/${property.id}/claim`);
 
@@ -278,7 +278,7 @@ test.describe('2. Property Valididity', () => {
 
   test.describe('2.2. Valid Property ID', () => {
     test('2.2.1. Page is shown', async ({ page }, testInfo) => {
-      const property = properties[testInfo.workerIndex];
+      const property = properties[testInfo.workerIndex]!;
 
       await page.goto(`/properties/${property.id}/claim`);
 
@@ -289,7 +289,7 @@ test.describe('2. Property Valididity', () => {
       test('2.2.2.1. Property address matches 1', async ({
         page,
       }, testInfo) => {
-        const property = properties[testInfo.workerIndex];
+        const property = properties[testInfo.workerIndex]!;
 
         await page.goto(`/properties/${property.id}/claim`);
 
@@ -299,7 +299,7 @@ test.describe('2. Property Valididity', () => {
       test('2.2.2.2. Property address matches 2', async ({
         page,
       }, testInfo) => {
-        const property = properties[testInfo.workerIndex];
+        const property = properties[testInfo.workerIndex]!;
 
         await page.goto(`/properties/${property.id}/claim`);
 
@@ -315,7 +315,7 @@ test.describe('3. Claim Property Form', () => {
 
   // go to the claim page before each test
   test.beforeEach(async ({ page }, testInfo) => {
-    const property = properties[testInfo.workerIndex];
+    const property = properties[testInfo.workerIndex]!;
 
     await page.goto(`/properties/${property.id}/claim`);
   });
@@ -353,6 +353,7 @@ test.describe('3. Claim Property Form', () => {
 
   test.describe('3.2. Fields Indicate When Set', () => {
     const activeClass = /bg-accent\/20/;
+
     test.describe('3.2.1. Start Date', () => {
       test('3.2.1.1 Start Date is initially unset', async ({ page }) => {
         await expect(page.locator('input[name="started_at"]')).toHaveValue('');
@@ -414,7 +415,7 @@ test.describe('3. Claim Property Form', () => {
 
   test('3.3. Form Submission', async ({ page }, testInfo) => {
     // check that a new property record is added to the database when form is submitted with valid data
-    const property = properties[testInfo.workerIndex];
+    const property = properties[testInfo.workerIndex]!;
 
     await page
       .locator('input[name="started_at"]')
@@ -583,7 +584,10 @@ test.describe('3. Claim Property Form', () => {
         test(`3.5.A.${startDateIndex + 1}. ${startDateTest.name}`, async ({
           page,
         }, testInfo) => {
-          const property = properties[testInfo.workerIndex];
+          console.log(
+            startDateTests.map((thisTest) => thisTest.date.toISODateString()),
+          );
+          const property = properties[testInfo.workerIndex]!;
           // Use open claim to isolate issues
           await page
             .getByRole('button', { name: 'I still own this property' })
@@ -670,7 +674,7 @@ test.describe('3. Claim Property Form', () => {
         test(`3.5.A.${endDateIndex + 1}. ${endDateTest.name}`, async ({
           page,
         }, testInfo) => {
-          const property = properties[testInfo.workerIndex];
+          const property = properties[testInfo.workerIndex]!;
           // Use safe pass start date
           await page
             .locator('input[name="started_at"]')
@@ -759,7 +763,7 @@ test.describe('3. Claim Property Form', () => {
         test(`3.5.C.${endIndex + 1}. ${endDateTest.name}`, async ({
           page,
         }, testInfo) => {
-          const property = properties[testInfo.workerIndex];
+          const property = properties[testInfo.workerIndex]!;
           // Use safe pass start date
           await page
             .locator('input[name="started_at"]')
@@ -894,7 +898,7 @@ test.describe('3. Claim Property Form', () => {
             return test.skip();
           }
 
-          const property = properties[testInfo.workerIndex];
+          const property = properties[testInfo.workerIndex]!;
           // Use safe pass start date
           await page
             .locator('input[name="started_at"]')
@@ -960,7 +964,7 @@ test.describe('4. Claim Collision', () => {
 
   // go to the claim page before each test
   test.beforeEach(async ({ page }, testInfo) => {
-    const property = properties[testInfo.workerIndex];
+    const property = properties[testInfo.workerIndex]!;
 
     await page.goto(`/properties/${property.id}/claim`);
   });
@@ -972,7 +976,7 @@ test.describe('4. Claim Collision', () => {
 
     // Setup the potentially colliding claim before each test
     test.beforeEach(async ({ page }, testInfo) => {
-      const property = properties[testInfo.workerIndex];
+      const property = properties[testInfo.workerIndex]!;
 
       // Create the existing ownership record
       const res = await page.request.post(
@@ -1005,6 +1009,7 @@ test.describe('4. Claim Collision', () => {
     type NewClaimTest = {
       name: string;
       date: TransformableDate;
+
       testWithEnds: EndDateTest[];
     };
 
@@ -1406,7 +1411,7 @@ test.describe('4. Claim Collision', () => {
           test(`4.1.${startIestIndex + 1}.${endTestIndex + 1} ${claimEndIndex.name}`, async ({
             page,
           }, testInfo) => {
-            const property = properties[testInfo.workerIndex];
+            const property = properties[testInfo.workerIndex]!;
 
             // Fill in form & submit
             await page
@@ -1747,7 +1752,7 @@ test.describe('4. Claim Collision', () => {
     test.describe(`4.2${existingClaim.tag}. Single Open Claim (${existingClaim.label})`, () => {
       // Create the exising claim for each test
       test.beforeEach(async ({ page }, testInfo) => {
-        const property = properties[testInfo.workerIndex];
+        const property = properties[testInfo.workerIndex]!;
 
         // Create the existing ownership record
         const res = await page.request.post(
@@ -1782,7 +1787,7 @@ test.describe('4. Claim Collision', () => {
             test(`4.2${existingClaim.tag}.${startIndex + 1}.${endIndex + 1}. ${endDateTest.label}`, async ({
               page,
             }, testInfo) => {
-              const property = properties[testInfo.workerIndex];
+              const property = properties[testInfo.workerIndex]!;
 
               // Fill in form & submit
               await page
@@ -1900,7 +1905,7 @@ test.describe('4. Claim Collision', () => {
     const existingClaim2End = today.yearsBefore(1);
 
     test.beforeEach(async ({ page }, testInfo) => {
-      const property = properties[testInfo.workerIndex];
+      const property = properties[testInfo.workerIndex]!;
 
       // Create the first ownership record
       const res1 = await page.request.post(
@@ -2560,7 +2565,7 @@ test.describe('4. Claim Collision', () => {
           test(`4.3.${startIndex + 1}.${endIndex + 1}. ${endTestDate.name}`, async ({
             page,
           }, testInfo) => {
-            const property = properties[testInfo.workerIndex];
+            const property = properties[testInfo.workerIndex]!;
             const { newClaimEndDate } = endTestDate;
 
             // Fill in form & submit

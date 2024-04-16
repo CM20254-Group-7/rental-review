@@ -8,10 +8,13 @@
     "lint": "eslint . --ext .ts,.tsx"
   },
   "devDependencies": {
-    "@playwright/test": "^1.41.2",
-    "@types/node": "^20.11.16",
     "@next/eslint-plugin-next": "^14.1.1",
+    "@playwright/test": "^1.41.2",
     "@repo/eslint-config": "workspace:*",
-    "@repo/typescript-config": "workspace:*"
+    "@repo/typescript-config": "workspace:*",
+    "@types/node": "^20.11.16"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5"
   }
 }

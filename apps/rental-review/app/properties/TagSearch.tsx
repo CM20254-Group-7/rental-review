@@ -54,15 +54,15 @@ const TagSearch: React.FC<{
     <div className='flex flex-col gap-2'>
       <p>Search By Tags</p>
 
-      <div className='flex flex-col gap-2 border-y border-foreground/30'>
+      <div className='border-foreground/30 flex flex-col gap-2 border-y'>
         {selectedTags.length > 0 && (
-          <div className='flex flex-wrap justify-center px-2 py-4 gap-2'>
+          <div className='flex flex-wrap justify-center gap-2 px-2 py-4'>
             {selectedTags.map((tag) => (
               <button
                 key={tag}
                 type='button'
                 onClick={() => handleSearch(tag)}
-                className='border border-foreground/30 rounded-md px-4 py-2 text-foreground bg-secondary/10 dark:bg-accent/10 hover:bg-secondary/5 hover:dark:bg-accent/5 hover:shadow-md hover:shadow-accent/10'
+                className='border-foreground/30 text-foreground bg-secondary/10 dark:bg-accent/10 hover:bg-secondary/5 hover:dark:bg-accent/5 hover:shadow-accent/10 rounded-md border px-4 py-2 hover:shadow-md'
               >
                 {tag}
               </button>
@@ -70,13 +70,13 @@ const TagSearch: React.FC<{
           </div>
         )}
         {unselectedTags.length > 0 && (
-          <div className='flex flex-wrap justify-center px-2 py-4 gap-2'>
+          <div className='flex flex-wrap justify-center gap-2 px-2 py-4'>
             {unselectedTags.map((tag) => (
               <button
                 key={tag}
                 type='button'
                 onClick={() => handleSearch(tag)}
-                className='border border-foreground/30 rounded-md px-4 py-2 text-foreground hover:bg-secondary/10 dark:hover:bg-accent/10 hover:shadow-lg hover:shadow-accent/20'
+                className='border-foreground/30 text-foreground hover:bg-secondary/10 dark:hover:bg-accent/10 hover:shadow-accent/20 rounded-md border px-4 py-2 hover:shadow-lg'
               >
                 {tag}
               </button>

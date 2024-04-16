@@ -109,7 +109,7 @@ const ToolbarSettingsForm: React.FC<{
                 <FormItem className='flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm'>
                   <div className='space-y-0.5'>
                     <FormLabel>Show for everyone</FormLabel>
-                    <FormDescription className='whitespace-pre-wrap max-w-md'>
+                    <FormDescription className='max-w-md whitespace-pre-wrap'>
                       If enabled the toolbar will be visible to all visitors to
                       the site.
                       {'\n'}
@@ -117,7 +117,7 @@ const ToolbarSettingsForm: React.FC<{
                       below.
                       {'\n'}
                       {'\n'}
-                      <span className='font-semibold text-sm inline'>
+                      <span className='inline text-sm font-semibold'>
                         Note:
                       </span>
                       This option is not recommended unless you are testing
@@ -152,13 +152,13 @@ const ToolbarSettingsForm: React.FC<{
                       <Badge
                         key={email}
                         variant='outline'
-                        className='mr-2 mb-2 p-0 px-3 pr-1 gap-1'
+                        className='mb-2 mr-2 gap-1 p-0 px-3 pr-1'
                       >
                         {email}
                         <Button
                           variant='ghost'
                           size='sm'
-                          className='rounded-full p-0 aspect-square text-red-400 hover:bg-inherit hover:text-red-700'
+                          className='aspect-square rounded-full p-0 text-red-400 hover:bg-inherit hover:text-red-700'
                           type='button'
                           onClick={() => {
                             field.onChange(
@@ -178,7 +178,7 @@ const ToolbarSettingsForm: React.FC<{
                           <Button
                             variant='outline'
                             role='combobox'
-                            className='w-[200px] justify-between text-muted-foreground'
+                            className='text-muted-foreground w-[200px] justify-between'
                           >
                             Add user
                             <CaretSortIcon className='ml-2 h-4 w-4 shrink-0 opacity-50' />

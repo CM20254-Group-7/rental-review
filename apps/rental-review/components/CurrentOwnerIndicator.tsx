@@ -47,10 +47,10 @@ const CurrentOwnerIndicator: React.FC<{ propertyId: string }> = async ({
 
   return (
     <>
-      <div className='flex flex-width px-2 py-1 hover:bg-secondary/10'>
+      <div className='flex-width hover:bg-secondary/10 flex px-2 py-1'>
         {currentOwner ? (
           <Link
-            className='flex w-full min-w-[12rem] flex-row gap-2 justify-between items-baseline'
+            className='flex w-full min-w-[12rem] flex-row items-baseline justify-between gap-2'
             href={`/profiles/${currentOwner.user_id}`}
             style={{ flexGrow: 1 }}
           >
@@ -68,7 +68,7 @@ const CurrentOwnerIndicator: React.FC<{ propertyId: string }> = async ({
       </div>
 
       <div className='flex flex-col text-center'>
-        <div className='flex px-2 py-1 border-t w-full flex-1 justify-center'>
+        <div className='flex w-full flex-1 justify-center border-t px-2 py-1'>
           <Link
             className='text-sm hover:underline'
             href={`/properties/${propertyId}/ownership-history`}
