@@ -14,7 +14,7 @@ const links = [
   },
   {
     label: 'Contact Us',
-    href: '/contact',
+    href: 'mailto:help.rentalreview@gmail.com',
   },
 ];
 
