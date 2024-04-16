@@ -1,7 +1,14 @@
 import { Database } from '@repo/supabase';
-import { createClient as createSupabaseClient } from '@supabase/supabase-js';
+import {
+  SupabaseClient,
+  createClient as createSupabaseClient,
+} from '@supabase/supabase-js';
 
-const createClient = () =>
+const createClient = (): SupabaseClient<
+  Database,
+  'public',
+  Database['public']
+> =>
   createSupabaseClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
