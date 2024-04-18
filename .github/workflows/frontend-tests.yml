@@ -10,13 +10,20 @@ jobs:
     environment: preview
 
     env:
+      CI                            : true
+      TURBO_TOKEN                   : ${{ secrets.TURBO_TOKEN                }}
+      TURBO_TEAM                    : ${{ vars.TURBO_TEAM                    }}
       NEXT_PUBLIC_SUPABASE_URL      : ${{ vars.NEXT_PUBLIC_SUPABASE_URL      }}
       NEXT_PUBLIC_SUPABASE_ANON_KEY : ${{ vars.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
       SUPABASE_SERVICE_KEY          : ${{ secrets.SUPABASE_SERVICE_KEY       }}
-      NEXT_PUBLIC_PUBLIC_SITE_URL          : ${{ vars.NEXT_PUBLIC_PUBLIC_SITE_URL          }}
-      CI                            : true
-      TURBO_TOKEN                   : ${{ secrets.TURBO_TOKEN }}
-      TURBO_TEAM                    : ${{ vars.TURBO_TEAM }}
+      NEXT_PUBLIC_PUBLIC_SITE_URL   : ${{ vars.NEXT_PUBLIC_PUBLIC_SITE_URL   }}
+      EDGE_CONFIG                   : ${{ vars.EDGE_CONFIG                   }}
+      ADMIN_ENCRYPTION_KEY          : ${{ vars.ADMIN_ENCRYPTION_KEY          }}
+      ADMIN_PASSWORD_HASH           : ${{ vars.ADMIN_PASSWORD_HASH           }}
+      VERCEL_TEAM_ID                : ${{ vars.VERCEL_TEAM_ID                }}
+      VERCEL_API_KEY                : ${{ vars.VERCEL_API_KEY                }}
+      FLAGS_SECRET                  : ${{ vars.FLAGS_SECRET                  }}
+      VERCEL_ENV                    : ${{ vars.VERCEL_ENV                    }}
 
     steps:
     - name: Check out code
