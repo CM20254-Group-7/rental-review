@@ -3,38 +3,102 @@
   "globalDotEnv": [".env"],
   "globalPassThroughEnv": ["CI"],
   "pipeline": {
-    "build": {
+    "build": {},
+    "rental-review#build": {
       "dependsOn": ["^build"],
       "outputs": [".next/**", "!.next/cache/**"],
       "env": [
-        "VERCEL_URL",
+        "NEXT_PUBLIC_SUPABASE_URL",
+        "NEXT_PUBLIC_SUPABASE_ANON_KEY",
+        "NEXT_PUBLIC_PUBLIC_SITE_URL",
         "SUPABASE_SERVICE_KEY",
         "EDGE_CONFIG",
         "VERCEL_ENV",
         "FLAGS_SECRET"
       ]
     },
-    "lint": {
-      "dependsOn": ["^lint"]
+    "admin-console#build": {
+      "dependsOn": ["^build"],
+      "outputs": [".next/**", "!.next/cache/**"],
+      "env": [
+        "NEXT_PUBLIC_SUPABASE_URL",
+        "NEXT_PUBLIC_SUPABASE_ANON_KEY",
+        "NEXT_PUBLIC_PUBLIC_SITE_URL",
+        "SUPABASE_SERVICE_KEY",
+        "ADMIN_ENCRYPTION_KEY",
+        "ADMIN_PASSWORD_HASH",
+        "EDGE_CONFIG",
+        "VERCEL_TEAM_ID",
+        "VERCEL_API_KEY",
+        "FLAGS_SECRET"
+      ]
     },
-    "dev": {
+
+    "start": {},
+    "rental-review#start": {
+      "dependsOn": ["build", "^start"],
+      "cache": false,
+      "persistent": true,
+      "env": [
+        "NEXT_PUBLIC_SUPABASE_URL",
+        "NEXT_PUBLIC_SUPABASE_ANON_KEY",
+        "NEXT_PUBLIC_PUBLIC_SITE_URL",
+        "SUPABASE_SERVICE_KEY",
+        "EDGE_CONFIG",
+        "VERCEL_ENV",
+        "FLAGS_SECRET"
+      ]
+    },
+    "admin-console#start": {
+      "dependsOn": ["build", "^start"],
+      "cache": false,
+      "persistent": true,
+      "env": [
+        "NEXT_PUBLIC_SUPABASE_URL",
+        "NEXT_PUBLIC_SUPABASE_ANON_KEY",
+        "NEXT_PUBLIC_PUBLIC_SITE_URL",
+        "SUPABASE_SERVICE_KEY",
+        "ADMIN_ENCRYPTION_KEY",
+        "ADMIN_PASSWORD_HASH",
+        "EDGE_CONFIG",
+        "VERCEL_TEAM_ID",
+        "VERCEL_API_KEY",
+        "FLAGS_SECRET"
+      ]
+    },
+
+    "rental-review#dev": {
       "cache": false,
       "persistent": true,
       "dotEnv": [".env"],
       "env": [
         "NEXT_PUBLIC_SUPABASE_URL",
         "NEXT_PUBLIC_SUPABASE_ANON_KEY",
+        "NEXT_PUBLIC_PUBLIC_SITE_URL",
         "SUPABASE_SERVICE_KEY",
         "EDGE_CONFIG",
         "VERCEL_ENV",
-        "FLAGS_SECRET",
-        "ADMIN_PASSWORD_HASH",
-        "ADMIN_ENCRYPTION_KEY",
-        "VERCEL_API_KEY",
-        "VERCEL_TEAM_ID",
-        "EDGE_CONFIG_ID"
+        "FLAGS_SECRET"
       ]
     },
+    "admin-console#dev": {
+      "cache": false,
+      "persistent": true,
+      "dotEnv": [".env"],
+      "env": [
+        "NEXT_PUBLIC_SUPABASE_URL",
+        "NEXT_PUBLIC_SUPABASE_ANON_KEY",
+        "NEXT_PUBLIC_PUBLIC_SITE_URL",
+        "SUPABASE_SERVICE_KEY",
+        "ADMIN_ENCRYPTION_KEY",
+        "ADMIN_PASSWORD_HASH",
+        "EDGE_CONFIG",
+        "VERCEL_TEAM_ID",
+        "VERCEL_API_KEY",
+        "FLAGS_SECRET"
+      ]
+    },
+
     "@repo/supabase#start": {
       "dependsOn": ["^start"],
       "cache": false
@@ -50,14 +114,17 @@
       "dependsOn": ["@repo/supabase#start"],
       "cache": false
     },
+
     "test": {
       "dependsOn": ["^test"],
       "cache": false,
       "env": [
         "NEXT_PUBLIC_SUPABASE_URL",
         "NEXT_PUBLIC_SUPABASE_ANON_KEY",
-        "SUPABASE_SERVICE_KEY",
-        "NEXT_PUBLIC_PUBLIC_SITE_URL"
+        "NEXT_PUBLIC_PUBLIC_SITE_URL",
+        "EDGE_CONFIG",
+        "FLAGS_SECRET",
+        "SUPABASE_SERVICE_KEY"
       ]
     },
     "test:ui": {
@@ -66,22 +133,15 @@
       "env": [
         "NEXT_PUBLIC_SUPABASE_URL",
         "NEXT_PUBLIC_SUPABASE_ANON_KEY",
-        "SUPABASE_SERVICE_KEY",
-        "NEXT_PUBLIC_PUBLIC_SITE_URL"
+        "NEXT_PUBLIC_PUBLIC_SITE_URL",
+        "EDGE_CONFIG",
+        "FLAGS_SECRET",
+        "SUPABASE_SERVICE_KEY"
       ]
     },
-    "rental-review#start": {
-      "dependsOn": ["rental-review#build"],
-      "env": [
-        "NEXT_PUBLIC_SUPABASE_URL",
-        "NEXT_PUBLIC_SUPABASE_ANON_KEY",
-        "SUPABASE_SERVICE_KEY",
-        "EDGE_CONFIG",
-        "VERCEL_ENV",
-        "FLAGS_SECRET"
-      ],
-      "cache": false,
-      "persistent": true
+
+    "lint": {
+      "dependsOn": ["^lint"]
     },
     "lint:sarif": {},
     "rental-review#lint:sarif": {
@@ -89,27 +149,6 @@
     },
     "admin-console#lint:sarif": {
       "outputs": ["../../eslint-results/admin-console.sarif"]
-    },
-    "admin-console#start": {
-      "dependsOn": ["admin-console#build"],
-      "env": [
-        "NEXT_PUBLIC_SUPABASE_URL",
-        "NEXT_PUBLIC_SUPABASE_ANON_KEY",
-        "SUPABASE_SERVICE_KEY",
-        "EDGE_CONFIG",
-        "VERCEL_ENV",
-        "FLAGS_SECRET",
-        "ADMIN_PASSWORD_HASH",
-        "ADMIN_ENCRYPTION_KEY",
-        "VERCEL_API_KEY",
-        "VERCEL_TEAM_ID",
-        "EDGE_CONFIG_ID"
-      ],
-      "cache": false,
-      "persistent": true
-    },
-    "lint:fix": {
-      "dependsOn": ["^lint:fix"]
     }
   }
 }

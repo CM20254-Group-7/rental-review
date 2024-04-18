@@ -1,19 +1,19 @@
-import { createEnv } from "@t3-oss/env-nextjs";
-import { defaultIfDev } from "./helpers";
-import { z } from "zod";
+import { createEnv } from '@t3-oss/env-nextjs';
+import { defaultIfDev } from './helpers';
+import { z } from 'zod';
 
 // Environment variables required to access the Supabase client
 const supabaseClientEnv = createEnv({
   server: {
     SUPABASE_SERVICE_KEY: defaultIfDev(
       z.string().min(1),
-      'http://127.0.0.1:54321',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24iLCJleHAiOjE5ODM4MTI5OTZ9.CRXP1A7WOeoJeXxjNni43kdQwgnWNReilDMblYTn_I0',
     ),
   },
   client: {
     NEXT_PUBLIC_SUPABASE_URL: defaultIfDev(
       z.string().url(),
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24iLCJleHAiOjE5ODM4MTI5OTZ9.CRXP1A7WOeoJeXxjNni43kdQwgnWNReilDMblYTn_I0',
+      'http://127.0.0.1:54321',
     ),
     NEXT_PUBLIC_SUPABASE_ANON_KEY: defaultIfDev(
       z.string().min(1),

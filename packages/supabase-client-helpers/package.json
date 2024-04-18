@@ -8,6 +8,7 @@
     "dependencies": {
         "@supabase/ssr": "latest",
         "@supabase/supabase-js": "latest",
+        "@repo/environment-variables": "workspace:*",
         "@repo/supabase": "workspace:*",
         "next": "^14.2.1"
     },

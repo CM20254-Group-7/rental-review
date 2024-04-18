@@ -9,12 +9,7 @@ import { SpeedInsights } from '@vercel/speed-insights/next';
 import Toolbar from '@/components/vercel-toolbar';
 import Providers from '@/components/Providers';
 
-const defaultUrl = process.env.VERCEL_URL
-  ? `https://${process.env.VERCEL_URL}`
-  : 'http://localhost:3000';
-
 export const metadata = {
-  metadataBase: new URL(defaultUrl),
   title: 'Rental Review',
   description:
     'A place for tenants and landlords to work towards better living.',

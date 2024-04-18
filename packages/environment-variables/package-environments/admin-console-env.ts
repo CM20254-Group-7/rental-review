@@ -1,9 +1,9 @@
-import { createEnv } from "@t3-oss/env-nextjs";
-import { vercel } from "@t3-oss/env-nextjs/presets";
-import { z } from "zod";
-import { edgeConfigWriteEnv } from "@/src/edge-config-write";
-import envType from "@/src/env-type";
-import { defaultIfDev } from "@/src/helpers";
+import { createEnv } from '@t3-oss/env-nextjs';
+import { vercel } from '@t3-oss/env-nextjs/presets';
+import { z } from 'zod';
+import { edgeConfigWriteEnv } from '../src/edge-config-write';
+import envType from '../src/env-type';
+import { defaultIfDev } from '../src/helpers';
 
 // Variables used in /apps/admin-console
 // This app needs to write to the edge config

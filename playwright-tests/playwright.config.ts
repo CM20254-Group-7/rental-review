@@ -1,6 +1,7 @@
 import { defineConfig, devices } from '@playwright/test';
 import path from 'path';
 import dotenv from 'dotenv';
+import env from '@repo/environment-variables/playwright-tests';
 
 // use the parent folder's dotenv (remove the last folder from the path)
 dotenv.config({
@@ -15,17 +16,17 @@ export default defineConfig({
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
-  forbidOnly: !!process.env.CI,
+  forbidOnly: env.CI,
   /* Retry on CI only */
-  retries: process.env.CI ? 2 : 0,
+  retries: env.CI ? 2 : 0,
   /* Opt out of parallel tests on CI. */
-  workers: process.env.CI ? 1 : undefined,
+  workers: env.CI ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: 'html',
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
-    baseURL: process.env.NEXT_PUBLIC_PUBLIC_SITE_URL || 'http://127.0.0.1:3000',
+    baseURL: env.NEXT_PUBLIC_PUBLIC_SITE_URL,
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
@@ -81,9 +82,9 @@ export default defineConfig({
   /* Run your local dev server before starting the tests */
   webServer: {
     command: 'pnpm run -w start:rental-review',
-    url: process.env.NEXT_PUBLIC_PUBLIC_SITE_URL || 'http://localhost:3000',
+    url: env.NEXT_PUBLIC_PUBLIC_SITE_URL,
     timeout: 120 * 1000,
-    reuseExistingServer: !process.env.CI,
+    reuseExistingServer: !env.CI,
     // stdout: "pipe"
   },
 });

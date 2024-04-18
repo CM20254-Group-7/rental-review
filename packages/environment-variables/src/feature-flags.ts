@@ -1,8 +1,8 @@
 // variables required to read from the feature flags
 
-import { createEnv } from "@t3-oss/env-nextjs";
-import edgeConfigReadEnv from "./edge-config-read";
-import { z } from "zod";
+import { createEnv } from '@t3-oss/env-nextjs';
+import edgeConfigReadEnv from './edge-config-read';
+import { z } from 'zod';
 
 // extends the edge config read environment with the secret used to encrypt flag values in cookies
 export const featureFlagsEnv = createEnv({

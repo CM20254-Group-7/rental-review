@@ -1,7 +1,8 @@
 import { test, expect, TestInfo as TestInfoType } from '@playwright/test';
+import env from '@repo/environment-variables/playwright-tests';
 import { users } from './helpers';
 
-const apiBaseURL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const apiBaseURL = env.NEXT_PUBLIC_SUPABASE_URL!;
 
 // Make sure you update/add at least the worker index & id if you change them in the test to ensure users are cleaned up
 const testUsers: {
@@ -27,11 +28,11 @@ test.beforeEach(async ({ browser }, TestInfo: TestInfoType) => {
   // Create a new user using a fresh context
   const context = await browser.newContext();
   const res = await context.request.post(
-    `${process.env.NEXT_PUBLIC_SUPABASE_URL}/auth/v1/signup`,
+    `${env.NEXT_PUBLIC_SUPABASE_URL}/auth/v1/signup`,
     {
       headers: {
-        apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-        Authorization: `Bearer ${process.env.SUPABASE_SERVICE_KEY!}`,
+        apikey: env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+        Authorization: `Bearer ${env.SUPABASE_SERVICE_KEY!}`,
         'Content-Type': 'application/json',
         Prefer: 'return=representation',
       },
@@ -66,11 +67,11 @@ test.afterEach(async ({ browser }, TestInfo) => {
 
   const context = await browser.newContext();
   const res = await context.request.delete(
-    `${process.env.NEXT_PUBLIC_SUPABASE_URL}/auth/v1/admin/users/${testUser.id}`,
+    `${env.NEXT_PUBLIC_SUPABASE_URL}/auth/v1/admin/users/${testUser.id}`,
     {
       headers: {
-        apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-        Authorization: `Bearer ${process.env.SUPABASE_SERVICE_KEY!}`,
+        apikey: env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+        Authorization: `Bearer ${env.SUPABASE_SERVICE_KEY!}`,
       },
     },
   );
@@ -230,8 +231,8 @@ test.describe('User Profile Tests', () => {
         `${apiBaseURL}/rest/v1/user_profiles?email=eq.${firstUser.email}&select=email`,
         {
           headers: {
-            apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-            Authorization: `Bearer ${process.env.SUPABASE_SERVICE_KEY!}`,
+            apikey: env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+            Authorization: `Bearer ${env.SUPABASE_SERVICE_KEY!}`,
           },
         },
       );
@@ -246,8 +247,8 @@ test.describe('User Profile Tests', () => {
         `${apiBaseURL}/rest/v1/user_profiles?email=eq.${secondUser.email}&select=email`,
         {
           headers: {
-            apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-            Authorization: `Bearer ${process.env.SUPABASE_SERVICE_KEY!}`,
+            apikey: env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+            Authorization: `Bearer ${env.SUPABASE_SERVICE_KEY!}`,
           },
         },
       );
@@ -274,8 +275,8 @@ test.describe('User Profile Tests', () => {
           `${apiBaseURL}/rest/v1/user_profiles?email=eq.${firstUser.email}&select=*`,
           {
             headers: {
-              apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-              Authorization: `Bearer ${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!}`,
+              apikey: env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+              Authorization: `Bearer ${env.NEXT_PUBLIC_SUPABASE_ANON_KEY!}`,
             },
           },
         );
@@ -292,8 +293,8 @@ test.describe('User Profile Tests', () => {
           `${apiBaseURL}/rest/v1/user_profiles?email=eq.${secondUser.email}&select=email`,
           {
             headers: {
-              apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-              Authorization: `Bearer ${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!}`,
+              apikey: env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+              Authorization: `Bearer ${env.NEXT_PUBLIC_SUPABASE_ANON_KEY!}`,
             },
           },
         );
@@ -328,7 +329,7 @@ test.describe('User Profile Tests', () => {
               password: firstUser.password,
             },
             headers: {
-              apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+              apikey: env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
               'Content-Type': 'application/json',
             },
           },
@@ -340,7 +341,7 @@ test.describe('User Profile Tests', () => {
           `${apiBaseURL}/rest/v1/user_profiles?email=eq.${firstUser.email}&select=email`,
           {
             headers: {
-              apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+              apikey: env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
               Authorization: `Bearer ${accessToken}`,
             },
           },
@@ -365,7 +366,7 @@ test.describe('User Profile Tests', () => {
               password: firstUser.password,
             },
             headers: {
-              apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+              apikey: env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
               'Content-Type': 'application/json',
             },
           },
@@ -377,7 +378,7 @@ test.describe('User Profile Tests', () => {
           `${apiBaseURL}/rest/v1/user_profiles?email=eq.${secondUser.email}&select=email`,
           {
             headers: {
-              apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+              apikey: env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
               Authorization: `Bearer ${accessToken}`,
             },
           },
@@ -413,7 +414,7 @@ test.describe('User Profile Tests', () => {
               password: secondUser.password,
             },
             headers: {
-              apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+              apikey: env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
               'Content-Type': 'application/json',
             },
           },
@@ -425,7 +426,7 @@ test.describe('User Profile Tests', () => {
           `${apiBaseURL}/rest/v1/user_profiles?email=eq.${firstUser.email}&select=email`,
           {
             headers: {
-              apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+              apikey: env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
               Authorization: `Bearer ${accessToken}`,
             },
           },
@@ -448,7 +449,7 @@ test.describe('User Profile Tests', () => {
               password: secondUser.password,
             },
             headers: {
-              apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+              apikey: env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
               'Content-Type': 'application/json',
             },
           },
@@ -460,7 +461,7 @@ test.describe('User Profile Tests', () => {
           `${apiBaseURL}/rest/v1/user_profiles?email=eq.${secondUser.email}&select=email`,
           {
             headers: {
-              apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+              apikey: env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
               Authorization: `Bearer ${accessToken}`,
             },
           },

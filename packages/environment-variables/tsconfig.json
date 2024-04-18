@@ -1,0 +1,12 @@
+{
+    "extends": "@repo/typescript-config/nextjs.json",
+    "compilerOptions": {
+      "moduleResolution": "Bundler",
+      "allowImportingTsExtensions": true
+    },
+    "include": [
+      "**/*.ts",
+      "**/*.tsx",
+    ],
+    "exclude": ["node_modules"]
+  }

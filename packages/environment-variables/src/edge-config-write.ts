@@ -1,11 +1,11 @@
 // Variables required to write to the edge config
 // Extends from the read environement
 
-import { createEnv } from "@t3-oss/env-nextjs";
-import { z } from "zod";
+import { createEnv } from '@t3-oss/env-nextjs';
+import { z } from 'zod';
 
-import edgeConfigReadEnv from "./edge-config-read";
-import { optionalIfDev } from "./helpers";
+import edgeConfigReadEnv from './edge-config-read';
+import { optionalIfDev } from './helpers';
 
 // values are optional in development as the API cannot be shared
 export const edgeConfigWriteEnv = createEnv({

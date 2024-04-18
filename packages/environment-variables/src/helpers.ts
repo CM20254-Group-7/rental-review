@@ -1,5 +1,5 @@
-import { z } from "zod";
-import envType from "./env-type";
+import { z } from 'zod';
+import envType from './env-type';
 
 // used to give variables a default value when in development while requiring them to be set in production
 export const defaultIfDev = (zObject: z.ZodString, defaultValue: string) => {
