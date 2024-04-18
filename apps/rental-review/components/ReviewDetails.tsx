@@ -49,11 +49,9 @@ const AboutYouBadge: React.FC<AboutYouBadgeProps> = async (props) => {
       data: { user },
     } = await supabase.auth.getUser();
 
-    if (!user) console.log(props, user);
     if (!user) return false;
 
-    console.log(propertyId, reviewDate);
-    const { data: landlordForReview, error } = await supabase.rpc(
+    const { data: landlordForReview } = await supabase.rpc(
       'property_owner_on_date',
       {
         property_id: propertyId,

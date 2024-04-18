@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import { NextPage } from 'next';
 import { redirect } from 'next/navigation';
 import { Label } from '@/components/ui/label';
