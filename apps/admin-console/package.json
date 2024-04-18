@@ -2,12 +2,13 @@
   "name": "admin-console",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev --turbo --port 3001",
     "build": "next build",
     "start": "next start --port 3001",
     "lint": "next lint --dir .",
-    "lint:sarif": "eslint . --config .eslintrc.js --ext .js,.jsx,.ts,.tsx --format @microsoft/eslint-formatter-sarif --output-file ../../eslint-results/admin-console.sarif",
+    "lint:sarif": "eslint . --config .eslintrc.cjs --ext .js,.jsx,.ts,.tsx --format @microsoft/eslint-formatter-sarif --output-file ../../eslint-results/admin-console.sarif",
     "lint:fix": "next lint --dir . --fix"
   },
   "dependencies": {
@@ -31,6 +32,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
     "cmdk": "^1.0.0",
+    "jiti": "^1.21.0",
     "lucide-react": "^0.368.0",
     "next": "^14.2.1",
     "next-themes": "^0.3.0",

@@ -85,6 +85,6 @@ export default defineConfig({
     url: env.NEXT_PUBLIC_PUBLIC_SITE_URL,
     timeout: 120 * 1000,
     reuseExistingServer: !env.CI,
-    // stdout: "pipe"
+    stdout: env.CI ? 'pipe' : 'ignore',
   },
 });
