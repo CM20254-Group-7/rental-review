@@ -23,7 +23,6 @@ const getReviews = cache(async (landlordId: string) => {
 
         return {
           ...review,
-          review_date: new Date(review.review_date),
           review_tags: reviewTags.map((tag) => tag.tag),
         };
       }),
@@ -43,6 +42,7 @@ const ReviewResults: React.FC<{
   return reviews.map((review) => (
     <ReviewDetailsLayout
       key={review.review_id}
+      propertyId={review.property_id}
       reviewId={review.review_id}
       reviewDate={review.review_date}
       reviewMessage={review.review_body}

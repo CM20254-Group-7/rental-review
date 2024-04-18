@@ -39,7 +39,8 @@ const flags: FeatureFlagDefinitions = {
 };
 const getFlagOverides = async () => {
   const overrideCookie = cookies().get('vercel-flag-overrides')?.value;
-  return overrideCookie ? await decrypt<FlagOverridesType>(overrideCookie) : {};
+  if (!overrideCookie) return {};
+  return decrypt<FlagOverridesType>(overrideCookie);
 };
 const getFlagsConfig = async () =>
   (await get('featureFlags')) as { [key: string]: JsonValue } | undefined;
@@ -54,9 +55,10 @@ const getFlagDetails = async (
   flagName: keyof Features,
 ): Promise<FlagDetails> => {
   console.log('flagName', flagName);
+  const overrides = await getFlagOverides();
   const override = (await getFlagOverides())?.[flagName];
   const config = (await getFlagsConfig())?.[flagName] as JsonValue | undefined;
-  const defaultValue = flags[flagName].defaultValue;
+  const { defaultValue } = flags[flagName];
   const flagDetails = {
     name: flagName,
     ...flags[flagName],

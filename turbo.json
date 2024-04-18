@@ -6,7 +6,13 @@
     "build": {
       "dependsOn": ["^build"],
       "outputs": [".next/**", "!.next/cache/**"],
-      "env": ["VERCEL_URL"]
+      "env": [
+        "VERCEL_URL",
+        "SUPABASE_SERVICE_KEY",
+        "EDGE_CONFIG",
+        "VERCEL_ENV",
+        "FLAGS_SECRET"
+      ]
     },
     "lint": {
       "dependsOn": ["^lint"]
@@ -101,6 +107,9 @@
       ],
       "cache": false,
       "persistent": true
+    },
+    "lint:fix": {
+      "dependsOn": ["^lint:fix"]
     }
   }
 }

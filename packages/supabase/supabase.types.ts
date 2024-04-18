@@ -211,6 +211,21 @@ export type Database = {
           },
         ]
       }
+      report_reasons: {
+        Row: {
+          owner_only: boolean
+          reason: string
+        }
+        Insert: {
+          owner_only?: boolean
+          reason: string
+        }
+        Update: {
+          owner_only?: boolean
+          reason?: string
+        }
+        Relationships: []
+      }
       review_photos: {
         Row: {
           photo_id: number
@@ -234,6 +249,51 @@ export type Database = {
           },
           {
             foreignKeyName: "review_photos_review_id_fkey"
+            columns: ["review_id"]
+            isOneToOne: false
+            referencedRelation: "reviews"
+            referencedColumns: ["review_id"]
+          },
+        ]
+      }
+      review_reports: {
+        Row: {
+          contact_email: string | null
+          created_at: string
+          explanation: string
+          id: number
+          reason: string
+          reporter_id: string
+          review_id: string
+        }
+        Insert: {
+          contact_email?: string | null
+          created_at?: string
+          explanation: string
+          id?: number
+          reason: string
+          reporter_id: string
+          review_id: string
+        }
+        Update: {
+          contact_email?: string | null
+          created_at?: string
+          explanation?: string
+          id?: number
+          reason?: string
+          reporter_id?: string
+          review_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "public_review_reports_reason_fkey"
+            columns: ["reason"]
+            isOneToOne: false
+            referencedRelation: "report_reasons"
+            referencedColumns: ["reason"]
+          },
+          {
+            foreignKeyName: "public_review_reports_review_id_fkey"
             columns: ["review_id"]
             isOneToOne: false
             referencedRelation: "reviews"
