@@ -12,7 +12,8 @@ create table "public"."review_reports" (
     "review_id" uuid not null,
     "reporter_id" uuid not null,
     "reason" text not null,
-    "explanation" text not null
+    "explanation" text not null,
+    "contact_email" text
 );
 
 

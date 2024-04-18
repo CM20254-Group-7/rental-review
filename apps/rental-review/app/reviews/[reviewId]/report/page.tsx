@@ -10,9 +10,118 @@ import {
 import { ReviewDetailsLayout } from '@/components/ReviewDetails';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { createServerSupabaseClient } from '@repo/supabase-client-helpers/server-only';
+import {
+  createServerSupabaseClient,
+  createServiceSupabaseClient,
+} from '@repo/supabase-client-helpers/server-only';
 import { Tooltip } from '@nextui-org/tooltip';
+import { z } from 'zod';
 import BackButton from './_components/back-button';
+import FormWrapper, { ReportReviewState } from './_components/form-wrapper';
+import FormSubmitButton from './_components/form-submit-button';
+
+const reportReviewSchema = z.object({
+  reason: z.string(),
+  explanation: z.string(),
+  contact: z.string(),
+});
+
+const reportReview = async (
+  reviewId: string,
+  reason: string,
+  explanation: string,
+  contact: string,
+): Promise<ReportReviewState> => {
+  // Verify the user is logged in
+  const serverSupabase = createServerSupabaseClient();
+  const {
+    data: { user },
+  } = await serverSupabase.auth.getUser();
+  if (!user) {
+    return {
+      message: 'You must be logged in to report a review',
+    };
+  }
+
+  // Verify review exists
+  const { data: reviewDetails } = await serverSupabase
+    .from('reviews')
+    .select('property_id, reviewer_id, review_date')
+    .eq('review_id', reviewId)
+    .single();
+
+  if (!reviewDetails) {
+    return {
+      message: 'Review not found',
+    };
+  }
+
+  // verify user is not reporting their own review
+  const { data: reviewerProfile } = await serverSupabase
+    .from('reviewer_private_profiles')
+    .select('user_id')
+    .eq('property_id', reviewDetails.property_id)
+    .eq('reviewer_id', reviewDetails.reviewer_id)
+    .maybeSingle();
+
+  if (reviewerProfile?.user_id === user.id) {
+    return {
+      message: 'You cannot report your own review',
+    };
+  }
+
+  // check whether the reason is
+  // - valid
+  // - available to the user
+  const { data: reportReason } = await serverSupabase
+    .from('report_reasons')
+    .select('*')
+    .eq('reason', reason)
+    .single();
+
+  if (!reportReason) {
+    return {
+      message: 'Invalid report reason',
+    };
+  }
+
+  if (reportReason.owner_only) {
+    const { data: landlordForReview } = await serverSupabase.rpc(
+      'property_owner_on_date',
+      {
+        property_id: reviewDetails.property_id,
+        query_date: reviewDetails.review_date,
+      },
+    );
+
+    if (landlordForReview !== user.id) {
+      return {
+        message:
+          'You cannot report this review for this reason as the review is not about you',
+      };
+    }
+  }
+
+  // Create the report
+  const serviceSupabase = createServiceSupabaseClient();
+  const { error } = await serviceSupabase.from('review_reports').insert([
+    {
+      review_id: reviewId,
+      reporter_id: user.id,
+      reason,
+      explanation,
+      contact_email: contact,
+    },
+  ]);
+
+  if (error) {
+    return {
+      message: 'An error occurred while reporting the review',
+    };
+  }
+
+  return { message: 'Review reported' };
+};
 
 const ReportReviewPage: NextPage<{
   params: {
@@ -59,7 +168,7 @@ const ReportReviewPage: NextPage<{
   }
 
   // User cannot report their own review
-  const { data: reviewerProfile, error } = await supabase
+  const { data: reviewerProfile } = await supabase
     .from('reviewer_private_profiles')
     .select('user_id')
     .eq('property_id', reviewDetails.property_id)
@@ -104,6 +213,28 @@ const ReportReviewPage: NextPage<{
       ? []
       : reportReasons?.filter((reason) => reason.owner_only)) ?? [];
 
+  const submitAction = async (
+    prevState: ReportReviewState,
+    formData: FormData,
+  ): Promise<ReportReviewState> => {
+    'use server';
+
+    // Validate form data
+    const validatedFields = reportReviewSchema.safeParse({
+      reason: formData.get('reason'),
+      explanation: formData.get('explanation'),
+      contact: formData.get('contact'),
+    });
+    if (!validatedFields.success) {
+      return {
+        message: 'Please fill out all fields',
+      };
+    }
+    const { reason, explanation, contact } = validatedFields.data;
+
+    return reportReview(reviewId, reason, explanation, contact);
+  };
+
   return (
     <main className='flex w-full max-w-prose flex-col items-center gap-4 p-4 py-10'>
       <div className='flex w-full flex-row items-start'>
@@ -123,7 +254,10 @@ const ReportReviewPage: NextPage<{
         showReportButton={false}
       />
       <Divider />
-      <form className='flex w-full max-w-prose flex-col gap-4'>
+      <FormWrapper
+        className='flex w-full max-w-prose flex-col gap-4'
+        action={submitAction}
+      >
         <div className='flex w-fit flex-col gap-2'>
           <h2 className='text-lg font-semibold'>Reason</h2>
           <Select required className=' max-w-[16rem]' name='reason'>
@@ -205,10 +339,10 @@ const ReportReviewPage: NextPage<{
             defaultValue={user.email}
           />
         </div>
-        <Button variant='primary' className='w-fit'>
+        <FormSubmitButton variant='primary' className='w-fit'>
           Submit report
-        </Button>
-      </form>
+        </FormSubmitButton>
+      </FormWrapper>
     </main>
   );
 };
