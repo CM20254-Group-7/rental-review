@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { deletePicture, getReviewPictures } from './actions';
 import AddPictureForm from './form';
 
-import BackButton from './back-button';
+import BackButton from './_components/back-button';
 
 const AddPicturePage: NextPage<{
   params: {
