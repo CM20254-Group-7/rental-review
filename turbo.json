@@ -122,9 +122,14 @@
         "NEXT_PUBLIC_SUPABASE_URL",
         "NEXT_PUBLIC_SUPABASE_ANON_KEY",
         "NEXT_PUBLIC_PUBLIC_SITE_URL",
+        "NEXT_PUBLIC_VERCEL_ENV",
+        "SUPABASE_SERVICE_KEY",
         "EDGE_CONFIG",
         "FLAGS_SECRET",
-        "SUPABASE_SERVICE_KEY"
+        "ADMIN_ENCRYPTION_KEY",
+        "ADMIN_PASSWORD_HASH",
+        "VERCEL_TEAM_ID",
+        "VERCEL_API_KEY"
       ]
     },
     "test:ui": {
@@ -134,21 +139,76 @@
         "NEXT_PUBLIC_SUPABASE_URL",
         "NEXT_PUBLIC_SUPABASE_ANON_KEY",
         "NEXT_PUBLIC_PUBLIC_SITE_URL",
+        "NEXT_PUBLIC_VERCEL_ENV",
+        "SUPABASE_SERVICE_KEY",
         "EDGE_CONFIG",
         "FLAGS_SECRET",
-        "SUPABASE_SERVICE_KEY"
+        "ADMIN_ENCRYPTION_KEY",
+        "ADMIN_PASSWORD_HASH",
+        "VERCEL_TEAM_ID",
+        "VERCEL_API_KEY"
       ]
     },
 
     "lint": {
-      "dependsOn": ["^lint"]
+      "dependsOn": ["^lint"],
+      "env": [
+        "NEXT_PUBLIC_SUPABASE_URL",
+        "NEXT_PUBLIC_SUPABASE_ANON_KEY",
+        "NEXT_PUBLIC_PUBLIC_SITE_URL",
+        "NEXT_PUBLIC_VERCEL_ENV",
+        "SUPABASE_SERVICE_KEY",
+        "EDGE_CONFIG",
+        "FLAGS_SECRET",
+        "ADMIN_ENCRYPTION_KEY",
+        "ADMIN_PASSWORD_HASH",
+        "VERCEL_TEAM_ID",
+        "VERCEL_API_KEY"
+      ]
+    },
+    "lint:fix": {
+      "dependsOn": ["^lint:fix"],
+      "env": [
+        "NEXT_PUBLIC_SUPABASE_URL",
+        "NEXT_PUBLIC_SUPABASE_ANON_KEY",
+        "NEXT_PUBLIC_PUBLIC_SITE_URL",
+        "NEXT_PUBLIC_VERCEL_ENV",
+        "SUPABASE_SERVICE_KEY",
+        "EDGE_CONFIG",
+        "FLAGS_SECRET",
+        "ADMIN_ENCRYPTION_KEY",
+        "ADMIN_PASSWORD_HASH",
+        "VERCEL_TEAM_ID",
+        "VERCEL_API_KEY"
+      ]
     },
     "lint:sarif": {},
     "rental-review#lint:sarif": {
-      "outputs": ["../../eslint-results/rental-review.sarif"]
+      "outputs": ["../../eslint-results/rental-review.sarif"],
+      "env": [
+        "NEXT_PUBLIC_SUPABASE_URL",
+        "NEXT_PUBLIC_SUPABASE_ANON_KEY",
+        "NEXT_PUBLIC_PUBLIC_SITE_URL",
+        "SUPABASE_SERVICE_KEY",
+        "EDGE_CONFIG",
+        "NEXT_PUBLIC_VERCEL_ENV",
+        "FLAGS_SECRET"
+      ]
     },
     "admin-console#lint:sarif": {
-      "outputs": ["../../eslint-results/admin-console.sarif"]
+      "outputs": ["../../eslint-results/admin-console.sarif"],
+      "env": [
+        "NEXT_PUBLIC_SUPABASE_URL",
+        "NEXT_PUBLIC_SUPABASE_ANON_KEY",
+        "NEXT_PUBLIC_PUBLIC_SITE_URL",
+        "SUPABASE_SERVICE_KEY",
+        "ADMIN_ENCRYPTION_KEY",
+        "ADMIN_PASSWORD_HASH",
+        "EDGE_CONFIG",
+        "VERCEL_TEAM_ID",
+        "VERCEL_API_KEY",
+        "FLAGS_SECRET"
+      ]
     }
   }
 }

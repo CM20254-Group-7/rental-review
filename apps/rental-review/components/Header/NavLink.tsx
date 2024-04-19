@@ -16,14 +16,12 @@ const NavLink: React.FC<{
   }, [href, pathName]);
 
   return (
-    <div>
-      <Link
-        href={href}
-        className={`flex rounded-b-md px-2 py-1 no-underline ${active ? 'border-accent border-b' : 'hover:border-accent/70 hover:border-b'}`}
-      >
-        {text}
-      </Link>
-    </div>
+    <Link
+      href={href}
+      className={`flex w-fit rounded-b-md px-2 py-1 no-underline ${active ? 'border-accent border-b' : 'hover:border-accent/70 hover:border-b'}`}
+    >
+      {text}
+    </Link>
   );
 };
 
