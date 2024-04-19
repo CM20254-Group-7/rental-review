@@ -21,7 +21,7 @@ const Help: React.FC = () => {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className='bg-background min-w-full p-0' asChild>
-        <div className='flex w-3/5 max-w-md flex-col p-4 text-center focus:bg-inherit'>
+        <div className='bg-background flex w-3/5 max-w-md flex-col p-4 text-center'>
           <p className='mb-2'>
             There are a few things you should know about this website before you
             start using it. They are located on the home page of the website.

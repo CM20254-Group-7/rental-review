@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import env from '@repo/environment-variables/playwright-tests';
 import { users } from './helpers';
 
 const notALandlordUser = users[2]!; // user not registered as a landlord - test that cannot access the claim page
@@ -114,11 +115,11 @@ test.beforeEach(
     const address = `${house}, ${street}, ${county}, ${postcode}, ${country}`;
 
     const res = await page.request.post(
-      `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/properties?select=*`,
+      `${env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/properties?select=*`,
       {
         headers: {
-          apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-          Authorization: `Bearer ${process.env.SUPABASE_SERVICE_KEY!}`,
+          apikey: env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+          Authorization: `Bearer ${env.SUPABASE_SERVICE_KEY!}`,
           'Content-Type': 'application/json',
           Prefer: 'return=representation',
         },
@@ -152,11 +153,11 @@ test.afterEach(
     const property = properties[testInfo.workerIndex]!;
 
     const res = await page.request.delete(
-      `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/properties?id=eq.${property.id}`,
+      `${env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/properties?id=eq.${property.id}`,
       {
         headers: {
-          apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-          Authorization: `Bearer ${process.env.SUPABASE_SERVICE_KEY!}`,
+          apikey: env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+          Authorization: `Bearer ${env.SUPABASE_SERVICE_KEY!}`,
           Prefer: 'return=minimal',
         },
       },
@@ -431,11 +432,11 @@ test.describe('3. Claim Property Form', () => {
     );
     // Check ownerhip record added to database
     const res = await page.request.get(
-      `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/property_ownership?select=*&property_id=eq.${property.id}`,
+      `${env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/property_ownership?select=*&property_id=eq.${property.id}`,
       {
         headers: {
-          apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-          Authorization: `Bearer ${process.env.SUPABASE_SERVICE_KEY!}`,
+          apikey: env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+          Authorization: `Bearer ${env.SUPABASE_SERVICE_KEY!}`,
         },
       },
     );
@@ -612,11 +613,11 @@ test.describe('3. Claim Property Form', () => {
 
           // Get the ownership record if it exists
           const res = await page.request.get(
-            `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/property_ownership?select=*&property_id=eq.${property.id}`,
+            `${env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/property_ownership?select=*&property_id=eq.${property.id}`,
             {
               headers: {
-                apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-                Authorization: `Bearer ${process.env.SUPABASE_SERVICE_KEY!}`,
+                apikey: env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+                Authorization: `Bearer ${env.SUPABASE_SERVICE_KEY!}`,
               },
             },
           );
@@ -699,11 +700,11 @@ test.describe('3. Claim Property Form', () => {
 
           // Get the ownership record if it exists
           const res = await page.request.get(
-            `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/property_ownership?select=*&property_id=eq.${property.id}`,
+            `${env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/property_ownership?select=*&property_id=eq.${property.id}`,
             {
               headers: {
-                apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-                Authorization: `Bearer ${process.env.SUPABASE_SERVICE_KEY!}`,
+                apikey: env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+                Authorization: `Bearer ${env.SUPABASE_SERVICE_KEY!}`,
               },
             },
           );
@@ -788,11 +789,11 @@ test.describe('3. Claim Property Form', () => {
 
           // Get the ownership record if it exists
           const res = await page.request.get(
-            `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/property_ownership?select=*&property_id=eq.${property.id}`,
+            `${env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/property_ownership?select=*&property_id=eq.${property.id}`,
             {
               headers: {
-                apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-                Authorization: `Bearer ${process.env.SUPABASE_SERVICE_KEY!}`,
+                apikey: env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+                Authorization: `Bearer ${env.SUPABASE_SERVICE_KEY!}`,
               },
             },
           );
@@ -923,11 +924,11 @@ test.describe('3. Claim Property Form', () => {
 
           // Get the ownership record if it exists
           const res = await page.request.get(
-            `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/property_ownership?select=*&property_id=eq.${property.id}`,
+            `${env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/property_ownership?select=*&property_id=eq.${property.id}`,
             {
               headers: {
-                apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-                Authorization: `Bearer ${process.env.SUPABASE_SERVICE_KEY!}`,
+                apikey: env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+                Authorization: `Bearer ${env.SUPABASE_SERVICE_KEY!}`,
               },
             },
           );
@@ -980,11 +981,11 @@ test.describe('4. Claim Collision', () => {
 
       // Create the existing ownership record
       const res = await page.request.post(
-        `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/property_ownership?select=*`,
+        `${env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/property_ownership?select=*`,
         {
           headers: {
-            apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-            Authorization: `Bearer ${process.env.SUPABASE_SERVICE_KEY!}`,
+            apikey: env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+            Authorization: `Bearer ${env.SUPABASE_SERVICE_KEY!}`,
             'Content-Type': 'application/json',
             Prefer: 'return=representation',
           },
@@ -1441,11 +1442,11 @@ test.describe('4. Claim Collision', () => {
 
             // try and fetch the claim from the database
             const res = await page.request.get(
-              `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/property_ownership?select=*&property_id=eq.${property.id}&landlord_id=eq.${propertyClaimerUser.id}`,
+              `${env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/property_ownership?select=*&property_id=eq.${property.id}&landlord_id=eq.${propertyClaimerUser.id}`,
               {
                 headers: {
-                  apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-                  Authorization: `Bearer ${process.env.SUPABASE_SERVICE_KEY!}`,
+                  apikey: env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+                  Authorization: `Bearer ${env.SUPABASE_SERVICE_KEY!}`,
                 },
               },
             );
@@ -1756,11 +1757,11 @@ test.describe('4. Claim Collision', () => {
 
         // Create the existing ownership record
         const res = await page.request.post(
-          `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/property_ownership?select=*`,
+          `${env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/property_ownership?select=*`,
           {
             headers: {
-              apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-              Authorization: `Bearer ${process.env.SUPABASE_SERVICE_KEY!}`,
+              apikey: env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+              Authorization: `Bearer ${env.SUPABASE_SERVICE_KEY!}`,
               'Content-Type': 'application/json',
               Prefer: 'return=representation',
             },
@@ -1819,11 +1820,11 @@ test.describe('4. Claim Collision', () => {
 
               // try and fetch the claim from the database
               const res = await page.request.get(
-                `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/property_ownership?select=*&property_id=eq.${property.id}&landlord_id=eq.${propertyClaimerUser.id}&started_at=eq.${startDateTest.newClaimStartDate.toISODateString()}`,
+                `${env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/property_ownership?select=*&property_id=eq.${property.id}&landlord_id=eq.${propertyClaimerUser.id}&started_at=eq.${startDateTest.newClaimStartDate.toISODateString()}`,
                 {
                   headers: {
-                    apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-                    Authorization: `Bearer ${process.env.SUPABASE_SERVICE_KEY!}`,
+                    apikey: env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+                    Authorization: `Bearer ${env.SUPABASE_SERVICE_KEY!}`,
                   },
                 },
               );
@@ -1864,11 +1865,11 @@ test.describe('4. Claim Collision', () => {
 
               // Check that the existing claim was closed if it should have been
               const existingRes = await page.request.get(
-                `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/property_ownership?select=*&property_id=eq.${property.id}&landlord_id=eq.${existingClaim.user.id}&started_at=eq.${existingClaim.existingClaimStart.toISODateString()}`,
+                `${env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/property_ownership?select=*&property_id=eq.${property.id}&landlord_id=eq.${existingClaim.user.id}&started_at=eq.${existingClaim.existingClaimStart.toISODateString()}`,
                 {
                   headers: {
-                    apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-                    Authorization: `Bearer ${process.env.SUPABASE_SERVICE_KEY!}`,
+                    apikey: env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+                    Authorization: `Bearer ${env.SUPABASE_SERVICE_KEY!}`,
                   },
                 },
               );
@@ -1909,11 +1910,11 @@ test.describe('4. Claim Collision', () => {
 
       // Create the first ownership record
       const res1 = await page.request.post(
-        `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/property_ownership?select=*`,
+        `${env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/property_ownership?select=*`,
         {
           headers: {
-            apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-            Authorization: `Bearer ${process.env.SUPABASE_SERVICE_KEY!}`,
+            apikey: env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+            Authorization: `Bearer ${env.SUPABASE_SERVICE_KEY!}`,
             'Content-Type': 'application/json',
             Prefer: 'return=representation',
           },
@@ -1929,11 +1930,11 @@ test.describe('4. Claim Collision', () => {
 
       // Create the second ownership record
       const res2 = await page.request.post(
-        `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/property_ownership?select=*`,
+        `${env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/property_ownership?select=*`,
         {
           headers: {
-            apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-            Authorization: `Bearer ${process.env.SUPABASE_SERVICE_KEY!}`,
+            apikey: env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+            Authorization: `Bearer ${env.SUPABASE_SERVICE_KEY!}`,
             'Content-Type': 'application/json',
             Prefer: 'return=representation',
           },
@@ -2590,11 +2591,11 @@ test.describe('4. Claim Collision', () => {
 
             // try and fetch the claim from the database
             const res = await page.request.get(
-              `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/property_ownership?select=*&property_id=eq.${property.id}&landlord_id=eq.${propertyClaimerUser.id}`,
+              `${env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/property_ownership?select=*&property_id=eq.${property.id}&landlord_id=eq.${propertyClaimerUser.id}`,
               {
                 headers: {
-                  apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-                  Authorization: `Bearer ${process.env.SUPABASE_SERVICE_KEY!}`,
+                  apikey: env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+                  Authorization: `Bearer ${env.SUPABASE_SERVICE_KEY!}`,
                 },
               },
             );

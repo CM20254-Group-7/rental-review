@@ -1,5 +1,6 @@
 import { cookies } from 'next/headers';
 import bcrypt from 'bcryptjs';
+import env from '@repo/environment-variables/admin-console';
 
 // generate a hash of a password to store in the ADMIN_PASSWORD_HASH env variable
 export const generatePasswordHash = async (password: string) =>
@@ -35,7 +36,7 @@ export const parseEncryptionKeyString = async (keyString: string) =>
 
 // gets the encryption key from the ADMIN_ENCRYPTION_KEY env variable as a CryptoKey object
 export const getEnvEncryptionKey = () =>
-  parseEncryptionKeyString(process.env.ADMIN_ENCRYPTION_KEY!);
+  parseEncryptionKeyString(env.ADMIN_ENCRYPTION_KEY!);
 
 // encrypts data using the provided key and iv
 export const encrypt = async (data: string, key: CryptoKey, iv: Uint8Array) =>
@@ -147,7 +148,7 @@ export const getAuthCookies = async () => {
 export const clearAuthCookies = () => cookies().delete(passwordCookieName);
 
 export const passwordMatchesEnvHash = (password: string) =>
-  bcrypt.compareSync(password, process.env.ADMIN_PASSWORD_HASH!);
+  bcrypt.compareSync(password, env.ADMIN_PASSWORD_HASH!);
 
 export const tryLogin = async (password: string) => {
   if (!passwordMatchesEnvHash(password)) {

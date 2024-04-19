@@ -6,9 +6,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint --dir .",
-    "lint:sarif": "eslint . --config .eslintrc.js --ext .js,.jsx,.ts,.tsx --format @microsoft/eslint-formatter-sarif --output-file ../../eslint-results/rental-review.sarif",
+    "lint:sarif": "eslint . --config .eslintrc.cjs --ext .js,.jsx,.ts,.tsx --format @microsoft/eslint-formatter-sarif --output-file ../../eslint-results/rental-review.sarif",
     "lint:fix": "next lint --dir . --fix"
   },
+  "type": "module",
   "dependencies": {
     "@headlessui/react": "^1.7.18",
     "@headlessui/tailwindcss": "^0.2.0",
@@ -20,6 +21,7 @@
     "@nextui-org/tooltip": "^2.0.31",
     "@radix-ui/react-dialog": "^1.0.5",
     "@radix-ui/react-dropdown-menu": "^2.0.6",
+    "@repo/environment-variables": "workspace:*",
     "@repo/feature-flags": "workspace:*",
     "@repo/supabase-client-helpers": "workspace:*",
     "@tremor/react": "^3.15.0",
@@ -34,6 +36,7 @@
     "framer-motion": "^11.0.24",
     "geist": "^1.3.0",
     "lucide-react": "^0.368.0",
+    "jiti": "^1.21.0",
     "next": "^14.2.1",
     "postcss": "8.4.31",
     "react": "^18.2.0",

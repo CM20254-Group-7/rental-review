@@ -1,30 +1,26 @@
+import { fileURLToPath } from "node:url";
+import createJiti from "jiti";
+import withVercelToolbar from "@vercel/toolbar/plugins/next";
+const jiti = createJiti(fileURLToPath(import.meta.url));
+
+const env = jiti('@repo/environment-variables/rental-review');
+
+const url = env.default.NEXT_PUBLIC_SUPABASE_URL
+const [protocol, host] = url.split('://');
+const [hostname, port] = host.split(':');
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    images: {
-      remotePatterns: [
-        // Supabase Storage - localhost
-        {
-          protocol: 'http',
-          hostname: 'localhost',
-          port: '54321',
-          pathname: '/storage/v1/object/**',
-        },
-        {
-            protocol: 'http',
-            hostname: '127.0.0.1',
-            port: '54321',
-            pathname: '/storage/v1/object/**',
-        },
-        // Supabase Storage - production
-        {
-          protocol: 'https',
-          hostname: 'mvqaugemtuynguqelykb.supabase.co',
-          pathname: '/storage/v1/object/**',
-        },
-      ],
-    },
-  };
+  images: {
+    remotePatterns: [
+      {
+        protocol,
+        hostname,
+        port,
+        pathname: '/storage/v1/object/**',
+      },
+    ],
+  },
+};
 
-const withVercelToolbar = require('@vercel/toolbar/plugins/next')();
-
-module.exports = withVercelToolbar(nextConfig);
+export default withVercelToolbar(nextConfig);

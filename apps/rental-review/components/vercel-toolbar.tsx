@@ -1,11 +1,12 @@
 import React from 'react';
 import { createServerSupabaseClient } from '@repo/supabase-client-helpers/server-only';
 import { get } from '@vercel/edge-config';
+import env from '@repo/environment-variables/rental-review';
 
 const { VercelToolbar } = await import('@vercel/toolbar/next');
 
 const Toolbar: React.FC = async () => {
-  const environment = process.env.VERCEL_ENV || 'development';
+  const environment = env.NEXT_PUBLIC_VERCEL_ENV;
   const isProduction = environment === 'production';
 
   // Always show the toolbar in development & preview environments

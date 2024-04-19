@@ -2,6 +2,7 @@ import { createServerClient, type CookieOptions } from '@supabase/ssr';
 import { type NextRequest, NextResponse } from 'next/server';
 import { Database } from '@repo/supabase';
 import { SupabaseClient } from '@supabase/supabase-js';
+import env from '@repo/environment-variables/supabase-client';
 
 const createClient = (
   request: NextRequest,
@@ -17,8 +18,8 @@ const createClient = (
   });
 
   const supabase = createServerClient<Database>(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    env.NEXT_PUBLIC_SUPABASE_URL!,
+    env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
       cookies: {
         get(name: string) {
