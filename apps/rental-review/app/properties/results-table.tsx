@@ -108,7 +108,7 @@ const ResultsTable: React.FC<{
   }[];
 }> = ({ properties }) => {
   return (
-    <Table>
+    <Table className=' z-10'>
       <TableHeader>
         <TableRow>
           {/* <TableHead className='hidden w-[100px] sm:table-cell'>

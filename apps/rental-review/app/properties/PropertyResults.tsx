@@ -3,8 +3,23 @@ import Link from 'next/link';
 import React, { cache } from 'react';
 import StarRatingLayout from '@/components/StarRating';
 import CurrentOwnerIndicator from '@/components/CurrentOwnerIndicator';
-import { getFlagValue } from '@repo/feature-flags';
+import { getFeatureFlagValues, getFlagValue } from '@repo/feature-flags';
 import ResultsTable, { ResultsTableSkeleton } from './results-table';
+import Pagination from './pagination';
+
+// show all properties if pagination is disabled, otherwise show an appropriate number for the format (more for condensed)
+export const getPerPage = (): Promise<'all' | number> =>
+  getFeatureFlagValues().then(
+    ({ propertySearchCondensedView, propertySearchPagination }) => {
+      if (!propertySearchPagination) {
+        return 'all';
+      }
+      if (propertySearchCondensedView) {
+        return 10;
+      }
+      return 5;
+    },
+  );
 
 const defaultSortBy = 'rating';
 const defaultSortOrder = 'desc';
@@ -29,7 +44,8 @@ const getPropertyResults = cache(
     postalCode?: string;
     country?: string;
     tags?: string[];
-  }): Promise<PropertyResults> => {
+    page?: string;
+  }): Promise<{ properties: PropertyResults; count: number }> => {
     const supabase = createServerSupabaseClient();
 
     const sortBy = searchQuery?.sortBy || defaultSortBy;
@@ -54,7 +70,9 @@ const getPropertyResults = cache(
 
     let baseQuery = supabase
       .from('full_properties')
-      .select('id, address, average_rating, description, beds, baths, tags');
+      .select('id, address, average_rating, description, beds, baths, tags', {
+        count: 'exact',
+      });
 
     if (searchQuery?.address) {
       baseQuery = baseQuery.textSearch('address', searchQuery.address, {
@@ -99,13 +117,23 @@ const getPropertyResults = cache(
       baseQuery = baseQuery.order(sortField, { ascending: sortAsc });
     }
 
-    const { data: properties, error: propertiesError } = await baseQuery;
+    const perPage = await getPerPage();
 
-    if (propertiesError) {
-      return [];
+    if (perPage !== 'all') {
+      const page = searchQuery?.page ? parseInt(searchQuery.page, 10) : 1;
+      const startIndex = (page - 1) * perPage;
+      const endIndex = page * perPage - 1;
+
+      baseQuery = baseQuery.range(startIndex, endIndex);
     }
 
-    return properties;
+    const { data: properties, error: propertiesError, count } = await baseQuery;
+
+    if (propertiesError) {
+      return { properties: [], count: 0 };
+    }
+
+    return { properties, count: count ?? 0 };
   },
 );
 
@@ -219,20 +247,30 @@ const PropertyResults: React.FC<{
     postalCode?: string;
     country?: string;
     tags?: string | string[];
+    page?: string;
   };
 }> = async ({ searchParams }) => {
-  const properties = await getPropertyResults({
+  const { properties, count } = await getPropertyResults({
     ...searchParams,
     tags: searchParams?.tags ? [searchParams.tags].flat() : undefined,
   });
 
-  return getFlagValue('propertySearchCondensedView').then(
-    (condensedResultFormat) =>
-      (condensedResultFormat as boolean) ? (
+  const condensedResultFormat = (await getFlagValue(
+    'propertySearchCondensedView',
+  )) as boolean;
+
+  const perPage = await getPerPage();
+  const paginate = perPage !== 'all';
+
+  return (
+    <>
+      {condensedResultFormat ? (
         <PropertyResultsTable properties={properties} />
       ) : (
         <PropertyResultsCards properties={properties} />
-      ),
+      )}
+      {paginate && <Pagination pageSize={perPage} totalResults={count} />}
+    </>
   );
 };
 

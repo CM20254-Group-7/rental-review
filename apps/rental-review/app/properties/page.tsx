@@ -31,6 +31,7 @@ const PropertiesPage: NextPage<{
     postalCode?: string;
     country?: string;
     tags?: string | string[];
+    page?: string;
   };
 }> = async ({ searchParams }) => {
   const tags = await getTags();
@@ -47,7 +48,7 @@ const PropertiesPage: NextPage<{
       <div className='lg:hidden'>
         <Sheet>
           <SheetTrigger asChild>
-            <div className='bg-background fixed w-full  border-b shadow-sm'>
+            <div className='bg-background fixed z-20  w-full border-b shadow-sm'>
               <Button
                 variant='light'
                 type='button'
