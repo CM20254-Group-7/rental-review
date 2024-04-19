@@ -2,8 +2,10 @@ import { NextPage } from 'next';
 import Image from 'next/image';
 
 import { deletePicture, getReviewPictures } from './actions';
-
 import AddPictureForm from './form';
+
+import BackButton from './back-button';
+
 
 const AddPicturePage: NextPage<{
   params: {
@@ -22,6 +24,9 @@ const AddPicturePage: NextPage<{
 
   return (
     <main className='flex flex-1 flex-col place-items-center justify-center py-10 md:py-16'>
+      <div className='flex w-full flex-row items-start'>
+        <BackButton />
+      </div>
       <div>
         <h1 className='mt-6 flex justify-center text-2xl font-bold'>
           Add pictures to your review
