@@ -3,9 +3,20 @@ import Link from 'next/link';
 import React, { cache } from 'react';
 import StarRatingLayout from '@/components/StarRating';
 import CurrentOwnerIndicator from '@/components/CurrentOwnerIndicator';
+import { getFlagValue } from '@repo/feature-flags';
 
 const defaultSortBy = 'rating';
 const defaultSortOrder = 'desc';
+
+type PropertyResults = {
+  id: string | null;
+  address: string | null;
+  average_rating: number | null;
+  description: string | null;
+  beds: number | null;
+  baths: number | null;
+  tags: string[] | null;
+}[];
 
 const getPropertyResults = cache(
   async (searchQuery?: {
@@ -17,7 +28,7 @@ const getPropertyResults = cache(
     postalCode?: string;
     country?: string;
     tags?: string[];
-  }) => {
+  }): Promise<PropertyResults> => {
     const supabase = createServerSupabaseClient();
 
     const sortBy = searchQuery?.sortBy || defaultSortBy;
@@ -90,34 +101,24 @@ const getPropertyResults = cache(
     const { data: properties, error: propertiesError } = await baseQuery;
 
     if (propertiesError) {
-      return {
-        properties: [],
-      };
+      return [];
     }
 
-    return {
-      properties,
-    };
+    return properties;
   },
 );
 
-const PropertyResults: React.FC<{
-  searchParams?: {
-    sortBy?: string;
-    sortOrder?: string;
-    address?: string;
-    street?: string;
-    city?: string;
-    postalCode?: string;
-    country?: string;
-    tags?: string | string[];
-  };
-}> = async ({ searchParams }) => {
-  const { properties } = await getPropertyResults({
-    ...searchParams,
-    tags: searchParams?.tags ? [searchParams.tags].flat() : undefined,
-  });
-
+const PropertyResultsCards: React.FC<{
+  properties: {
+    id: string | null;
+    address: string | null;
+    average_rating: number | null;
+    description: string | null;
+    beds: number | null;
+    baths: number | null;
+    tags: string[] | null;
+  }[];
+}> = async ({ properties }) => {
   if (properties.length === 0) {
     return <div>No properties found</div>;
   }
@@ -171,6 +172,43 @@ const PropertyResults: React.FC<{
       </div>
     </Link>
   ));
+};
+
+const PropertyResultsTable: React.FC<{ properties: PropertyResults }> = ({
+  properties,
+}) => {
+  return (
+    <div>
+      {properties.map((property) => (
+        <p>{property.address}</p>
+      ))}
+    </div>
+  );
+};
+
+const PropertyResults: React.FC<{
+  searchParams?: {
+    sortBy?: string;
+    sortOrder?: string;
+    address?: string;
+    street?: string;
+    city?: string;
+    postalCode?: string;
+    country?: string;
+    tags?: string | string[];
+  };
+}> = async ({ searchParams }) => {
+  const condensedResultFormat = await getFlagValue(
+    'propertySearchCondensedView',
+  );
+  const properties = await getPropertyResults({
+    ...searchParams,
+    tags: searchParams?.tags ? [searchParams.tags].flat() : undefined,
+  });
+
+  if (condensedResultFormat)
+    return <PropertyResultsTable properties={properties} />;
+  return <PropertyResultsCards properties={properties} />;
 };
 
 export default PropertyResults;
