@@ -9,9 +9,10 @@ const AddPictureForm: FC<{
   property_id: string;
   review_id: string;
 }> = ({ property_id, review_id }) => {
+  const initialState = { error: '', message: null };
   const [state, dispatch] = useFormState(
     uploadPictures.bind(null, property_id, review_id),
-    {},
+    initialState,
   );
 
   let errorMessage = state.error ? JSON.stringify(state.error, null, '\t') : '';

@@ -6,7 +6,6 @@ import {
   createServerSupabaseClient,
   createServiceSupabaseClient,
 } from '@repo/supabase-client-helpers/server-only';
-import { z } from 'zod';
 
 export type ReviewPictureState =
   | {
@@ -17,10 +16,6 @@ export type ReviewPictureState =
       error: null;
       message: string;
     };
-
-const reviewPictureSchema = z.object({
-  pictures: z.instanceof(File),
-});
 
 export const uploadPictures = async (
   propertyId: string,
@@ -78,12 +73,6 @@ export const uploadPictures = async (
   // get current timestamp in yyyymmddhhss format
   const timestamp = new Date().toISOString().replace(/[^0-9]/g, '');
 
-  const { data: pictures } = await serviceSupabase.storage
-    .from('review_pictures')
-    .upload(`${propertyId}/${reviewId}@${timestamp}`, file, {
-      upsert: true,
-    });
-
   const {
     data: { publicUrl },
   } = serviceSupabase.storage
@@ -112,7 +101,7 @@ export const uploadPictures = async (
 
 export const getReviewPictures = async (
   reviewId: string,
-): Promise<string[] | null> => {
+): Promise<string[]> => {
   const serviceSupabase = createServiceSupabaseClient();
 
   const { data: pictures } = await serviceSupabase
@@ -120,11 +109,18 @@ export const getReviewPictures = async (
     .select('photo')
     .eq('review_id', reviewId);
 
-  if (!pictures) {
-    return null;
+  if (!pictures || pictures === undefined || pictures.length === 0) {
+    return [];
   }
 
-  return pictures;
+  const pictureArray: string[] = [];
+  for (let i = 0; i < pictures.length; i += 1) {
+    if (pictures[i]?.photo !== undefined) {
+      pictureArray.push(pictures[i]?.photo ?? '');
+    }
+  }
+
+  return pictureArray;
 };
 
 export const deletePicture = async (imageURL: string) => {

@@ -6,20 +6,17 @@ import AddPictureForm from './form';
 
 import BackButton from './back-button';
 
-
 const AddPicturePage: NextPage<{
   params: {
     id: string;
     reviewID: string;
   };
 }> = async ({ params: { id: propertyId, reviewID: reviewId } }) => {
-  const pictures = (await getReviewPictures(reviewId ?? '')) as unknown as {
-    photo: string;
-  }[];
+  const pictures = await getReviewPictures(reviewId ?? '');
   const pictureArray: string[] = [];
 
   for (let i = 0; i < pictures.length; i += 1) {
-    pictureArray.push(pictures[i]?.photo ?? '');
+    pictureArray.push(pictures[i] as string);
   }
 
   return (

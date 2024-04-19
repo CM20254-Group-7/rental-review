@@ -34,4 +34,5 @@ create policy "Give access to upload file to the folder"
     TRUE
   ));
 
+alter table "public"."review_photos" alter column "photo" set not null;
 
