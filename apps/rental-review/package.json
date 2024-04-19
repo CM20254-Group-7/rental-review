@@ -9,7 +9,6 @@
     "lint:sarif": "eslint . --config .eslintrc.cjs --ext .js,.jsx,.ts,.tsx --format @microsoft/eslint-formatter-sarif --output-file ../../eslint-results/rental-review.sarif",
     "lint:fix": "next lint --dir . --fix"
   },
-  "type": "module",
   "dependencies": {
     "@headlessui/react": "^1.7.18",
     "@headlessui/tailwindcss": "^0.2.0",
