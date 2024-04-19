@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
-import { users } from './helpers';
 import env from '@repo/environment-variables/playwright-tests';
+import { users } from './helpers';
 
 const properties: {
   [key: number]: {

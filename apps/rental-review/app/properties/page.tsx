@@ -2,12 +2,12 @@ import { NextPage } from 'next';
 import Link from 'next/link';
 import React, { Suspense, cache } from 'react';
 import { createServerSupabaseClient } from '@repo/supabase-client-helpers/server-only';
+import { Sheet, SheetContent, SheetTrigger } from '@/components/sheet';
+import { Button } from '@/components/ClientTremor';
 import PropertyResults, { PropertyResultsSkeleton } from './PropertyResults';
 import AddressSearch from './AddressSearch';
 import TagSearch from './TagSearch';
 import SortBy from './SortBy';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/sheet';
-import { Button } from '@/components/ClientTremor';
 
 const getTags = cache(async () => {
   const supabase = createServerSupabaseClient();

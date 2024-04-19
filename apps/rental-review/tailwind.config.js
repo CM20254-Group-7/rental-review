@@ -10,7 +10,7 @@ module.exports = {
   theme: {
     extend: {
       screens: {
-        'mid': '54rem'
+        mid: '54rem',
       },
       colors: {
         foreground: 'hsl(var(--foreground) / <alpha-value>)',

@@ -4,9 +4,9 @@
   "scripts": {
     "build": "dotenv -- turbo build",
     "dev": "dotenv -- turbo dev",
-    "lint": "turbo lint",
-    "lint:sarif": "turbo lint:sarif",
-    "lint:fix": "turbo lint:fix",
+    "lint": "dotenv -- turbo lint",
+    "lint:sarif": "dotenv -- turbo lint:sarif",
+    "lint:fix": "dotenv -- turbo lint:fix",
     "start": "dotenv -- turbo start",
     "start:rental-review": "dotenv -- turbo start --filter rental-review",
     "start:supabase": "turbo start --filter supabase",

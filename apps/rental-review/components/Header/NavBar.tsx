@@ -1,22 +1,12 @@
-import Link from 'next/link';
-import { CircleUser, Home, Menu, Package2, Search } from 'lucide-react';
-
-import { TextInput as Input, Button } from '@/components/ClientTremor';
+import { Menu } from 'lucide-react';
+import { FC } from 'react';
+import { createServerSupabaseClient } from '@repo/supabase-client-helpers/server-only';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/sheet';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/dropdown';
+import { Button } from '@/components/ClientTremor';
 import HomeButton from './HomeButton';
 import NavLink from './NavLink';
-import { FC } from 'react';
 import AuthButton from './AuthButton';
 import Help from './Help';
-import { createServerSupabaseClient } from '@repo/supabase-client-helpers/server-only';
 
 const NavBar: FC = async () => {
   const supabase = createServerSupabaseClient();

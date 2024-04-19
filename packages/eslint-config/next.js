@@ -13,7 +13,7 @@ module.exports = {
     'plugin:prettier/recommended',
   ],
   rules: {
-    'react/jsx-props-no-spreading': 'warn',
+    'react/jsx-props-no-spreading': 'off',
     'react/require-default-props': 'off',
     'jsx-a11y/label-has-associated-control': 'off',
     'jsx-a11y/control-has-associated-label': 'off',
