@@ -126,3 +126,26 @@ export const getReviewPictures = async (
 
   return pictures;
 };
+
+export const deletePicture = async (imageURL: string) => {
+  const serviceSupabase = createServiceSupabaseClient();
+
+  // Extract the file name from the imageURL
+  const fileName = imageURL.substring(imageURL.lastIndexOf('/') + 1);
+
+  // Delete the file from the storage bucket
+  const { error } = await serviceSupabase.storage
+    .from('review_pictures')
+    .remove([fileName]);
+
+  if (error) {
+    return {
+      error: 'Error deleting image',
+      message: null,
+    };
+  }
+  return {
+    error: null,
+    message: 'Image deleted successfully',
+  };
+};

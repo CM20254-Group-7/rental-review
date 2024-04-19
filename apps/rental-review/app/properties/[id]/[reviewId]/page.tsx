@@ -1,8 +1,9 @@
 import { NextPage } from 'next';
-import Image from 'next/image'; // Import the Image component from the appropriate package
+import Image from 'next/image';
+
+import { deletePicture, getReviewPictures } from './actions';
 
 import AddPictureForm from './form';
-import { getReviewPictures } from './actions';
 
 const AddPicturePage: NextPage<{
   params: {
@@ -34,14 +35,38 @@ const AddPicturePage: NextPage<{
         property_id={propertyId || ''}
         review_id={reviewId || ''}
       />
+
+      {/* Uploaded pictures */}
+      {pictureArray.length > 0 && (
+        <>
+          <h2 className='mt-6 flex justify-center text-2xl font-bold'>
+            Uploaded Pictures
+          </h2>
+          <br />
+        </>
+      )}
+
       {pictureArray.map((picture, index) => (
-        <Image
-          key={index}
-          src={pictureArray[index] ?? ''}
-          alt={`Picture ${index}`}
-          width={100}
-          height={100}
-        />
+        <>
+          <Image
+            key={`Picture${index}`}
+            src={pictureArray[index] ?? ''}
+            alt={`Picture ${index}`}
+            width={400}
+            height={100}
+            className='mb-2'
+          />
+          {/* <br /> */}
+          <button
+            type='button'
+            className='rounded-md border p-2 hover:bg-gray-600/20'
+            // TODO: It is saying that it should be converted to a client component
+            // onClick={() => deletePicture(pictureArray[index] ?? '')}
+          >
+            Delete Above Picture
+          </button>
+          <br />
+        </>
       ))}
     </main>
   );
