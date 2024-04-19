@@ -36,3 +36,9 @@ create policy "Give access to upload file to the folder"
 
 alter table "public"."review_photos" alter column "photo" set not null;
 
+CREATE UNIQUE INDEX review_photos_pkey ON public.review_photos USING btree (photo);
+
+alter table "public"."review_photos" add constraint "review_photos_pkey" PRIMARY KEY using index "review_photos_pkey";
+
+
+

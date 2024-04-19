@@ -73,6 +73,12 @@ export const uploadPictures = async (
   // get current timestamp in yyyymmddhhss format
   const timestamp = new Date().toISOString().replace(/[^0-9]/g, '');
 
+  await serviceSupabase.storage
+    .from('review_pictures')
+    .upload(`${propertyId}/${reviewId}@${timestamp}`, file, {
+      upsert: true,
+    });
+
   const {
     data: { publicUrl },
   } = serviceSupabase.storage
