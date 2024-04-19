@@ -126,4 +126,25 @@ export const uploadPictures = async (
   };
 };
 
-// export { data}
+export const getReviewPictures = async (
+  reviewId: string,
+): Promise<string[] | null> => {
+  const serviceSupabase = createServiceSupabaseClient();
+
+  const { data: pictures, error } = await serviceSupabase
+    .from('review_photos')
+    .select('photo')
+    .eq('review_id', reviewId);
+
+  console.log(error);
+  console.log(pictures);
+  console.log(pictures as Array<{ photo: string }>);
+
+  if (!pictures) {
+    return null;
+  }
+
+
+
+  return (pictures as Array<{ photo: string }>).map((picture) => picture.photo);
+};

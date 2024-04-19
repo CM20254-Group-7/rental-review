@@ -18,11 +18,9 @@ const AddPictureForm: FC<{
 
   return (
     <form
-      className='mb-8 flex w-full max-w-prose flex-col place-items-center gap-2 rounded-md border p-4'
+      className='mb-8 flex w-full max-w-prose flex-col place-items-center gap-2 rounded-md p-4'
       action={dispatch}
     >
-      <p>Please upload your pictures one by one</p>
-
       <input
         className='rounded-md border p-2'
         name='pictures'
@@ -35,6 +33,11 @@ const AddPictureForm: FC<{
       >
         Upload Picture
       </button>
+
+      <br />
+
+      <p>Accepted formats: .jpg, .jpeg, .png, and .gif</p>
+      <p>Please upload your pictures one by one.</p>
 
       {state.message != null && <p>Success!</p>}
       {state.error && <p>{errorMessage}</p>}
