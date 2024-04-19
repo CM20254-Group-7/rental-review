@@ -1,5 +1,6 @@
 'use server';
 
+import env from '@repo/environment-variables/admin-console';
 import { flags } from '@repo/feature-flags';
 import { parseConnectionString } from '@vercel/edge-config';
 
@@ -29,11 +30,11 @@ export const updateFlags = async (
 
   try {
     const createEdgeConfig = await fetch(
-      `https://api.vercel.com/v1/edge-config/${parseConnectionString(process.env.EDGE_CONFIG!)?.id}/items?teamId=${process.env.VERCEL_TEAM_ID}`,
+      `https://api.vercel.com/v1/edge-config/${parseConnectionString(env.EDGE_CONFIG!)?.id}/items?teamId=${env.VERCEL_TEAM_ID}`,
       {
         method: 'PATCH',
         headers: {
-          Authorization: `Bearer ${process.env.VERCEL_API_KEY}`,
+          Authorization: `Bearer ${env.VERCEL_API_KEY}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
@@ -62,11 +63,11 @@ export const updateToolbarSettings = async (
 ) => {
   try {
     const createEdgeConfig = await fetch(
-      `https://api.vercel.com/v1/edge-config/${parseConnectionString(process.env.EDGE_CONFIG!)?.id}/items?teamId=${process.env.VERCEL_TEAM_ID}`,
+      `https://api.vercel.com/v1/edge-config/${parseConnectionString(env.EDGE_CONFIG!)?.id}/items?teamId=${env.VERCEL_TEAM_ID}`,
       {
         method: 'PATCH',
         headers: {
-          Authorization: `Bearer ${process.env.VERCEL_API_KEY}`,
+          Authorization: `Bearer ${env.VERCEL_API_KEY}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({

@@ -9,6 +9,7 @@ import {
   UsersIcon,
 } from '@heroicons/react/24/outline';
 import { Button } from '@/components/ui/button';
+import env from '@repo/environment-variables/admin-console';
 import {
   Card,
   CardContent,
@@ -85,7 +86,7 @@ const PublicSiteCard: React.FC = () => (
     </CardHeader>
     <CardContent>
       <Button size='sm' className='w-full'>
-        <Link href={process.env.NEXT_PUBLIC_PUBLIC_SITE_URL!}>Public Site</Link>
+        <Link href={env.NEXT_PUBLIC_PUBLIC_SITE_URL!}>Public Site</Link>
       </Button>
     </CardContent>
   </Card>

@@ -1,6 +1,7 @@
 import { Page, expect, Locator } from '@playwright/test';
+import env from '@repo/environment-variables/playwright-tests';
 
-const apiBaseURL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const apiBaseURL = env.NEXT_PUBLIC_SUPABASE_URL!;
 
 const userIds = [
   'b1b284f9-2c24-4f2e-bd4e-9c7ab7fe88e3',
@@ -138,7 +139,7 @@ const loginUserWithAPI = async (
         password,
       },
       headers: {
-        apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+        apikey: env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
         'Content-Type': 'application/json',
       },
     },

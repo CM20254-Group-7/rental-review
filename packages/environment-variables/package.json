@@ -1,0 +1,20 @@
+{
+  "name": "@repo/environment-variables",
+  "version": "1.0.0",
+  "description": "Type-safe environment variable definitions for monorepo",
+  "type": "module",
+  "exports": {
+    "./supabase-client": "./package-environments/supabase-client-env.ts",
+    "./feature-flags": "./package-environments/feature-flags-env.ts",
+    "./rental-review": "./package-environments/rental-review-env.ts",
+    "./admin-console": "./package-environments/admin-console-env.ts",
+    "./playwright-tests": "./package-environments/playwright-tests-env.ts"
+  },
+  "dependencies": {
+    "@t3-oss/env-nextjs": "^0.9.2",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.7"
+  }
+}

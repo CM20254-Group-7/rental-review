@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { users } from './helpers';
+import env from '@repo/environment-variables/playwright-tests';
 
 const properties: {
   [key: number]: {
@@ -19,11 +20,11 @@ test.beforeEach(async ({ page }, testInfo) => {
     const address = `${house}, ${street}, ${county}`;
 
     const res = await page.request.post(
-      `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/properties?select=*`,
+      `${env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/properties?select=*`,
       {
         headers: {
-          apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-          Authorization: `Bearer ${process.env.SUPABASE_SERVICE_KEY!}`,
+          apikey: env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+          Authorization: `Bearer ${env.SUPABASE_SERVICE_KEY!}`,
           'Content-Type': 'application/json',
           Prefer: 'return=representation',
         },
@@ -53,11 +54,11 @@ test.beforeEach(async ({ page }, testInfo) => {
     if (testInfo.title.includes('Existing Review')) {
       // create a reviewer profile
       const res3 = await page.request.post(
-        `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/reviewer_private_profiles?select=*`,
+        `${env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/reviewer_private_profiles?select=*`,
         {
           headers: {
-            apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-            Authorization: `Bearer ${process.env.SUPABASE_SERVICE_KEY!}`,
+            apikey: env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+            Authorization: `Bearer ${env.SUPABASE_SERVICE_KEY!}`,
             'Content-Type': 'application/json',
             Prefer: 'return=representation',
           },
@@ -72,11 +73,11 @@ test.beforeEach(async ({ page }, testInfo) => {
 
       // create a review
       const res2 = await page.request.post(
-        `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/reviews?select=*`,
+        `${env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/reviews?select=*`,
         {
           headers: {
-            apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-            Authorization: `Bearer ${process.env.SUPABASE_SERVICE_KEY!}`,
+            apikey: env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+            Authorization: `Bearer ${env.SUPABASE_SERVICE_KEY!}`,
             'Content-Type': 'application/json',
             Prefer: 'return=representation',
           },
@@ -103,11 +104,11 @@ test.afterEach(async ({ page }, testInfo) => {
     const property = properties[testInfo.workerIndex]!;
 
     const res = await page.request.delete(
-      `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/properties?id=eq.${property.id}`,
+      `${env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/properties?id=eq.${property.id}`,
       {
         headers: {
-          apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-          Authorization: `Bearer ${process.env.SUPABASE_SERVICE_KEY!}`,
+          apikey: env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+          Authorization: `Bearer ${env.SUPABASE_SERVICE_KEY!}`,
           Prefer: 'return=minimal',
         },
       },
@@ -117,11 +118,11 @@ test.afterEach(async ({ page }, testInfo) => {
     // otherwise check the database for the property and delete it if found
   } else {
     const res = await page.request.get(
-      `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/properties?select=id&house=eq.${testInfo.workerIndex}&street=eq.${'Property Claiming Road'}`,
+      `${env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/properties?select=id&house=eq.${testInfo.workerIndex}&street=eq.${'Property Claiming Road'}`,
       {
         headers: {
-          apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-          Authorization: `Bearer ${process.env.SUPABASE_SERVICE_KEY!}`,
+          apikey: env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+          Authorization: `Bearer ${env.SUPABASE_SERVICE_KEY!}`,
         },
       },
     );
@@ -130,11 +131,11 @@ test.afterEach(async ({ page }, testInfo) => {
 
     if (id) {
       const res2 = await page.request.delete(
-        `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/properties?id=eq.${id}`,
+        `${env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/properties?id=eq.${id}`,
         {
           headers: {
-            apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-            Authorization: `Bearer ${process.env.SUPABASE_SERVICE_KEY!}`,
+            apikey: env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+            Authorization: `Bearer ${env.SUPABASE_SERVICE_KEY!}`,
             Prefer: 'return=minimal',
           },
         },
