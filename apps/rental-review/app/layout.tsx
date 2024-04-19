@@ -3,16 +3,25 @@ import './globals.css';
 import NavBar from '@/components/Header/NavBar';
 import Footer from '@/components/Footer/Footer';
 import { NextPage } from 'next';
-import React, { Suspense } from 'react';
+import React, { FC, Suspense } from 'react';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import Toolbar from '@/components/vercel-toolbar';
 import Providers from '@/components/Providers';
+import { FlagValues } from '@vercel/flags/react';
+import { getFeatureFlagValues } from '@repo/feature-flags';
+import { encrypt } from '@vercel/flags';
 
 export const metadata = {
   title: 'Rental Review',
   description:
     'A place for tenants and landlords to work towards better living.',
+};
+
+const FeatureFlags: FC = async () => {
+  const flagValues = await getFeatureFlagValues();
+  const encryptedFlagValues = await encrypt(flagValues);
+  return <FlagValues values={encryptedFlagValues} />;
 };
 
 const Layout: NextPage<{
@@ -32,6 +41,7 @@ const Layout: NextPage<{
         <SpeedInsights />
         <Analytics />
         <Suspense>
+          <FeatureFlags />
           <Toolbar />
         </Suspense>
       </Providers>

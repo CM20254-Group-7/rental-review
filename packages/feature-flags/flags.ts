@@ -8,7 +8,8 @@ import {
 import { cookies } from 'next/headers';
 // defines the list of
 type Features = {
-  propertySearchView: () => void;
+  propertySearchCondensedView: () => void;
+  propertySearchPagination: () => void;
   // ...
   // newFeature: () => void;
 };
@@ -27,12 +28,21 @@ const flags: FeatureFlagDefinitions = {
   //   ],
   //   defaultValue: false,
   // },
-  propertySearchView: {
+  propertySearchCondensedView: {
     description:
       'Used for A/B test on the property search page. Allows a reduced version of the page to be shown to allow results to be quicklly skimmed',
     options: [
       { value: false, label: 'Normal' },
       { value: true, label: 'Condenced' },
+    ],
+    defaultValue: false,
+  },
+  propertySearchPagination: {
+    description:
+      'Used for A/B test on the property search page. Allows the user to navigate between pages of results rather than showing all results on one page',
+    options: [
+      { value: false, label: 'Off' },
+      { value: true, label: 'On' },
     ],
     defaultValue: false,
   },
@@ -44,6 +54,32 @@ const getFlagOverides = async () => {
 };
 const getFlagsConfig = async () =>
   (await get('featureFlags')) as { [key: string]: JsonValue } | undefined;
+export const getFlagValue = async (flagName: keyof Features) => {
+  const overrides = await getFlagOverides();
+  const override = overrides?.[flagName];
+  const config = (await getFlagsConfig())?.[flagName] as JsonValue | undefined;
+  const { defaultValue } = flags[flagName];
+  return override ?? config ?? defaultValue;
+};
+type FlagValues = {
+  [Property in keyof Features]: JsonValue;
+};
+export const getFeatureFlagValues = async (): Promise<FlagValues> => {
+  const flagNames = Object.keys(flags) as Array<keyof Features>;
+  const overrideValues = await getFlagOverides();
+  const configValues = await getFlagsConfig();
+  const flagValues = flagNames.reduce((acc, flagName) => {
+    const flagConfig = configValues?.[flagName];
+    const flagOverride = overrideValues?.[flagName];
+    const flagValue =
+      flagOverride ?? flagConfig ?? flags[flagName].defaultValue;
+    return {
+      ...acc,
+      [flagName]: flagValue,
+    };
+  }, {} as FlagValues);
+  return flagValues;
+};
 type FlagDetails = FlagDefinitionType & {
   name: keyof Features;
   defaultValue: JsonValue;
@@ -54,8 +90,6 @@ type FlagDetails = FlagDefinitionType & {
 const getFlagDetails = async (
   flagName: keyof Features,
 ): Promise<FlagDetails> => {
-  console.log('flagName', flagName);
-  const overrides = await getFlagOverides();
   const override = (await getFlagOverides())?.[flagName];
   const config = (await getFlagsConfig())?.[flagName] as JsonValue | undefined;
   const { defaultValue } = flags[flagName];
