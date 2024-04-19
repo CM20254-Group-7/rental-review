@@ -12,19 +12,23 @@ const AddPictureForm: FC<{
     uploadPictures.bind(null, property_id),
     {},
   );
-  let error_message = state.error
-    ? JSON.stringify(state.error, null, '\t')
-    : '';
-  error_message = error_message.substring(1, error_message.length - 1);
 
-  console.log(state);
+  let errorMessage = state.error ? JSON.stringify(state.error, null, '\t') : '';
+  errorMessage = errorMessage.substring(1, errorMessage.length - 1);
+
   return (
     <form
       className='mb-8 flex w-full max-w-prose flex-col place-items-center gap-2 rounded-md border p-4'
       action={dispatch}
     >
       <p>Please upload your pictures one by one</p>
-      <input className='rounded-md border p-2' type='file' name='pictures' />
+
+      <input
+        className='rounded-md border p-2'
+        name='pictures'
+        type='file'
+        accept='image/*'
+      />
       <button
         className='rounded-md border p-2 hover:bg-gray-600/20'
         type='submit'
@@ -33,7 +37,7 @@ const AddPictureForm: FC<{
       </button>
 
       {state.message != null && <p>Success!</p>}
-      {state.error && <p>{error_message}</p>}
+      {state.error && <p>{errorMessage}</p>}
     </form>
   );
 };

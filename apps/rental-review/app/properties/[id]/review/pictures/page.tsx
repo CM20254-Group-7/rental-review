@@ -1,33 +1,12 @@
 import { NextPage } from 'next';
-import {
-  createServerSupabaseClient,
-  createServiceSupabaseClient,
-} from '@repo/supabase-client-helpers/server-only';
 
 import AddPictureForm from './form';
-import { get } from 'http';
-
-// get all the pictures uploaded so far that are associated with the review
-const getReviewPictures = async (reviewId: string, propertyId: string) => {
-  const supabase = createServerSupabaseClient();
-  const serviceSupabase = createServiceSupabaseClient();
-
-  // TODO: need to fix this to get the review pictures
-  const { data: reviewPictures, error } = await serviceSupabase.storage
-    .from('review_pictures')
-    .list(propertyId);
-
-  if (error) {
-    return null;
-  }
-};
 
 const AddPicturePage: NextPage<{
   params?: {
     id: string;
   };
 }> = async ({ params: { id: propertyId } = {} }) => {
-  getReviewPictures('123', propertyId || '');
   return (
     <main className='flex flex-1 flex-col place-items-center justify-center py-10 md:py-16'>
       <div>

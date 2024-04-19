@@ -38,6 +38,14 @@ export const uploadPictures = async (
     };
   }
 
+  const extension = file.name.split('.').pop() as string;
+  if (!['jpg', 'jpeg', 'png', 'gif'].includes(extension)) {
+    return {
+      error: 'Invalid File Type',
+      message: null,
+    };
+  }
+
   const supabase = createServerSupabaseClient();
 
   const {
@@ -117,3 +125,5 @@ export const uploadPictures = async (
     message: 'Success',
   };
 };
+
+// export { data}
