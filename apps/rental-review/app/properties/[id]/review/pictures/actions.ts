@@ -10,13 +10,13 @@ import { z } from 'zod';
 
 export type ReviewPictureState =
   | {
-    error: string;
-    message: null
-  }
+      error: string;
+      message: null;
+    }
   | {
-    error: null;
-    message: string;
-  }
+      error: null;
+      message: string;
+    };
 
 const reviewPictureSchema = z.object({
   pictures: z.instanceof(File),
@@ -27,7 +27,6 @@ export const uploadPictures = async (
   prevState: ReviewPictureState,
   formData: FormData,
 ): Promise<ReviewPictureState> => {
-
   const file = formData.get('pictures')
     ? (formData.get('pictures') as File)
     : null;
@@ -54,13 +53,13 @@ export const uploadPictures = async (
 
   const user_id = user.id;
 
-  const { data:reviewerId, error: reviewerError } = await supabase
+  const { data: reviewerId, error: reviewerError } = await supabase
     .from('reviewer_private_profiles')
     .select('reviewer_id')
     .eq('user_id', user_id)
     .eq('property_id', propertyId)
     .single();
-  
+
   if (reviewerError || !reviewerId) {
     return {
       error: 'Error fetching reviewer id',
@@ -68,7 +67,7 @@ export const uploadPictures = async (
     };
   }
 
-  const { data:reviewId, error:reviewError } = await supabase
+  const { data: reviewId, error: reviewError } = await supabase
     .from('reviews')
     .select('review_id')
     .eq('reviewer_id', reviewerId.reviewer_id)
@@ -92,47 +91,29 @@ export const uploadPictures = async (
     .upload(`${propertyId}/${reviewId.review_id}@${timestamp}`, file, {
       upsert: true,
     });
-  
-  const { data:pictureUrl, error:pictureError } = await serviceSupabase.storage
+
+  const {
+    data: { publicUrl },
+  } = serviceSupabase.storage
     .from('review_pictures')
     .getPublicUrl(`${propertyId}/${reviewId.review_id}@${timestamp}`);
 
-  if (pictureError) {
-    return {
-      error: 'Error fetching picture',
-      message: null,
-    };
-  }
+  const { error: photoError } = await supabase.from('review_photos').insert([
+    {
+      review_id: reviewId.review_id,
+      photo: publicUrl,
+    },
+  ]);
 
-  // TODO: This doesn't work, need to fix
-  // I don't know if I even need to write to a table
-  const { error: photoError } = await supabase
-    .from('review_photos')
-    .insert([
-      {
-        review_id: reviewId.review_id,
-        photo: pictureUrl,
-      },
-    ]);
-  
-  console.log(photoError);
   if (photoError) {
     return {
       error: 'Error inserting photo',
       message: null,
     };
   }
-  
-  // await serviceSupabase.from('review_photos').insert([
-  //   {
-  //     review_id: reviewId,
-  //     photos: pictures,
-  //   },
-  // ]);
 
   return {
     error: null,
     message: 'Success',
   };
 };
-

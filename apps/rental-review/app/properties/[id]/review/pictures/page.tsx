@@ -8,10 +8,9 @@ import AddPictureForm from './form';
 import { get } from 'http';
 
 // get all the pictures uploaded so far that are associated with the review
-const getReviewPictures = async (reviewId: string, propertyId:string) => {
+const getReviewPictures = async (reviewId: string, propertyId: string) => {
   const supabase = createServerSupabaseClient();
   const serviceSupabase = createServiceSupabaseClient();
-
 
   // TODO: need to fix this to get the review pictures
   const { data: reviewPictures, error } = await serviceSupabase.storage
@@ -21,8 +20,7 @@ const getReviewPictures = async (reviewId: string, propertyId:string) => {
   if (error) {
     return null;
   }
-}
-
+};
 
 const AddPicturePage: NextPage<{
   params?: {
@@ -33,16 +31,16 @@ const AddPicturePage: NextPage<{
   return (
     <main className='flex flex-1 flex-col place-items-center justify-center py-10 md:py-16'>
       <div>
-
-        <h1 className='flex justify-center mt-6 text-2xl font-bold'>
+        <h1 className='mt-6 flex justify-center text-2xl font-bold'>
           Add pictures to your review
         </h1>
         <p className='mb-6'>
-          Pictures can help others grasp the severity of the situation you're highlighting
+          Pictures can help others grasp the severity of the situation you're
+          highlighting
         </p>
       </div>
-      
-      <AddPictureForm property_id={propertyId || ''}/>
+
+      <AddPictureForm property_id={propertyId || ''} />
     </main>
   );
 };
