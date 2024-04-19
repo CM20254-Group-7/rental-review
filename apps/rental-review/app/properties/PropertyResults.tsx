@@ -4,6 +4,7 @@ import React, { cache } from 'react';
 import StarRatingLayout from '@/components/StarRating';
 import CurrentOwnerIndicator from '@/components/CurrentOwnerIndicator';
 import { getFlagValue } from '@repo/feature-flags';
+import ResultsTable, { ResultsTableSkeleton } from './results-table';
 
 const defaultSortBy = 'rating';
 const defaultSortOrder = 'desc';
@@ -174,16 +175,38 @@ const PropertyResultsCards: React.FC<{
   ));
 };
 
-const PropertyResultsTable: React.FC<{ properties: PropertyResults }> = ({
+const PropertyResultsTable: React.FC<{ properties: PropertyResults }> = async ({
   properties,
 }) => {
-  return (
-    <div>
-      {properties.map((property) => (
-        <p>{property.address}</p>
-      ))}
-    </div>
+  const supabase = createServerSupabaseClient();
+  const propertyDetails = await Promise.all(
+    properties.map(async (property) => {
+      const { data } = await supabase
+        .from('property_ownership')
+        .select('landlord_id')
+        .eq('property_id', property.id!)
+        .is('ended_at', null)
+        .maybeSingle();
+
+      const currentOwner = data?.landlord_id;
+
+      const currentLandlordRating = currentOwner
+        ? (
+            await supabase.rpc('average_landlord_rating', {
+              id: currentOwner,
+            })
+          ).data
+        : null;
+
+      return {
+        id: property.id!,
+        address: property.address!,
+        average_rating: property.average_rating!,
+        current_landlord_rating: currentLandlordRating,
+      };
+    }),
   );
+  return <ResultsTable properties={propertyDetails} />;
 };
 
 const PropertyResults: React.FC<{
@@ -198,22 +221,33 @@ const PropertyResults: React.FC<{
     tags?: string | string[];
   };
 }> = async ({ searchParams }) => {
-  const condensedResultFormat = await getFlagValue(
-    'propertySearchCondensedView',
-  );
   const properties = await getPropertyResults({
     ...searchParams,
     tags: searchParams?.tags ? [searchParams.tags].flat() : undefined,
   });
 
-  if (condensedResultFormat)
-    return <PropertyResultsTable properties={properties} />;
-  return <PropertyResultsCards properties={properties} />;
+  return getFlagValue('propertySearchCondensedView').then(
+    (condensedResultFormat) =>
+      (condensedResultFormat as boolean) ? (
+        <PropertyResultsTable properties={properties} />
+      ) : (
+        <PropertyResultsCards properties={properties} />
+      ),
+  );
 };
 
 export default PropertyResults;
 
-// TODO: Replace with skeleton
-export const PropertyResultsSkeleton: React.FC = () => (
+const ResultsCardsSkeleton: React.FC = async () => (
   <div className='my-auto'>Properties Loading...</div>
 );
+
+// TODO: Replace with skeleton
+export const PropertyResultsSkeleton: React.FC = async () =>
+  getFlagValue('propertySearchCondensedView').then((condensedResultFormat) =>
+    (condensedResultFormat as boolean) ? (
+      <ResultsTableSkeleton rows={10} />
+    ) : (
+      <ResultsCardsSkeleton />
+    ),
+  );

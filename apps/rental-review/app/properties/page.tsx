@@ -70,7 +70,7 @@ const PropertiesPage: NextPage<{
         </Sheet>
       </div>
       <div className='flex w-full flex-1 justify-center px-4 py-20'>
-        <div className='flex max-w-prose flex-1 flex-col place-items-center justify-center gap-8 py-10 md:py-16'>
+        <div className='flex max-w-prose flex-1 flex-col place-items-center gap-8 py-10 md:py-16'>
           <Suspense fallback={<PropertyResultsSkeleton />}>
             <PropertyResults searchParams={searchParams} />
             <div className='flex flex-col items-center gap-2'>

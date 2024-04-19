@@ -1,6 +1,7 @@
 'use client';
 
 import {
+  Badge,
   Button,
   Divider,
   TextInput,
@@ -16,6 +17,7 @@ import {
 } from '@tremor/react';
 
 export {
+  Badge,
   Button,
   Divider,
   TextInput,
