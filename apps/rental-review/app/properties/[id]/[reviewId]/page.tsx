@@ -10,20 +10,14 @@ const AddPicturePage: NextPage<{
     reviewID: string;
   };
 }> = async ({ params: { id: propertyId, reviewID: reviewId } }) => {
-  const pictures = (await getReviewPictures(reviewId ?? '')) as string[];
-  let pictureArray = [];
-  console.log('+++++++++++++++++++');
+  const pictures = (await getReviewPictures(reviewId ?? '')) as unknown as {
+    photo: string;
+  }[];
+  const pictureArray: string[] = [];
 
-  for (let i = 0; i < pictures.length; i++) {
-    // store them to an array
-    pictureArray.push(pictures && pictures[i]?.photo);
+  for (let i = 0; i < pictures.length; i += 1) {
+    pictureArray.push(pictures[i]?.photo ?? '');
   }
-  console.log(pictureArray);
-  pictureArray.map((picture, index) => {
-    console.log(index)
-    console.log(picture);
-  });
-  console.log('+++++++++++++++++++');
 
   return (
     <main className='flex flex-1 flex-col place-items-center justify-center py-10 md:py-16'>
@@ -40,12 +34,11 @@ const AddPicturePage: NextPage<{
         property_id={propertyId || ''}
         review_id={reviewId || ''}
       />
-      {/* display picture for each picture in pictureArray  */}
       {pictureArray.map((picture, index) => (
         <Image
           key={index}
-          src={pictureArray[index]}
-          alt='broken??????'
+          src={pictureArray[index] ?? ''}
+          alt={`Picture ${index}`}
           width={100}
           height={100}
         />

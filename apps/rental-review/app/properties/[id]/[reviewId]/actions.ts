@@ -59,7 +59,7 @@ export const uploadPictures = async (
       message: null,
     };
   }
-  
+
   // check if the review_id exists
   const { data: review } = await supabase
     .from('reviews')
