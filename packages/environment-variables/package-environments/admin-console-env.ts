@@ -8,7 +8,7 @@ import { defaultIfDev } from '../src/helpers';
 // Variables used in /apps/admin-console
 // This app needs to write to the edge config
 // also hosted on Vercel, so use the Vercel preset
-// add our own envType last to override the default value of VERCEL_ENV (can be undefined in vercel preset, we want to default to development)
+// add our own envType last to override the default value of NEXT_PUBLIC_VERCEL_ENV (can be undefined in vercel preset, we want to default to development)
 // also requires additional varaibles for authentication & to link back to the public site
 const adminConsoleEnv = createEnv({
   extends: [{ ...edgeConfigWriteEnv, ...vercel, ...envType }],

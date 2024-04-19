@@ -13,7 +13,7 @@
         "NEXT_PUBLIC_PUBLIC_SITE_URL",
         "SUPABASE_SERVICE_KEY",
         "EDGE_CONFIG",
-        "VERCEL_ENV",
+        "NEXT_PUBLIC_VERCEL_ENV",
         "FLAGS_SECRET"
       ]
     },
@@ -45,7 +45,7 @@
         "NEXT_PUBLIC_PUBLIC_SITE_URL",
         "SUPABASE_SERVICE_KEY",
         "EDGE_CONFIG",
-        "VERCEL_ENV",
+        "NEXT_PUBLIC_VERCEL_ENV",
         "FLAGS_SECRET"
       ]
     },
@@ -77,7 +77,7 @@
         "NEXT_PUBLIC_PUBLIC_SITE_URL",
         "SUPABASE_SERVICE_KEY",
         "EDGE_CONFIG",
-        "VERCEL_ENV",
+        "NEXT_PUBLIC_VERCEL_ENV",
         "FLAGS_SECRET"
       ]
     },

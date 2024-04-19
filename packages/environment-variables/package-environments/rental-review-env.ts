@@ -8,7 +8,7 @@ import envType from '../src/env-type';
 // Variables used in /apps/renewal-review
 // This app needs to use the Supabase client and the feature flags, so it extends from both
 // also hosted on Vercel, so use the Vercel preset
-// add our own envType last to override the default value of VERCEL_ENV (can be undefined in vercel preset, we want to default to development)
+// add our own envType last to override the default value of NEXT_PUBLIC_VERCEL_ENV (can be undefined in vercel preset, we want to default to development)
 const publicSiteEnv = createEnv({
   extends: [
     { ...supabaseClientEnv, ...featureFlagsEnv, ...vercel, ...envType },

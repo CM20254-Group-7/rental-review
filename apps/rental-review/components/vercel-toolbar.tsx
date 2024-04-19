@@ -6,7 +6,7 @@ import env from '@repo/environment-variables/rental-review';
 const { VercelToolbar } = await import('@vercel/toolbar/next');
 
 const Toolbar: React.FC = async () => {
-  const environment = env.VERCEL_ENV;
+  const environment = env.NEXT_PUBLIC_VERCEL_ENV;
   const isProduction = environment === 'production';
 
   // Always show the toolbar in development & preview environments

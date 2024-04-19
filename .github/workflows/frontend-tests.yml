@@ -23,7 +23,7 @@ jobs:
       VERCEL_TEAM_ID                : ${{ vars.VERCEL_TEAM_ID                }}
       VERCEL_API_KEY                : ${{ vars.VERCEL_API_KEY                }}
       FLAGS_SECRET                  : ${{ vars.FLAGS_SECRET                  }}
-      VERCEL_ENV                    : ${{ vars.VERCEL_ENV                    }}
+      NEXT_PUBLIC_VERCEL_ENV                    : ${{ vars.NEXT_PUBLIC_VERCEL_ENV                    }}
 
     steps:
     - name: Check out code

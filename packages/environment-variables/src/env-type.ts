@@ -3,13 +3,13 @@ import { z } from 'zod';
 
 // the type of environment that the app is running in
 const envType = createEnv({
-  server: {
-    VERCEL_ENV: z
+  client: {
+    NEXT_PUBLIC_VERCEL_ENV: z
       .enum(['development', 'preview', 'production'])
       .default('development'),
   },
   runtimeEnv: {
-    VERCEL_ENV: process.env.VERCEL_ENV,
+    NEXT_PUBLIC_VERCEL_ENV: process.env.NEXT_PUBLIC_VERCEL_ENV,
   },
 });
 
