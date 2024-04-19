@@ -1,10 +1,9 @@
 import { NextPage } from 'next';
 import Image from 'next/image';
 
+import Link from 'next/link';
 import { deletePicture, getReviewPictures } from './actions';
 import AddPictureForm from './form';
-
-import BackButton from './_components/back-button';
 
 const AddPicturePage: NextPage<{
   params: {
@@ -22,7 +21,14 @@ const AddPicturePage: NextPage<{
   return (
     <main className='flex flex-1 flex-col place-items-center justify-center py-10 md:py-16'>
       <div className='flex w-full flex-row items-start'>
-        <BackButton />
+        <Link href={`/properties/${propertyId}/`}>
+          <button
+            type='button'
+            className='text-blue-500/70 underline hover:text-blue-500'
+          >
+            Back
+          </button>
+        </Link>
       </div>
       <div>
         <h1 className='mt-6 flex justify-center text-2xl font-bold'>
