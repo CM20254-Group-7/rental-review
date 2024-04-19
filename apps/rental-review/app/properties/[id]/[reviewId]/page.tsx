@@ -51,6 +51,7 @@ const AddPicturePage: NextPage<{
       {pictureArray.map((picture, index) => (
         <>
           <Image
+            // eslint-disable-next-line react/no-array-index-key
             key={`Picture${index}`}
             src={pictureArray[index] ?? ''}
             alt={`Picture ${index}`}

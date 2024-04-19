@@ -123,7 +123,7 @@ export const ReviewDetailsLayout: React.FC<ReviewDetailsLayoutProps> = async ({
   let currentReviewId = null;
 
   if (user) {
-    const { data: reviewerData, error: reviewerError } = await supabase
+    const { data: reviewerData } = await supabase
       .from('reviewer_private_profiles')
       .select('reviewer_id')
       .eq('user_id', user.id)
@@ -131,7 +131,7 @@ export const ReviewDetailsLayout: React.FC<ReviewDetailsLayoutProps> = async ({
       .single();
 
     if (reviewerData) {
-      const { data: reviewData, error: reviewError } = await supabase
+      const { data: reviewData } = await supabase
         .from('reviews')
         .select('review_id')
         .eq('reviewer_id', reviewerData.reviewer_id)
@@ -142,9 +142,6 @@ export const ReviewDetailsLayout: React.FC<ReviewDetailsLayoutProps> = async ({
       }
     }
   }
-
-  console.log('------------------');
-  console.log(user?.id, reviewId);
 
   const { data, error } = await supabase
     .from('reviews')
@@ -200,6 +197,7 @@ export const ReviewDetailsLayout: React.FC<ReviewDetailsLayoutProps> = async ({
         </p>
 
         <div className='flex flex-row'>
+          {/* eslint-disable-next-line react/jsx-props-no-spreading */}
           <AboutYouBadge {...aboutYouProps} />
           {showReportButton && (
             <Link
