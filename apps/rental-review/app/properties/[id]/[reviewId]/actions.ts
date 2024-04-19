@@ -24,6 +24,7 @@ const reviewPictureSchema = z.object({
 
 export const uploadPictures = async (
   propertyId: string,
+  reviewId: string,
   prevState: ReviewPictureState,
   formData: FormData,
 ): Promise<ReviewPictureState> => {
@@ -39,7 +40,7 @@ export const uploadPictures = async (
   }
 
   const extension = file.name.split('.').pop() as string;
-  if (!['jpg', 'jpeg', 'png', 'gif'].includes(extension)) {
+  if (!['jpg', 'png', 'gif'].includes(extension)) {
     return {
       error: 'Invalid File Type',
       message: null,
@@ -58,33 +59,16 @@ export const uploadPictures = async (
       message: null,
     };
   }
-
-  const user_id = user.id;
-
-  const { data: reviewerId, error: reviewerError } = await supabase
-    .from('reviewer_private_profiles')
-    .select('reviewer_id')
-    .eq('user_id', user_id)
-    .eq('property_id', propertyId)
-    .single();
-
-  if (reviewerError || !reviewerId) {
-    return {
-      error: 'Error fetching reviewer id',
-      message: null,
-    };
-  }
-
-  const { data: reviewId, error: reviewError } = await supabase
+  
+  // check if the review_id exists
+  const { data: review } = await supabase
     .from('reviews')
     .select('review_id')
-    .eq('reviewer_id', reviewerId.reviewer_id)
-    .eq('property_id', propertyId)
-    .single();
+    .eq('review_id', reviewId);
 
-  if (reviewError || !reviewId) {
+  if (!review || review.length === 0) {
     return {
-      error: 'Error fetching review id',
+      error: 'Review does not exist',
       message: null,
     };
   }
@@ -96,7 +80,7 @@ export const uploadPictures = async (
 
   const { data: pictures } = await serviceSupabase.storage
     .from('review_pictures')
-    .upload(`${propertyId}/${reviewId.review_id}@${timestamp}`, file, {
+    .upload(`${propertyId}/${reviewId}@${timestamp}`, file, {
       upsert: true,
     });
 
@@ -104,11 +88,11 @@ export const uploadPictures = async (
     data: { publicUrl },
   } = serviceSupabase.storage
     .from('review_pictures')
-    .getPublicUrl(`${propertyId}/${reviewId.review_id}@${timestamp}`);
+    .getPublicUrl(`${propertyId}/${reviewId}@${timestamp}`);
 
   const { error: photoError } = await supabase.from('review_photos').insert([
     {
-      review_id: reviewId.review_id,
+      review_id: reviewId,
       photo: publicUrl,
     },
   ]);
@@ -131,20 +115,14 @@ export const getReviewPictures = async (
 ): Promise<string[] | null> => {
   const serviceSupabase = createServiceSupabaseClient();
 
-  const { data: pictures, error } = await serviceSupabase
+  const { data: pictures } = await serviceSupabase
     .from('review_photos')
     .select('photo')
     .eq('review_id', reviewId);
-
-  console.log(error);
-  console.log(pictures);
-  console.log(pictures as Array<{ photo: string }>);
 
   if (!pictures) {
     return null;
   }
 
-
-
-  return (pictures as Array<{ photo: string }>).map((picture) => picture.photo);
+  return pictures;
 };

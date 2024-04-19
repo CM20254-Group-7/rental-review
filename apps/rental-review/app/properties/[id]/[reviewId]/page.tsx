@@ -1,17 +1,30 @@
 import { NextPage } from 'next';
+import Image from 'next/image'; // Import the Image component from the appropriate package
 
 import AddPictureForm from './form';
 import { getReviewPictures } from './actions';
 
 const AddPicturePage: NextPage<{
-  params?: {
-    property_id: string;
-    review_id: string;
+  params: {
+    id: string;
+    reviewID: string;
   };
-}> = async ({
-  params: { property_id: propertyId, review_id: reviewId } = {},
-}) => {
-  getReviewPictures(reviewId ?? '');
+}> = async ({ params: { id: propertyId, reviewID: reviewId } }) => {
+  const pictures = (await getReviewPictures(reviewId ?? '')) as string[];
+  let pictureArray = [];
+  console.log('+++++++++++++++++++');
+
+  for (let i = 0; i < pictures.length; i++) {
+    // store them to an array
+    pictureArray.push(pictures && pictures[i]?.photo);
+  }
+  console.log(pictureArray);
+  pictureArray.map((picture, index) => {
+    console.log(index)
+    console.log(picture);
+  });
+  console.log('+++++++++++++++++++');
+
   return (
     <main className='flex flex-1 flex-col place-items-center justify-center py-10 md:py-16'>
       <div>
@@ -23,8 +36,20 @@ const AddPicturePage: NextPage<{
           highlighting
         </p>
       </div>
-
-      <AddPictureForm property_id={propertyId || ''} />
+      <AddPictureForm
+        property_id={propertyId || ''}
+        review_id={reviewId || ''}
+      />
+      {/* display picture for each picture in pictureArray  */}
+      {pictureArray.map((picture, index) => (
+        <Image
+          key={index}
+          src={pictureArray[index]}
+          alt='broken??????'
+          width={100}
+          height={100}
+        />
+      ))}
     </main>
   );
 };

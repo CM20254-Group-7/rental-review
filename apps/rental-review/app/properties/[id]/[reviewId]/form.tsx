@@ -7,9 +7,10 @@ import { uploadPictures } from './actions';
 
 const AddPictureForm: FC<{
   property_id: string;
-}> = ({ property_id }) => {
+  review_id: string;
+}> = ({ property_id, review_id }) => {
   const [state, dispatch] = useFormState(
-    uploadPictures.bind(null, property_id),
+    uploadPictures.bind(null, property_id, review_id),
     {},
   );
 
@@ -36,11 +37,13 @@ const AddPictureForm: FC<{
 
       <br />
 
-      <p>Accepted formats: .jpg, .jpeg, .png, and .gif</p>
+      <p>Accepted formats: .jpg, .png, and .gif</p>
       <p>Please upload your pictures one by one.</p>
 
-      {state.message != null && <p>Success!</p>}
-      {state.error && <p>{errorMessage}</p>}
+      <br />
+
+      {state.message != null && <p className='text-green-600'>Success!</p>}
+      {state.error && <p className='text-red-500'>{errorMessage}</p>}
     </form>
   );
 };
