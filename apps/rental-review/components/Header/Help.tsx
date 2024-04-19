@@ -27,9 +27,10 @@ const Help: React.FC = () => {
           <p className='mb-2'>
             If you are still unsure about something, feel free to visit the FAQ
             page for assistance
-            <Link href='/FAQ' className='font-bold text-blue-500'>
-              {' '}
-              here
+            <Link href='/FAQ' className='px-1'>
+              <Button variant='light' color='blue'>
+                here
+              </Button>
             </Link>
             .
           </p>
