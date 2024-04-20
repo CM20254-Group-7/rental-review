@@ -38,7 +38,7 @@ const AddPictureForm: FC<{
 
       <br />
 
-      <p>Accepted formats: .jpg, .png, and .gif</p>
+      <p>Accepted formats: .jpg .jpeg .png .gif</p>
       <p>Please upload your pictures one by one.</p>
 
       <br />

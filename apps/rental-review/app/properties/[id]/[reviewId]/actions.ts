@@ -35,7 +35,7 @@ export const uploadPictures = async (
   }
 
   const extension = file.name.split('.').pop() as string;
-  if (!['jpg', 'png', 'gif'].includes(extension)) {
+  if (!['jpg', 'jpeg', 'png', 'gif'].includes(extension)) {
     return {
       error: 'Invalid File Type',
       message: null,
