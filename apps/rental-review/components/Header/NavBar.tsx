@@ -19,7 +19,7 @@ const NavBar: FC = async () => {
     loggedIn = false;
   }
   return (
-    <header className='bg-background sticky top-0 h-16 w-screen'>
+    <header className='bg-background sticky top-0 z-30 h-16 w-screen'>
       <div className='bg-primary/10 grid h-full w-full grid-cols-3 grid-rows-1 items-center gap-4 border-b px-4 md:grid-cols-1 md:px-6'>
         <nav className='hidden w-full flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6'>
           <HomeButton />

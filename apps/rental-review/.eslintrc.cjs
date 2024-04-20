@@ -15,5 +15,18 @@ module.exports = {
       },
     ],
   },
-  ignorePatterns: ['next.config.js', 'node_modules/**/*'],
+  overrides: [
+    // allow named export in lib/utils.ts file
+    {
+      files: ['./lib/utils.ts'],
+      rules: {
+        'import/prefer-default-export': 'off',
+      },
+    },
+  ],
+  ignorePatterns: [
+    'next.config.js',
+    'node_modules/**/*',
+    'tailwind.config.cjs',
+  ],
 };

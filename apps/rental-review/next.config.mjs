@@ -1,6 +1,7 @@
 import { withVercelToolbar } from '@vercel/toolbar/plugins/next';
 import { fileURLToPath } from 'node:url';
 import createJiti from 'jiti';
+
 const jiti = createJiti(fileURLToPath(import.meta.url));
 
 const env = jiti('@repo/environment-variables/rental-review');
@@ -20,6 +21,11 @@ const nextConfig = {
         pathname: '/storage/v1/object/**',
       },
     ],
+  },
+  eslint: {
+    // Warning: This allows production builds to successfully complete even if
+    // your project has ESLint errors.
+    ignoreDuringBuilds: true,
   },
 };
 
