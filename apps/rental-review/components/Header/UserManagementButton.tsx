@@ -3,16 +3,32 @@
 import { UserCircleIcon } from '@heroicons/react/24/solid';
 import Link from 'next/link';
 import React from 'react';
-import signOut from './actions';
+// import signOut from './actions';
+import { createClientSupabaseClient } from '@repo/supabase-client-helpers';
+import { useRouter } from 'next/navigation';
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '../dropdown';
 import { Button } from '../ClientTremor';
 
 const UserManagementButton: React.FC<{ email: string }> = ({ email }) => {
+  const router = useRouter();
+  const supabase = createClientSupabaseClient();
+
+  const signOut = async () => {
+    await supabase.auth.signOut();
+
+    router.push('/login');
+  };
+
+  supabase.auth.onAuthStateChange(() => {
+    router.refresh();
+  });
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -26,7 +42,7 @@ const UserManagementButton: React.FC<{ email: string }> = ({ email }) => {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className='bg-background min-w-full p-0' asChild>
-        <form action={signOut}>
+        <DropdownMenuGroup>
           {/* <DropdownMenuLabel>My Account</DropdownMenuLabel> */}
           {/* <DropdownMenuSeparator /> */}
           <DropdownMenuItem asChild>
@@ -40,13 +56,14 @@ const UserManagementButton: React.FC<{ email: string }> = ({ email }) => {
           {/* <DropdownMenuSeparator /> */}
           <DropdownMenuItem asChild>
             <button
-              type='submit'
+              onClick={signOut}
+              type='button'
               className='focus:bg-secondary/10 flex w-full justify-end border-b px-4 py-2 text-right no-underline'
             >
               Logout
             </button>
           </DropdownMenuItem>
-        </form>
+        </DropdownMenuGroup>
       </DropdownMenuContent>
     </DropdownMenu>
   );
