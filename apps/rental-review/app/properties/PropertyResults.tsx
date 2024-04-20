@@ -3,9 +3,36 @@ import Link from 'next/link';
 import React, { cache } from 'react';
 import StarRatingLayout from '@/components/StarRating';
 import CurrentOwnerIndicator from '@/components/CurrentOwnerIndicator';
+import { getFeatureFlagValues, getFlagValue } from '@repo/feature-flags';
+import ResultsTable, { ResultsTableSkeleton } from './results-table';
+import Pagination from './pagination';
+
+// show all properties if pagination is disabled, otherwise show an appropriate number for the format (more for condensed)
+export const getPerPage = (): Promise<'all' | number> =>
+  getFeatureFlagValues().then(
+    ({ propertySearchCondensedView, propertySearchPagination }) => {
+      if (!propertySearchPagination) {
+        return 'all';
+      }
+      if (propertySearchCondensedView) {
+        return 10;
+      }
+      return 5;
+    },
+  );
 
 const defaultSortBy = 'rating';
 const defaultSortOrder = 'desc';
+
+type PropertyResults = {
+  id: string | null;
+  address: string | null;
+  average_rating: number | null;
+  description: string | null;
+  beds: number | null;
+  baths: number | null;
+  tags: string[] | null;
+}[];
 
 const getPropertyResults = cache(
   async (searchQuery?: {
@@ -17,7 +44,8 @@ const getPropertyResults = cache(
     postalCode?: string;
     country?: string;
     tags?: string[];
-  }) => {
+    page?: string;
+  }): Promise<{ properties: PropertyResults; count: number }> => {
     const supabase = createServerSupabaseClient();
 
     const sortBy = searchQuery?.sortBy || defaultSortBy;
@@ -42,7 +70,9 @@ const getPropertyResults = cache(
 
     let baseQuery = supabase
       .from('full_properties')
-      .select('id, address, average_rating, description, beds, baths, tags');
+      .select('id, address, average_rating, description, beds, baths, tags', {
+        count: 'exact',
+      });
 
     if (searchQuery?.address) {
       baseQuery = baseQuery.textSearch('address', searchQuery.address, {
@@ -87,37 +117,37 @@ const getPropertyResults = cache(
       baseQuery = baseQuery.order(sortField, { ascending: sortAsc });
     }
 
-    const { data: properties, error: propertiesError } = await baseQuery;
+    const perPage = await getPerPage();
 
-    if (propertiesError) {
-      return {
-        properties: [],
-      };
+    if (perPage !== 'all') {
+      const page = searchQuery?.page ? parseInt(searchQuery.page, 10) : 1;
+      const startIndex = (page - 1) * perPage;
+      const endIndex = page * perPage - 1;
+
+      baseQuery = baseQuery.range(startIndex, endIndex);
     }
 
-    return {
-      properties,
-    };
+    const { data: properties, error: propertiesError, count } = await baseQuery;
+
+    if (propertiesError) {
+      return { properties: [], count: 0 };
+    }
+
+    return { properties, count: count ?? 0 };
   },
 );
 
-const PropertyResults: React.FC<{
-  searchParams?: {
-    sortBy?: string;
-    sortOrder?: string;
-    address?: string;
-    street?: string;
-    city?: string;
-    postalCode?: string;
-    country?: string;
-    tags?: string | string[];
-  };
-}> = async ({ searchParams }) => {
-  const { properties } = await getPropertyResults({
-    ...searchParams,
-    tags: searchParams?.tags ? [searchParams.tags].flat() : undefined,
-  });
-
+const PropertyResultsCards: React.FC<{
+  properties: {
+    id: string | null;
+    address: string | null;
+    average_rating: number | null;
+    description: string | null;
+    beds: number | null;
+    baths: number | null;
+    tags: string[] | null;
+  }[];
+}> = async ({ properties }) => {
   if (properties.length === 0) {
     return <div>No properties found</div>;
   }
@@ -173,9 +203,89 @@ const PropertyResults: React.FC<{
   ));
 };
 
+const PropertyResultsTable: React.FC<{ properties: PropertyResults }> = async ({
+  properties,
+}) => {
+  const supabase = createServerSupabaseClient();
+  const propertyDetails = await Promise.all(
+    properties.map(async (property) => {
+      const { data } = await supabase
+        .from('property_ownership')
+        .select('landlord_id')
+        .eq('property_id', property.id!)
+        .is('ended_at', null)
+        .maybeSingle();
+
+      const currentOwner = data?.landlord_id;
+
+      const currentLandlordRating = currentOwner
+        ? (
+            await supabase.rpc('average_landlord_rating', {
+              id: currentOwner,
+            })
+          ).data
+        : null;
+
+      return {
+        id: property.id!,
+        address: property.address!,
+        average_rating: property.average_rating!,
+        current_landlord_rating: currentLandlordRating,
+      };
+    }),
+  );
+  return <ResultsTable properties={propertyDetails} />;
+};
+
+const PropertyResults: React.FC<{
+  searchParams?: {
+    sortBy?: string;
+    sortOrder?: string;
+    address?: string;
+    street?: string;
+    city?: string;
+    postalCode?: string;
+    country?: string;
+    tags?: string | string[];
+    page?: string;
+  };
+}> = async ({ searchParams }) => {
+  const { properties, count } = await getPropertyResults({
+    ...searchParams,
+    tags: searchParams?.tags ? [searchParams.tags].flat() : undefined,
+  });
+
+  const condensedResultFormat = (await getFlagValue(
+    'propertySearchCondensedView',
+  )) as boolean;
+
+  const perPage = await getPerPage();
+  const paginate = perPage !== 'all';
+
+  return (
+    <>
+      {condensedResultFormat ? (
+        <PropertyResultsTable properties={properties} />
+      ) : (
+        <PropertyResultsCards properties={properties} />
+      )}
+      {paginate && <Pagination pageSize={perPage} totalResults={count} />}
+    </>
+  );
+};
+
 export default PropertyResults;
 
-// TODO: Replace with skeleton
-export const PropertyResultsSkeleton: React.FC = () => (
+const ResultsCardsSkeleton: React.FC = async () => (
   <div className='my-auto'>Properties Loading...</div>
 );
+
+// TODO: Replace with skeleton
+export const PropertyResultsSkeleton: React.FC = async () =>
+  getFlagValue('propertySearchCondensedView').then((condensedResultFormat) =>
+    (condensedResultFormat as boolean) ? (
+      <ResultsTableSkeleton rows={10} />
+    ) : (
+      <ResultsCardsSkeleton />
+    ),
+  );
