@@ -11,6 +11,7 @@ import Providers from '@/components/Providers';
 import { FlagValues } from '@vercel/flags/react';
 import { getFeatureFlagValues } from '@repo/feature-flags';
 import { encrypt } from '@vercel/flags';
+import { createServerSupabaseClient } from '@repo/supabase-client-helpers/server-only';
 
 export const metadata = {
   title: 'Rental Review',
@@ -26,27 +27,32 @@ const FeatureFlags: FC = async () => {
 
 const Layout: NextPage<{
   children: React.ReactNode;
-}> = ({ children }) => (
-  <html lang='en' className={GeistSans.className}>
-    <body className='bg-background text-foreground '>
-      <Providers>
-        <div className='flex min-h-screen flex-col items-center'>
-          <NavBar />
-          <div className='flex w-full flex-1 flex-col items-center'>
-            {children}
+}> = async ({ children }) => {
+  const {
+    data: { user },
+  } = await createServerSupabaseClient().auth.getUser();
+  return (
+    <html lang='en' className={GeistSans.className}>
+      <body className='bg-background text-foreground '>
+        <Providers initialUser={user}>
+          <div className='flex min-h-screen flex-col items-center'>
+            <NavBar />
+            <div className='flex w-full flex-1 flex-col items-center'>
+              {children}
+            </div>
+            <Footer />
           </div>
-          <Footer />
-        </div>
 
-        <SpeedInsights />
-        <Analytics />
-        <Suspense>
-          <FeatureFlags />
-          <Toolbar />
-        </Suspense>
-      </Providers>
-    </body>
-  </html>
-);
+          <SpeedInsights />
+          <Analytics />
+          <Suspense>
+            <FeatureFlags />
+            <Toolbar />
+          </Suspense>
+        </Providers>
+      </body>
+    </html>
+  );
+};
 
 export default Layout;
