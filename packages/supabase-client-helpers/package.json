@@ -10,7 +10,7 @@
         "@supabase/supabase-js": "latest",
         "@repo/environment-variables": "workspace:*",
         "@repo/supabase": "workspace:*",
-        "next": "^14.2.1"
+        "next": "latest"
     },
     "devDependencies": {
         "supabase": "1.142.2"

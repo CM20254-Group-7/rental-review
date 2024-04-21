@@ -33,7 +33,7 @@
     "cmdk": "^1.0.0",
     "jiti": "^1.21.0",
     "lucide-react": "^0.368.0",
-    "next": "^14.2.1",
+    "next": "latest",
     "next-themes": "^0.3.0",
     "react": "^18",
     "react-dom": "^18",

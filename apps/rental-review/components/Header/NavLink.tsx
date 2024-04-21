@@ -3,17 +3,22 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
+import { useUser } from '../Providers';
 
 const NavLink: React.FC<{
   text: string;
   href: string;
-}> = ({ text, href }) => {
+  loggedInOnly?: boolean;
+}> = ({ text, href, loggedInOnly = false }) => {
+  const { user } = useUser();
   const pathName = usePathname();
   const [active, setActive] = useState(pathName === href);
 
   useEffect(() => {
     setActive(pathName === href);
   }, [href, pathName]);
+
+  if (loggedInOnly && !user) return null;
 
   return (
     <Link
