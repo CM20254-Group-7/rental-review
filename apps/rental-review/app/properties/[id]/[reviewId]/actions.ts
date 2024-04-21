@@ -75,7 +75,7 @@ export const uploadPictures = async (
 
   await serviceSupabase.storage
     .from('review_pictures')
-    .upload(`${propertyId}/${reviewId}@${timestamp}`, file, {
+    .upload(`${propertyId}/${reviewId}@${timestamp}.${extension}`, file, {
       upsert: true,
     });
 
@@ -83,7 +83,7 @@ export const uploadPictures = async (
     data: { publicUrl },
   } = serviceSupabase.storage
     .from('review_pictures')
-    .getPublicUrl(`${propertyId}/${reviewId}@${timestamp}`);
+    .getPublicUrl(`${propertyId}/${reviewId}@${timestamp}.${extension}`);
 
   const { error: photoError } = await supabase.from('review_photos').insert([
     {
@@ -129,23 +129,72 @@ export const getReviewPictures = async (
   return pictureArray;
 };
 
-export const deletePicture = async (imageURL: string) => {
+export type DeletePictureState =
+  | {
+      error: string;
+      message: null;
+    }
+  | {
+      error: null;
+      message: string;
+    };
+
+function extractFromUrl(url: string): { fileName: string; folderName: string } {
+  const splitedParts = url.split('/');
+  const fileName = splitedParts[splitedParts.length - 1];
+  const folderName = splitedParts[splitedParts.length - 2];
+
+  if (fileName === undefined || folderName === undefined) {
+    return { fileName: '', folderName: '' };
+  }
+
+  return { fileName, folderName };
+}
+
+export const deletePicture = async (
+  pictureUrl: string,
+): Promise<DeletePictureState> => {
   const serviceSupabase = createServiceSupabaseClient();
 
-  // Extract the file name from the imageURL
-  const fileName = imageURL.substring(imageURL.lastIndexOf('/') + 1);
+  const { fileName, folderName } = extractFromUrl(pictureUrl);
 
-  // Delete the file from the storage bucket
-  const { error } = await serviceSupabase.storage
-    .from('review_pictures')
-    .remove([fileName]);
-
-  if (error) {
+  if (!fileName || !folderName) {
     return {
-      error: 'Error deleting image',
+      error: 'No file name provided',
       message: null,
     };
   }
+
+  if (pictureUrl === undefined) {
+    return {
+      error: 'File undefined',
+      message: null,
+    };
+  }
+
+  const { error: databaseError } = await serviceSupabase.storage
+    .from('review_pictures')
+    .remove([`${folderName}/${fileName}`]);
+
+  if (databaseError) {
+    return {
+      error: 'Error deleting image in storage',
+      message: null,
+    };
+  }
+
+  const { error: photoError } = await serviceSupabase
+    .from('review_photos')
+    .delete()
+    .eq('photo', pictureUrl);
+
+  if (photoError) {
+    return {
+      error: 'Error deleting image in table',
+      message: null,
+    };
+  }
+
   return {
     error: null,
     message: 'Image deleted successfully',

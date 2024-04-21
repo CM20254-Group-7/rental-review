@@ -1,9 +1,8 @@
 import { NextPage } from 'next';
-import Image from 'next/image';
 
 import Link from 'next/link';
-import { deletePicture, getReviewPictures } from './actions';
-import AddPictureForm from './form';
+import { getReviewPictures } from './actions';
+import { AddPictureForm, DeletePictureForm } from './form';
 
 const AddPicturePage: NextPage<{
   params: {
@@ -55,27 +54,8 @@ const AddPicturePage: NextPage<{
       )}
 
       {pictureArray.map((picture, index) => (
-        <>
-          <Image
-            // eslint-disable-next-line react/no-array-index-key
-            key={`Picture${index}`}
-            src={pictureArray[index] ?? ''}
-            alt={`Picture ${index}`}
-            width={400}
-            height={100}
-            className='mb-2'
-          />
-          {/* <br /> */}
-          <button
-            type='button'
-            className='rounded-md border p-2 hover:bg-gray-600/20'
-            // TODO: It is saying that it should be converted to a client component
-            // onClick={() => deletePicture(pictureArray[index] ?? '')}
-          >
-            Delete Above Picture
-          </button>
-          <br />
-        </>
+        // eslint-disable-next-line react/no-array-index-key
+        <DeletePictureForm key={index} imageUrl={pictureArray[index] ?? ''} />
       ))}
     </main>
   );
