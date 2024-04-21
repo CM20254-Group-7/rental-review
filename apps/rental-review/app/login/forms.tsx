@@ -1,8 +1,11 @@
 'use client';
 
 import { useFormState } from 'react-dom';
-import React from 'react';
-import { signIn, signUp, State } from './actions';
+import React, { useState } from 'react';
+import { createClientSupabaseClient } from '@repo/supabase-client-helpers';
+import { useRouter } from 'next/navigation';
+import { z } from 'zod';
+import { signUp, State } from './actions';
 
 type FieldProps = {
   name: string;
@@ -126,19 +129,76 @@ const Form: React.FC<FormProps> = ({
   </form>
 );
 
+const signInSchema = z.object({
+  email: z.string().email(),
+  password: z.string(),
+});
+
+const signInErrorMessages: Record<string, string> = {
+  'You must provide either an email or phone number and a password':
+    'You must provide either an email or phone number and a password',
+
+  'Email logins are disabled':
+    'Sign in currently disabled. Please try again later.',
+
+  'Database error querying schema':
+    'Unable to connect to server. Please try again later.',
+
+  'Email not confirmed': 'Sign in failed, Confirm your email before logging in',
+
+  'Failed to set JWT cookie': 'Sign in failed, unable to set cookie.',
+
+  'Invalid login credentials':
+    'Sign in failed, please check your credentials and try again.',
+};
+
 export const SignInForm: React.FC<{
   redirectTo?: string;
 }> = ({ redirectTo }) => {
   const initialState: State = { message: null, errors: {} };
-  const signInWithRedirect = signIn.bind(null, redirectTo);
-  const [loginState, loginDispatch] = useFormState(
-    signInWithRedirect,
-    initialState,
-  );
+  const { push: redirect } = useRouter();
+  const [loginState, setLoginState] = useState(initialState);
+
+  const signIn = async (formData: FormData) => {
+    const validatedFields = signInSchema.safeParse({
+      email: formData.get('email'),
+      password: formData.get('password'),
+    });
+
+    if (!validatedFields.success) {
+      return {
+        errors: validatedFields.error.flatten().fieldErrors,
+        message: 'Invalid Fields. Failed to Sign In User.',
+      };
+    }
+
+    const { email, password } = validatedFields.data;
+
+    // login the user
+    const supabase = createClientSupabaseClient();
+
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    if (error) {
+      setLoginState({
+        errors: {
+          auth: [error.message],
+        },
+        message: Object.keys(signInErrorMessages).includes(error.message)
+          ? signInErrorMessages[error.message]
+          : 'Sign in failed, please check your credentials and try again.',
+      });
+    }
+
+    return redirect(redirectTo || '/');
+  };
 
   return (
     <Form
-      dispatch={loginDispatch}
+      dispatch={signIn}
       state={loginState}
       title='Returning User? Sign In Here.'
       submitText='Sign In'

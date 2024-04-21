@@ -2,7 +2,7 @@
 
 import { UserCircleIcon } from '@heroicons/react/24/solid';
 import Link from 'next/link';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 // import signOut from './actions';
 import { createClientSupabaseClient } from '@repo/supabase-client-helpers';
 import { useRouter } from 'next/navigation';
@@ -15,19 +15,40 @@ import {
 } from '../dropdown';
 import { Button } from '../ClientTremor';
 
-const UserManagementButton: React.FC<{ email: string }> = ({ email }) => {
-  const router = useRouter();
+const UserManagementButton: React.FC<{ email: string | undefined }> = ({
+  email: initialEmail,
+}) => {
+  const { refresh } = useRouter();
   const supabase = createClientSupabaseClient();
+  const [email, setEmail] = useState(initialEmail);
 
   const signOut = async () => {
     await supabase.auth.signOut();
-
-    router.push('/login');
   };
 
-  supabase.auth.onAuthStateChange(() => {
-    router.refresh();
-  });
+  useEffect(() => {
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((event, session) => {
+      setEmail(session?.user?.email);
+      // refresh on sign out to reassert if page should be visible
+      if (event === 'SIGNED_OUT' || event === 'SIGNED_IN') {
+        refresh();
+      }
+    });
+
+    return subscription.unsubscribe;
+  }, [refresh, supabase]);
+
+  if (!email)
+    return (
+      <Link
+        href='/login'
+        className='hover:bg-primary/20 hover:shadow-primary/20 text-accent flex rounded-md border px-3 py-2 text-lg no-underline transition-all hover:shadow-sm'
+      >
+        Login / Signup
+      </Link>
+    );
 
   return (
     <DropdownMenu>
