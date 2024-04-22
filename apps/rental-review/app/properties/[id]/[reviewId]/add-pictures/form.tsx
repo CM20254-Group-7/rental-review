@@ -51,7 +51,7 @@ export const AddPictureForm: FC<{
 
       <br />
 
-      <p>Accepted formats: .jpg .jpeg .png .gif</p>
+      <p>Accepted formats: .jpg .jpeg .png .webp .gif</p>
       <p>Please upload your pictures one by one.</p>
 
       <br />
@@ -93,7 +93,7 @@ export const DeletePictureForm: FC<{
         src={imageUrl ?? ''}
         alt={`${imageUrl}`}
         width={400}
-        height={100}
+        height={400}
         className='mb-2'
       />
       <button
