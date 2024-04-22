@@ -52,3 +52,54 @@ as
       from review_tags
       group by review_id
     ) as review_tags using(review_id) ;
+
+drop function reviews_for_landlord;
+drop function reviews_with_landlords;
+
+create function public.reviews_with_landlords()
+ returns table(
+  property_id uuid,
+  reviewer_id uuid,
+  review_date date,
+  review_id uuid,
+  landlord_rating smallint,
+  property_rating smallint,
+  review_body text,
+  review_posted timestamp with time zone,
+  restricted boolean,
+  landlord_id uuid
+)
+ LANGUAGE plpgsql
+as $function$ 
+#variable_conflict use_column 
+  begin 
+  return query
+    select
+      *,
+      property_owner_on_date(property_id, review_date) as landlord_id
+    from reviews;
+  end;
+$function$
+;
+
+create function public.reviews_for_landlord(id uuid)
+ returns table(
+  property_id uuid,
+  reviewer_id uuid,
+  review_date date,
+  review_id uuid,
+  landlord_rating smallint,
+  property_rating smallint,
+  review_body text,
+  review_posted timestamp with time zone,
+  restricted boolean,
+  landlord_id uuid
+  )
+ LANGUAGE plpgsql
+as $function$ #variable_conflict use_column 
+  begin return query
+    select *
+    from reviews_with_landlords()
+    where landlord_id = id;
+  end;
+$function$;

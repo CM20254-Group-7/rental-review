@@ -717,6 +717,7 @@ export type Database = {
           property_rating: number
           review_body: string
           review_posted: string
+          restricted: boolean
           landlord_id: string
         }[]
       }
@@ -731,6 +732,7 @@ export type Database = {
           property_rating: number
           review_body: string
           review_posted: string
+          restricted: boolean
           landlord_id: string
         }[]
       }
