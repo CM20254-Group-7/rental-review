@@ -7,9 +7,9 @@ import { AddPictureForm, DeletePictureForm } from './form';
 const AddPicturePage: NextPage<{
   params: {
     id: string;
-    reviewID: string;
+    reviewId: string;
   };
-}> = async ({ params: { id: propertyId, reviewID: reviewId } }) => {
+}> = async ({ params: { id: propertyId, reviewId } }) => {
   const pictures = await getReviewPictures(reviewId ?? '');
   const pictureArray: string[] = [];
 
