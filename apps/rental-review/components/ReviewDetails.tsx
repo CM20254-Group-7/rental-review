@@ -4,6 +4,7 @@ import { createServerSupabaseClient } from '@repo/supabase-client-helpers/server
 import Link from 'next/link';
 import React from 'react';
 import { Tooltip } from '@nextui-org/tooltip';
+import Image from 'next/image';
 import { Badge } from './ClientTremor';
 import StarRatingLayout from './StarRating';
 
@@ -59,16 +60,6 @@ const AboutYouBadge: React.FC<AboutYouBadgeProps> = async (props) => {
         query_date: reviewDate,
       },
     );
-
-    // console.log('landlordForReview', landlordForReview, error);
-
-    // console.log(
-    //   props,
-    //   user.id,
-    //   landlordForReview,
-    //   landlordForReview == user.id,
-    // );
-
     return landlordForReview === user.id;
   };
 
@@ -155,15 +146,18 @@ export const ReviewDetailsLayout: React.FC<ReviewDetailsLayoutProps> = async ({
   if (error || !data) {
     return null;
   }
+
+  const { data: images } = await supabase
+    .from('review_photos')
+    .select('photo')
+    .eq('review_id', reviewId);
+
   return (
     <MaybeLink
       conditionMet={link}
       link={`/review/${reviewId}`}
       className='flex h-fit w-full max-w-prose flex-1 flex-col place-items-center justify-center rounded-lg border px-8 py-4 sm:px-4'
     >
-      {/* <h1>Review Details</h1> */}
-      {/* <p>Review ID: {reviewId}</p> */}
-      {/* <p>Reviewer ID: {reviewerId}</p> */}
       <div className='flex w-full flex-col gap-4 sm:w-4/5'>
         <div className='flex flex-col place-items-center justify-around sm:flex-row'>
           <div className='flex flex-col'>
@@ -182,6 +176,21 @@ export const ReviewDetailsLayout: React.FC<ReviewDetailsLayoutProps> = async ({
           <p className='h-fit min-h-[5rem] rounded-md border bg-gray-100/10 px-2 py-1'>
             {reviewMessage}
           </p>
+        </div>
+
+        <div className='flex flex-wrap justify-center gap-2'>
+          {images &&
+            images.map((image) => (
+              <a key={image.photo} href={image.photo}>
+                <Image
+                  src={image.photo}
+                  alt='Review Image'
+                  className='md:h-30 md:w-30 h-32 w-32 flex-shrink-0 cursor-pointer rounded-md object-cover'
+                  width={500}
+                  height={500}
+                />
+              </a>
+            ))}
         </div>
 
         <div className='flex flex-wrap gap-2'>
@@ -235,18 +244,23 @@ export const ReviewDetailsLayout: React.FC<ReviewDetailsLayoutProps> = async ({
             </Link>
           )}
         </div>
-
         {reviewId === currentReviewId && (
           <div className='flex flex-1 flex-col place-items-center items-center justify-center'>
-            <p>This is your review.</p>
-            <Link href={`/properties/${propertyId}/${reviewId}`}>
-              <button
-                type='button'
-                className='text-blue-500/70 underline hover:text-blue-500'
-              >
-                Add Pictures
-              </button>
-            </Link>
+            {reviewId === currentReviewId && (
+              <>
+                <p>This is your review.</p>
+                <Link
+                  href={`/properties/${propertyId}/${reviewId}/add-pictures`}
+                >
+                  <button
+                    type='button'
+                    className='text-blue-500/70 underline hover:text-blue-500'
+                  >
+                    Add Pictures
+                  </button>
+                </Link>
+              </>
+            )}
           </div>
         )}
       </div>
@@ -271,8 +285,8 @@ export const ReviewDetails: React.FC<ReviewDetailsProps> = async ({
   const supabase = createServerSupabaseClient();
 
   const { data, error } = await supabase
-    .from('reviews')
-    .select('*, review_tags(tag)')
+    .from('full_reviews')
+    .select('*')
     .eq('review_id', reviewId)
     .single();
 
@@ -295,7 +309,7 @@ export const ReviewDetails: React.FC<ReviewDetailsProps> = async ({
       landlordRating={data.landlord_rating}
       propertyRating={data.property_rating}
       reviewMessage={data.review_body}
-      reviewTags={data.review_tags.map((reviewTag) => reviewTag.tag)}
+      reviewTags={data.tags || []}
       underReview={underReview}
       aboutActiveLandlord={false}
       link={link}
