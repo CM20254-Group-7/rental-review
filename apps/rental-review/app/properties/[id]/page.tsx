@@ -56,8 +56,6 @@ const PropertyDetailPage: NextPage<{
 }> = async ({ params }) => {
   const propertyDetails = await getPropertyDetails(params.id);
   const pictures = await getPictures(params.id);
-  
-  console.log(pictures);
 
   if (!propertyDetails) notFound();
 
@@ -68,7 +66,7 @@ const PropertyDetailPage: NextPage<{
         {/* Details Header */}
         <div className='bg1-secondary/30 shadow-secondary/40 flex w-full flex-row justify-between gap-2 shadow-lg'>
           {/* Property pictures */}
-            {pictures && pictures.length > 0 ? (
+          {pictures && pictures.length > 0 ? (
             <div className='relative aspect-[1000/682] w-full max-w-md'>
               <div className='relative h-full w-full'>
                 {pictures.map((url, index) => (
