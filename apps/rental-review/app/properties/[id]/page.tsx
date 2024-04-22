@@ -28,12 +28,34 @@ const getPropertyDetails = cache(async (propertyId: string) => {
   };
 });
 
+const getPictures = cache(async (propertyId: string) => {
+  const supabase = createServerSupabaseClient();
+
+  const { data: reviewData, error: reviewError } = await supabase
+    .from('reviews')
+    .select('review_id')
+    .eq('property_id', propertyId);
+
+  if (reviewError || !reviewData) return null;
+
+  const reviewIds = reviewData.map((review) => review.review_id);
+  const { data, error } = await supabase
+    .from('review_photos')
+    .select('photo')
+    .in('review_id', reviewIds);
+
+  if (error || !data) return null;
+
+  return data;
+});
+
 const PropertyDetailPage: NextPage<{
   params: {
     id: string;
   };
 }> = async ({ params }) => {
   const propertyDetails = await getPropertyDetails(params.id);
+  const pictures = await getPictures(params.id);
 
   if (!propertyDetails) notFound();
 
@@ -42,23 +64,46 @@ const PropertyDetailPage: NextPage<{
       {/* Content Boundary */}
       <div className='bg-secondary/10 shadow-secondary/40 flex w-full max-w-4xl flex-col overflow-clip rounded-lg border shadow-md'>
         {/* Details Header */}
-        <div className='bg-secondary/30 shadow-secondary/40 flex w-full flex-row justify-between gap-2 shadow-lg'>
-          {/* Images - Currently not implemented so shows example image with disclaimer */}
-          <div className='relative aspect-[1000/682] w-full max-w-md'>
-            <Image
-              className='absolute w-full max-w-md rounded-lg'
-              src='/house.jpeg'
-              width={1000}
-              height={682}
-              alt='Image of a house'
-              priority
-            />
-            <div className='bg-background/40 flex h-full w-full flex-col place-items-center justify-center backdrop-blur'>
-              <p className='text-foreground text-lg font-semibold'>
-                Property Images Coming Soon
-              </p>
+        <div className='bg1-secondary/30 shadow-secondary/40 flex w-full flex-row justify-between gap-2 shadow-lg'>
+          {/* Property pictures */}
+          {pictures != null ? (
+            <div className='relative aspect-[1000/682] w-full max-w-md'>
+              <div className='relative h-full w-full'>
+                {pictures.map((url, index) => (
+                  <div
+                    key={index}
+                    className={`absolute h-full w-full rounded-lg transition-opacity ${
+                      index === 0 ? 'opacity-100' : 'opacity-0'
+                    }`}
+                  >
+                    <Image
+                      className='h-full w-full object-cover'
+                      src={url.photo}
+                      alt={`Image ${index + 1}`}
+                      width={1000}
+                      height={682}
+                    />
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
+          ) : (
+            <div className='relative aspect-[1000/682] w-full max-w-md'>
+              <Image
+                className='absolute w-full max-w-md rounded-lg'
+                src='/house.jpeg'
+                width={1000}
+                height={682}
+                alt='Image of a house'
+                priority
+              />
+              <div className='bg-background/40 flex h-full w-full flex-col place-items-center justify-center backdrop-blur'>
+                <p className='text-foreground text-lg font-semibold'>
+                  No Images Uploaded Yet
+                </p>
+              </div>
+            </div>
+          )}
 
           {/* General Property Details */}
           <div className='justify-top flex w-full flex-1 flex-col gap-2 px-8 py-4 sm:max-w-md'>
