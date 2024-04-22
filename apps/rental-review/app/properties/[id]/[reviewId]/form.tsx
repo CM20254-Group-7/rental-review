@@ -51,7 +51,7 @@ export const AddPictureForm: FC<{
 
       <br />
 
-      <p>Accepted formats: .jpg .jpeg .png .gif</p>
+      <p>Accepted formats: .jpg .jpeg .png .webp .gif</p>
       <p>Please upload your pictures one by one.</p>
 
       <br />
