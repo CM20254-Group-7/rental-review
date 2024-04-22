@@ -2,33 +2,24 @@ import { createServerSupabaseClient } from '@repo/supabase-client-helpers/server
 import { ReviewDetailsLayout } from '@/components/ReviewDetails';
 import React, { cache } from 'react';
 
-interface ReviewDetails {
-  landlord_rating: number;
-  property_id: string;
-  property_rating: number;
-  review_body: string;
-  review_date: string;
-  review_id: string;
-  reviewer_id: string;
-  review_tags: string[];
-}
-const getReviewResults = cache(
-  async (propertyId: string): Promise<ReviewDetails[]> => {
-    const supabase = createServerSupabaseClient();
+const getReviewResults = cache(async (propertyId: string) => {
+  const supabase = createServerSupabaseClient();
 
-    const { data, error } = await supabase
-      .from('reviews')
-      .select('*, review_tags(tag)')
-      .eq('property_id', propertyId);
+  const { data, error } = await supabase
+    .from('full_reviews')
+    .select('*')
+    .eq('property_id', propertyId);
 
-    if (error) return [];
+  if (error) return [];
 
-    return data.map((review) => ({
-      ...review,
-      review_tags: review.review_tags.map((reviewTag) => reviewTag.tag),
-    }));
-  },
-);
+  const reviewDetails = data.map((review) => ({
+    ...review,
+    review_tags: review.tags?.map((reviewTag) => reviewTag) ?? [],
+    under_review: review.under_review ?? false,
+  }));
+
+  return reviewDetails;
+});
 
 const ReviewResults: React.FC<{ propertyId: string }> = async ({
   propertyId,
@@ -49,6 +40,7 @@ const ReviewResults: React.FC<{ propertyId: string }> = async ({
       propertyRating={reviewDetails.property_rating}
       reviewMessage={reviewDetails.review_body}
       reviewTags={reviewDetails.review_tags}
+      underReview={reviewDetails.under_review}
     />
   ));
 };
