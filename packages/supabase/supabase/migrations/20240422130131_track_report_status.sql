@@ -4,4 +4,4 @@ alter table "public"."review_reports" add column "moderator_comment" report_stat
 
 alter table "public"."review_reports" add column "status" report_status not null default 'reported'::report_status;
 
-
+alter table "public"."reviews" add column "restricted" boolean not null default false;
