@@ -3,7 +3,8 @@
 import { createServerSupabaseClient } from '@repo/supabase-client-helpers/server-only';
 import Link from 'next/link';
 import React from 'react';
-import { Badge } from '@tremor/react';
+import { Tooltip } from '@nextui-org/tooltip';
+import { Badge } from './ClientTremor';
 import StarRatingLayout from './StarRating';
 
 interface MaybeLinkProps {
@@ -85,6 +86,7 @@ type Review = {
   propertyRating: number;
   reviewMessage: string;
   reviewTags: string[];
+  underReview: boolean;
 };
 
 interface ReviewDetailsLayoutProps extends Review {
@@ -102,6 +104,7 @@ export const ReviewDetailsLayout: React.FC<ReviewDetailsLayoutProps> = async ({
   reviewMessage,
   reviewTags,
   aboutActiveLandlord,
+  underReview,
   link = false,
   showReportButton = true,
 }) => {
@@ -156,7 +159,7 @@ export const ReviewDetailsLayout: React.FC<ReviewDetailsLayoutProps> = async ({
     <MaybeLink
       conditionMet={link}
       link={`/review/${reviewId}`}
-      className='flex h-fit w-full max-w-prose flex-1 flex-col place-items-center justify-center rounded-lg border px-8 py-2 sm:px-4'
+      className='flex h-fit w-full max-w-prose flex-1 flex-col place-items-center justify-center rounded-lg border px-8 py-4 sm:px-4'
     >
       {/* <h1>Review Details</h1> */}
       {/* <p>Review ID: {reviewId}</p> */}
@@ -198,7 +201,31 @@ export const ReviewDetailsLayout: React.FC<ReviewDetailsLayoutProps> = async ({
 
         <div className='flex flex-row'>
           {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-          <AboutYouBadge {...aboutYouProps} />
+          <div className='flex flex-row gap-2'>
+            {underReview && (
+              <Tooltip
+                content={
+                  <div className='bg-background'>
+                    <div className='bg-accent/5 flex max-w-sm flex-col items-center rounded-md border p-2 text-center text-sm shadow'>
+                      <p>
+                        We have recieved reports about this review and our
+                        moderators are investigating.
+                      </p>
+                      <p>
+                        Please bear in mind that the contents may not be
+                        accurate.
+                      </p>
+                    </div>
+                  </div>
+                }
+              >
+                <Badge className='ml-auto' color='red'>
+                  Under Review
+                </Badge>
+              </Tooltip>
+            )}
+            <AboutYouBadge {...aboutYouProps} />
+          </div>
           {showReportButton && (
             <Link
               href={`/reviews/${reviewId}/report`}
@@ -209,21 +236,19 @@ export const ReviewDetailsLayout: React.FC<ReviewDetailsLayoutProps> = async ({
           )}
         </div>
 
-        <div className='flex flex-1 flex-col place-items-center items-center justify-center'>
-          {reviewId === currentReviewId && (
-            <>
-              <p>This is your review.</p>
-              <Link href={`/properties/${propertyId}/${reviewId}`}>
-                <button
-                  type='button'
-                  className='text-blue-500/70 underline hover:text-blue-500'
-                >
-                  Add Pictures
-                </button>
-              </Link>
-            </>
-          )}
-        </div>
+        {reviewId === currentReviewId && (
+          <div className='flex flex-1 flex-col place-items-center items-center justify-center'>
+            <p>This is your review.</p>
+            <Link href={`/properties/${propertyId}/${reviewId}`}>
+              <button
+                type='button'
+                className='text-blue-500/70 underline hover:text-blue-500'
+              >
+                Add Pictures
+              </button>
+            </Link>
+          </div>
+        )}
       </div>
     </MaybeLink>
   );
@@ -255,6 +280,13 @@ export const ReviewDetails: React.FC<ReviewDetailsProps> = async ({
     return null;
   }
 
+  const underReview =
+    (
+      await supabase.rpc('under_review', {
+        r_id: data?.review_id,
+      })
+    ).data ?? false;
+
   return (
     <ReviewDetailsLayout
       reviewId={reviewId}
@@ -264,6 +296,7 @@ export const ReviewDetails: React.FC<ReviewDetailsProps> = async ({
       propertyRating={data.property_rating}
       reviewMessage={data.review_body}
       reviewTags={data.review_tags.map((reviewTag) => reviewTag.tag)}
+      underReview={underReview}
       aboutActiveLandlord={false}
       link={link}
       showReportButton={showReportButton}
