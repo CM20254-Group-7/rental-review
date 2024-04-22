@@ -178,14 +178,15 @@ export const ReviewDetailsLayout: React.FC<ReviewDetailsLayoutProps> = async ({
         <div className='flex flex-wrap justify-center gap-2'>
           {images &&
             images.map((image) => (
-              <Image
-                key={image.photo}
-                src={image.photo}
-                alt='Review Image'
-                className='md:h-30 md:w-30 h-32 w-32 flex-shrink-0 rounded-md object-cover'
-                width={500}
-                height={500}
-              />
+              <a key={image.photo} href={image.photo}>
+                <Image
+                  src={image.photo}
+                  alt='Review Image'
+                  className='md:h-30 md:w-30 h-32 w-32 flex-shrink-0 cursor-pointer rounded-md object-cover'
+                  width={500}
+                  height={500}
+                />
+              </a>
             ))}
         </div>
 
@@ -221,7 +222,7 @@ export const ReviewDetailsLayout: React.FC<ReviewDetailsLayoutProps> = async ({
           {reviewId === currentReviewId && (
             <>
               <p>This is your review.</p>
-              <Link href={`/properties/${propertyId}/${reviewId}`}>
+              <Link href={`/properties/${propertyId}/${reviewId}/add-pictures`}>
                 <button
                   type='button'
                   className='text-blue-500/70 underline hover:text-blue-500'

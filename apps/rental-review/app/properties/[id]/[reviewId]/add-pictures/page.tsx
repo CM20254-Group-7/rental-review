@@ -1,5 +1,7 @@
-import { NextPage } from 'next';
+'use client'
 
+import { NextPage } from 'next';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { getReviewPictures } from './actions';
 import { AddPictureForm, DeletePictureForm } from './form';
@@ -9,13 +11,24 @@ const AddPicturePage: NextPage<{
     id: string;
     reviewId: string;
   };
-}> = async ({ params: { id: propertyId, reviewId } }) => {
-  const pictures = await getReviewPictures(reviewId ?? '');
-  const pictureArray: string[] = [];
+}> = ({ params: { id: propertyId, reviewId } }) => {
+  const [pictures, setPictures] = useState<string[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  for (let i = 0; i < pictures.length; i += 1) {
-    pictureArray.push(pictures[i] as string);
-  }
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const picturesData = await getReviewPictures(reviewId ?? '');
+        setPictures(picturesData);
+        setLoading(false);
+      } catch (error) {
+        // console.error('Error fetching pictures:', error);
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [reviewId]);
 
   return (
     <main className='flex flex-1 flex-col place-items-center justify-center py-10 md:py-16'>
@@ -44,7 +57,7 @@ const AddPicturePage: NextPage<{
       />
 
       {/* Uploaded pictures */}
-      {pictureArray.length > 0 && (
+      {!loading && pictures.length > 0 && (
         <>
           <h2 className='mt-6 flex justify-center text-2xl font-bold'>
             Uploaded Pictures
@@ -53,10 +66,11 @@ const AddPicturePage: NextPage<{
         </>
       )}
 
-      {pictureArray.map((picture, index) => (
-        // eslint-disable-next-line react/no-array-index-key
-        <DeletePictureForm key={index} imageUrl={pictureArray[index] ?? ''} />
-      ))}
+      {!loading &&
+        pictures.map((picture, index) => (
+          // eslint-disable-next-line react/no-array-index-key
+          <DeletePictureForm key={index} imageUrl={picture || ''} />
+        ))}
     </main>
   );
 };
