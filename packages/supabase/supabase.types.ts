@@ -244,6 +244,13 @@ export type Database = {
             foreignKeyName: "review_photos_review_id_fkey"
             columns: ["review_id"]
             isOneToOne: false
+            referencedRelation: "full_reviews"
+            referencedColumns: ["review_id"]
+          },
+          {
+            foreignKeyName: "review_photos_review_id_fkey"
+            columns: ["review_id"]
+            isOneToOne: false
             referencedRelation: "reviews"
             referencedColumns: ["review_id"]
           },
@@ -255,27 +262,37 @@ export type Database = {
           created_at: string
           explanation: string
           id: number
+          moderator_comment: Database["public"]["Enums"]["report_status"] | null
           reason: string
           reporter_id: string
           review_id: string
+          status: Database["public"]["Enums"]["report_status"]
         }
         Insert: {
           contact_email?: string | null
           created_at?: string
           explanation: string
           id?: number
+          moderator_comment?:
+            | Database["public"]["Enums"]["report_status"]
+            | null
           reason: string
           reporter_id: string
           review_id: string
+          status?: Database["public"]["Enums"]["report_status"]
         }
         Update: {
           contact_email?: string | null
           created_at?: string
           explanation?: string
           id?: number
+          moderator_comment?:
+            | Database["public"]["Enums"]["report_status"]
+            | null
           reason?: string
           reporter_id?: string
           review_id?: string
+          status?: Database["public"]["Enums"]["report_status"]
         }
         Relationships: [
           {
@@ -284,6 +301,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "report_reasons"
             referencedColumns: ["reason"]
+          },
+          {
+            foreignKeyName: "public_review_reports_review_id_fkey"
+            columns: ["review_id"]
+            isOneToOne: false
+            referencedRelation: "full_reviews"
+            referencedColumns: ["review_id"]
           },
           {
             foreignKeyName: "public_review_reports_review_id_fkey"
@@ -308,6 +332,13 @@ export type Database = {
           tag?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "review_tags_review_id_fkey"
+            columns: ["review_id"]
+            isOneToOne: false
+            referencedRelation: "full_reviews"
+            referencedColumns: ["review_id"]
+          },
           {
             foreignKeyName: "review_tags_review_id_fkey"
             columns: ["review_id"]
@@ -369,6 +400,7 @@ export type Database = {
           landlord_rating: number
           property_id: string
           property_rating: number
+          restricted: boolean
           review_body: string
           review_date: string
           review_id: string
@@ -379,6 +411,7 @@ export type Database = {
           landlord_rating: number
           property_id: string
           property_rating: number
+          restricted?: boolean
           review_body: string
           review_date: string
           review_id?: string
@@ -389,6 +422,7 @@ export type Database = {
           landlord_rating?: number
           property_id?: string
           property_rating?: number
+          restricted?: boolean
           review_body?: string
           review_date?: string
           review_id?: string
@@ -495,6 +529,45 @@ export type Database = {
           tags: string[] | null
         }
         Relationships: []
+      }
+      full_reviews: {
+        Row: {
+          landlord_id: string | null
+          landlord_rating: number | null
+          property_id: string | null
+          property_rating: number | null
+          restricted: boolean | null
+          review_body: string | null
+          review_date: string | null
+          review_id: string | null
+          review_posted: string | null
+          reviewer_id: string | null
+          tags: string[] | null
+          under_review: boolean | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reviews_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reviews_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "full_properties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reviews_reviewer_id_fkey"
+            columns: ["reviewer_id"]
+            isOneToOne: false
+            referencedRelation: "reviewer_private_profiles"
+            referencedColumns: ["reviewer_id"]
+          },
+        ]
       }
       landlord_profile_pictures: {
         Row: {
@@ -661,9 +734,15 @@ export type Database = {
           landlord_id: string
         }[]
       }
+      under_review: {
+        Args: {
+          r_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      report_status: "reported" | "accepted" | "rejected"
     }
     CompositeTypes: {
       [_ in never]: never
