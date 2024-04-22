@@ -92,8 +92,8 @@ interface ReviewDetailsLayoutProps extends Review {
   link?: boolean;
   showReportButton?: boolean;
 }
-// export seperately to allow pages that already have the data to use the standardised layout
-export const ReviewDetailsLayout: React.FC<ReviewDetailsLayoutProps> = ({
+// export separately to allow pages that already have the data to use the standardised layout
+export const ReviewDetailsLayout: React.FC<ReviewDetailsLayoutProps> = async ({
   reviewId,
   propertyId,
   reviewDate,
@@ -113,6 +113,45 @@ export const ReviewDetailsLayout: React.FC<ReviewDetailsLayoutProps> = ({
           reviewDate,
         }
       : { knownOwner: true, isOwner: aboutActiveLandlord };
+
+  const supabase = createServerSupabaseClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  let currentReviewId = null;
+
+  if (user) {
+    const { data: reviewerData } = await supabase
+      .from('reviewer_private_profiles')
+      .select('reviewer_id')
+      .eq('user_id', user.id)
+      .eq('property_id', propertyId)
+      .single();
+
+    if (reviewerData) {
+      const { data: reviewData } = await supabase
+        .from('reviews')
+        .select('review_id')
+        .eq('reviewer_id', reviewerData.reviewer_id)
+        .single();
+
+      if (reviewData) {
+        currentReviewId = reviewData.review_id;
+      }
+    }
+  }
+
+  const { data, error } = await supabase
+    .from('reviews')
+    .select('*, review_tags(tag)')
+    .eq('review_id', reviewId)
+    .single();
+
+  if (error || !data) {
+    return null;
+  }
   return (
     <MaybeLink
       conditionMet={link}
@@ -158,6 +197,7 @@ export const ReviewDetailsLayout: React.FC<ReviewDetailsLayoutProps> = ({
         </p>
 
         <div className='flex flex-row'>
+          {/* eslint-disable-next-line react/jsx-props-no-spreading */}
           <AboutYouBadge {...aboutYouProps} />
           {showReportButton && (
             <Link
@@ -166,6 +206,22 @@ export const ReviewDetailsLayout: React.FC<ReviewDetailsLayoutProps> = ({
             >
               Report
             </Link>
+          )}
+        </div>
+
+        <div className='flex flex-1 flex-col place-items-center items-center justify-center'>
+          {reviewId === currentReviewId && (
+            <>
+              <p>This is your review.</p>
+              <Link href={`/properties/${propertyId}/${reviewId}`}>
+                <button
+                  type='button'
+                  className='text-blue-500/70 underline hover:text-blue-500'
+                >
+                  Add Pictures
+                </button>
+              </Link>
+            </>
           )}
         </div>
       </div>

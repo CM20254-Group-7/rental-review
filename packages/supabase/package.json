@@ -1,18 +1,18 @@
 {
-    "name": "@repo/supabase",
-    "version": "1.0.0",
-    "exports": {
-      ".": "./index.ts"
-    },
-    "scripts": {
-        "start": "supabase start",
-        "stop": "supabase stop",
-        "restart": "supabase stop --no-backup && supabase start",
-        "db-reset": "supabase db reset",
-        "generate-migration": "supabase db diff -f",
-        "generate-types": "supabase gen types typescript --local > supabase.types.ts"
-    },
-    "devDependencies": {
-        "supabase": "latest"
-    }
+  "name": "@repo/supabase",
+  "version": "1.0.0",
+  "exports": {
+    ".": "./index.ts"
+  },
+  "scripts": {
+    "start": "supabase start",
+    "stop": "supabase stop",
+    "restart": "supabase stop --no-backup && supabase start",
+    "db-reset": "supabase db reset",
+    "generate-migration": "supabase db diff -f",
+    "generate-types": "supabase gen types typescript --local > supabase.types.ts"
+  },
+  "devDependencies": {
+    "supabase": "latest"
+  }
 }
