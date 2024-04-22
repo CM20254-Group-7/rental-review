@@ -1,10 +1,24 @@
-'use client'
+'use client';
 
 import { NextPage } from 'next';
-import { useState, useEffect } from 'react';
-import Link from 'next/link';
-import { getReviewPictures } from './actions';
+import { FC, useState, useEffect } from 'react';
+import { ArrowLeftIcon } from '@heroicons/react/24/solid';
+import { Button } from '@tremor/react';
+import { useRouter } from 'next/navigation';
 import { AddPictureForm, DeletePictureForm } from './form';
+import { getReviewPictures } from './actions';
+
+const BackButton: FC = () => {
+  const { back } = useRouter();
+  return (
+    <Button variant='light' onClick={back}>
+      <div className='flex flex-row items-center gap-2'>
+        <ArrowLeftIcon className='h-4 w-4' />
+        <p>Back</p>
+      </div>
+    </Button>
+  );
+};
 
 const AddPicturePage: NextPage<{
   params: {
@@ -22,7 +36,6 @@ const AddPicturePage: NextPage<{
         setPictures(picturesData);
         setLoading(false);
       } catch (error) {
-        // console.error('Error fetching pictures:', error);
         setLoading(false);
       }
     };
@@ -33,14 +46,7 @@ const AddPicturePage: NextPage<{
   return (
     <main className='flex flex-1 flex-col place-items-center justify-center py-10 md:py-16'>
       <div className='flex w-full flex-row items-start'>
-        <Link href={`/properties/${propertyId}/`}>
-          <button
-            type='button'
-            className='text-blue-500/70 underline hover:text-blue-500'
-          >
-            Back
-          </button>
-        </Link>
+        <BackButton />
       </div>
       <div>
         <h1 className='mt-6 flex justify-center text-2xl font-bold'>

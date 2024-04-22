@@ -93,7 +93,7 @@ export const DeletePictureForm: FC<{
         src={imageUrl ?? ''}
         alt={`${imageUrl}`}
         width={400}
-        height={100}
+        height={400}
         className='mb-2'
       />
       <button
