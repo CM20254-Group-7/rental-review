@@ -16,3 +16,7 @@ to public
 using (
   (not restricted)
 );
+
+alter view public.full_properties set (security_invoker=true);
+alter view public.landlord_profile_pictures set (security_invoker=true);
+alter view public.landlord_public_profiles_full set (security_invoker=true);
