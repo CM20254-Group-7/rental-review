@@ -131,15 +131,16 @@ const ReportReviewPage: NextPage<{
   const supabase = createServerSupabaseClient();
 
   const { data: reviewDetails } = await supabase
-    .from('reviews')
-    .select('*, review_tags(tag)')
+    .from('full_reviews')
+    .select('*')
     .eq('review_id', reviewId)
     .single()
     .then(({ data, error }) => ({
       data: data
         ? {
             ...data,
-            review_tags: data.review_tags.map(({ tag }) => tag),
+            tags: data.tags ?? [],
+            under_review: data.under_review ?? false,
           }
         : null,
       error,
@@ -247,10 +248,11 @@ const ReportReviewPage: NextPage<{
         propertyId={reviewDetails.property_id}
         reviewDate={reviewDetails.review_date}
         reviewMessage={reviewDetails.review_body}
-        reviewTags={reviewDetails.review_tags}
+        reviewTags={reviewDetails.tags}
         propertyRating={reviewDetails.property_rating}
         landlordRating={reviewDetails.landlord_rating}
         aboutActiveLandlord={reviewIsForCurrentUser}
+        underReview={reviewDetails.under_review}
         showReportButton={false}
       />
       <Divider />
