@@ -1,4 +1,4 @@
-import { Database } from '@repo/supabase';
+import { Database } from '../database.types';
 import {
   SupabaseClient,
   createClient as createSupabaseClient,

@@ -9,4 +9,4 @@ export {
   createMiddlewareSupabaseClient,
 };
 
-export type { Database } from '@repo/supabase';
+export type { Database } from './database.types';
