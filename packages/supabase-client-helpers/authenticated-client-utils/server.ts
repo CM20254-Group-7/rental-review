@@ -1,6 +1,6 @@
 import { createServerClient, type CookieOptions } from '@supabase/ssr';
 import { cookies } from 'next/headers';
-import { Database } from '@repo/supabase';
+import { Database } from '../database.types';
 import { SupabaseClient } from '@supabase/supabase-js';
 import env from '@repo/environment-variables/supabase-client';
 

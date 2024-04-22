@@ -6,11 +6,12 @@
         "./server-only": "./server-only.ts"
     },
     "dependencies": {
-        "@supabase/ssr": "latest",
-        "@supabase/supabase-js": "latest",
         "@repo/environment-variables": "workspace:*",
         "@repo/supabase": "workspace:*",
-        "next": "latest"
+        "@supabase/ssr": "latest",
+        "@supabase/supabase-js": "latest",
+        "next": "latest",
+        "type-fest": "^4.16.0"
     },
     "devDependencies": {
         "supabase": "1.142.2"

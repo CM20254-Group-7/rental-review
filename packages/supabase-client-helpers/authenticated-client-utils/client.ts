@@ -1,5 +1,5 @@
 import { createBrowserClient } from '@supabase/ssr';
-import { Database } from '@repo/supabase';
+import { Database } from '../database.types';
 import { SupabaseClient } from '@supabase/supabase-js';
 import env from '@repo/environment-variables/supabase-client';
 
