@@ -107,11 +107,16 @@
       "dependsOn": ["^stop"],
       "cache": false
     },
-    "generate-types": {
-      "dependsOn": ["^generate-types"]
+    "@repo/supabase#db-reset": {
+      "dependsOn": ["^db-reset"],
+      "cache": false
+    },
+    "@repo/supabase#generate-migration": {
+      "dependsOn": ["^generate-migration"],
+      "cache": false
     },
     "@repo/supabase#generate-types": {
-      "dependsOn": ["@repo/supabase#start"],
+      "dependsOn": ["@repo/supabase#start", "^generate-types"],
       "cache": false
     },
 
