@@ -217,7 +217,7 @@ export const ReviewDetailsLayout: React.FC<ReviewDetailsLayoutProps> = async ({
                   <div className='bg-background'>
                     <div className='bg-accent/5 flex max-w-sm flex-col items-center rounded-md border p-2 text-center text-sm shadow'>
                       <p>
-                        We have recieved reports about this review and our
+                        We have received reports about this review and our
                         moderators are investigating.
                       </p>
                       <p>
