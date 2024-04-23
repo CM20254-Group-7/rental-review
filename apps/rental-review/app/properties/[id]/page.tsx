@@ -28,7 +28,8 @@ const getPropertyDetails = cache(async (propertyId: string) => {
     ...data,
   };
 });
-export const getPictures = cache(async (propertyId: string) => {
+
+const getPictures = cache(async (propertyId: string) => {
   const supabase = createServerSupabaseClient();
 
   const { data: reviewData, error: reviewError } = await supabase
