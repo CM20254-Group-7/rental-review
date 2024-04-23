@@ -2,9 +2,21 @@ import AdminConsolePageLayout from '@/components/ui/page-layout';
 import { createServiceSupabaseClient } from '@repo/supabase-client-helpers/server-only';
 import { NextPage } from 'next';
 import { cookies } from 'next/headers';
-// import { Suspense } from 'react';
+import { cache } from 'react';
 import { columns } from './_components/columns';
 import DataTable from './_components/data-table';
+
+const getPossibleReportReasons = cache(async () => {
+  cookies();
+
+  const supabase = createServiceSupabaseClient();
+  const data = await supabase
+    .from('report_reasons')
+    .select('reason')
+    .then((res) => res.data?.map((r) => r.reason));
+
+  return data ?? [];
+});
 
 const getAllReports = async () => {
   cookies(); // not entirely sure why, but the data fetch fails if this function is not called first
@@ -17,8 +29,11 @@ const getAllReports = async () => {
 
 const ReviewReportsTable: React.FC = async () => {
   const reports = await getAllReports();
+  const reportReasons = await getPossibleReportReasons();
 
-  return <DataTable columns={columns} data={reports} />;
+  return (
+    <DataTable columns={columns} data={reports} reportReasons={reportReasons} />
+  );
 };
 
 const ModerationPage: NextPage = () => (

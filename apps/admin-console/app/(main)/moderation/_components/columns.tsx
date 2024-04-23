@@ -8,6 +8,7 @@ import { MoreHorizontal } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import ActionMenu from './action-menu';
+import DataTableColumnHeader from './data-table-header';
 
 type BaseReportType = Database['public']['Tables']['review_reports']['Row'];
 
@@ -26,7 +27,7 @@ const statusColours: {
   rejected: 'bg-green-500/40 hover:bg-yellow-500/60',
 };
 
-export const columns: ColumnDef<ReviewReport>[] = [
+export const columns = (reportReasons: string[]): ColumnDef<ReviewReport>[] => [
   {
     accessorKey: 'id',
   },
@@ -44,14 +45,36 @@ export const columns: ColumnDef<ReviewReport>[] = [
   },
   {
     accessorKey: 'reason',
-    header: 'Reason',
+    header: ({ column }) => {
+      return (
+        <DataTableColumnHeader
+          column={column}
+          title='Reason'
+          isFilterable
+          filterOptions={reportReasons}
+        />
+      );
+    },
     cell: ({ row }) => (
-      <Badge variant='outline'>{row.getValue('reason')}</Badge>
+      <div className='flex justify-center'>
+        <Badge variant='outline' className='w-fit px-2 py-1 text-center'>
+          {row.getValue('reason')}
+        </Badge>
+      </div>
     ),
   },
   {
     accessorKey: 'status',
-    header: 'Status',
+    header: ({ column }) => {
+      return (
+        <DataTableColumnHeader
+          column={column}
+          title='Status'
+          isFilterable
+          filterOptions={['reported', 'accepted', 'rejected']}
+        />
+      );
+    },
     cell: ({ row }) => {
       const status = row.getValue('status') as ReviewReport['status'];
       const colour = statusColours[status];
@@ -62,6 +85,18 @@ export const columns: ColumnDef<ReviewReport>[] = [
         </Badge>
       );
     },
+  },
+  {
+    accessorKey: 'created_at',
+    header: ({ column }) => {
+      return (
+        <DataTableColumnHeader column={column} title='Reported On' isSortable />
+      );
+    },
+    cell: ({ row }) => (
+      // Suppress hydration warning to prevent errors when the server & client are in different timezones
+      <p>{new Date(row.getValue('created_at')).toLocaleDateString('en-gb')}</p>
+    ),
   },
   {
     id: 'actions',

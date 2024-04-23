@@ -35,7 +35,7 @@ import {
 type MenuProps =
   | ({ mode: 'context' } & ContextMenuProps)
   | ({ mode: 'dropdown' } & DropdownMenuProps);
-const Menu = forwardRef<HTMLElement, MenuProps>((props) => {
+const Menu = forwardRef<HTMLElement, MenuProps>((props, ref) => {
   const { mode, ...otherProps } = props;
 
   if (mode === 'context') {
@@ -52,24 +52,26 @@ Menu.displayName = 'Menu';
 type MenuTriggerProps =
   | ({ mode: 'context' } & ContextMenuTriggerProps)
   | ({ mode: 'dropdown' } & DropdownMenuTriggerProps);
-const MenuTrigger = forwardRef<HTMLButtonElement, MenuTriggerProps>((props) => {
-  const { mode, ...otherProps } = props;
+const MenuTrigger = forwardRef<HTMLButtonElement, MenuTriggerProps>(
+  (props, ref) => {
+    const { mode, ...otherProps } = props;
 
-  if (mode === 'context') {
-    return <ContextMenuTrigger {...otherProps} />;
-  }
-  if (mode === 'dropdown') {
-    return <DropdownMenuTrigger {...otherProps} />;
-  }
-  throw new Error(`Invalid mode prop: ${mode}`);
-});
+    if (mode === 'context') {
+      return <ContextMenuTrigger {...otherProps} />;
+    }
+    if (mode === 'dropdown') {
+      return <DropdownMenuTrigger {...otherProps} />;
+    }
+    throw new Error(`Invalid mode prop: ${mode}`);
+  },
+);
 MenuTrigger.displayName = 'MenuTrigger';
 
 // MenuItem
 type MenuItemProps =
   | ({ mode: 'context' } & ContextMenuItemProps)
   | ({ mode: 'dropdown' } & DropdownMenuProps);
-const MenuItem = forwardRef<HTMLButtonElement, MenuItemProps>((props) => {
+const MenuItem = forwardRef<HTMLButtonElement, MenuItemProps>((props, ref) => {
   const { mode, ...otherProps } = props;
 
   if (mode === 'context') {
@@ -86,7 +88,7 @@ MenuItem.displayName = 'MenuItem';
 type MenuLabelProps =
   | ({ mode: 'context' } & ContextMenuLabelProps)
   | ({ mode: 'dropdown' } & DropdownMenuLabelProps);
-const MenuLabel = forwardRef<HTMLDivElement, MenuLabelProps>((props) => {
+const MenuLabel = forwardRef<HTMLDivElement, MenuLabelProps>((props, ref) => {
   const { mode, ...otherProps } = props;
 
   if (mode === 'context') {
@@ -104,7 +106,7 @@ type MenuSeparatorProps =
   | ({ mode: 'context' } & ContextMenuSeparatorProps)
   | ({ mode: 'dropdown' } & DropdownMenuSeparatorProps);
 const MenuSeparator = forwardRef<HTMLDivElement, MenuSeparatorProps>(
-  (props) => {
+  (props, ref) => {
     const { mode, ...otherProps } = props;
 
     if (mode === 'context') {
@@ -122,17 +124,19 @@ MenuSeparator.displayName = 'MenuSeparator';
 type MenuContentProps =
   | ({ mode: 'context' } & ContextMenuContentProps)
   | ({ mode: 'dropdown' } & DropdownMenuContentProps);
-const MenuContent = forwardRef<HTMLDivElement, MenuContentProps>((props) => {
-  const { mode, ...otherProps } = props;
+const MenuContent = forwardRef<HTMLDivElement, MenuContentProps>(
+  (props, ref) => {
+    const { mode, ...otherProps } = props;
 
-  if (mode === 'context') {
-    return <ContextMenuContent {...otherProps} />;
-  }
-  if (mode === 'dropdown') {
-    return <DropdownMenuContent {...otherProps} />;
-  }
-  throw new Error(`Invalid mode prop: ${mode}`);
-});
+    if (mode === 'context') {
+      return <ContextMenuContent {...otherProps} />;
+    }
+    if (mode === 'dropdown') {
+      return <DropdownMenuContent {...otherProps} />;
+    }
+    throw new Error(`Invalid mode prop: ${mode}`);
+  },
+);
 MenuContent.displayName = 'MenuContent';
 
 export { Menu, MenuTrigger, MenuItem, MenuLabel, MenuSeparator, MenuContent };
