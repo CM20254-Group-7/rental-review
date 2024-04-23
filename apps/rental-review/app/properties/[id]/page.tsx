@@ -56,13 +56,15 @@ const PropertyDetailPage: NextPage<{
                       index === 0 ? 'opacity-100' : 'opacity-0'
                     }`}
                   >
-                    <Image
-                      className='h-full w-full object-cover'
-                      src={url.photo}
-                      alt={`Image ${index + 1}`}
-                      width={1000}
-                      height={682}
-                    />
+                    <a key={url.photo} href={url.photo}>
+                      <Image
+                        className='h-full w-full object-cover'
+                        src={url.photo}
+                        alt={`Image ${index + 1}`}
+                        width={1000}
+                        height={682}
+                      />
+                    </a>
                   </div>
                 ))}
               </div>
