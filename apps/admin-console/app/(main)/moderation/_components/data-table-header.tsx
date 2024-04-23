@@ -12,13 +12,12 @@ import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
-  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { ReactElement, ReactNode } from 'react';
+import { ReactNode } from 'react';
 
 const SortArrow = ({ direction }: { direction: false | 'asc' | 'desc' }) => {
   if (direction === 'desc') return <ArrowDownIcon className='ml-2 h-4 w-4' />;

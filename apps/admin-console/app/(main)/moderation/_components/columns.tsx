@@ -11,6 +11,11 @@ import ActionMenu from './action-menu';
 import DataTableColumnHeader from './data-table-header';
 
 type BaseReportType = Database['public']['Tables']['review_reports']['Row'];
+type BaseReviewType = Database['public']['Views']['full_reviews']['Row'];
+type BasePropertyType = Database['public']['Views']['full_properties']['Row'];
+
+type Review = Pick<BaseReviewType, 'review_body' | 'landlord_id'>;
+type Property = Pick<BasePropertyType, 'id' | 'address'>;
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -19,15 +24,23 @@ export type ReviewReport = Pick<
   'id' | 'reason' | 'status' | 'reporter_id' | 'review_id' | 'explanation'
 >;
 
+// Add a property field to the ReviewReport type
+export type ExpandedReport = ReviewReport & {
+  review: Review | null;
+  property: Property | null;
+};
+
 const statusColours: {
-  [key in ReviewReport['status']]: string;
+  [key in ExpandedReport['status']]: string;
 } = {
   reported: 'bg-yellow-500/40 hover:bg-yellow-500/60',
   accepted: 'bg-red-500/40 hover:bg-red-500/60',
   rejected: 'bg-green-500/40 hover:bg-green-500/60',
 };
 
-export const columns = (reportReasons: string[]): ColumnDef<ReviewReport>[] => [
+export const columns = (
+  reportReasons: string[],
+): ColumnDef<ExpandedReport>[] => [
   {
     accessorKey: 'id',
   },
@@ -36,8 +49,35 @@ export const columns = (reportReasons: string[]): ColumnDef<ReviewReport>[] => [
     header: 'Review ID',
   },
   {
+    id: 'property_id',
+    accessorKey: 'property.id',
+    header: 'Property ID',
+  },
+  {
+    id: 'review_body',
+    accessorKey: 'review.review_body',
+    header: 'Review Text',
+  },
+  {
+    accessorKey: 'property.address',
+    header: 'Property Address',
+  },
+  {
     accessorKey: 'reporter_id',
     header: 'Reporter ID',
+  },
+  {
+    id: 'reporter_is_landlord',
+    accessorFn: (row) => row.reporter_id === row.review?.landlord_id,
+    header: 'Reported by Landlord',
+    cell: ({ row }) => (
+      <Badge
+        variant='outline'
+        className={`w-fit px-2 py-1 text-center ${row.getValue('reporter_is_landlord') ? 'bg-green-300/30' : 'bg-slate-300/30'}`}
+      >
+        {row.getValue('reporter_is_landlord') ? 'Yes' : 'No'}
+      </Badge>
+    ),
   },
   {
     accessorKey: 'explanation',

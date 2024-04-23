@@ -59,6 +59,14 @@ const DataTable = <
       sorting,
       columnFilters,
     },
+    initialState: {
+      columnVisibility: {
+        id: false,
+        review_id: false,
+        property_id: false,
+        reporter_id: false,
+      },
+    },
     // initialState: {
     //   pagination: {
     //     pageSize: 1,

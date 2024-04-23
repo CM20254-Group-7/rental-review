@@ -22,7 +22,34 @@ const getAllReports = async () => {
   cookies(); // not entirely sure why, but the data fetch fails if this function is not called first
 
   const supabase = createServiceSupabaseClient();
-  const { data } = await supabase.from('review_reports').select('*');
+  const data = await supabase
+    .from('review_reports')
+    .select('*')
+    .then(async (res) =>
+      Promise.all(
+        res.data?.map(async (r) => {
+          // get the review data
+          const { data: review } = await supabase
+            .from('full_reviews')
+            .select('*')
+            .eq('review_id', r.review_id)
+            .single();
+
+          // get the property data
+          const { data: property } = await supabase
+            .from('full_properties')
+            .select('*')
+            .eq('id', review!.property_id)
+            .single();
+
+          return {
+            ...r,
+            review: review!,
+            property: property!,
+          };
+        }) ?? [],
+      ),
+    );
 
   return data ?? [];
 };
