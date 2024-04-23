@@ -4,6 +4,7 @@ import { z } from 'zod';
 import { edgeConfigWriteEnv } from '../src/edge-config-write';
 import envType from '../src/env-type';
 import { defaultIfDev } from '../src/helpers';
+import supabaseClientEnv from './supabase-client-env';
 
 // Variables used in /apps/admin-console
 // This app needs to write to the edge config
@@ -11,7 +12,9 @@ import { defaultIfDev } from '../src/helpers';
 // add our own envType last to override the default value of NEXT_PUBLIC_VERCEL_ENV (can be undefined in vercel preset, we want to default to development)
 // also requires additional varaibles for authentication & to link back to the public site
 const adminConsoleEnv = createEnv({
-  extends: [{ ...edgeConfigWriteEnv, ...vercel, ...envType }],
+  extends: [
+    { ...supabaseClientEnv, ...edgeConfigWriteEnv, ...vercel, ...envType },
+  ],
   server: {
     ADMIN_ENCRYPTION_KEY: defaultIfDev(
       z.string().min(1),
