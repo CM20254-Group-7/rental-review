@@ -9,6 +9,7 @@ import { ArrowPathIcon } from '@heroicons/react/24/solid';
 import CurrentOwnerIndicator from '@/components/CurrentOwnerIndicator';
 import AverageRating from './AverageRating';
 import ReviewResults from './ReviewResults';
+import { getPictures } from './PropertyPictures';
 
 export const revalidate = 60 * 60; // revalidate every hour
 
@@ -26,27 +27,6 @@ const getPropertyDetails = cache(async (propertyId: string) => {
   return {
     ...data,
   };
-});
-
-const getPictures = cache(async (propertyId: string) => {
-  const supabase = createServerSupabaseClient();
-
-  const { data: reviewData, error: reviewError } = await supabase
-    .from('reviews')
-    .select('review_id')
-    .eq('property_id', propertyId);
-
-  if (reviewError || !reviewData) return null;
-
-  const reviewIds = reviewData.map((review) => review.review_id);
-  const { data, error } = await supabase
-    .from('review_photos')
-    .select('photo')
-    .in('review_id', reviewIds);
-
-  if (error || !data) return null;
-
-  return data;
 });
 
 const PropertyDetailPage: NextPage<{
