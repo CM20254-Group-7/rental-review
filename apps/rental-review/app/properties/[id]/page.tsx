@@ -9,7 +9,7 @@ import { ArrowPathIcon } from '@heroicons/react/24/solid';
 import CurrentOwnerIndicator from '@/components/CurrentOwnerIndicator';
 import AverageRating from './AverageRating';
 import ReviewResults from './ReviewResults';
-import { getPictures } from './PropertyPictures';
+import PictureGallery from './PropertyPictures';
 
 export const revalidate = 60 * 60; // revalidate every hour
 
@@ -27,6 +27,26 @@ const getPropertyDetails = cache(async (propertyId: string) => {
   return {
     ...data,
   };
+});
+export const getPictures = cache(async (propertyId: string) => {
+  const supabase = createServerSupabaseClient();
+
+  const { data: reviewData, error: reviewError } = await supabase
+    .from('reviews')
+    .select('review_id')
+    .eq('property_id', propertyId);
+
+  if (reviewError || !reviewData) return null;
+
+  const reviewIds = reviewData.map((review) => review.review_id);
+  const { data, error } = await supabase
+    .from('review_photos')
+    .select('photo')
+    .in('review_id', reviewIds);
+
+  if (error || !data) return null;
+
+  return data.map((photo) => photo.photo);
 });
 
 const PropertyDetailPage: NextPage<{
@@ -47,29 +67,30 @@ const PropertyDetailPage: NextPage<{
         <div className='bg1-secondary/30 shadow-secondary/40 flex w-full flex-row justify-between gap-2 shadow-lg'>
           {/* Property pictures */}
           {pictures && pictures.length > 0 ? (
-            <div className='relative aspect-[1000/682] w-full max-w-md'>
-              <div className='relative h-full w-full'>
-                {pictures.map((url, index) => (
-                  <div
-                    key={index}
-                    className={`absolute h-full w-full rounded-lg transition-opacity ${
-                      index === 0 ? 'opacity-100' : 'opacity-0'
-                    }`}
-                  >
-                    <a key={url.photo} href={url.photo}>
-                      <Image
-                        className='h-full w-full object-cover'
-                        src={url.photo}
-                        alt={`Image ${index + 1}`}
-                        width={1000}
-                        height={682}
-                      />
-                    </a>
-                  </div>
-                ))}
-              </div>
-            </div>
+            <PictureGallery pictureUrls={pictures} />
           ) : (
+            // <div className='relative aspect-[1000/682] w-full max-w-md'>
+            //   <div className='relative h-full w-full'>
+            //     {pictures.map((url, index) => (
+            //       <div
+            //         key={index}
+            //         className={`absolute h-full w-full rounded-lg transition-opacity ${
+            //           index === 0 ? 'opacity-100' : 'opacity-0'
+            //         }`}
+            //       >
+            //         <a key={url.photo} href={url.photo}>
+            //           <Image
+            //             className='h-full w-full object-cover'
+            //             src={url.photo}
+            //             alt={`Image ${index + 1}`}
+            //             width={1000}
+            //             height={682}
+            //           />
+            //         </a>
+            //       </div>
+            //     ))}
+            //   </div>
+            // </div>
             <div className='relative aspect-[1000/682] w-full max-w-md'>
               <Image
                 className='absolute w-full max-w-md rounded-lg'
