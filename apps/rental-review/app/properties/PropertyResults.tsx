@@ -4,6 +4,8 @@ import React, { cache } from 'react';
 import StarRatingLayout from '@/components/StarRating';
 import CurrentOwnerIndicator from '@/components/CurrentOwnerIndicator';
 import { getFeatureFlagValues, getFlagValue } from '@repo/feature-flags';
+import Image from 'next/image';
+import { get } from 'http';
 import ResultsTable, { ResultsTableSkeleton } from './results-table';
 import Pagination from './pagination';
 
@@ -137,6 +139,37 @@ const getPropertyResults = cache(
   },
 );
 
+const getPictureUrls = async (propertyId: string) => {
+  const supabase = createServerSupabaseClient();
+
+  const { data: reviews, error: reviewError } = await supabase
+    .from('reviews')
+    .select('review_id')
+    .eq('property_id', propertyId);
+
+  if (reviewError || !reviews) {
+    return null;
+  }
+
+  const { data: pictures, error: picturesError } = await supabase
+    .from('review_photos')
+    .select('photo')
+    .in(
+      'review_id',
+      reviews.map((review) => review.review_id),
+    );
+
+  if (picturesError) {
+    return null;
+  }
+
+  if (pictures.length > 5) {
+    return pictures.slice(0, 5).map((picture) => picture.photo);
+  }
+
+  return pictures.map((picture) => picture.photo);
+};
+
 const PropertyResultsCards: React.FC<{
   properties: {
     id: string | null;
@@ -148,11 +181,14 @@ const PropertyResultsCards: React.FC<{
     tags: string[] | null;
   }[];
 }> = async ({ properties }) => {
-  if (properties.length === 0) {
-    return <div>No properties found</div>;
-  }
+  const images = await Promise.all(
+    properties.map(async (property) => {
+      const pictureUrls = await getPictureUrls(property.id!);
+      return pictureUrls;
+    }),
+  );
 
-  return properties.map((property) => (
+  return properties.map((property, index) => (
     <Link
       className='bg-secondary/10 hover:bg-secondary/20 shadow-secondary/40 hover:shadow-secondary/40 flex w-full flex-col items-center gap-4 rounded-xl border p-6 pb-8 shadow-md hover:shadow-lg'
       href={`/properties/${property.id}`}
@@ -168,6 +204,22 @@ const PropertyResultsCards: React.FC<{
         </div>
         <span className='border-accent w-full border border-b' />
       </div>
+
+      {/* Show the images if there are */}
+      {images && images[index] && (
+        <div className='flex flex-wrap gap-2'>
+          {images[index]?.map((image) => (
+            <Image
+              key={image}
+              src={image}
+              alt='Property Image'
+              className='h-30 w-30 flex-shrink-0 cursor-pointer rounded-md object-cover md:h-28 md:w-28'
+              width={300}
+              height={200}
+            />
+          ))}
+        </div>
+      )}
 
       <div className='grid w-full grid-cols-1 md:grid-cols-2'>
         <div className='flex flex-col items-center justify-center gap-2'>

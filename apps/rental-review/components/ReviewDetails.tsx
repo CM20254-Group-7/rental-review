@@ -267,6 +267,7 @@ export const ReviewDetailsLayout: React.FC<ReviewDetailsLayoutProps> = async ({
     </MaybeLink>
   );
 };
+
 ReviewDetailsLayout.defaultProps = {
   link: false,
   showReportButton: true,
