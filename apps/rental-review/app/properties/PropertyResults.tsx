@@ -5,7 +5,6 @@ import StarRatingLayout from '@/components/StarRating';
 import CurrentOwnerIndicator from '@/components/CurrentOwnerIndicator';
 import { getFeatureFlagValues, getFlagValue } from '@repo/feature-flags';
 import Image from 'next/image';
-import { get } from 'http';
 import ResultsTable, { ResultsTableSkeleton } from './results-table';
 import Pagination from './pagination';
 
