@@ -70,28 +70,6 @@ const PropertyDetailPage: NextPage<{
           {pictures && pictures.length > 0 ? (
             <PictureGallery pictureUrls={pictures} />
           ) : (
-            // <div className='relative aspect-[1000/682] w-full max-w-md'>
-            //   <div className='relative h-full w-full'>
-            //     {pictures.map((url, index) => (
-            //       <div
-            //         key={index}
-            //         className={`absolute h-full w-full rounded-lg transition-opacity ${
-            //           index === 0 ? 'opacity-100' : 'opacity-0'
-            //         }`}
-            //       >
-            //         <a key={url.photo} href={url.photo}>
-            //           <Image
-            //             className='h-full w-full object-cover'
-            //             src={url.photo}
-            //             alt={`Image ${index + 1}`}
-            //             width={1000}
-            //             height={682}
-            //           />
-            //         </a>
-            //       </div>
-            //     ))}
-            //   </div>
-            // </div>
             <div className='relative aspect-[1000/682] w-full max-w-md'>
               <Image
                 className='absolute w-full max-w-md rounded-lg'
