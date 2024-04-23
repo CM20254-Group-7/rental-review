@@ -31,7 +31,10 @@ interface DataTableProps<TData, TValue> {
   reportReasons: string[];
 }
 
-const DataTable = <TData extends { id: number }, TValue>({
+const DataTable = <
+  TData extends { id: number; status: 'reported' | 'rejected' | 'accepted' },
+  TValue,
+>({
   columns,
   data,
   reportReasons,
@@ -94,15 +97,14 @@ const DataTable = <TData extends { id: number }, TValue>({
                   mode='context'
                   key={row.id}
                   reportId={row.original.id}
+                  currentStatus={row.original.status}
                 >
                   <TableRow data-state={row.getIsSelected() && 'selected'}>
-                    {/* <p>{JSON.stringify(row.original.id, null, 2)}</p> */}
                     {row
                       .getVisibleCells()
                       .filter((cell) => cell.column.id !== 'id')
                       .map((cell) => (
                         <TableCell key={cell.id}>
-                          {/* {JSON.stringify(cell.column, null, 2)} */}
                           {flexRender(
                             cell.column.columnDef.cell,
                             cell.getContext(),

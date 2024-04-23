@@ -23,8 +23,8 @@ const statusColours: {
   [key in ReviewReport['status']]: string;
 } = {
   reported: 'bg-yellow-500/40 hover:bg-yellow-500/60',
-  accepted: 'bg-red-500/40 hover:bg-yellow-500/60',
-  rejected: 'bg-green-500/40 hover:bg-yellow-500/60',
+  accepted: 'bg-red-500/40 hover:bg-red-500/60',
+  rejected: 'bg-green-500/40 hover:bg-green-500/60',
 };
 
 export const columns = (reportReasons: string[]): ColumnDef<ReviewReport>[] => [
@@ -104,7 +104,11 @@ export const columns = (reportReasons: string[]): ColumnDef<ReviewReport>[] => [
       const report = row.original;
 
       return (
-        <ActionMenu mode='dropdown' reportId={report.id}>
+        <ActionMenu
+          mode='dropdown'
+          reportId={report.id}
+          currentStatus={report.status}
+        >
           <Button variant='ghost' className='h-8 w-8 p-0'>
             <span className='sr-only'>Open menu</span>
             <MoreHorizontal className='h-4 w-4' />
